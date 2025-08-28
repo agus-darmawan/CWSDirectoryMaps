@@ -45,7 +45,6 @@ struct Edge: Codable, Identifiable {
     let source: String
     let target: String
     let type: String
-    
     var id: String { "\(source)-\(target)-\(type)" }
 }
 

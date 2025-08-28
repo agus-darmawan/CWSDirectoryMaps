@@ -13,7 +13,7 @@ struct PathfindingView: View {
     @State private var graph: Graph? = nil
     @State private var path: [String] = [] // store A* path labels
     @State private var pathCoordinates: [CGPoint] = [] // precomputed coordinates for drawing
-
+    
     var body: some View {
         GeometryReader { geo in
             ZStack {
@@ -21,7 +21,7 @@ struct PathfindingView: View {
                     let bounds = graphBounds(graph)
                     let scale = fittingScale(bounds: bounds, in: geo.size)
                     let offset = fittingOffset(bounds: bounds, in: geo.size, scale: scale)
-
+                    
                     ZStack {
                         // MARK: - Draw edges
                         ForEach(graph.edges) { edge in
@@ -34,25 +34,21 @@ struct PathfindingView: View {
                                 .stroke(Color.white.opacity(0.6), lineWidth: 5)
                             }
                         }
-
+                        
                         // MARK: - Draw path
-                        if pathCoordinates.count > 1 {
+                        if pathCoordinates.count > 1 { // Changed condition
                             ForEach(0..<(pathCoordinates.count-1), id: \.self) { i in
                                 Path { p in
                                     let from = pathCoordinates[i]
                                     let to = pathCoordinates[i+1]
-                                    p.move(to: CGPoint(x: from.x * scale + offset.width,
-                                                       y: from.y * scale + offset.height))
-                                    p.addLine(to: CGPoint(x: to.x * scale + offset.width,
-                                                          y: to.y * scale + offset.height))
+                                    // REMOVED: * scale + offset.width/height from here
+                                    p.move(to: CGPoint(x: from.x, y: from.y))
+                                    p.addLine(to: CGPoint(x: to.x, y: to.y))
                                 }
                                 .stroke(Color.yellow, lineWidth: 6)
                             }
-                            Text("🔹 Total steps in path: \(pathCoordinates.count)")
-                                .foregroundColor(.white)
-                                .position(x: 120, y: 30)
                         }
-
+                        
                         // MARK: - Draw nodes
                         ForEach(graph.nodes) { node in
                             Circle()
@@ -75,7 +71,7 @@ struct PathfindingView: View {
             }
         }
     }
-
+    
     // MARK: - Node Coloring
     private func color(for node: Node) -> Color {
         switch node.type {
@@ -85,7 +81,7 @@ struct PathfindingView: View {
         default: return .red
         }
     }
-
+    
     // MARK: - Graph Bounds Helpers
     private func graphBounds(_ graph: Graph) -> CGRect {
         let xs = graph.nodes.map { $0.x }
@@ -98,14 +94,14 @@ struct PathfindingView: View {
                       width: maxX - minX,
                       height: maxY - minY)
     }
-
+    
     private func fittingScale(bounds: CGRect, in size: CGSize) -> CGFloat {
         guard bounds.width > 0, bounds.height > 0 else { return 1 }
         let scaleX = size.width / bounds.width
         let scaleY = size.height / bounds.height
         return min(scaleX, scaleY) * 0.95
     }
-
+    
     private func fittingOffset(bounds: CGRect, in size: CGSize, scale: CGFloat) -> CGSize {
         let graphWidth = bounds.width * scale
         let graphHeight = bounds.height * scale
@@ -113,11 +109,11 @@ struct PathfindingView: View {
         let y = (size.height - graphHeight) / 2 - bounds.minY * scale
         return CGSize(width: x, height: y)
     }
-
+    
     // MARK: - Graph Loading and Pathfinding
     private func loadAndPrepareGraph() {
         guard let g = loadGraph() else { return }
-
+        
         // 1️⃣ Ensure all nodes have labels
         let nodesWithLabel = g.nodes.map { node -> Node in
             if node.label == nil {
@@ -127,29 +123,23 @@ struct PathfindingView: View {
             }
             return node
         }
-
+        
         // 2️⃣ Recreate graph with labeled nodes
         let labeledGraph = Graph(metadata: g.metadata, nodes: nodesWithLabel, edges: g.edges)
         self.graph = labeledGraph
-
+        
         // 3️⃣ Build label-based graph for A*
         let labelGraph = buildLabelGraph(from: labeledGraph)
-
+        
         // 4️⃣ Run A*
-        let start = "boss"
-        let goal = "lexus"
-        if let foundPath = aStarByLabel(graph: labelGraph, startLabel: start, goalLabel: goal) {
-            self.path = foundPath
-            print("✅ Path from \(start) to \(goal): \(foundPath)")
-
-            // 5️⃣ Convert path to coordinates for drawing
-            self.pathCoordinates = foundPath.compactMap { label in
-                if let node = labelGraph[label] {
-                    return CGPoint(x: node.x, y: node.y)
-                }
-                return nil
+        let start = "lift_2"
+        let goal = "alba_ristorante"
+        if let foundPathCoordinates = aStarByLabel(graph: labelGraph, startLabel: start, goalLabel: goal) {
+            self.pathCoordinates = foundPathCoordinates // Assign coordinates directly
+            print("✅ Path found from \(start) to \(goal).")
+            for (index, coordinate) in self.pathCoordinates.enumerated() {
+                print("  [\(index)] X: \(String(format: "%.1f", coordinate.x)), Y: \(String(format: "%.1f", coordinate.y))")
             }
-            print("🔹 Total coordinates to draw: \(self.pathCoordinates.count)")
         } else {
             print("❌ No path found from \(start) to \(goal)")
         }

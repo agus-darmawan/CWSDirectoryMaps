@@ -5,47 +5,37 @@
 //  Created by Steven Gonawan on 27/08/25.
 //
 
-
-//
-//  HelperFunctions.swift
-//  Map Pathfinding Test
-//
-//  Created by Steven Gonawan on 27/08/25.
-//
-
-import math_h
 import Foundation
+import CoreGraphics
 
-// MARK: - Loader
 func loadGraph() -> Graph? {
     guard let url = Bundle.main.url(forResource: "pathfinding_graph", withExtension: "json") else {
+        print("Error: pathfinding_graph.json not found in bundle.")
         return nil
     }
     
     do {
         let data = try Data(contentsOf: url)
-        return try JSONDecoder().decode(Graph.self, from: data)
+        let decoder = JSONDecoder()
+        return try decoder.decode(Graph.self, from: data)
     } catch {
+        print("Error loading or decoding graph: \(error)")
         return nil
     }
 }
 
-// MARK: - Convert JSON Graph -> Label Graph (skip ellipse nodes)
 func buildLabelGraph(from graph: Graph) -> [String: GraphNode] {
     let nodeCount = graph.nodes.count
-    let edgeCount = graph.edges.count
-    
     var nodeDict = [String: GraphNode]()
-    nodeDict.reserveCapacity(nodeCount + 100) // Reserve extra for potential splits
+    nodeDict.reserveCapacity(nodeCount * 2)
     
-    var newNodes = graph.nodes
-    newNodes.reserveCapacity(nodeCount + 100)
+    var currentNodes = graph.nodes
+    currentNodes.reserveCapacity(nodeCount * 2)
     
-    var newEdges = graph.edges
-    newEdges.reserveCapacity(edgeCount * 2)
+    var currentEdges = graph.edges
+    currentEdges.reserveCapacity(graph.edges.count * 2)
     
-    // 1️⃣ Pre-populate node dictionary
-    for node in newNodes {
+    for node in currentNodes {
         let label = node.label ?? node.id
         nodeDict[label] = GraphNode(
             id: node.id,
@@ -56,88 +46,93 @@ func buildLabelGraph(from graph: Graph) -> [String: GraphNode] {
         )
     }
     
-    // 2️⃣ Optimized edge splitting with spatial indexing
     let threshold: Double = 30.0
-    let thresholdSq = threshold * threshold // Use squared distance to avoid sqrt
+    let thresholdSq = threshold * threshold
     var splitCount = 0
     
-    // Create spatial lookup for faster edge-node intersection checks
-    let eligibleNodes = graph.nodes.filter { $0.type != "ellipse-point" }
+    let eligibleNodesForSplitting = currentNodes.filter { $0.type != "ellipse-point" }
+    
     var edgesToRemove = Set<String>()
     var edgesToAdd: [Edge] = []
+    var nodesToAdd: [Node] = []
     
     for edge in graph.edges {
         guard
-            let source = graph.nodes.first(where: { $0.id == edge.source }),
-            let target = graph.nodes.first(where: { $0.id == edge.target })
+            let sourceNode = currentNodes.first(where: { $0.id == edge.source }),
+            let targetNode = currentNodes.first(where: { $0.id == edge.target })
         else { continue }
         
         let edgeKey = "\(edge.source)-\(edge.target)"
         
-        // Quick bounding box check first
-        let minX = min(source.x, target.x) - threshold
-        let maxX = max(source.x, target.x) + threshold
-        let minY = min(source.y, target.y) - threshold
-        let maxY = max(source.y, target.y) + threshold
+        let minX = min(sourceNode.x, targetNode.x) - threshold
+        let maxX = max(sourceNode.x, targetNode.x) + threshold
+        let minY = min(sourceNode.y, targetNode.y) - threshold
+        let maxY = max(sourceNode.y, targetNode.y) + threshold
         
-        for candidate in eligibleNodes {
-            if candidate.id == source.id || candidate.id == target.id { continue }
+        for candidateNode in eligibleNodesForSplitting {
+            if candidateNode.id == sourceNode.id || candidateNode.id == targetNode.id { continue }
             
-            // Bounding box culling
-            if candidate.x < minX || candidate.x > maxX || candidate.y < minY || candidate.y > maxY {
+            if candidateNode.x < minX || candidateNode.x > maxX || candidateNode.y < minY || candidateNode.y > maxY {
                 continue
             }
             
-            let (distSq, proj) = distanceFromPointToSegmentSquared(
-                px: candidate.x, py: candidate.y,
-                x1: source.x, y1: source.y,
-                x2: target.x, y2: target.y
+            let (distSq, projPoint) = distanceFromPointToSegmentSquared(
+                px: candidateNode.x, py: candidateNode.y,
+                x1: sourceNode.x, y1: sourceNode.y,
+                x2: targetNode.x, y2: targetNode.y
             )
             
             if distSq < thresholdSq {
                 splitCount += 1
                 let splitId = "split_\(splitCount)"
+                
                 let splitNode = Node(
                     id: splitId,
-                    x: proj.0,
-                    y: proj.1,
+                    x: projPoint.0,
+                    y: projPoint.1,
                     type: "path-point",
-                    rx: nil,
-                    ry: nil,
-                    angle: nil,
-                    label: splitId,
-                    parentLabel: nil
+                    rx: nil, ry: nil, angle: nil,
+                    label: splitId, parentLabel: nil
                 )
-                newNodes.append(splitNode)
+                nodesToAdd.append(splitNode)
                 
                 edgesToRemove.insert(edgeKey)
                 edgesToRemove.insert("\(edge.target)-\(edge.source)")
                 
                 edgesToAdd.append(contentsOf: [
-                    Edge(source: source.id, target: splitId, type: "line"),
-                    Edge(source: splitId, target: target.id, type: "line"),
-                    Edge(source: candidate.id, target: splitId, type: "line")
+                    Edge(source: sourceNode.id, target: splitId, type: "line"),
+                    Edge(source: splitId, target: targetNode.id, type: "line"),
+                    Edge(source: candidateNode.id, target: splitId, type: "line")
                 ])
             }
         }
     }
     
-    // Apply edge modifications in batch
-    newEdges.removeAll { edge in
+    currentNodes.append(contentsOf: nodesToAdd)
+    currentEdges.removeAll { edge in
         edgesToRemove.contains("\(edge.source)-\(edge.target)")
     }
-    newEdges.append(contentsOf: edgesToAdd)
+    currentEdges.append(contentsOf: edgesToAdd)
     
-    // 3️⃣ Build neighbors with pre-calculated distances
-    let eligibleNodeIds = Set(newNodes.compactMap { node in
+    for node in nodesToAdd {
+        nodeDict[node.label ?? node.id] = GraphNode(
+            id: node.id,
+            label: node.label ?? node.id,
+            x: node.x,
+            y: node.y,
+            neighbors: []
+        )
+    }
+    
+    let finalEligibleNodeIds = Set(currentNodes.compactMap { node in
         node.type == "ellipse-point" ? nil : node.id
     })
     
-    for edge in newEdges {
-        guard eligibleNodeIds.contains(edge.source),
-              eligibleNodeIds.contains(edge.target),
-              let source = newNodes.first(where: { $0.id == edge.source }),
-              let target = newNodes.first(where: { $0.id == edge.target }) else {
+    for edge in currentEdges {
+        guard finalEligibleNodeIds.contains(edge.source),
+              finalEligibleNodeIds.contains(edge.target),
+              let source = currentNodes.first(where: { $0.id == edge.source }),
+              let target = currentNodes.first(where: { $0.id == edge.target }) else {
             continue
         }
         
@@ -148,24 +143,11 @@ func buildLabelGraph(from graph: Graph) -> [String: GraphNode] {
         let dy = target.y - source.y
         let cost = sqrt(dx*dx + dy*dy)
         
-        // Ensure nodes exist in dictionary
         if nodeDict[sourceLabel] == nil {
-            nodeDict[sourceLabel] = GraphNode(
-                id: source.id,
-                label: sourceLabel,
-                x: source.x,
-                y: source.y,
-                neighbors: []
-            )
+             nodeDict[sourceLabel] = GraphNode(id: source.id, label: sourceLabel, x: source.x, y: source.y, neighbors: [])
         }
         if nodeDict[targetLabel] == nil {
-            nodeDict[targetLabel] = GraphNode(
-                id: target.id,
-                label: targetLabel,
-                x: target.x,
-                y: target.y,
-                neighbors: []
-            )
+             nodeDict[targetLabel] = GraphNode(id: target.id, label: targetLabel, x: target.x, y: target.y, neighbors: [])
         }
         
         nodeDict[sourceLabel]?.neighbors.append((node: targetLabel, cost: cost))
@@ -175,47 +157,43 @@ func buildLabelGraph(from graph: Graph) -> [String: GraphNode] {
     return nodeDict
 }
 
-// MARK: - Optimized A* Algorithm
-func aStarByLabel(graph: [String: GraphNode], startLabel: String, goalLabel: String) -> [String]? {
+func aStarByLabel(graph: [String: GraphNode], startLabel: String, goalLabel: String) -> [CGPoint]? {
     guard let startNode = graph[startLabel],
           let goalNode = graph[goalLabel] else {
+        print("Error: Start node '\(startLabel)' or goal node '\(goalLabel)' not found in graph.")
         return nil
     }
     
-    // Use a min-priority queue (min-heap) for efficient retrieval of the node with the lowest fScore.
     var openSet = PriorityQueue()
     openSet.enqueue((fScore: heuristic(from: startNode, to: goalNode), label: startLabel))
     
     var cameFrom = [String: String]()
     var gScore = [String: Double]()
     var fScore = [String: Double]()
-    
+
     gScore[startLabel] = 0.0
     fScore[startLabel] = heuristic(from: startNode, to: goalNode)
     
-    // A dictionary to quickly check if a node is in the priority queue,
-    // useful for handling updates to a node's fScore.
     var openSetMembers = Set<String>([startLabel])
 
     while !openSet.isEmpty {
-        let (currentFScore, currentLabel) = openSet.dequeue()!
-        
+        let (_, currentLabel) = openSet.dequeue()!
         if currentLabel == goalLabel {
-            return reconstructPath(cameFrom: cameFrom, current: currentLabel)
+            return reconstructPath(cameFrom: cameFrom, current: currentLabel, graph: graph)
         }
-        
         openSetMembers.remove(currentLabel)
-        
         guard let currentNode = graph[currentLabel] else { continue }
         
         for neighbor in currentNode.neighbors {
             let tentativeGScore = (gScore[currentLabel] ?? .infinity) + neighbor.cost
-            
             if tentativeGScore < (gScore[neighbor.node] ?? .infinity) {
                 cameFrom[neighbor.node] = currentLabel
                 gScore[neighbor.node] = tentativeGScore
-                fScore[neighbor.node] = tentativeGScore + heuristic(from: graph[neighbor.node]!, to: goalNode)
-                
+                if let neighborGraphNode = graph[neighbor.node] {
+                    fScore[neighbor.node] = tentativeGScore + heuristic(from: neighborGraphNode, to: goalNode)
+                } else {
+                    continue
+                }
                 if !openSetMembers.contains(neighbor.node) {
                     openSet.enqueue((fScore: fScore[neighbor.node]!, label: neighbor.node))
                     openSetMembers.insert(neighbor.node)
@@ -224,7 +202,8 @@ func aStarByLabel(graph: [String: GraphNode], startLabel: String, goalLabel: Str
         }
     }
     
-    return nil // Path not found
+    print("❌ No path found from \(startLabel) to \(goalLabel).")
+    return nil
 }
 
 fileprivate struct PriorityQueue {
@@ -247,11 +226,11 @@ fileprivate struct PriorityQueue {
     
     private mutating func siftUp(_ index: Int) {
         var childIndex = index
-        let parentIndex = (childIndex - 1) / 2
-        
+        var parentIndex = (childIndex - 1) / 2
         while childIndex > 0 && heap[childIndex].fScore < heap[parentIndex].fScore {
             heap.swapAt(childIndex, parentIndex)
             childIndex = parentIndex
+            parentIndex = (childIndex - 1) / 2
         }
     }
     
@@ -279,12 +258,9 @@ fileprivate struct PriorityQueue {
     }
 }
 
-// MARK: - Optimized Utility Functions
-
-// Squared distance to avoid expensive sqrt operations during comparison
 private func distanceFromPointToSegmentSquared(px: Double, py: Double,
-                                             x1: Double, y1: Double,
-                                             x2: Double, y2: Double) -> (Double, (Double, Double)) {
+                                               x1: Double, y1: Double,
+                                               x2: Double, y2: Double) -> (Double, (Double, Double)) {
     let dx = x2 - x1
     let dy = y2 - y1
     let lengthSq = dx*dx + dy*dy
@@ -302,7 +278,6 @@ private func distanceFromPointToSegmentSquared(px: Double, py: Double,
     return (distSq, (projX, projY))
 }
 
-// Straight-line heuristic (Euclidean distance)
 @inline(__always)
 private func heuristic(from: GraphNode, to: GraphNode) -> Double {
     let dx = to.x - from.x
@@ -310,19 +285,26 @@ private func heuristic(from: GraphNode, to: GraphNode) -> Double {
     return sqrt(dx*dx + dy*dy)
 }
 
-// Optimized path reconstruction
-private func reconstructPath(cameFrom: [String: String], current: String) -> [String] {
-    var path: [String] = []
+private func reconstructPath(cameFrom: [String: String], current: String, graph: [String: GraphNode]) -> [CGPoint]? {
+    var pathLabels: [String] = [current]
     var current = current
+    pathLabels.reserveCapacity(20)
     
-    // Pre-calculate approximate path length to reduce array reallocations
-    path.reserveCapacity(20)
-    
-    path.append(current)
     while let prev = cameFrom[current] {
-        path.append(prev)
+        pathLabels.append(prev)
         current = prev
     }
     
-    return path.reversed()
+    let pathLabelsReversed = pathLabels.reversed()
+    
+    let pathCoordinates: [CGPoint] = pathLabelsReversed.compactMap { label in
+        guard let node = graph[label] else { return nil }
+        return CGPoint(x: CGFloat(node.x), y: CGFloat(node.y))
+    }
+    
+    if pathCoordinates.count == pathLabelsReversed.count {
+        return pathCoordinates
+    } else {
+        return nil
+    }
 }
