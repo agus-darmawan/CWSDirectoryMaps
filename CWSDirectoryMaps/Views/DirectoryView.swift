@@ -40,9 +40,17 @@ struct DirectoryView: View {
             }
             .navigationTitle("Directory")
             .navigationBarTitleDisplayMode(.inline)
-            .onChange(of: isSearchFieldFocused) { focused in
+            .onChange(of: isSearchFieldFocused) { _, focused in
                 withAnimation(.easeInOut(duration: 0.2)) {
                     viewModel.isSearching = focused
+                }
+            }
+            .sheet(isPresented: .constant(viewModel.selectedStore != nil)) {
+                if let store = viewModel.selectedStore {
+                    TenantDetailModal(store: store, isPresented: Binding<Bool>(
+                        get: { viewModel.selectedStore != nil },
+                        set: { _ in viewModel.selectedStore = nil }
+                    ))
                 }
             }
         }
