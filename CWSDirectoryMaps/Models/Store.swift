@@ -21,4 +21,11 @@ struct Store: Identifiable {
     let name: String
     let category: StoreCategory
     let imageName: String
+    let subcategory: String
+    let description: String
+    let location: String
+    let website: String?
+    let phone: String?
+    let hours: String
+    let detailImageName: String
 }
