@@ -11,6 +11,7 @@ enum StoreCategory: String, CaseIterable, Identifiable {
     case shop = "Shop"
     case fnb = "F&B"
     case play = "Play"
+    case facility = "Facility"
     case others = "Others"
     
     var id: String { self.rawValue }
@@ -28,4 +29,8 @@ struct Store: Identifiable {
     let phone: String?
     let hours: String
     let detailImageName: String
+    
+    var isFacility: Bool {
+        return category == .facility
+    }
 }

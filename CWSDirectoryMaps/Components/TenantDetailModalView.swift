@@ -182,96 +182,44 @@ struct TenantDetailModalView: View {
             .padding(.horizontal)
             .padding(.bottom, 20)
             
-            ScrollView {
-                VStack(spacing: 20) {
-                    AsyncImage(url: URL(string: store.detailImageName)) { image in
-                        image
-                            .resizable()
-                            .aspectRatio(contentMode: .fill)
-                    } placeholder: {
-                        Image(store.detailImageName)
-                            .resizable()
-                            .aspectRatio(contentMode: .fill)
-                    }
-                    .frame(height: 200)
-                    .clipped()
-                    .cornerRadius(12)
-                    .padding(.horizontal)
-                    
-                    VStack(alignment: .leading, spacing: 8) {
-                        Text(showFullDescription ? store.description : String(store.description.prefix(150)) + (store.description.count > 150 ? "..." : ""))
+            if store.isFacility {
+                facilityContentView
+            } else {
+                storeDetailScrollView
+            }
+        }
+    }
+    
+    private var facilityContentView: some View {
+        ScrollView {
+            VStack(spacing: 20) {
+                AsyncImage(url: URL(string: store.detailImageName)) { image in
+                    image
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                } placeholder: {
+                    Image(store.detailImageName)
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                }
+                .frame(height: 200)
+                .clipped()
+                .cornerRadius(12)
+                .padding(.horizontal)
+                
+                VStack(spacing: 16) {
+                    HStack {
+                        Image(systemName: "location.fill")
+                            .frame(width: 24)
+                            .foregroundColor(.primary)
+                        
+                        Text(store.location)
                             .font(.body)
-                            .lineLimit(showFullDescription ? nil : 3)
                         
-                        if store.description.count > 150 {
-                            Button(action: {
-                                withAnimation(.easeInOut(duration: 0.3)) {
-                                    showFullDescription.toggle()
-                                }
-                            }) {
-                                Text(showFullDescription ? "Show Less" : "Show More")
-                                    .font(.subheadline)
-                                    .fontWeight(.medium)
-                                    .foregroundColor(customBlueColor)
-                            }
-                        }
+                        Spacer()
                     }
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(.horizontal)
                     
-                    VStack(spacing: 16) {
-                        HStack {
-                            Image(systemName: "storefront.fill")
-                                .frame(width: 24)
-                                .foregroundColor(.primary)
-                            
-                            Text(store.location)
-                                .font(.body)
-                            
-                            Spacer()
-                        }
-                        
-                        if let website = store.website {
-                            HStack {
-                                Image(systemName: "globe")
-                                    .frame(width: 24)
-                                    .foregroundColor(.primary)
-                                
-                                Button(action: {
-                                    if let url = URL(string: website) {
-                                        UIApplication.shared.open(url)
-                                    }
-                                }) {
-                                    Text("Click here")
-                                        .font(.body)
-                                        .foregroundColor(customBlueColor)
-                                        .underline()
-                                }
-                                
-                                Spacer()
-                            }
-                        }
-                        
-                        if let phone = store.phone {
-                            HStack {
-                                Image(systemName: "phone.fill")
-                                    .frame(width: 24)
-                                    .foregroundColor(.primary)
-                                
-                                Button(action: {
-                                    if let url = URL(string: "tel:\(phone)") {
-                                        UIApplication.shared.open(url)
-                                    }
-                                }) {
-                                    Text(phone)
-                                        .font(.body)
-                                        .foregroundColor(.primary)
-                                }
-                                
-                                Spacer()
-                            }
-                        }
-                        
+                    if !store.hours.isEmpty {
                         HStack {
                             Image(systemName: "clock.fill")
                                 .frame(width: 24)
@@ -283,9 +231,119 @@ struct TenantDetailModalView: View {
                             Spacer()
                         }
                     }
-                    .padding(.horizontal)
-                    .padding(.bottom, 40)
                 }
+                .padding(.horizontal)
+                
+                Spacer(minLength: 100)
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+        }
+    }
+    
+    private var storeDetailScrollView: some View {
+        ScrollView {
+            VStack(spacing: 20) {
+                AsyncImage(url: URL(string: store.detailImageName)) { image in
+                    image
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                } placeholder: {
+                    Image(store.detailImageName)
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                }
+                .frame(height: 200)
+                .clipped()
+                .cornerRadius(12)
+                .padding(.horizontal)
+                
+                VStack(alignment: .leading, spacing: 8) {
+                    Text(showFullDescription ? store.description : String(store.description.prefix(150)) + (store.description.count > 150 ? "..." : ""))
+                        .font(.body)
+                        .lineLimit(showFullDescription ? nil : 3)
+                    
+                    if store.description.count > 150 {
+                        Button(action: {
+                            withAnimation(.easeInOut(duration: 0.3)) {
+                                showFullDescription.toggle()
+                            }
+                        }) {
+                            Text(showFullDescription ? "Show Less" : "Show More")
+                                .font(.subheadline)
+                                .fontWeight(.medium)
+                                .foregroundColor(customBlueColor)
+                        }
+                    }
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.horizontal)
+                
+                VStack(spacing: 16) {
+                    HStack {
+                        Image(systemName: "storefront.fill")
+                            .frame(width: 24)
+                            .foregroundColor(.primary)
+                        
+                        Text(store.location)
+                            .font(.body)
+                        
+                        Spacer()
+                    }
+                    
+                    if let website = store.website {
+                        HStack {
+                            Image(systemName: "globe")
+                                .frame(width: 24)
+                                .foregroundColor(.primary)
+                            
+                            Button(action: {
+                                if let url = URL(string: website) {
+                                    UIApplication.shared.open(url)
+                                }
+                            }) {
+                                Text("Click here")
+                                    .font(.body)
+                                    .foregroundColor(customBlueColor)
+                                    .underline()
+                            }
+                            
+                            Spacer()
+                        }
+                    }
+                    
+                    if let phone = store.phone {
+                        HStack {
+                            Image(systemName: "phone.fill")
+                                .frame(width: 24)
+                                .foregroundColor(.primary)
+                            
+                            Button(action: {
+                                if let url = URL(string: "tel:\(phone)") {
+                                    UIApplication.shared.open(url)
+                                }
+                            }) {
+                                Text(phone)
+                                    .font(.body)
+                                    .foregroundColor(.primary)
+                            }
+                            
+                            Spacer()
+                        }
+                    }
+                    
+                    HStack {
+                        Image(systemName: "clock.fill")
+                            .frame(width: 24)
+                            .foregroundColor(.primary)
+                        
+                        Text(store.hours)
+                            .font(.body)
+                        
+                        Spacer()
+                    }
+                }
+                .padding(.horizontal)
+                .padding(.bottom, 40)
             }
         }
     }
@@ -442,7 +500,6 @@ struct TenantDetailModalView: View {
             startLocationText = store.name
             activeField = .destination
         } else {
-            // Fill destination
             if navigationState.startLocation?.id == store.id {
                 showingSameLocationAlert = true
                 return

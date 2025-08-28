@@ -149,6 +149,126 @@ class DirectoryViewModel: ObservableObject {
                 hours: "24 Hours",
                 detailImageName: "store_logo_placeholder"
             ),
+            Store(
+                name: "North Entrance",
+                category: .facility,
+                imageName: "store_logo_placeholder",
+                subcategory: "Main Entrance",
+                description: "",
+                location: "Ground Floor, North Wing",
+                website: nil,
+                phone: nil,
+                hours: "24 Hours",
+                detailImageName: "store_logo_placeholder"
+            ),
+            Store(
+                name: "South Entrance",
+                category: .facility,
+                imageName: "store_logo_placeholder",
+                subcategory: "Main Entrance",
+                description: "",
+                location: "Ground Floor, South Wing",
+                website: nil,
+                phone: nil,
+                hours: "24 Hours",
+                detailImageName: "store_logo_placeholder"
+            ),
+            Store(
+                name: "Main Lobby",
+                category: .facility,
+                imageName: "store_logo_placeholder",
+                subcategory: "Information Center",
+                description: "",
+                location: "Ground Floor, Central",
+                website: nil,
+                phone: nil,
+                hours: "06:00AM - 12:00AM",
+                detailImageName: "store_logo_placeholder"
+            ),
+            Store(
+                name: "Restroom - Level 1",
+                category: .facility,
+                imageName: "store_logo_placeholder",
+                subcategory: "Public Facilities",
+                description: "",
+                location: "Level 1, Near Food Court",
+                website: nil,
+                phone: nil,
+                hours: "06:00AM - 12:00AM",
+                detailImageName: "store_logo_placeholder"
+            ),
+            Store(
+                name: "Restroom - Level 2",
+                category: .facility,
+                imageName: "store_logo_placeholder",
+                subcategory: "Public Facilities",
+                description: "",
+                location: "Level 2, Near Cinema",
+                website: nil,
+                phone: nil,
+                hours: "06:00AM - 12:00AM",
+                detailImageName: "store_logo_placeholder"
+            ),
+            Store(
+                name: "Emergency Exit A",
+                category: .facility,
+                imageName: "store_logo_placeholder",
+                subcategory: "Emergency Exit",
+                description: "",
+                location: "Level 1, West Wing",
+                website: nil,
+                phone: nil,
+                hours: "24 Hours",
+                detailImageName: "store_logo_placeholder"
+            ),
+            Store(
+                name: "Emergency Exit B",
+                category: .facility,
+                imageName: "store_logo_placeholder",
+                subcategory: "Emergency Exit",
+                description: "",
+                location: "Level 2, East Wing",
+                website: nil,
+                phone: nil,
+                hours: "24 Hours",
+                detailImageName: "store_logo_placeholder"
+            ),
+            Store(
+                name: "Parking Entrance",
+                category: .facility,
+                imageName: "store_logo_placeholder",
+                subcategory: "Vehicle Access",
+                description: "",
+                location: "Basement Level",
+                website: nil,
+                phone: nil,
+                hours: "24 Hours",
+                detailImageName: "store_logo_placeholder"
+            ),
+            Store(
+                name: "Elevator Bank A",
+                category: .facility,
+                imageName: "store_logo_placeholder",
+                subcategory: "Vertical Transportation",
+                description: "",
+                location: "Central Area, All Levels",
+                website: nil,
+                phone: nil,
+                hours: "06:00AM - 12:00AM",
+                detailImageName: "store_logo_placeholder"
+            ),
+            Store(
+                name: "Elevator Bank B",
+                category: .facility,
+                imageName: "store_logo_placeholder",
+                subcategory: "Vertical Transportation",
+                description: "",
+                location: "East Wing, All Levels",
+                website: nil,
+                phone: nil,
+                hours: "06:00AM - 12:00AM",
+                detailImageName: "store_logo_placeholder"
+            )
         ]
     }
     
