@@ -5,14 +5,6 @@
 //  Created by Steven Gonawan on 27/08/25.
 //
 
-
-//
-//  Graph.swift.swift
-//  Map Pathfinding Test
-//
-//  Created by Steven Gonawan on 26/08/25.
-//
-
 import Foundation
 
 // MARK: - Models
@@ -54,5 +46,7 @@ struct GraphNode {
     let label: String
     let x: Double
     let y: Double
+    let type: String // Add this line
+    let parentLabel: String?
     var neighbors: [(node: String, cost: Double)]
 }

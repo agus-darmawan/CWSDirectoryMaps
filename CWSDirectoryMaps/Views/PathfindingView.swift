@@ -132,13 +132,13 @@ struct PathfindingView: View {
         let labelGraph = buildLabelGraph(from: labeledGraph)
         
         // 4️⃣ Run A*
-        let start = "lift_2"
-        let goal = "alba_ristorante"
+        let start = "braun_buffel"
+        let goal = "oval_atrium"
         if let foundPathCoordinates = aStarByLabel(graph: labelGraph, startLabel: start, goalLabel: goal) {
             self.pathCoordinates = foundPathCoordinates // Assign coordinates directly
             print("✅ Path found from \(start) to \(goal).")
             for (index, coordinate) in self.pathCoordinates.enumerated() {
-                print("  [\(index)] X: \(String(format: "%.1f", coordinate.x)), Y: \(String(format: "%.1f", coordinate.y))")
+//                print("  [\(index)] X: \(String(format: "%.1f", coordinate.x)), Y: \(String(format: "%.1f", coordinate.y))")
             }
         } else {
             print("❌ No path found from \(start) to \(goal)")

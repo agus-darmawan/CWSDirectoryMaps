@@ -35,6 +35,7 @@ func buildLabelGraph(from graph: Graph) -> [String: GraphNode] {
     var currentEdges = graph.edges
     currentEdges.reserveCapacity(graph.edges.count * 2)
     
+    // 1️⃣ Pre-populate node dictionary with initial nodes
     for node in currentNodes {
         let label = node.label ?? node.id
         nodeDict[label] = GraphNode(
@@ -42,6 +43,8 @@ func buildLabelGraph(from graph: Graph) -> [String: GraphNode] {
             label: label,
             x: node.x,
             y: node.y,
+            type: node.type, // Added this line
+            parentLabel: node.parentLabel,
             neighbors: []
         )
     }
@@ -92,7 +95,8 @@ func buildLabelGraph(from graph: Graph) -> [String: GraphNode] {
                     y: projPoint.1,
                     type: "path-point",
                     rx: nil, ry: nil, angle: nil,
-                    label: splitId, parentLabel: nil
+                    label: splitId,
+                    parentLabel: nil // Correct: split nodes don't have an original parentLabel
                 )
                 nodesToAdd.append(splitNode)
                 
@@ -114,12 +118,15 @@ func buildLabelGraph(from graph: Graph) -> [String: GraphNode] {
     }
     currentEdges.append(contentsOf: edgesToAdd)
     
+    // 2️⃣.5 Update nodeDict with new split nodes (ensuring parentLabel is passed)
     for node in nodesToAdd {
         nodeDict[node.label ?? node.id] = GraphNode(
             id: node.id,
             label: node.label ?? node.id,
             x: node.x,
             y: node.y,
+            type: node.type, // Added this line
+            parentLabel: node.parentLabel,
             neighbors: []
         )
     }
@@ -128,6 +135,7 @@ func buildLabelGraph(from graph: Graph) -> [String: GraphNode] {
         node.type == "ellipse-point" ? nil : node.id
     })
     
+    // 3️⃣ Build neighbors with pre-calculated distances
     for edge in currentEdges {
         guard finalEligibleNodeIds.contains(edge.source),
               finalEligibleNodeIds.contains(edge.target),
@@ -143,11 +151,28 @@ func buildLabelGraph(from graph: Graph) -> [String: GraphNode] {
         let dy = target.y - source.y
         let cost = sqrt(dx*dx + dy*dy)
         
+        // Ensure nodes exist in dictionary (and correctly initialize GraphNode with parentLabel)
         if nodeDict[sourceLabel] == nil {
-             nodeDict[sourceLabel] = GraphNode(id: source.id, label: sourceLabel, x: source.x, y: source.y, neighbors: [])
+            nodeDict[sourceLabel] = GraphNode(
+                id: source.id,
+                label: sourceLabel,
+                x: source.x,
+                y: source.y,
+                type: source.type, // Added this line
+                parentLabel: source.parentLabel,
+                neighbors: []
+            )
         }
         if nodeDict[targetLabel] == nil {
-             nodeDict[targetLabel] = GraphNode(id: target.id, label: targetLabel, x: target.x, y: target.y, neighbors: [])
+            nodeDict[targetLabel] = GraphNode(
+                id: target.id,
+                label: targetLabel,
+                x: target.x,
+                y: target.y,
+                type: target.type, // Added this line
+                parentLabel: target.parentLabel,
+                neighbors: []
+            )
         }
         
         nodeDict[sourceLabel]?.neighbors.append((node: targetLabel, cost: cost))
@@ -160,7 +185,6 @@ func buildLabelGraph(from graph: Graph) -> [String: GraphNode] {
 func aStarByLabel(graph: [String: GraphNode], startLabel: String, goalLabel: String) -> [CGPoint]? {
     guard let startNode = graph[startLabel],
           let goalNode = graph[goalLabel] else {
-        print("Error: Start node '\(startLabel)' or goal node '\(goalLabel)' not found in graph.")
         return nil
     }
     
@@ -175,25 +199,132 @@ func aStarByLabel(graph: [String: GraphNode], startLabel: String, goalLabel: Str
     fScore[startLabel] = heuristic(from: startNode, to: goalNode)
     
     var openSetMembers = Set<String>([startLabel])
+    
+    var analyzedStorePaths = Set<String>()
 
     while !openSet.isEmpty {
         let (_, currentLabel) = openSet.dequeue()!
+
+        // --- Proximity Debugging Logic ---
+        if currentLabel.hasPrefix("storepath") {
+            let components = currentLabel.split(separator: "_")
+            if components.count >= 2 {
+                let basePath = "\(components[0])"
+                
+                if !analyzedStorePaths.contains(basePath) {
+                    print("--- DEBUG: Proximity Analysis for \(basePath) triggered by \(currentLabel) ---")
+                    
+                    let proximityThreshold = 30.0
+                    let point0Label = "\(basePath)_point_0"
+                    let point1Label = "\(basePath)_point_1"
+                    
+                    if let point0Node = graph[point0Label] {
+                        print("  'ellipse-center' nodes near \(point0Node.label):")
+                        for candidateNode in graph.values {
+                            if candidateNode.label == point0Node.label { continue }
+                            let distance = heuristic(from: point0Node, to: candidateNode)
+                            if distance < proximityThreshold && candidateNode.type == "ellipse-center" {
+                                 print("    - Label: \(candidateNode.label), ID: \(candidateNode.id), Parent: \(candidateNode.parentLabel ?? "N/A"), Dist: \(String(format: "%.2f", distance))")
+                            }
+                        }
+                    } else {
+                        print("  Could not find node for \(point0Label)")
+                    }
+                    
+                    if let point1Node = graph[point1Label] {
+                        print("  'ellipse-center' nodes near \(point1Node.label):")
+                         for candidateNode in graph.values {
+                            if candidateNode.label == point1Node.label { continue }
+                            let distance = heuristic(from: point1Node, to: candidateNode)
+                            if distance < proximityThreshold && candidateNode.type == "ellipse-center" {
+                                 print("    - Label: \(candidateNode.label), ID: \(candidateNode.id), Parent: \(candidateNode.parentLabel ?? "N/A"), Dist: \(String(format: "%.2f", distance))")
+                            }
+                        }
+                    } else {
+                        print("  Could not find node for \(point1Label)")
+                    }
+                    print("---------------------------------------------------------")
+                    
+                    analyzedStorePaths.insert(basePath)
+                }
+            }
+        }
+        // --- End Debugging Logic ---
+
         if currentLabel == goalLabel {
             return reconstructPath(cameFrom: cameFrom, current: currentLabel, graph: graph)
         }
+        
         openSetMembers.remove(currentLabel)
-        guard let currentNode = graph[currentLabel] else { continue }
+        
+        guard let currentNode = graph[currentLabel] else {
+            continue
+        }
         
         for neighbor in currentNode.neighbors {
+            let neighborLabel = neighbor.node
+            guard let neighborNode = graph[neighborLabel] else { continue }
+
+            // --- Path Restriction Logic ---
+            if neighborNode.label.hasPrefix("split_") {
+                var associatedStoreLabel: String? = nil
+                for splitNeighborTuple in neighborNode.neighbors {
+                    if let splitNeighborNode = graph[splitNeighborTuple.node] {
+                        if splitNeighborNode.type == "ellipse-point" {
+                            associatedStoreLabel = splitNeighborNode.parentLabel
+                            break
+                        }
+                    }
+                }
+
+                if let storeLabel = associatedStoreLabel {
+                    if storeLabel != goalLabel && storeLabel != startLabel {
+                        continue
+                    }
+                }
+            } else if neighborNode.label.hasPrefix("storepath") {
+                var isPathToDestination = false
+                let proximityThreshold = 30.0
+                
+                let components = neighborNode.label.split(separator: "_")
+                if components.count >= 2 {
+                    let basePath = "\(components[0])"
+                    let point0Label = "\(basePath)_point_0"
+                    let point1Label = "\(basePath)_point_1"
+
+                    if let point0Node = graph[point0Label] {
+                        if heuristic(from: point0Node, to: startNode) < proximityThreshold ||
+                           heuristic(from: point0Node, to: goalNode) < proximityThreshold {
+                            isPathToDestination = true
+                        }
+                    }
+
+                    if !isPathToDestination, let point1Node = graph[point1Label] {
+                         if heuristic(from: point1Node, to: startNode) < proximityThreshold ||
+                            heuristic(from: point1Node, to: goalNode) < proximityThreshold {
+                            isPathToDestination = true
+                        }
+                    }
+                }
+
+                if !isPathToDestination {
+                    continue
+                }
+            }
+            // --- End Path Restriction Logic ---
+
             let tentativeGScore = (gScore[currentLabel] ?? .infinity) + neighbor.cost
+            
             if tentativeGScore < (gScore[neighbor.node] ?? .infinity) {
                 cameFrom[neighbor.node] = currentLabel
                 gScore[neighbor.node] = tentativeGScore
+                
                 if let neighborGraphNode = graph[neighbor.node] {
                     fScore[neighbor.node] = tentativeGScore + heuristic(from: neighborGraphNode, to: goalNode)
                 } else {
                     continue
                 }
+                
                 if !openSetMembers.contains(neighbor.node) {
                     openSet.enqueue((fScore: fScore[neighbor.node]!, label: neighbor.node))
                     openSetMembers.insert(neighbor.node)
@@ -202,9 +333,11 @@ func aStarByLabel(graph: [String: GraphNode], startLabel: String, goalLabel: Str
         }
     }
     
-    print("❌ No path found from \(startLabel) to \(goalLabel).")
+    // No path was found
     return nil
 }
+
+
 
 fileprivate struct PriorityQueue {
     fileprivate var heap = [(fScore: Double, label: String)]()
