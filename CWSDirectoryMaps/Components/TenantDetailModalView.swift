@@ -350,27 +350,31 @@ struct TenantDetailModalView: View {
     
     private var navigationContentView: some View {
         VStack(spacing: 0) {
-            VStack(spacing: 12) {
-                HStack {
-                    Image(systemName: "location.circle.fill")
-                        .foregroundColor(Color(.systemBlue))
-                        .font(.system(size: 24))
-                    
+            HStack(spacing: 12) {
+                VStack(spacing: 0) {
                     HStack {
-                        TextField("Search starting location", text: $startLocationText)
-                            .font(.body)
-                            .foregroundColor(.primary)
-                            .onTapGesture {
-                                activeField = .startLocation
-                            }
-                            .onChange(of: startLocationText) { _, newValue in
-                                activeField = .startLocation
-                                if let currentStore = navigationState.startLocation {
-                                    if newValue != currentStore.name {
-                                        navigationState.startLocation = nil
+                        Image(systemName: "location.circle.fill")
+                            .foregroundColor(.blue)
+                            .font(.system(size: 24))
+                        
+                        if let startLocation = navigationState.startLocation {
+                            Text(startLocation.name)
+                                .foregroundColor(.primary)
+                        } else {
+                            TextField("Search starting location", text: $startLocationText)
+                                .foregroundColor(.primary)
+                                .onTapGesture {
+                                    activeField = .startLocation
+                                }
+                                .onChange(of: startLocationText) { _, newValue in
+                                    activeField = .startLocation
+                                    if let currentStore = navigationState.startLocation {
+                                        if newValue != currentStore.name {
+                                            navigationState.startLocation = nil
+                                        }
                                     }
                                 }
-                            }
+                        }
                         
                         Spacer()
                         
@@ -382,63 +386,39 @@ struct TenantDetailModalView: View {
                             }) {
                                 Image(systemName: "xmark.circle.fill")
                                     .foregroundColor(.secondary)
-                                    .font(.system(size: 16))
+                                    .font(.system(size: 20))
                             }
                         }
                     }
-                    .padding(.horizontal, 16)
-                    .padding(.vertical, 14)
-                    .background(Color.white)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 8)
-                            .stroke(Color(.systemGray4), lineWidth: 1)
-                    )
-                    .cornerRadius(8)
-                }
-                .padding(.horizontal)
-                
-                HStack {
-                    Spacer()
+                    .padding(10)
+                    .background(Color(.secondarySystemBackground))
                     
-                    Button(action: {
-                        if canReverse {
-                            withAnimation(.easeInOut(duration: 0.2)) {
-                                navigationState.reverseLocations()
-                                let tempText = startLocationText
-                                startLocationText = destinationText
-                                destinationText = tempText
-                            }
-                        }
-                    }) {
-                        Image(systemName: "arrow.up.arrow.down.circle.fill")
-                            .font(.system(size: 24, weight: .medium))
-                            .foregroundColor(canReverse ? customBlueColor : .secondary)
-                    }
-                    .disabled(!canReverse)
-                    
-                    Spacer()
-                }
-                
-                HStack {
-                    Image(systemName: "mappin.and.ellipse.circle.fill")
-                        .foregroundColor(Color(.systemRed))
-                        .font(.system(size: 24))
+                    Divider()
+                        .frame(height: 1)
                     
                     HStack {
-                        TextField("Search destination", text: $destinationText)
-                            .font(.body)
-                            .foregroundColor(.primary)
-                            .onTapGesture {
-                                activeField = .destination
-                            }
-                            .onChange(of: destinationText) { _, newValue in
-                                activeField = .destination
-                                if let currentStore = navigationState.endLocation {
-                                    if newValue != currentStore.name {
-                                        navigationState.endLocation = nil
+                        Image(systemName: "mappin.circle.fill")
+                            .foregroundColor(.red)
+                            .font(.system(size: 24))
+                        
+                        if let endLocation = navigationState.endLocation {
+                            Text(endLocation.name)
+                                .foregroundColor(.primary)
+                        } else {
+                            TextField("Search destination", text: $destinationText)
+                                .foregroundColor(.primary)
+                                .onTapGesture {
+                                    activeField = .destination
+                                }
+                                .onChange(of: destinationText) { _, newValue in
+                                    activeField = .destination
+                                    if let currentStore = navigationState.endLocation {
+                                        if newValue != currentStore.name {
+                                            navigationState.endLocation = nil
+                                        }
                                     }
                                 }
-                            }
+                        }
                         
                         Spacer()
                         
@@ -450,22 +430,33 @@ struct TenantDetailModalView: View {
                             }) {
                                 Image(systemName: "xmark.circle.fill")
                                     .foregroundColor(.secondary)
-                                    .font(.system(size: 16))
+                                    .font(.system(size: 20))
                             }
                         }
                     }
-                    .padding(.horizontal, 16)
-                    .padding(.vertical, 14)
-                    .background(Color.white)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 8)
-                            .stroke(Color(.systemGray4), lineWidth: 1)
-                    )
-                    .cornerRadius(8)
+                    .padding(10)
+                    .background(Color(.secondarySystemBackground))
                 }
-                .padding(.horizontal)
+                .clipShape(RoundedRectangle(cornerRadius: 12))
+                
+                Button(action: {
+                    if canReverse {
+                        withAnimation(.easeInOut(duration: 0.2)) {
+                            navigationState.reverseLocations()
+                            let tempText = startLocationText
+                            startLocationText = destinationText
+                            destinationText = tempText
+                        }
+                    }
+                }) {
+                    Image(systemName: "arrow.up.arrow.down.circle.fill")
+                        .foregroundColor(.blue)
+                        .font(.system(size: 28))
+                }
+                .disabled(!canReverse)
             }
-            .padding(.vertical, 20)
+            .padding(.horizontal)
+            .padding(.vertical, 12)
             
             CategoryFilterView(
                 categories: StoreCategory.allCases,
