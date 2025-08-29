@@ -29,4 +29,8 @@ struct Store: Identifiable {
     let phone: String?
     let hours: String
     let detailImageName: String
+    
+    var isFacility: Bool {
+        return category == .facility
+    }
 }
