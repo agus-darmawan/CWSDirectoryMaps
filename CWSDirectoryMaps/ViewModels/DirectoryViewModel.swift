@@ -279,7 +279,7 @@ class DirectoryViewModel: ObservableObject {
                 guard let self = self else { return [] }
                 
                 if let selected = store {
-                    return [selected]
+                    return self.allStores
                 }
                 
                 var storesToFilter = self.allStores
@@ -316,5 +316,10 @@ class DirectoryViewModel: ObservableObject {
         searchText = ""
         selectedCategory = nil
         selectedStore = nil
+    }
+    
+    func selectStore(_ store: Store) {
+        selectedStore = store
+        searchText = store.name
     }
 }

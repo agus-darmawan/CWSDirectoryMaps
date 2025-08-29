@@ -45,9 +45,9 @@ struct SearchBarView: View {
                         onCloseSearch()
                     }
                 }) {
-                    Image(systemName: "xmark.circle.fill")
-                        .foregroundColor(.secondary)
-                        .font(.system(size: 24, weight: .medium))
+                    Text("Cancel")
+                        .font(.system(size: 17, weight: .regular))
+                        .foregroundColor(.blue)
                 }
             }
         }
