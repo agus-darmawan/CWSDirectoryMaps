@@ -47,10 +47,14 @@ struct DirectoryView: View {
             }
             .sheet(isPresented: .constant(viewModel.selectedStore != nil)) {
                 if let store = viewModel.selectedStore {
-                    TenantDetailModal(store: store, isPresented: Binding<Bool>(
-                        get: { viewModel.selectedStore != nil },
-                        set: { _ in viewModel.selectedStore = nil }
-                    ))
+                    TenantDetailModalView(
+                        store: store,
+                        viewModel: viewModel,
+                        isPresented: Binding<Bool>(
+                            get: { viewModel.selectedStore != nil },
+                            set: { _ in viewModel.selectedStore = nil }
+                        )
+                    )
                 }
             }
         }
