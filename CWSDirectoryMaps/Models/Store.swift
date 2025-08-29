@@ -11,6 +11,7 @@ enum StoreCategory: String, CaseIterable, Identifiable {
     case shop = "Shop"
     case fnb = "F&B"
     case play = "Play"
+    case facility = "Facility"
     case others = "Others"
     
     var id: String { self.rawValue }

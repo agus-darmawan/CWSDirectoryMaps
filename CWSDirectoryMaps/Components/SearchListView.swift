@@ -19,7 +19,6 @@ struct SearchListView: View {
             )
             .padding(.vertical)
             
-            // Daftar Toko
             List(viewModel.filteredStores) { store in
                 StoreRowView(store: store)
                     .onTapGesture {
