@@ -27,61 +27,47 @@ struct ZoomableScrollView<Content: View>: View {
                     lastOffset = .zero
                 }
                 .gesture(
-                    MagnificationGesture() //pinch zoom
-                        .onChanged { value in
-                            scale = lastScale * value
-                            offset = clampedOffset(offset, geo: geo)
-                        }
-                        .onEnded { _ in
-                            lastScale = max(min(scale, 5.0), 1.0)
-                            scale = lastScale
-                            offset = clampedOffset(offset, geo: geo)
-                            lastOffset = offset
-                        }
+                    SimultaneousGesture(
+                        MagnificationGesture()
+                            .onChanged { value in
+                                scale = lastScale * value
+                                offset = clampedOffset(offset, geo: geo)
+                            }
+                            .onEnded { _ in
+                                lastScale = max(min(scale, 5.0), 1.0)
+                                scale = lastScale
+                                offset = clampedOffset(offset, geo: geo)
+                                lastOffset = offset
+                            },
+                        DragGesture()
+                            .onChanged { value in
+                                let newOffset = CGSize(
+                                    width: lastOffset.width + value.translation.width,
+                                    height: lastOffset.height + value.translation.height
+                                )
+                                offset = clampedOffset(newOffset, geo: geo)
+                            }
+                            .onEnded { _ in
+                                lastOffset = offset
+                            }
+                    )
                 )
                 .gesture(
-                    DragGesture() //pan gesture
-                        .onChanged { value in
-                            let newOffset = CGSize(
-                                width: lastOffset.width + value.translation.width,
-                                height: lastOffset.height + value.translation.height
-                            )
-                            offset = clampedOffset(newOffset, geo: geo)
-                        }
-                        .onEnded { _ in
-                            lastOffset = offset
-                        }
-                )
-                .gesture(
-                    DragGesture(minimumDistance: 0) //double tap zoom
-                        .onEnded { value in
-                            let now = Date()
-                            if now.timeIntervalSince(lastTapTime) < 0.3 {
-                                let location = value.location
-                                withAnimation(.easeInOut) {
-                                    if scale > 3 {
-                                        //zoom out
-                                        scale = 3
-                                        lastScale = 3
-                                        offset = .zero
-                                        lastOffset = .zero
-                                    } else if scale <= 3 {
-                                        //zoom in
-                                        let tapX = location.x - geo.size.width / 2
-                                        let tapY = location.y - geo.size.height / 2
-                                        
-                                        scale = 5
-                                        lastScale = 5
-                                        
-                                        offset = CGSize(
-                                            width: -tapX * (scale - 1),
-                                            height: -tapY * (scale - 1)
-                                        )
-                                        lastOffset = offset
-                                    }
+                    TapGesture(count: 2)
+                        .onEnded {
+                            withAnimation(.easeInOut) {
+                                if scale > 3 {
+                                    // zoom out
+                                    scale = 3
+                                    lastScale = 3
+                                    offset = .zero
+                                    lastOffset = .zero
+                                } else {
+                                    // zoom in
+                                    scale = 5
+                                    lastScale = 5
                                 }
                             }
-                            lastTapTime = now
                         }
                 )
         }
@@ -320,6 +306,79 @@ struct DirectionsModal: View {
     }
 }
 
+struct DirectionStepsModal: View {
+    @Binding var showStepsModal: Bool
+    @State var showSteps: Bool = false
+    
+    var body: some View {
+        if showStepsModal{
+            
+            VStack {
+                Spacer()
+                
+                VStack(spacing: 16) {
+                    //title
+                    HStack {
+                        VStack(alignment: .leading, spacing: 2) {
+                            HStack {
+                                Text("To")
+                                    .font(.title3)
+                                    .bold()
+                            }
+                            Text("200m – 4 mins")
+                                .font(.subheadline)
+                                .foregroundColor(.secondary)
+                        }
+                        Spacer()
+                        
+                        Button(action: { showSteps = true }) {
+                            Image(systemName: "chevron.up.circle.fill")
+                                .font(.title2)
+                                .foregroundColor(.secondary)
+                        }
+                        .padding(.bottom, 12)
+                    }
+                    
+                    //steps card
+                    VStack {
+                        HStack {
+                            Image(systemName: "figure.walk")
+                                .foregroundColor(.blue)
+                            Text("Head north on Main St toward 1st Ave")
+                                .foregroundColor(.primary)
+                            Spacer()
+                            Text("100m")
+                                .foregroundColor(.secondary)
+                        }
+                    }
+                    
+                    //go button
+                    Button(action: {
+                        print("Go tapped")
+                    }) {
+                        Text("GO")
+                            .font(.headline)
+                            .frame(maxWidth: .infinity)
+                            .padding()
+                            .background(Color.green)
+                            .foregroundColor(.primary)
+                            .cornerRadius(12)
+                    }
+                    .padding(.bottom, 24)
+                }
+                .padding()
+                .background(Color(.systemBackground))
+                .cornerRadius(16, corners: [.topLeft, .topRight])
+                //                .shadow(radius: 10)
+            }
+            .ignoresSafeArea(edges: .bottom)
+            .transition(.move(edge: .bottom))
+            .animation(.spring(), value: showStepsModal)
+        }
+    }
+    
+}
+
 extension View {
     func cornerRadius(_ radius: CGFloat, corners: UIRectCorner) -> some View {
         clipShape(RoundedCorner(radius: radius, corners: corners))
@@ -343,6 +402,7 @@ struct RoundedCorner: Shape {
 
 #Preview {
     Maps()
-    DirectionsModal(showModal: .constant(true))
+//    DirectionsModal(showModal: .constant(true))
+    DirectionStepsModal(showStepsModal: .constant(true))
 }
 
