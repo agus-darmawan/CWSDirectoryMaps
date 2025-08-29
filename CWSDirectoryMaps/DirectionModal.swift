@@ -100,64 +100,7 @@ struct ZoomableScrollView<Content: View>: View {
     }
 }
 
-struct Maps: View {
-    @State private var selectedFloor: String = "Ground Floor"
-    
-    let floors = [
-        "4th Floor",
-        "3rd Floor",
-        "2nd Floor",
-        "1st Floor",
-        "Ground Floor",
-        "Lower Ground"
-    ]
-    
-    var body: some View {
-        ZStack(alignment: .topTrailing) {
-            ZoomableScrollView {
-                Image(imageName(for: selectedFloor))
-                    .resizable()
-                    .scaledToFit()
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-            }
-            
-            Menu {
-                ForEach(floors, id: \.self) { floor in
-                    Button(action: {
-                        selectedFloor = floor
-                    }) {
-                        Text(floor)
-                    }
-                }
-            } label: {
-                HStack {
-                    Text(selectedFloor)
-                        .font(.headline)
-                    Image(systemName: "chevron.down")
-                }
-                .padding(.horizontal, 12)
-                .padding(.vertical, 8)
-                .background(Color(.systemBackground))
-                .cornerRadius(8)
-                .shadow(color: Color.black.opacity(0.2), radius: 3)
-                .foregroundColor(.primary)
-            }
-            .padding()
-        }
-    }
-    
-    private func imageName(for floor: String) -> String {
-        switch floor {
-        case "Lower Ground": return "floor-lower-ground"
-        case "Ground Floor": return "floor-ground"
-        case "1st Floor": return "floor-1"
-        case "2nd Floor": return "floor-2"
-        case "3rd Floor": return "floor-3"
-        case "4th Floor": return "floor-4"
-        default: return "floor-ground"
-        }
-    }
-}
+
 
 struct DirectionsModal: View {
     @Binding var showModal: Bool
@@ -401,8 +344,8 @@ struct RoundedCorner: Shape {
 
 
 #Preview {
-    Maps()
-//    DirectionsModal(showModal: .constant(true))
-    DirectionStepsModal(showStepsModal: .constant(true))
+//    Maps()
+    DirectionsModal(showModal: .constant(true))
+//    DirectionStepsModal(showStepsModal: .constant(true))
 }
 

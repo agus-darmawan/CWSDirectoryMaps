@@ -1,3 +1,4 @@
+
 //
 //  DirectoryView.swift
 //  CWSDirectoryMaps
@@ -14,27 +15,31 @@ struct DirectoryView: View {
     
     var body: some View {
         NavigationView {
-            ZStack {
-                MapView()
-                    .ignoresSafeArea()
+            VStack(spacing: 0) {
+                // Fixed SearchBar at top
+                SearchBarView(
+                    searchText: $viewModel.searchText,
+                    isSearching: $viewModel.isSearching,
+                    isSearchFieldFocused: $isSearchFieldFocused,
+                    onClear: viewModel.clearSearch
+                )
+                .padding(.horizontal)
+                .padding(.top, 10)
+                .padding(.bottom, 8)
+                .background(Color(.systemBackground))
+                .zIndex(1) // Ensure search bar stays on top
                 
-                VStack(spacing: 0) {
-                    SearchBarView(
-                        searchText: $viewModel.searchText,
-                        isSearching: $viewModel.isSearching,
-                        isSearchFieldFocused: $isSearchFieldFocused,
-                        onClear: viewModel.clearSearch
-                    )
-                    .padding(.horizontal)
-                    .padding(.top, 10)
-                    .padding(.bottom, 8)
+                // Map or Search Results below
+                ZStack {
+                    // Map View - always present but hidden when searching
+                    MapView()
+                        .opacity(viewModel.isSearching ? 0 : 1)
                     
+                    // Search Results - only shown when searching
                     if viewModel.isSearching {
                         SearchListView(viewModel: viewModel)
                             .background(Color(.systemBackground))
                             .transition(.opacity.combined(with: .move(edge: .bottom)))
-                    } else {
-                        Spacer()
                     }
                 }
             }
@@ -59,8 +64,4 @@ struct DirectoryView: View {
             }
         }
     }
-}
-
-#Preview {
-    DirectoryView()
 }
