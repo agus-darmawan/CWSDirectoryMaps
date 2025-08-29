@@ -43,14 +43,15 @@ func buildLabelGraph(from graph: Graph) -> [String: GraphNode] {
             label: label,
             x: node.x,
             y: node.y,
-            type: node.type, // Added this line
+            type: node.type,
             parentLabel: node.parentLabel,
             neighbors: []
         )
     }
     
+    let nodeLookup = Dictionary(uniqueKeysWithValues: currentNodes.map { ($0.id, $0) })
+    
     let threshold: Double = 30.0
-    let thresholdSq = threshold * threshold
     var splitCount = 0
     
     let eligibleNodesForSplitting = currentNodes.filter { $0.type != "ellipse-point" }
@@ -59,56 +60,61 @@ func buildLabelGraph(from graph: Graph) -> [String: GraphNode] {
     var edgesToAdd: [Edge] = []
     var nodesToAdd: [Node] = []
     
-    for edge in graph.edges {
-        guard
-            let sourceNode = currentNodes.first(where: { $0.id == edge.source }),
-            let targetNode = currentNodes.first(where: { $0.id == edge.target })
-        else { continue }
-        
-        let edgeKey = "\(edge.source)-\(edge.target)"
-        
-        let minX = min(sourceNode.x, targetNode.x) - threshold
-        let maxX = max(sourceNode.x, targetNode.x) + threshold
-        let minY = min(sourceNode.y, targetNode.y) - threshold
-        let maxY = max(sourceNode.y, targetNode.y) + threshold
-        
-        for candidateNode in eligibleNodesForSplitting {
+    for candidateNode in eligibleNodesForSplitting {
+        var bestEdge: Edge? = nil
+        var bestProjection: (Double, Double)? = nil
+        var minDistanceSq = Double.infinity
+
+        for edge in graph.edges {
+            guard
+                let sourceNode = nodeLookup[edge.source],
+                let targetNode = nodeLookup[edge.target]
+            else { continue }
+            
             if candidateNode.id == sourceNode.id || candidateNode.id == targetNode.id { continue }
-            
-            if candidateNode.x < minX || candidateNode.x > maxX || candidateNode.y < minY || candidateNode.y > maxY {
-                continue
-            }
-            
+
             let (distSq, projPoint) = distanceFromPointToSegmentSquared(
                 px: candidateNode.x, py: candidateNode.y,
                 x1: sourceNode.x, y1: sourceNode.y,
                 x2: targetNode.x, y2: targetNode.y
             )
-            
-            if distSq < thresholdSq {
-                splitCount += 1
-                let splitId = "split_\(splitCount)"
-                
-                let splitNode = Node(
-                    id: splitId,
-                    x: projPoint.0,
-                    y: projPoint.1,
-                    type: "path-point",
-                    rx: nil, ry: nil, angle: nil,
-                    label: splitId,
-                    parentLabel: nil // Correct: split nodes don't have an original parentLabel
-                )
-                nodesToAdd.append(splitNode)
-                
-                edgesToRemove.insert(edgeKey)
-                edgesToRemove.insert("\(edge.target)-\(edge.source)")
-                
-                edgesToAdd.append(contentsOf: [
-                    Edge(source: sourceNode.id, target: splitId, type: "line"),
-                    Edge(source: splitId, target: targetNode.id, type: "line"),
-                    Edge(source: candidateNode.id, target: splitId, type: "line")
-                ])
+
+            if distSq < minDistanceSq {
+                minDistanceSq = distSq
+                bestEdge = edge
+                bestProjection = projPoint
             }
+        }
+
+        if minDistanceSq < threshold * threshold, let edgeToSplit = bestEdge, let projPoint = bestProjection {
+            guard
+                let sourceNode = nodeLookup[edgeToSplit.source],
+                let targetNode = nodeLookup[edgeToSplit.target]
+            else { continue }
+
+            splitCount += 1
+            let splitId = "split_\(splitCount)"
+            
+            let splitNode = Node(
+                id: splitId,
+                x: projPoint.0,
+                y: projPoint.1,
+                type: "path-point",
+                rx: nil, ry: nil, angle: nil,
+                label: splitId,
+                parentLabel: nil
+            )
+            nodesToAdd.append(splitNode)
+            
+            let edgeKey = "\(edgeToSplit.source)-\(edgeToSplit.target)"
+            edgesToRemove.insert(edgeKey)
+            edgesToRemove.insert("\(edgeToSplit.target)-\(edgeToSplit.source)")
+            
+            edgesToAdd.append(contentsOf: [
+                Edge(source: sourceNode.id, target: splitId, type: "line"),
+                Edge(source: splitId, target: targetNode.id, type: "line"),
+                Edge(source: candidateNode.id, target: splitId, type: "line")
+            ])
         }
     }
     
@@ -118,29 +124,26 @@ func buildLabelGraph(from graph: Graph) -> [String: GraphNode] {
     }
     currentEdges.append(contentsOf: edgesToAdd)
     
-    // 2️⃣.5 Update nodeDict with new split nodes (ensuring parentLabel is passed)
     for node in nodesToAdd {
         nodeDict[node.label ?? node.id] = GraphNode(
             id: node.id,
             label: node.label ?? node.id,
             x: node.x,
             y: node.y,
-            type: node.type, // Added this line
+            type: node.type,
             parentLabel: node.parentLabel,
             neighbors: []
         )
     }
     
-    let finalEligibleNodeIds = Set(currentNodes.compactMap { node in
-        node.type == "ellipse-point" ? nil : node.id
-    })
+    let finalNodeLookup = Dictionary(uniqueKeysWithValues: currentNodes.map { ($0.id, $0) })
     
-    // 3️⃣ Build neighbors with pre-calculated distances
+    // --- FIX: Removed the incorrect filtering of 'ellipse-point' nodes ---
+    
     for edge in currentEdges {
-        guard finalEligibleNodeIds.contains(edge.source),
-              finalEligibleNodeIds.contains(edge.target),
-              let source = currentNodes.first(where: { $0.id == edge.source }),
-              let target = currentNodes.first(where: { $0.id == edge.target }) else {
+        // --- FIX: Simplified the guard statement ---
+        guard let source = finalNodeLookup[edge.source],
+              let target = finalNodeLookup[edge.target] else {
             continue
         }
         
@@ -151,14 +154,13 @@ func buildLabelGraph(from graph: Graph) -> [String: GraphNode] {
         let dy = target.y - source.y
         let cost = sqrt(dx*dx + dy*dy)
         
-        // Ensure nodes exist in dictionary (and correctly initialize GraphNode with parentLabel)
         if nodeDict[sourceLabel] == nil {
             nodeDict[sourceLabel] = GraphNode(
                 id: source.id,
                 label: sourceLabel,
                 x: source.x,
                 y: source.y,
-                type: source.type, // Added this line
+                type: source.type,
                 parentLabel: source.parentLabel,
                 neighbors: []
             )
@@ -169,7 +171,7 @@ func buildLabelGraph(from graph: Graph) -> [String: GraphNode] {
                 label: targetLabel,
                 x: target.x,
                 y: target.y,
-                type: target.type, // Added this line
+                type: target.type,
                 parentLabel: target.parentLabel,
                 neighbors: []
             )
@@ -178,6 +180,14 @@ func buildLabelGraph(from graph: Graph) -> [String: GraphNode] {
         nodeDict[sourceLabel]?.neighbors.append((node: targetLabel, cost: cost))
         nodeDict[targetLabel]?.neighbors.append((node: sourceLabel, cost: cost))
     }
+    
+//    print("--- Final Graph Contents ---")
+//    for (label, node) in nodeDict {
+//        print("Node: \(label)")
+//        for neighbor in node.neighbors {
+//            print("  -> Connects to: \(neighbor.node) (Cost: \(String(format: "%.2f", neighbor.cost)))")
+//        }
+//    }
     
     return nodeDict
 }
@@ -199,57 +209,9 @@ func aStarByLabel(graph: [String: GraphNode], startLabel: String, goalLabel: Str
     fScore[startLabel] = heuristic(from: startNode, to: goalNode)
     
     var openSetMembers = Set<String>([startLabel])
-    
-    var analyzedStorePaths = Set<String>()
 
     while !openSet.isEmpty {
         let (_, currentLabel) = openSet.dequeue()!
-
-        // --- Proximity Debugging Logic ---
-        if currentLabel.hasPrefix("storepath") {
-            let components = currentLabel.split(separator: "_")
-            if components.count >= 2 {
-                let basePath = "\(components[0])"
-                
-                if !analyzedStorePaths.contains(basePath) {
-                    print("--- DEBUG: Proximity Analysis for \(basePath) triggered by \(currentLabel) ---")
-                    
-                    let proximityThreshold = 30.0
-                    let point0Label = "\(basePath)_point_0"
-                    let point1Label = "\(basePath)_point_1"
-                    
-                    if let point0Node = graph[point0Label] {
-                        print("  'ellipse-center' nodes near \(point0Node.label):")
-                        for candidateNode in graph.values {
-                            if candidateNode.label == point0Node.label { continue }
-                            let distance = heuristic(from: point0Node, to: candidateNode)
-                            if distance < proximityThreshold && candidateNode.type == "ellipse-center" {
-                                 print("    - Label: \(candidateNode.label), ID: \(candidateNode.id), Parent: \(candidateNode.parentLabel ?? "N/A"), Dist: \(String(format: "%.2f", distance))")
-                            }
-                        }
-                    } else {
-                        print("  Could not find node for \(point0Label)")
-                    }
-                    
-                    if let point1Node = graph[point1Label] {
-                        print("  'ellipse-center' nodes near \(point1Node.label):")
-                         for candidateNode in graph.values {
-                            if candidateNode.label == point1Node.label { continue }
-                            let distance = heuristic(from: point1Node, to: candidateNode)
-                            if distance < proximityThreshold && candidateNode.type == "ellipse-center" {
-                                 print("    - Label: \(candidateNode.label), ID: \(candidateNode.id), Parent: \(candidateNode.parentLabel ?? "N/A"), Dist: \(String(format: "%.2f", distance))")
-                            }
-                        }
-                    } else {
-                        print("  Could not find node for \(point1Label)")
-                    }
-                    print("---------------------------------------------------------")
-                    
-                    analyzedStorePaths.insert(basePath)
-                }
-            }
-        }
-        // --- End Debugging Logic ---
 
         if currentLabel == goalLabel {
             return reconstructPath(cameFrom: cameFrom, current: currentLabel, graph: graph)
@@ -310,6 +272,12 @@ func aStarByLabel(graph: [String: GraphNode], startLabel: String, goalLabel: Str
                 if !isPathToDestination {
                     continue
                 }
+            } else if neighborNode.type == "rect-corner" {
+                if let rectLabel = neighborNode.parentLabel {
+                    if rectLabel != goalLabel && rectLabel != startLabel {
+                        continue
+                    }
+                }
             }
             // --- End Path Restriction Logic ---
 
@@ -333,10 +301,8 @@ func aStarByLabel(graph: [String: GraphNode], startLabel: String, goalLabel: Str
         }
     }
     
-    // No path was found
     return nil
 }
-
 
 
 fileprivate struct PriorityQueue {
@@ -391,9 +357,11 @@ fileprivate struct PriorityQueue {
     }
 }
 
-private func distanceFromPointToSegmentSquared(px: Double, py: Double,
-                                               x1: Double, y1: Double,
-                                               x2: Double, y2: Double) -> (Double, (Double, Double)) {
+private func distanceFromPointToSegmentSquared(
+    px: Double, py: Double,
+    x1: Double, y1: Double,
+    x2: Double, y2: Double
+) -> (Double, (Double, Double)) {
     let dx = x2 - x1
     let dy = y2 - y1
     let lengthSq = dx*dx + dy*dy
