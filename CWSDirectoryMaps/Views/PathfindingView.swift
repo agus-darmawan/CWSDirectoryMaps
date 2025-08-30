@@ -23,7 +23,6 @@ struct SearchBarView: View {
     
     var onLocationSelected: (String) -> Void
     
-    // --- Properties for managing keyboard focus ---
     var field: Field
     @FocusState.Binding var focusedField: Field?
 
@@ -43,11 +42,9 @@ struct SearchBarView: View {
                                 .padding(.leading, 8)
                         }
                     )
-                    // --- Bind the focus state to this text field ---
                     .focused($focusedField, equals: field)
                     .onTapGesture {
                         self.isEditing = true
-                        // --- Set the focus to this field when tapped ---
                         self.focusedField = field
                     }
             }
@@ -60,7 +57,6 @@ struct SearchBarView: View {
                             self.text = location
                             self.isEditing = false
                             self.onLocationSelected(location)
-                            // --- Clear focus to dismiss the keyboard ---
                             self.focusedField = nil
                         }
                 }
@@ -72,33 +68,55 @@ struct SearchBarView: View {
     }
 }
 
+// MARK: - View for a Single Direction Step
+struct DirectionStepView: View {
+    let step: DirectionStep
+
+    var body: some View {
+        HStack {
+            Image(systemName: step.iconName)
+                .font(.title2)
+                .foregroundColor(.white)
+                .frame(width: 40)
+            
+            Text(step.instruction)
+                .foregroundColor(.white)
+                .font(.body)
+            
+            Spacer()
+        }
+        .padding()
+        .background(Color.blue.opacity(0.8))
+        .cornerRadius(10)
+    }
+}
+
 
 // MARK: - PathfindingView
 struct PathfindingView: View {
     @State private var graph: Graph? = nil
     @State private var pathCoordinates: [CGPoint] = []
     
-    // --- State for map interaction ---
     @State private var scale: CGFloat = 1.0
     @State private var lastScale: CGFloat = 1.0
     @State private var offset: CGSize = .zero
     @State private var lastOffset: CGSize = .zero
 
-    // --- State for manual adjustments ---
     @State private var manualOffsetX: CGFloat = 14.0
     @State private var manualOffsetY: CGFloat = 16.0
     
-    // --- State for pathfinding inputs ---
-    @State private var startLabel: String = "braun_buffel"
-    @State private var endLabel: String = "oval_atrium"
+    @State private var startLabel: String = "metro"
+    @State private var endLabel: String = "east_lobby"
     @State private var allLocations: [String] = []
     
-    // --- State to manage keyboard focus ---
+    @State private var directionSteps: [DirectionStep] = []
+    private let directionsGenerator = DirectionsGenerator()
+    private let pathCleaner = PathCleaner() // Create an instance of the new cleaner
+    
     @FocusState private var focusedField: Field?
     
     var body: some View {
         VStack(spacing: 0) {
-            // --- Search Bar UI ---
             VStack {
                 SearchBarView(text: $startLabel, placeholder: "Start", locations: allLocations, onLocationSelected: { selected in
                     self.startLabel = selected
@@ -113,8 +131,8 @@ struct PathfindingView: View {
             .padding(.top)
             .background(Color.black.opacity(0.8))
 
-            // --- Map View ---
             ZStack {
+                // --- Map View ---
                 ZStack {
                     Image("map_background")
                         .resizable()
@@ -189,6 +207,23 @@ struct PathfindingView: View {
                         .padding()
                         .foregroundColor(.white)
                 }
+                
+                // --- Directions UI ---
+                VStack {
+                    Spacer()
+                    if !directionSteps.isEmpty {
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            HStack {
+                                ForEach(directionSteps) { step in
+                                    DirectionStepView(step: step)
+                                }
+                            }
+                            .padding()
+                        }
+                        .frame(height: 100)
+                        .background(Color.black.opacity(0.7))
+                    }
+                }
             }
         }
         .background(Color.black.ignoresSafeArea())
@@ -197,12 +232,10 @@ struct PathfindingView: View {
         }
     }
     
-    // MARK: - Node Coloring
     private func color(for node: Node) -> Color {
         return .white
     }
 
-    // MARK: - Graph Bounds and Scaling Helpers
     private func graphBounds(_ graph: Graph) -> CGRect {
         let xs = graph.nodes.map { $0.x }
         let ys = graph.nodes.map { $0.y }
@@ -228,7 +261,6 @@ struct PathfindingView: View {
         return CGSize(width: x, height: y)
     }
     
-    // MARK: - Graph Loading and Pathfinding
     private func runPathfinding() {
         guard let graph = self.graph else { return }
         
@@ -238,10 +270,26 @@ struct PathfindingView: View {
             
             await MainActor.run {
                 if let path = foundPathCoordinates {
-                    self.pathCoordinates = path
+                    
+                    // --- MODIFICATION: Clean the path before generating directions ---
+                    let cleanedPath = pathCleaner.clean(path: path, graph: graph)
+                    self.pathCoordinates = cleanedPath // Use the cleaned path for drawing
+                    self.directionSteps = directionsGenerator.generate(from: cleanedPath, graph: self.graph)
+                    // --- END MODIFICATION ---
+
                     print("✅ Path found from \(startLabel) to \(endLabel).")
+                    
+                    // --- DEBUGGING: Print the final generated direction steps ---
+                    print("--- Final Directional Steps ---")
+                    for (index, step) in self.directionSteps.enumerated() {
+                        print("Step \(index + 1): \(step.instruction)")
+                    }
+                    print("-----------------------------")
+                    // --- END DEBUGGING ---
+                    
                 } else {
-                    self.pathCoordinates = [] // Clear old path if none found
+                    self.pathCoordinates = []
+                    self.directionSteps = []
                     print("❌ No path found from \(startLabel) to \(endLabel)")
                 }
             }
@@ -273,7 +321,6 @@ struct PathfindingView: View {
             
             let correctedGraph = Graph(metadata: g.metadata, nodes: normalizedNodes, edges: g.edges)
             
-            // Extract location labels for search bars
             let locations = Set(correctedGraph.nodes
                 .filter { $0.type == "ellipse-center" || $0.type == "circle-center" || $0.type == "rect-corner" }
                 .compactMap { $0.parentLabel ?? $0.label }
@@ -282,7 +329,7 @@ struct PathfindingView: View {
             await MainActor.run {
                 self.graph = correctedGraph
                 self.allLocations = locations
-                runPathfinding() // Run initial pathfinding
+                runPathfinding()
             }
         }
     }
@@ -292,3 +339,4 @@ struct PathfindingView: View {
 #Preview {
     PathfindingView()
 }
+
