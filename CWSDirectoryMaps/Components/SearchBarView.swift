@@ -12,29 +12,44 @@ struct SearchBarView: View {
     @Binding var isSearching: Bool
     var isSearchFieldFocused: FocusState<Bool>.Binding
     var onClear: () -> Void
+    var onCloseSearch: () -> Void
     
     var body: some View {
-        HStack {
-            Image(systemName: "magnifyingglass")
-                .foregroundColor(.secondary)
-            
-            TextField("Search stores, exits, etc", text: $searchText)
-                .focused(isSearchFieldFocused)
-                .onTapGesture {
-                    withAnimation {
-                        isSearching = true
+        HStack(spacing: 12) {
+            HStack {
+                Image(systemName: "magnifyingglass")
+                    .foregroundColor(.secondary)
+                
+                TextField("Search stores, exits, etc", text: $searchText)
+                    .focused(isSearchFieldFocused)
+                    .onTapGesture {
+                        withAnimation {
+                            isSearching = true
+                        }
+                    }
+                
+                if !searchText.isEmpty {
+                    Button(action: onClear) {
+                        Image(systemName: "xmark.circle.fill")
+                            .foregroundColor(.secondary)
                     }
                 }
+            }
+            .padding(12)
+            .background(Color(.systemGray6))
+            .cornerRadius(12)
             
-            if !searchText.isEmpty {
-                Button(action: onClear) {
-                    Image(systemName: "xmark.circle.fill")
-                        .foregroundColor(.secondary)
+            if isSearching {
+                Button(action: {
+                    withAnimation(.easeInOut(duration: 0.3)) {
+                        onCloseSearch()
+                    }
+                }) {
+                    Text("Cancel")
+                        .font(.system(size: 17, weight: .regular))
+                        .foregroundColor(.blue)
                 }
             }
         }
-        .padding(12)
-        .background(Color(.systemGray6))
-        .cornerRadius(12)
     }
 }

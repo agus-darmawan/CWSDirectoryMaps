@@ -23,7 +23,11 @@ struct DirectoryView: View {
                         searchText: $viewModel.searchText,
                         isSearching: $viewModel.isSearching,
                         isSearchFieldFocused: $isSearchFieldFocused,
-                        onClear: viewModel.clearSearch
+                        onClear: viewModel.clearSearch,
+                        onCloseSearch: {
+                            viewModel.exitSearch()
+                            isSearchFieldFocused = false
+                        }
                     )
                     .padding(.horizontal)
                     .padding(.top, 10)

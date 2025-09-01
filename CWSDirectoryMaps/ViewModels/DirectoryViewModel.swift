@@ -149,9 +149,10 @@ class DirectoryViewModel: ObservableObject {
                 hours: "24 Hours",
                 detailImageName: "store_logo_placeholder"
             ),
+            // New Facility entries
             Store(
                 name: "North Entrance",
-                category: .facility,
+                category: .entrances,
                 imageName: "store_logo_placeholder",
                 subcategory: "Main Entrance",
                 description: "",
@@ -163,7 +164,7 @@ class DirectoryViewModel: ObservableObject {
             ),
             Store(
                 name: "South Entrance",
-                category: .facility,
+                category: .entrances,
                 imageName: "store_logo_placeholder",
                 subcategory: "Main Entrance",
                 description: "",
@@ -175,7 +176,7 @@ class DirectoryViewModel: ObservableObject {
             ),
             Store(
                 name: "Main Lobby",
-                category: .facility,
+                category: .facilities,
                 imageName: "store_logo_placeholder",
                 subcategory: "Information Center",
                 description: "",
@@ -187,7 +188,7 @@ class DirectoryViewModel: ObservableObject {
             ),
             Store(
                 name: "Restroom - Level 1",
-                category: .facility,
+                category: .facilities,
                 imageName: "store_logo_placeholder",
                 subcategory: "Public Facilities",
                 description: "",
@@ -199,7 +200,7 @@ class DirectoryViewModel: ObservableObject {
             ),
             Store(
                 name: "Restroom - Level 2",
-                category: .facility,
+                category: .facilities,
                 imageName: "store_logo_placeholder",
                 subcategory: "Public Facilities",
                 description: "",
@@ -211,7 +212,7 @@ class DirectoryViewModel: ObservableObject {
             ),
             Store(
                 name: "Emergency Exit A",
-                category: .facility,
+                category: .entrances,
                 imageName: "store_logo_placeholder",
                 subcategory: "Emergency Exit",
                 description: "",
@@ -223,7 +224,7 @@ class DirectoryViewModel: ObservableObject {
             ),
             Store(
                 name: "Emergency Exit B",
-                category: .facility,
+                category: .entrances,
                 imageName: "store_logo_placeholder",
                 subcategory: "Emergency Exit",
                 description: "",
@@ -235,7 +236,7 @@ class DirectoryViewModel: ObservableObject {
             ),
             Store(
                 name: "Parking Entrance",
-                category: .facility,
+                category: .entrances,
                 imageName: "store_logo_placeholder",
                 subcategory: "Vehicle Access",
                 description: "",
@@ -247,7 +248,7 @@ class DirectoryViewModel: ObservableObject {
             ),
             Store(
                 name: "Elevator Bank A",
-                category: .facility,
+                category: .facilities,
                 imageName: "store_logo_placeholder",
                 subcategory: "Vertical Transportation",
                 description: "",
@@ -259,7 +260,7 @@ class DirectoryViewModel: ObservableObject {
             ),
             Store(
                 name: "Elevator Bank B",
-                category: .facility,
+                category: .facilities,
                 imageName: "store_logo_placeholder",
                 subcategory: "Vertical Transportation",
                 description: "",
@@ -278,7 +279,7 @@ class DirectoryViewModel: ObservableObject {
                 guard let self = self else { return [] }
                 
                 if let selected = store {
-                    return [selected]
+                    return self.allStores
                 }
                 
                 var storesToFilter = self.allStores
@@ -315,5 +316,10 @@ class DirectoryViewModel: ObservableObject {
         searchText = ""
         selectedCategory = nil
         selectedStore = nil
+    }
+    
+    func selectStore(_ store: Store) {
+        selectedStore = store
+        searchText = store.name
     }
 }
