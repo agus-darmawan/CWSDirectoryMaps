@@ -267,16 +267,6 @@ struct DirectionStepsModal: View {
     let steps: [DirectionStep]
     @State private var currentStepIndex: Int = 0
     
-    private var customBlueColor: Color {
-        Color(uiColor: UIColor { traitCollection in
-            if traitCollection.userInterfaceStyle == .dark {
-                return UIColor(red: 64/255, green: 156/255, blue: 255/255, alpha: 1.0)
-            } else {
-                return UIColor(red: 0/255, green: 46/255, blue: 127/255, alpha: 1.0)
-            }
-        })
-    }
-    
     var body: some View {
         if showStepsModal{
             VStack {
@@ -366,14 +356,108 @@ let dummySteps: [DirectionStep] = [
     DirectionStep(icon: "arrow.up", description: "Go straight to Marks & Spencer", distance: 150, shopImage: "adidas-store"),
     DirectionStep(icon: "arrow.turn.up.right", description: "Turn right at Starbucks", distance: 50, shopImage: "adidas-store"),
     DirectionStep(icon: "arrow.turn.up.left", description: "Turn left after Zara", distance: 80, shopImage: "adidas-store"),
-    DirectionStep(icon: "flag.checkered", description: "Arrive at destination", distance: 0, shopImage: "adidas-store")
+    DirectionStep(icon: "mappin", description: "Arrive at destination", distance: 0, shopImage: "adidas-store")
 ]
+
+struct DirectionStepsListView: View {
+    @Binding var showStepsModal: Bool
+    @Binding var showSteps: Bool
+    
+    let destinationName: String
+    let steps: [DirectionStep]
+    
+    var body: some View {
+        Spacer()
+        VStack(spacing: 0) {
+            HStack {
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("To \(destinationName)")
+                        .font(.title3)
+                        .bold()
+                    Text("200m – 4 mins")
+                        .font(.subheadline)
+                        .foregroundColor(.secondary)
+                }
+                Spacer()
+                
+                //navigate DirectionStepsModal
+                Button(action: {
+                    showSteps = false
+                }) {
+                    Image(systemName: "chevron.down")
+                        .font(.title2)
+                        .foregroundColor(.secondary)
+                }
+            }
+            .padding()
+            .background(Color(.systemBackground))
+            
+            // List steps
+            ScrollView {
+                VStack(spacing: 12) {
+                    ForEach(steps) { step in
+                        HStack {
+                            Image(systemName: step.icon)
+                                .foregroundColor(.white)
+                                .frame(width: 28, height: 28)
+                            
+                            Text(step.description)
+                                .foregroundColor(.white)
+                                .lineLimit(nil)
+                                .multilineTextAlignment(.leading)
+                                .padding(.leading, 4)
+                            
+                            Spacer()
+                            
+                            Image(step.shopImage)
+                                .resizable()
+                                .scaledToFill()
+                                .frame(width: 40, height: 40)
+                                .clipShape(Circle())
+                        }
+                        .padding()
+                        .background(customBlueColor)
+                        .cornerRadius(12)
+                    }
+                }
+                .padding()
+            }
+            
+            // End button
+            Button(action: {
+                showStepsModal = false
+            }) {
+                Text("End Route")
+                    .font(.headline)
+                    .foregroundColor(.white)
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                    .background(Color.red)
+                    .cornerRadius(12)
+                    .padding(.horizontal)
+                    .padding(.bottom, 20)
+            }
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity) // isi penuh layar
+        .background(Color(.systemBackground))
+        .ignoresSafeArea() // biar menutupi hingga bawah
+    }
+}
+
 
 extension View {
     func cornerRadius(_ radius: CGFloat, corners: UIRectCorner) -> some View {
         clipShape(RoundedCorner(radius: radius, corners: corners))
     }
 }
+
+let customBlueColor: Color = Color(uiColor: UIColor { traitCollection in
+    if traitCollection.userInterfaceStyle == .dark {
+        return UIColor(red: 64/255, green: 156/255, blue: 255/255, alpha: 1.0)
+    } else {
+        return UIColor(red: 0/255, green: 46/255, blue: 127/255, alpha: 1.0)
+    }
+})
 
 struct RoundedCorner: Shape {
     var radius: CGFloat
@@ -390,7 +474,8 @@ struct RoundedCorner: Shape {
 }
 
 #Preview {
-    MapNavigationView()
-    DirectionsModal(showModal: .constant(true))
+//    MapNavigationView()
+//    DirectionsModal(showModal: .constant(true))
 //    DirectionStepsModal(showStepsModal: .constant(true), destinationName: "One Love Bespoke", steps: dummySteps)
+    DirectionStepsListView(showStepsModal: .constant(true), showSteps: .constant(true), destinationName: "One Love Bespoke", steps: dummySteps)
 }
