@@ -15,7 +15,7 @@ struct DirectoryView: View {
     var body: some View {
         NavigationView {
             ZStack {
-                MapView()
+                MapDirectoryView()
                     .ignoresSafeArea()
                 
                 VStack(spacing: 0) {
