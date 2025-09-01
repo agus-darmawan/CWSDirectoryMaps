@@ -115,6 +115,7 @@ struct ZoomableScrollView<Content: View>: View {
 struct DirectionsModal: View {
     @Binding var showModal: Bool
     @State private var selectedMode: String = "walk"
+    var onGoTapped: (() -> Void)?
     
     private var modeImageName: String {
         switch selectedMode {
@@ -236,6 +237,8 @@ struct DirectionsModal: View {
                     //go button
                     Button(action: {
                         print("Go tapped")
+                        showModal = false
+                        onGoTapped?()
                     }) {
                         Text("GO")
                             .font(.headline)
@@ -261,7 +264,7 @@ struct DirectionsModal: View {
 
 struct DirectionStepsModal: View {
     @Binding var showStepsModal: Bool
-    @State var showSteps: Bool = false
+    @Binding var showSteps: Bool
     
     let destinationName: String
     let steps: [DirectionStep]
@@ -347,16 +350,15 @@ struct DirectionStep: Identifiable {
     let id = UUID()
     let icon: String
     let description: String
-    let distance: Int
     let shopImage: String
 }
 
 //dummy data
 let dummySteps: [DirectionStep] = [
-    DirectionStep(icon: "arrow.up", description: "Go straight to Marks & Spencer", distance: 150, shopImage: "adidas-store"),
-    DirectionStep(icon: "arrow.turn.up.right", description: "Turn right at Starbucks", distance: 50, shopImage: "adidas-store"),
-    DirectionStep(icon: "arrow.turn.up.left", description: "Turn left after Zara", distance: 80, shopImage: "adidas-store"),
-    DirectionStep(icon: "mappin", description: "Arrive at destination", distance: 0, shopImage: "adidas-store")
+    DirectionStep(icon: "arrow.up", description: "Go straight to Marks & Spencer", shopImage: "store_logo_placeholder"),
+    DirectionStep(icon: "arrow.turn.up.right", description: "Turn right at Starbucks", shopImage: "store_logo_placeholder"),
+    DirectionStep(icon: "arrow.turn.up.left", description: "Turn left after Zara", shopImage: "store_logo_placeholder"),
+    DirectionStep(icon: "mappin", description: "Arrive at destination", shopImage: "sstore_logo_placeholder")
 ]
 
 struct DirectionStepsListView: View {
@@ -438,9 +440,9 @@ struct DirectionStepsListView: View {
                     .padding(.bottom, 20)
             }
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity) // isi penuh layar
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color(.systemBackground))
-        .ignoresSafeArea() // biar menutupi hingga bawah
+        .ignoresSafeArea()
     }
 }
 
@@ -474,8 +476,8 @@ struct RoundedCorner: Shape {
 }
 
 #Preview {
-//    MapNavigationView()
-//    DirectionsModal(showModal: .constant(true))
-//    DirectionStepsModal(showStepsModal: .constant(true), destinationName: "One Love Bespoke", steps: dummySteps)
+//    MapView()
+//    DirectionsModal(showModal: .constant(true), showStepsModal: .constant(true), showSteps: .init(false) )
+    DirectionStepsModal(showStepsModal: .constant(true), showSteps: .constant(false), destinationName: "One Love Bespoke", steps: dummySteps)
     DirectionStepsListView(showStepsModal: .constant(true), showSteps: .constant(true), destinationName: "One Love Bespoke", steps: dummySteps)
 }
