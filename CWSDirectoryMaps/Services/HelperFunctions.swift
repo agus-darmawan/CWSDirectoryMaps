@@ -102,7 +102,8 @@ func buildLabelGraph(from graph: Graph) -> [String: GraphNode] {
                 type: "path-point",
                 rx: nil, ry: nil, angle: nil,
                 label: splitId,
-                parentLabel: nil
+                parentLabel: nil,
+                connectionId: nil,
             )
             nodesToAdd.append(splitNode)
             

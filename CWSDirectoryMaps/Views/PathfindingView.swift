@@ -36,20 +36,28 @@ struct FloorData {
     let locations: [String]
 }
 
+// ✅ A new struct to hold both a location's name and its floor
+struct Location: Identifiable, Hashable {
+    let id = UUID()
+    let name: String
+    let floor: Floor
+}
+
 // MARK: - Reusable Search Bar View
 struct SearchBarView: View {
     @Binding var text: String
     let placeholder: String
-    let locations: [String]
+    let locations: [Location] // Changed from [String]
     @State private var isEditing = false
-    
-    var onLocationSelected: (String) -> Void
-    
+
+    var onLocationSelected: (Location) -> Void // Changed from (String) -> Void
+
     var field: Field
     @FocusState.Binding var focusedField: Field?
 
     var body: some View {
         VStack(alignment: .leading) {
+            // ... The HStack with the TextField is unchanged ...
             HStack {
                 TextField(placeholder, text: $text)
                     .padding(7)
@@ -73,12 +81,13 @@ struct SearchBarView: View {
             .padding(.horizontal, 10)
 
             if isEditing {
-                List(locations.filter { $0.lowercased().contains(text.lowercased()) || text.isEmpty }, id: \.self) { location in
-                    Text(location)
+                // This filtering and list logic is updated
+                List(locations.filter { $0.name.lowercased().contains(text.lowercased()) || text.isEmpty }, id: \.self) { location in
+                    Text(location.name) // Display the location's name
                         .onTapGesture {
-                            self.text = location
+                            self.text = location.name // Set text field to the name
                             self.isEditing = false
-                            self.onLocationSelected(location)
+                            self.onLocationSelected(location) // Pass the whole Location object back
                             self.focusedField = nil
                         }
                 }
@@ -132,6 +141,14 @@ struct PathfindingView: View {
 
     @State private var manualOffsetX: CGFloat = 14.0
     @State private var manualOffsetY: CGFloat = 16.0
+    @State private var unifiedGraph: [String: GraphNode] = [:]
+    
+    @State private var allLocations: [Location] = [] // ✅ Add this master list
+
+    // 👇 Add these two lines
+    @State private var startFloor: Floor = .ground
+    @State private var endFloor: Floor = .ground
+    
     
     @State private var startLabel: String = "braun_buffel-5"
     @State private var endLabel: String = "tissot-5"
@@ -196,13 +213,17 @@ struct PathfindingView: View {
                     }
                     
                     VStack {
-                        SearchBarView(text: $startLabel, placeholder: "Start", locations: currentLocations, onLocationSelected: { selected in
-                            self.startLabel = selected
+                        // For the START search bar
+                        SearchBarView(text: $startLabel, placeholder: "Start", locations: allLocations, onLocationSelected: { selectedLocation in
+                            self.startLabel = selectedLocation.name   // Set the name
+                            self.startFloor = selectedLocation.floor   // ✅ SET THE CORRECT FLOOR
                             runPathfinding()
                         }, field: .start, focusedField: $focusedField)
-                        
-                        SearchBarView(text: $endLabel, placeholder: "Destination", locations: currentLocations, onLocationSelected: { selected in
-                            self.endLabel = selected
+
+                        // DESTINATION Search Bar (Updated)
+                        SearchBarView(text: $endLabel, placeholder: "Destination", locations: allLocations, onLocationSelected: { selectedLocation in
+                            self.endLabel = selectedLocation.name     // Set the name
+                            self.endFloor = selectedLocation.floor     // ✅ SET THE CORRECT FLOOR
                             runPathfinding()
                         }, field: .destination, focusedField: $focusedField)
                     }
@@ -313,6 +334,86 @@ struct PathfindingView: View {
         }
     }
     
+    private func buildUnifiedGraph() {
+        print("🛠️ Building unified graph via code...")
+        var combinedGraph: [String: GraphNode] = [:]
+        var connectionNodes: [String: [GraphNode]] = [:] // [connectionId: [Nodes]]
+
+        // 1. ✅ DEFINE CONNECTIONS IN CODE
+        // This map links node labels to a shared, unique connection ID.
+        let connectionMap: [String: String] = [
+            "escalator_bw_basement_1-0": "escalator_basement",
+            "escalator_bw_basement_1": "escalator_basement",
+            "escalator_west-4": "escalator_west",
+            "lift_west-0": "lift_west",
+            "lift_west": "lift_west"
+        ]
+
+        // 2. Combine all nodes and edges from all floors
+        for (floor, data) in floorData {
+            let floorPrefix = floor.fileName // "ground_path" or "lowerground_path"
+            let labelGraph = buildLabelGraph(from: data.graph)
+
+            for (label, var node) in labelGraph {
+                // Create a new, unique label for each node: e.g., "ground_path_tissot-5"
+                let uniqueLabel = "\(floorPrefix)_\(label)"
+                node.label = uniqueLabel
+                node.floor = floor
+
+                // Remap neighbors to have unique labels as well
+                node.neighbors = node.neighbors.map { neighbor in
+                    return (node: "\(floorPrefix)_\(neighbor.node)", cost: neighbor.cost)
+                }
+                
+                // 3. ✅ PROGRAMMATICALLY IDENTIFY CONNECTION POINTS
+                // Check if the original label is in our connection map
+                if let connectionId = connectionMap[label] {
+                    // Assign the connectionId to the node
+                    node.connectionId = connectionId
+                    connectionNodes[connectionId, default: []].append(node)
+                }
+                
+                combinedGraph[uniqueLabel] = node
+            }
+        }
+
+        // 4. Add edges between floors at the connection points
+        for (_, nodes) in connectionNodes {
+            guard nodes.count > 1 else { continue }
+            
+            for i in 0..<nodes.count {
+                for j in (i + 1)..<nodes.count {
+                    let nodeA = nodes[i]
+                    let nodeB = nodes[j]
+                    
+                    // Add a "cost" for changing floors (e.g., time to walk up stairs)
+                    let costOfChangingFloors = 50.0
+
+                    combinedGraph[nodeA.label]?.neighbors.append((node: nodeB.label, cost: costOfChangingFloors))
+                    combinedGraph[nodeB.label]?.neighbors.append((node: nodeA.label, cost: costOfChangingFloors))
+                }
+            }
+        }
+        
+        self.unifiedGraph = combinedGraph
+        print("✅ Unified graph built with \(self.unifiedGraph.count) nodes.")
+        
+        // 👇 ADD THIS DEBUGGING CODE
+            print("\n--- Verifying Connections ---")
+            for (id, nodes) in connectionNodes {
+                print("Connection ID: \(id)")
+                for node in nodes {
+                    if let graphNode = self.unifiedGraph[node.label] {
+                        print("  - Node: \(graphNode.label)")
+                        for neighbor in graphNode.neighbors {
+                            print("    -> Neighbor: \(neighbor.node)")
+                        }
+                    }
+                }
+            }
+            print("---------------------------\n")
+    }
+    
     // MARK: - Preload All Floor Data
     private func preloadAllFloorData() {
         Task {
@@ -333,10 +434,21 @@ struct PathfindingView: View {
             await MainActor.run {
                 self.floorData = loadedData
                 self.isLoading = false
-                
-                // Set initial floor data
+
+                // 👇 Replace the old allLocations logic with this new logic
+                var combinedLocations: [Location] = []
+                for (floor, data) in floorData {
+                    for locationName in data.locations {
+                        combinedLocations.append(Location(name: locationName, floor: floor))
+                    }
+                }
+                // Remove duplicates and sort by name
+                self.allLocations = Array(Set(combinedLocations)).sorted { $0.name < $1.name }
+
                 switchToFloor(selectedFloor)
-                print("🎉 All floor data preloaded successfully!")
+                buildUnifiedGraph()
+
+                print("🎉 All floor data preloaded. \(self.allLocations.count) total locations available.")
             }
         }
     }
@@ -365,7 +477,7 @@ struct PathfindingView: View {
         let foldedNodes = graph.nodes.map { node -> Node in
             return Node(id: node.id, x: node.x, y: abs(node.y), type: node.type,
                         rx: node.rx, ry: node.ry, angle: node.angle,
-                        label: node.label ?? node.id, parentLabel: node.parentLabel)
+                        label: node.label ?? node.id, parentLabel: node.parentLabel, connectionId: node.connectionId)
         }
         
         let normalizedNodes = foldedNodes.map { node -> Node in
@@ -374,7 +486,7 @@ struct PathfindingView: View {
                         y: node.y,
                         type: node.type,
                         rx: node.rx, ry: node.ry, angle: node.angle,
-                        label: node.label ?? node.id, parentLabel: node.parentLabel)
+                        label: node.label ?? node.id, parentLabel: node.parentLabel, connectionId: node.connectionId)
         }
         
         return Graph(metadata: graph.metadata, nodes: normalizedNodes, edges: graph.edges)
@@ -451,38 +563,42 @@ struct PathfindingView: View {
     }
     
     private func runPathfinding() {
-        guard let graph = self.currentGraph,
+        // 1. Guard against missing data
+        guard !unifiedGraph.isEmpty,
               !startLabel.isEmpty,
               !endLabel.isEmpty else {
-            pathCoordinates = []
+            pathCoordinates = [] // Clear old path
             directionSteps = []
             return
         }
-        
+
+        // 2. Create the unique start and end labels using the floor info
+        //    e.g., "ground_path_braun_buffel-5" or "lowerground_path_tissot-5"
+        let uniqueStartLabel = "\(startFloor.fileName)_\(startLabel)"
+        let uniqueEndLabel = "\(endFloor.fileName)_\(endLabel)"
+
+        print("🏃‍♂️ Running pathfinding from \(uniqueStartLabel) to \(uniqueEndLabel)")
+
         Task(priority: .userInitiated) {
-            let labelGraph = buildLabelGraph(from: graph)
-            let foundPathCoordinates = aStarByLabel(graph: labelGraph, startLabel: self.startLabel, goalLabel: self.endLabel)
-            
+            // 3. Call A* on the single unified graph
+            let foundPathCoordinates = aStarByLabel(
+                graph: self.unifiedGraph,
+                startLabel: uniqueStartLabel,
+                goalLabel: uniqueEndLabel
+            )
+
             await MainActor.run {
                 if let path = foundPathCoordinates {
-                    // Clean the path before generating directions
-                    let cleanedPath = pathCleaner.clean(path: path, graph: graph)
-                    self.pathCoordinates = cleanedPath
-                    self.directionSteps = directionsGenerator.generate(from: cleanedPath, graph: self.currentGraph)
+                    print("✅ Multi-floor path found! It has \(path.count) points.")
+                    // For now, we'll assign the whole path.
+                    // The next and final step will be to split this path by floor for correct display.
+                    self.pathCoordinates = path
+                    self.directionSteps = [] // Direction generation needs to be updated later.
 
-                    print("✅ Path found from \(startLabel) to \(endLabel) on \(selectedFloor.rawValue).")
-                    
-                    // Debug: Print the final generated direction steps
-                    print("--- Final Directional Steps ---")
-                    for (index, step) in self.directionSteps.enumerated() {
-                        print("Step \(index + 1): \(step.instruction)")
-                    }
-                    print("-----------------------------")
-                    
                 } else {
+                    print("❌ No multi-floor path found.")
                     self.pathCoordinates = []
                     self.directionSteps = []
-                    print("❌ No path found from \(startLabel) to \(endLabel) on \(selectedFloor.rawValue)")
                 }
             }
         }

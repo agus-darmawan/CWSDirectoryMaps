@@ -31,6 +31,7 @@ struct Node: Codable, Identifiable, Hashable {
     let angle: Double?
     let label: String?
     let parentLabel: String?
+    let connectionId: String?
 }
 
 struct Edge: Codable, Identifiable {
@@ -42,11 +43,13 @@ struct Edge: Codable, Identifiable {
 
 // MARK: - Pathfinding Node
 struct GraphNode {
-    let id: String
-    let label: String
+    var id: String
+    var label: String
     let x: Double
     let y: Double
     let type: String // Add this line
     let parentLabel: String?
     var neighbors: [(node: String, cost: Double)]
+    var floor: Floor?         // Add this
+    var connectionId: String? 
 }
