@@ -21,16 +21,13 @@ struct MapView: View {
     
     var body: some View {
         ZStack(alignment: .topTrailing) {
-            // Map content with proper bounds
             ZoomableScrollView {
                 Image(imageName(for: selectedFloor))
                     .resizable()
                     .scaledToFit()
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
-            .clipped() // Prevent map from overflowing
-            
-            // Floor selector - positioned at top right
+            .clipped()
             Menu {
                 ForEach(floors, id: \.self) { floor in
                     Button(action: {
