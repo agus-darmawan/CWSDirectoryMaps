@@ -1,5 +1,6 @@
+
 //
-//  DirectoryView.swift
+//  HomePageView.swift
 //  CWSDirectoryMaps
 //
 //  Created by Louis Fernando on 28/08/25.
@@ -7,34 +8,36 @@
 
 import SwiftUI
 
-struct DirectoryView: View {
+struct HomePageView: View {
     @StateObject private var viewModel = DirectoryViewModel()
-    
     @FocusState private var isSearchFieldFocused: Bool
     
     var body: some View {
         NavigationView {
-            ZStack {
-                MapDirectoryView()
-                    .ignoresSafeArea()
+            VStack(spacing: 0) {
+                SearchBarView(
+                      searchText: $viewModel.searchText,
+                      isSearching: $viewModel.isSearching,
+                      isSearchFieldFocused: $isSearchFieldFocused,
+                      onClear: viewModel.clearSearch,
+                      onCloseSearch: {
+                          viewModel.exitSearch()
+                          isSearchFieldFocused = false
+                      }
+                  )
+                  .padding(.horizontal)
+                  .padding(.top, 10)
+                  .padding(.bottom, 8)
+                .background(Color(.systemBackground))
+                .zIndex(1)
                 
-                VStack(spacing: 0) {
-                    SearchBarView(
-                        searchText: $viewModel.searchText,
-                        isSearching: $viewModel.isSearching,
-                        isSearchFieldFocused: $isSearchFieldFocused,
-                        onClear: viewModel.clearSearch
-                    )
-                    .padding(.horizontal)
-                    .padding(.top, 10)
-                    .padding(.bottom, 8)
-                    
+                ZStack {
+                    MapView()
+                        .opacity(viewModel.isSearching ? 0 : 1)
                     if viewModel.isSearching {
                         SearchListView(viewModel: viewModel)
                             .background(Color(.systemBackground))
                             .transition(.opacity.combined(with: .move(edge: .bottom)))
-                    } else {
-                        Spacer()
                     }
                 }
             }
@@ -47,6 +50,7 @@ struct DirectoryView: View {
             }
             .sheet(isPresented: .constant(viewModel.selectedStore != nil)) {
                 if let store = viewModel.selectedStore {
+   
                     TenantDetailModalView(
                         store: store,
                         viewModel: viewModel,
@@ -62,5 +66,6 @@ struct DirectoryView: View {
 }
 
 #Preview {
-    DirectoryView()
+    HomePageView()
 }
+
