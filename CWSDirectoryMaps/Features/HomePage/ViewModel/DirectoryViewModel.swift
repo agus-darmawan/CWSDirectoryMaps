@@ -17,14 +17,83 @@ class DirectoryViewModel: ObservableObject {
     @Published var selectedCategory: StoreCategory? = nil
     
     @Published var isSearching: Bool = false
+    @Published var isLoading: Bool = false
+    @Published var errorMessage: String? = nil
     
     @Published var selectedStore: Store? = nil
     
+    private let storeService = StoreService()
     private var cancellables = Set<AnyCancellable>()
     
+    
+    private let useAPI = APIConfiguration.shared.useAPI
+    
     init() {
-        loadMockData()
+        if useAPI {
+            loadStoresFromAPI()
+        } else {
+            loadMockData()
+        }
         setupFiltering()
+    }
+    
+    private func loadStoresFromAPI() {
+        isLoading = true
+        errorMessage = nil
+        
+        storeService.fetchAllFacilitiesWithDetails()
+            .receive(on: DispatchQueue.main)
+            .sink(
+                receiveCompletion: { [weak self] completion in
+                    self?.isLoading = false
+                    if case .failure(let error) = completion {
+                        self?.errorMessage = error.localizedDescription
+                        print("❌ API Error: \(error)")
+                        self?.loadMockData()
+                    }
+                },
+                receiveValue: { [weak self] facilitiesWithDetails in
+                    guard let self = self else { return }
+                    
+                    var allStores: [Store] = []
+                    
+                    for facilityWithDetails in facilitiesWithDetails {
+                        let store = self.storeService.convertFacilityWithDetailsToStore(facilityWithDetails)
+                        allStores.append(store)
+                    }
+                    
+                    self.allStores = allStores
+                    print("✅ Loaded \(allStores.count) stores from API (Facilities with details: \(facilitiesWithDetails.count))")
+                }
+            )
+            .store(in: &cancellables)
+    }
+    
+    func searchStoresFromAPI(query: String) {
+        guard useAPI, !query.isEmpty else {
+            return
+        }
+        
+        isLoading = true
+        errorMessage = nil
+        
+        let filtered = allStores.filter { store in
+            store.name.lowercased().contains(query.lowercased())
+        }
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { [weak self] in
+            self?.isLoading = false
+            self?.filteredStores = filtered
+            print("✅ Found \(filtered.count) stores from local search")
+        }
+    }
+    
+    func refreshData() {
+        if useAPI {
+            loadStoresFromAPI()
+        } else {
+            loadMockData()
+        }
     }
     
     private func loadMockData() {
@@ -279,12 +348,20 @@ class DirectoryViewModel: ObservableObject {
                 guard let self = self else { return [] }
                 
                 if let selected = store {
-                    return [selected]
+                    return self.allStores
                 }
                 
                 var storesToFilter = self.allStores
                 if let selectedCat = category {
                     storesToFilter = self.allStores.filter { $0.category == selectedCat }
+                    
+                    print("🔍 Filtering by category: \(selectedCat.rawValue)")
+                    print("📊 Total stores: \(self.allStores.count)")
+                    print("📊 Stores in category \(selectedCat.rawValue): \(storesToFilter.count)")
+                    
+                    for store in self.allStores {
+                        print("🏪 Store: \(store.name) - Category: \(store.category.rawValue)")
+                    }
                 }
                 
                 if text.isEmpty {
@@ -316,5 +393,10 @@ class DirectoryViewModel: ObservableObject {
         searchText = ""
         selectedCategory = nil
         selectedStore = nil
+    }
+    
+    func selectStore(_ store: Store) {
+        selectedStore = store
+        searchText = store.name
     }
 }

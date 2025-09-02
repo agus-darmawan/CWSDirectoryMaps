@@ -22,7 +22,7 @@ struct SearchListView: View {
             List(viewModel.filteredStores) { store in
                 StoreRowView(store: store)
                     .onTapGesture {
-                        viewModel.selectedStore = store
+                        viewModel.selectStore(store)
                     }
             }
             .listStyle(.plain)
