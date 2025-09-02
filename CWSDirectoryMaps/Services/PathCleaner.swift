@@ -1,3 +1,11 @@
+//
+//  PathCleaner.swift
+//  CWSDirectoryMaps
+//
+//  Created by Steven Gonawan on 02/09/25.
+//
+
+
 import Foundation
 import CoreGraphics
 

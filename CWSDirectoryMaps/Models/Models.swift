@@ -53,3 +53,39 @@ struct GraphNode {
     var floor: Floor?         // Add this
     var connectionId: String? 
 }
+
+// MARK: - Field Enum for Focus State
+enum Field: Hashable {
+    case start
+    case destination
+}
+
+// MARK: - Floor Enum
+enum Floor: String, CaseIterable, Identifiable {
+    case ground = "Ground"
+    case lowerground = "Lower Ground"
+    
+    var id: String { rawValue }
+    
+    var fileName: String {
+        switch self {
+        case .ground:
+            return "ground_path"
+        case .lowerground:
+            return "lowerground_path"
+        }
+    }
+}
+
+// MARK: - Graph Container for Preloaded Data
+struct FloorData {
+    let graph: Graph
+    let locations: [String]
+}
+
+// ✅ A new struct to hold both a location's name and its floor
+struct Location: Identifiable, Hashable {
+    let id = UUID()
+    let name: String
+    let floor: Floor
+}
