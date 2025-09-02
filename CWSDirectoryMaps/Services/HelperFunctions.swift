@@ -193,33 +193,42 @@ func buildLabelGraph(from graph: Graph) -> [String: GraphNode] {
     return nodeDict
 }
 
-func aStarByLabel(graph: [String: GraphNode], startLabel: String, goalLabel: String) -> [CGPoint]? {
+// In PriorityQueue.swift
+
+func aStarByLabel(graph: [String: GraphNode], startLabel: String, goalLabel: String) -> [(point: CGPoint, label: String)]? {
     guard let startNode = graph[startLabel],
           let goalNode = graph[goalLabel] else {
         return nil
     }
     
+    // Track storepath usage during pathfinding
+    var usedStorepaths: Set<String> = []
+    
     var openSet = PriorityQueue()
     openSet.enqueue((fScore: heuristic(from: startNode, to: goalNode), label: startLabel))
-    
     var cameFrom = [String: String]()
     var gScore = [String: Double]()
     var fScore = [String: Double]()
-
     gScore[startLabel] = 0.0
     fScore[startLabel] = heuristic(from: startNode, to: goalNode)
-    
     var openSetMembers = Set<String>([startLabel])
 
     while !openSet.isEmpty {
         let (_, currentLabel) = openSet.dequeue()!
 
         if currentLabel == goalLabel {
-            return reconstructPath(cameFrom: cameFrom, current: currentLabel, graph: graph)
+            let pathResult = reconstructPath(cameFrom: cameFrom, current: currentLabel, graph: graph)
+            
+            // Debug: Print path labels without coordinates
+            if let path = pathResult {
+                let pathLabels = path.map { $0.label }
+                print("Path found - Labels: \(pathLabels.joined(separator: ", "))")
+            }
+            
+            return pathResult
         }
         
         openSetMembers.remove(currentLabel)
-        
         guard let currentNode = graph[currentLabel] else {
             continue
         }
@@ -227,8 +236,13 @@ func aStarByLabel(graph: [String: GraphNode], startLabel: String, goalLabel: Str
         for neighbor in currentNode.neighbors {
             let neighborLabel = neighbor.node
             guard let neighborNode = graph[neighborLabel] else { continue }
-
-            // --- Path Restriction Logic ---
+            
+            // BLOCK circle-point and ellipse-point nodes completely
+            if neighborNode.type == "circle-point" || neighborNode.type == "ellipse-point" {
+                continue // Skip these node types entirely
+            }
+            
+            // Handle split nodes
             if neighborNode.label.hasPrefix("split_") {
                 var associatedStoreLabel: String? = nil
                 for splitNeighborTuple in neighborNode.neighbors {
@@ -239,61 +253,61 @@ func aStarByLabel(graph: [String: GraphNode], startLabel: String, goalLabel: Str
                         }
                     }
                 }
-
                 if let storeLabel = associatedStoreLabel {
                     if storeLabel != goalLabel && storeLabel != startLabel {
                         continue
                     }
                 }
-            } else if neighborNode.label.hasPrefix("storepath") {
-                var isPathToDestination = false
-                let proximityThreshold = 30.0
-                
-                let components = neighborNode.label.split(separator: "_")
-                if components.count >= 2 {
-                    let basePath = "\(components[0])"
-                    let point0Label = "\(basePath)_point_0"
-                    let point1Label = "\(basePath)_point_1"
-
-                    if let point0Node = graph[point0Label] {
-                        if heuristic(from: point0Node, to: startNode) < proximityThreshold ||
-                           heuristic(from: point0Node, to: goalNode) < proximityThreshold {
-                            isPathToDestination = true
-                        }
-                    }
-
-                    if !isPathToDestination, let point1Node = graph[point1Label] {
-                         if heuristic(from: point1Node, to: startNode) < proximityThreshold ||
-                            heuristic(from: point1Node, to: goalNode) < proximityThreshold {
-                            isPathToDestination = true
-                        }
-                    }
-                }
-
-                if !isPathToDestination {
+            }
+            // Enhanced storepath validation
+            else if neighborNode.label.contains("storepath") {
+                // Extract storepath base number (e.g., "317" from "storepath317-5_point_0")
+                let storepathBase = extractStorepathBase(from: neighborNode.label)
+                guard !storepathBase.isEmpty else {
                     continue
                 }
-            } else if neighborNode.type == "rect-corner" {
+                
+                // Check if we're already using 2 storepaths and this is a new one
+                if usedStorepaths.count >= 2 && !usedStorepaths.contains(storepathBase) {
+                    print("❌ Blocking storepath \(storepathBase): already using 2 storepaths \(usedStorepaths)")
+                    continue // Block: already using 2 different storepaths
+                }
+                
+                // Validate that storepath endpoints connect to start or goal
+                let isValidStorepath = validateStorepathConnection(
+                    storepathBase: storepathBase,
+                    startNode: startNode,
+                    goalNode: goalNode,
+                    graph: graph,
+                    currentLabel: neighborNode.label
+                )
+                
+                if !isValidStorepath {
+                    continue // Block: storepath doesn't connect properly to start/goal
+                }
+                
+                // Track usage of this storepath base
+                usedStorepaths.insert(storepathBase)
+                print("✅ Using storepath \(storepathBase). Total used: \(usedStorepaths)")
+            }
+            // Handle rect-corner nodes
+            else if neighborNode.type == "rect-corner" {
                 if let rectLabel = neighborNode.parentLabel {
                     if rectLabel != goalLabel && rectLabel != startLabel {
                         continue
                     }
                 }
             }
-            // --- End Path Restriction Logic ---
-
-            let tentativeGScore = (gScore[currentLabel] ?? .infinity) + neighbor.cost
             
+            let tentativeGScore = (gScore[currentLabel] ?? .infinity) + neighbor.cost
             if tentativeGScore < (gScore[neighbor.node] ?? .infinity) {
                 cameFrom[neighbor.node] = currentLabel
                 gScore[neighbor.node] = tentativeGScore
-                
                 if let neighborGraphNode = graph[neighbor.node] {
                     fScore[neighbor.node] = tentativeGScore + heuristic(from: neighborGraphNode, to: goalNode)
                 } else {
                     continue
                 }
-                
                 if !openSetMembers.contains(neighbor.node) {
                     openSet.enqueue((fScore: fScore[neighbor.node]!, label: neighbor.node))
                     openSetMembers.insert(neighbor.node)
@@ -305,6 +319,71 @@ func aStarByLabel(graph: [String: GraphNode], startLabel: String, goalLabel: Str
     return nil
 }
 
+/// Extracts the base storepath number (e.g., "317" from "ground_path_storepath317-5_point_0")
+private func extractStorepathBase(from label: String) -> String {
+    // Look for "storepath" followed by digits
+    let pattern = "storepath(\\d+)"
+    
+    if let regex = try? NSRegularExpression(pattern: pattern),
+       let match = regex.firstMatch(in: label, range: NSRange(label.startIndex..., in: label)) {
+        if let range = Range(match.range(at: 1), in: label) {
+            return String(label[range])
+        }
+    }
+    
+    return ""
+}
+
+/// Validates that a storepath has proper connections to start or goal destinations
+private func validateStorepathConnection(storepathBase: String, startNode: GraphNode, goalNode: GraphNode, graph: [String: GraphNode], currentLabel: String) -> Bool {
+    let proximityThreshold = 30.0
+    
+    // Find all storepath nodes with this base number in the graph
+    var storepathEndpoints: [GraphNode] = []
+    
+    for (label, node) in graph {
+        if label.contains("storepath\(storepathBase)") && label.contains("point_") {
+            storepathEndpoints.append(node)
+        }
+    }
+    
+    guard storepathEndpoints.count >= 1 else {
+        print("❌ Storepath \(storepathBase) rejected: found no endpoints")
+        return false
+    }
+    
+    // Check if ANY endpoint is connected to either start OR goal
+    var hasValidConnection = false
+    
+    for endpoint in storepathEndpoints {
+        let distToStart = heuristic(from: endpoint, to: startNode)
+        let distToGoal = heuristic(from: endpoint, to: goalNode)
+        
+        if distToStart < proximityThreshold || distToGoal < proximityThreshold {
+            hasValidConnection = true
+            break // Found at least one valid connection, that's enough
+        }
+    }
+    
+    if !hasValidConnection {
+        print("❌ Storepath \(storepathBase) rejected: no endpoints connected to start or goal")
+    } else {
+        print("✅ Storepath \(storepathBase) validated: at least one endpoint connected to start or goal")
+    }
+    
+    return hasValidConnection
+}
+
+/// Extracts floor prefix from a label (e.g., "ground_path" from "ground_path_storepath317-5_point_0")
+private func extractFloorPrefix(from label: String) -> String {
+    let components = label.split(separator: "_")
+    if components.count >= 2 {
+        return "\(components[0])_\(components[1])"
+    }
+    return ""
+}
+
+/// Validates that a storepath has proper connections to start or goal destination
 
 fileprivate struct PriorityQueue {
     fileprivate var heap = [(fScore: Double, label: String)]()
@@ -387,7 +466,7 @@ private func heuristic(from: GraphNode, to: GraphNode) -> Double {
     return sqrt(dx*dx + dy*dy)
 }
 
-private func reconstructPath(cameFrom: [String: String], current: String, graph: [String: GraphNode]) -> [CGPoint]? {
+private func reconstructPath(cameFrom: [String: String], current: String, graph: [String: GraphNode]) -> [(point: CGPoint, label: String)]? {
     var pathLabels: [String] = [current]
     var current = current
     pathLabels.reserveCapacity(20)
@@ -399,13 +478,16 @@ private func reconstructPath(cameFrom: [String: String], current: String, graph:
     
     let pathLabelsReversed = pathLabels.reversed()
     
-    let pathCoordinates: [CGPoint] = pathLabelsReversed.compactMap { label in
+    // Map each label to a tuple of (CGPoint, String)
+    let pathData: [(point: CGPoint, label: String)] = pathLabelsReversed.compactMap { label in
         guard let node = graph[label] else { return nil }
-        return CGPoint(x: CGFloat(node.x), y: CGFloat(node.y))
+        let point = CGPoint(x: CGFloat(node.x), y: CGFloat(node.y))
+        // Return the complete tuple
+        return (point: point, label: label)
     }
     
-    if pathCoordinates.count == pathLabelsReversed.count {
-        return pathCoordinates
+    if pathData.count == pathLabelsReversed.count {
+        return pathData
     } else {
         return nil
     }

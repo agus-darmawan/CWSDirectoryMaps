@@ -1,968 +1,27 @@
 {
   "metadata": {
     "totalNodes": 261,
-    "totalEdges": 345,
+    "totalEdges": 344,
     "nodeTypes": [
+      "ellipse-center",
+      "ellipse-point",
       "path-point",
       "circle-center",
       "circle-point",
-      "ellipse-center",
-      "ellipse-point",
       "rect-corner"
     ],
     "edgeTypes": [
+      "ellipse-radius",
+      "ellipse-arc",
       "path-segment",
       "circle-radius",
       "circle-arc",
-      "ellipse-radius",
-      "ellipse-arc",
       "rect-edge"
     ]
   },
   "nodes": [
     {
       "id": "n0",
-      "x": -1071.2094,
-      "y": 230.37851,
-      "type": "path-point",
-      "label": "storepath266-7-0_point_0",
-      "parentLabel": "storepath266-7-0"
-    },
-    {
-      "id": "n1",
-      "x": -970.87184,
-      "y": 52.296588,
-      "type": "path-point",
-      "label": "storepath266-7-0_point_1",
-      "parentLabel": "storepath266-7-0"
-    },
-    {
-      "id": "n2",
-      "x": -1315.9889,
-      "y": 247.47025,
-      "type": "circle-center",
-      "label": "restroom_braun_buffel",
-      "radius": 9.5
-    },
-    {
-      "id": "n3",
-      "x": -1306.4889,
-      "y": 247.47025,
-      "type": "circle-point",
-      "label": "circle-point_n3",
-      "angle": 0,
-      "radius": 9.5,
-      "parentLabel": "restroom_braun_buffel"
-    },
-    {
-      "id": "n4",
-      "x": -1309.2713855787279,
-      "y": 254.1877644212722,
-      "type": "circle-point",
-      "label": "circle-point_n4",
-      "angle": 0.7853981633974483,
-      "radius": 9.5,
-      "parentLabel": "restroom_braun_buffel"
-    },
-    {
-      "id": "n5",
-      "x": -1315.9889,
-      "y": 256.97024999999996,
-      "type": "circle-point",
-      "label": "circle-point_n5",
-      "angle": 1.5707963267948966,
-      "radius": 9.5,
-      "parentLabel": "restroom_braun_buffel"
-    },
-    {
-      "id": "n6",
-      "x": -1322.7064144212723,
-      "y": 254.1877644212722,
-      "type": "circle-point",
-      "label": "circle-point_n6",
-      "angle": 2.356194490192345,
-      "radius": 9.5,
-      "parentLabel": "restroom_braun_buffel"
-    },
-    {
-      "id": "n7",
-      "x": -1325.4889,
-      "y": 247.47025,
-      "type": "circle-point",
-      "label": "circle-point_n7",
-      "angle": 3.141592653589793,
-      "radius": 9.5,
-      "parentLabel": "restroom_braun_buffel"
-    },
-    {
-      "id": "n8",
-      "x": -1322.7064144212723,
-      "y": 240.7527355787278,
-      "type": "circle-point",
-      "label": "circle-point_n8",
-      "angle": 3.9269908169872414,
-      "radius": 9.5,
-      "parentLabel": "restroom_braun_buffel"
-    },
-    {
-      "id": "n9",
-      "x": -1315.9889,
-      "y": 237.97025,
-      "type": "circle-point",
-      "label": "circle-point_n9",
-      "angle": 4.71238898038469,
-      "radius": 9.5,
-      "parentLabel": "restroom_braun_buffel"
-    },
-    {
-      "id": "n10",
-      "x": -1309.2713855787279,
-      "y": 240.7527355787278,
-      "type": "circle-point",
-      "label": "circle-point_n10",
-      "angle": 5.497787143782138,
-      "radius": 9.5,
-      "parentLabel": "restroom_braun_buffel"
-    },
-    {
-      "id": "n11",
-      "x": -879.21368,
-      "y": 229.73007,
-      "type": "circle-center",
-      "label": "lift_west",
-      "radius": 9.5
-    },
-    {
-      "id": "n12",
-      "x": -869.71368,
-      "y": 229.73007,
-      "type": "circle-point",
-      "label": "circle-point_n12",
-      "angle": 0,
-      "radius": 9.5,
-      "parentLabel": "lift_west"
-    },
-    {
-      "id": "n13",
-      "x": -872.4961655787278,
-      "y": 236.4475844212722,
-      "type": "circle-point",
-      "label": "circle-point_n13",
-      "angle": 0.7853981633974483,
-      "radius": 9.5,
-      "parentLabel": "lift_west"
-    },
-    {
-      "id": "n14",
-      "x": -879.21368,
-      "y": 239.23007,
-      "type": "circle-point",
-      "label": "circle-point_n14",
-      "angle": 1.5707963267948966,
-      "radius": 9.5,
-      "parentLabel": "lift_west"
-    },
-    {
-      "id": "n15",
-      "x": -885.9311944212722,
-      "y": 236.4475844212722,
-      "type": "circle-point",
-      "label": "circle-point_n15",
-      "angle": 2.356194490192345,
-      "radius": 9.5,
-      "parentLabel": "lift_west"
-    },
-    {
-      "id": "n16",
-      "x": -888.71368,
-      "y": 229.73007,
-      "type": "circle-point",
-      "label": "circle-point_n16",
-      "angle": 3.141592653589793,
-      "radius": 9.5,
-      "parentLabel": "lift_west"
-    },
-    {
-      "id": "n17",
-      "x": -885.9311944212722,
-      "y": 223.0125555787278,
-      "type": "circle-point",
-      "label": "circle-point_n17",
-      "angle": 3.9269908169872414,
-      "radius": 9.5,
-      "parentLabel": "lift_west"
-    },
-    {
-      "id": "n18",
-      "x": -879.21368,
-      "y": 220.23007,
-      "type": "circle-point",
-      "label": "circle-point_n18",
-      "angle": 4.71238898038469,
-      "radius": 9.5,
-      "parentLabel": "lift_west"
-    },
-    {
-      "id": "n19",
-      "x": -872.4961655787278,
-      "y": 223.0125555787278,
-      "type": "circle-point",
-      "label": "circle-point_n19",
-      "angle": 5.497787143782138,
-      "radius": 9.5,
-      "parentLabel": "lift_west"
-    },
-    {
-      "id": "n20",
-      "x": -889.99152,
-      "y": 467.83011,
-      "type": "circle-center",
-      "label": "lift_west-5",
-      "radius": 9.5
-    },
-    {
-      "id": "n21",
-      "x": -880.49152,
-      "y": 467.83011,
-      "type": "circle-point",
-      "label": "circle-point_n21",
-      "angle": 0,
-      "radius": 9.5,
-      "parentLabel": "lift_west-5"
-    },
-    {
-      "id": "n22",
-      "x": -883.2740055787278,
-      "y": 474.5476244212722,
-      "type": "circle-point",
-      "label": "circle-point_n22",
-      "angle": 0.7853981633974483,
-      "radius": 9.5,
-      "parentLabel": "lift_west-5"
-    },
-    {
-      "id": "n23",
-      "x": -889.99152,
-      "y": 477.33011,
-      "type": "circle-point",
-      "label": "circle-point_n23",
-      "angle": 1.5707963267948966,
-      "radius": 9.5,
-      "parentLabel": "lift_west-5"
-    },
-    {
-      "id": "n24",
-      "x": -896.7090344212722,
-      "y": 474.5476244212722,
-      "type": "circle-point",
-      "label": "circle-point_n24",
-      "angle": 2.356194490192345,
-      "radius": 9.5,
-      "parentLabel": "lift_west-5"
-    },
-    {
-      "id": "n25",
-      "x": -899.49152,
-      "y": 467.83011,
-      "type": "circle-point",
-      "label": "circle-point_n25",
-      "angle": 3.141592653589793,
-      "radius": 9.5,
-      "parentLabel": "lift_west-5"
-    },
-    {
-      "id": "n26",
-      "x": -896.7090344212722,
-      "y": 461.1125955787278,
-      "type": "circle-point",
-      "label": "circle-point_n26",
-      "angle": 3.9269908169872414,
-      "radius": 9.5,
-      "parentLabel": "lift_west-5"
-    },
-    {
-      "id": "n27",
-      "x": -889.99152,
-      "y": 458.33011,
-      "type": "circle-point",
-      "label": "circle-point_n27",
-      "angle": 4.71238898038469,
-      "radius": 9.5,
-      "parentLabel": "lift_west-5"
-    },
-    {
-      "id": "n28",
-      "x": -883.2740055787278,
-      "y": 461.1125955787278,
-      "type": "circle-point",
-      "label": "circle-point_n28",
-      "angle": 5.497787143782138,
-      "radius": 9.5,
-      "parentLabel": "lift_west-5"
-    },
-    {
-      "id": "n29",
-      "x": -1231.4401,
-      "y": 246.11801,
-      "type": "circle-center",
-      "label": "escalator_bw_basement_1",
-      "radius": 9.5
-    },
-    {
-      "id": "n30",
-      "x": -1221.9401,
-      "y": 246.11801,
-      "type": "circle-point",
-      "label": "circle-point_n30",
-      "angle": 0,
-      "radius": 9.5,
-      "parentLabel": "escalator_bw_basement_1"
-    },
-    {
-      "id": "n31",
-      "x": -1224.7225855787278,
-      "y": 252.8355244212722,
-      "type": "circle-point",
-      "label": "circle-point_n31",
-      "angle": 0.7853981633974483,
-      "radius": 9.5,
-      "parentLabel": "escalator_bw_basement_1"
-    },
-    {
-      "id": "n32",
-      "x": -1231.4401,
-      "y": 255.61801,
-      "type": "circle-point",
-      "label": "circle-point_n32",
-      "angle": 1.5707963267948966,
-      "radius": 9.5,
-      "parentLabel": "escalator_bw_basement_1"
-    },
-    {
-      "id": "n33",
-      "x": -1238.1576144212722,
-      "y": 252.8355244212722,
-      "type": "circle-point",
-      "label": "circle-point_n33",
-      "angle": 2.356194490192345,
-      "radius": 9.5,
-      "parentLabel": "escalator_bw_basement_1"
-    },
-    {
-      "id": "n34",
-      "x": -1240.9401,
-      "y": 246.11801,
-      "type": "circle-point",
-      "label": "circle-point_n34",
-      "angle": 3.141592653589793,
-      "radius": 9.5,
-      "parentLabel": "escalator_bw_basement_1"
-    },
-    {
-      "id": "n35",
-      "x": -1238.1576144212722,
-      "y": 239.4004955787278,
-      "type": "circle-point",
-      "label": "circle-point_n35",
-      "angle": 3.9269908169872414,
-      "radius": 9.5,
-      "parentLabel": "escalator_bw_basement_1"
-    },
-    {
-      "id": "n36",
-      "x": -1231.4401,
-      "y": 236.61801,
-      "type": "circle-point",
-      "label": "circle-point_n36",
-      "angle": 4.71238898038469,
-      "radius": 9.5,
-      "parentLabel": "escalator_bw_basement_1"
-    },
-    {
-      "id": "n37",
-      "x": -1224.7225855787278,
-      "y": 239.4004955787278,
-      "type": "circle-point",
-      "label": "circle-point_n37",
-      "angle": 5.497787143782138,
-      "radius": 9.5,
-      "parentLabel": "escalator_bw_basement_1"
-    },
-    {
-      "id": "n38",
-      "x": -953.96375,
-      "y": 229.69028,
-      "type": "circle-center",
-      "label": "escalator_west-4",
-      "radius": 9.5
-    },
-    {
-      "id": "n39",
-      "x": -944.46375,
-      "y": 229.69028,
-      "type": "circle-point",
-      "label": "circle-point_n39",
-      "angle": 0,
-      "radius": 9.5,
-      "parentLabel": "escalator_west-4"
-    },
-    {
-      "id": "n40",
-      "x": -947.2462355787278,
-      "y": 236.4077944212722,
-      "type": "circle-point",
-      "label": "circle-point_n40",
-      "angle": 0.7853981633974483,
-      "radius": 9.5,
-      "parentLabel": "escalator_west-4"
-    },
-    {
-      "id": "n41",
-      "x": -953.96375,
-      "y": 239.19028,
-      "type": "circle-point",
-      "label": "circle-point_n41",
-      "angle": 1.5707963267948966,
-      "radius": 9.5,
-      "parentLabel": "escalator_west-4"
-    },
-    {
-      "id": "n42",
-      "x": -960.6812644212722,
-      "y": 236.4077944212722,
-      "type": "circle-point",
-      "label": "circle-point_n42",
-      "angle": 2.356194490192345,
-      "radius": 9.5,
-      "parentLabel": "escalator_west-4"
-    },
-    {
-      "id": "n43",
-      "x": -963.46375,
-      "y": 229.69028,
-      "type": "circle-point",
-      "label": "circle-point_n43",
-      "angle": 3.141592653589793,
-      "radius": 9.5,
-      "parentLabel": "escalator_west-4"
-    },
-    {
-      "id": "n44",
-      "x": -960.6812644212722,
-      "y": 222.9727655787278,
-      "type": "circle-point",
-      "label": "circle-point_n44",
-      "angle": 3.9269908169872414,
-      "radius": 9.5,
-      "parentLabel": "escalator_west-4"
-    },
-    {
-      "id": "n45",
-      "x": -953.96375,
-      "y": 220.19028,
-      "type": "circle-point",
-      "label": "circle-point_n45",
-      "angle": 4.71238898038469,
-      "radius": 9.5,
-      "parentLabel": "escalator_west-4"
-    },
-    {
-      "id": "n46",
-      "x": -947.2462355787278,
-      "y": 222.9727655787278,
-      "type": "circle-point",
-      "label": "circle-point_n46",
-      "angle": 5.497787143782138,
-      "radius": 9.5,
-      "parentLabel": "escalator_west-4"
-    },
-    {
-      "id": "n47",
-      "x": -878.93054,
-      "y": 244.68546,
-      "type": "ellipse-center",
-      "label": "klinstan",
-      "rx": 5.2631578,
-      "ry": 5
-    },
-    {
-      "id": "n48",
-      "x": -873.6673821999999,
-      "y": 244.68546,
-      "type": "ellipse-point",
-      "label": "ellipse-point_n48",
-      "angle": 0,
-      "rx": 5.2631578,
-      "ry": 5,
-      "parentLabel": "klinstan"
-    },
-    {
-      "id": "n49",
-      "x": -875.2089254291651,
-      "y": 248.22099390593274,
-      "type": "ellipse-point",
-      "label": "ellipse-point_n49",
-      "angle": 0.7853981633974483,
-      "rx": 5.2631578,
-      "ry": 5,
-      "parentLabel": "klinstan"
-    },
-    {
-      "id": "n50",
-      "x": -878.93054,
-      "y": 249.68546,
-      "type": "ellipse-point",
-      "label": "ellipse-point_n50",
-      "angle": 1.5707963267948966,
-      "rx": 5.2631578,
-      "ry": 5,
-      "parentLabel": "klinstan"
-    },
-    {
-      "id": "n51",
-      "x": -882.6521545708348,
-      "y": 248.22099390593274,
-      "type": "ellipse-point",
-      "label": "ellipse-point_n51",
-      "angle": 2.356194490192345,
-      "rx": 5.2631578,
-      "ry": 5,
-      "parentLabel": "klinstan"
-    },
-    {
-      "id": "n52",
-      "x": -884.1936978,
-      "y": 244.68546,
-      "type": "ellipse-point",
-      "label": "ellipse-point_n52",
-      "angle": 3.141592653589793,
-      "rx": 5.2631578,
-      "ry": 5,
-      "parentLabel": "klinstan"
-    },
-    {
-      "id": "n53",
-      "x": -882.6521545708348,
-      "y": 241.14992609406727,
-      "type": "ellipse-point",
-      "label": "ellipse-point_n53",
-      "angle": 3.9269908169872414,
-      "rx": 5.2631578,
-      "ry": 5,
-      "parentLabel": "klinstan"
-    },
-    {
-      "id": "n54",
-      "x": -878.93054,
-      "y": 239.68546,
-      "type": "ellipse-point",
-      "label": "ellipse-point_n54",
-      "angle": 4.71238898038469,
-      "rx": 5.2631578,
-      "ry": 5,
-      "parentLabel": "klinstan"
-    },
-    {
-      "id": "n55",
-      "x": -875.2089254291651,
-      "y": 241.14992609406727,
-      "type": "ellipse-point",
-      "label": "ellipse-point_n55",
-      "angle": 5.497787143782138,
-      "rx": 5.2631578,
-      "ry": 5,
-      "parentLabel": "klinstan"
-    },
-    {
-      "id": "n56",
-      "x": -830.51984,
-      "y": 307.30148,
-      "type": "ellipse-center",
-      "label": "wester_parking",
-      "rx": 5.2631578,
-      "ry": 5
-    },
-    {
-      "id": "n57",
-      "x": -825.2566822,
-      "y": 307.30148,
-      "type": "ellipse-point",
-      "label": "ellipse-point_n57",
-      "angle": 0,
-      "rx": 5.2631578,
-      "ry": 5,
-      "parentLabel": "wester_parking"
-    },
-    {
-      "id": "n58",
-      "x": -826.7982254291652,
-      "y": 310.83701390593274,
-      "type": "ellipse-point",
-      "label": "ellipse-point_n58",
-      "angle": 0.7853981633974483,
-      "rx": 5.2631578,
-      "ry": 5,
-      "parentLabel": "wester_parking"
-    },
-    {
-      "id": "n59",
-      "x": -830.51984,
-      "y": 312.30148,
-      "type": "ellipse-point",
-      "label": "ellipse-point_n59",
-      "angle": 1.5707963267948966,
-      "rx": 5.2631578,
-      "ry": 5,
-      "parentLabel": "wester_parking"
-    },
-    {
-      "id": "n60",
-      "x": -834.2414545708349,
-      "y": 310.83701390593274,
-      "type": "ellipse-point",
-      "label": "ellipse-point_n60",
-      "angle": 2.356194490192345,
-      "rx": 5.2631578,
-      "ry": 5,
-      "parentLabel": "wester_parking"
-    },
-    {
-      "id": "n61",
-      "x": -835.7829978000001,
-      "y": 307.30148,
-      "type": "ellipse-point",
-      "label": "ellipse-point_n61",
-      "angle": 3.141592653589793,
-      "rx": 5.2631578,
-      "ry": 5,
-      "parentLabel": "wester_parking"
-    },
-    {
-      "id": "n62",
-      "x": -834.2414545708349,
-      "y": 303.7659460940673,
-      "type": "ellipse-point",
-      "label": "ellipse-point_n62",
-      "angle": 3.9269908169872414,
-      "rx": 5.2631578,
-      "ry": 5,
-      "parentLabel": "wester_parking"
-    },
-    {
-      "id": "n63",
-      "x": -830.51984,
-      "y": 302.30148,
-      "type": "ellipse-point",
-      "label": "ellipse-point_n63",
-      "angle": 4.71238898038469,
-      "rx": 5.2631578,
-      "ry": 5,
-      "parentLabel": "wester_parking"
-    },
-    {
-      "id": "n64",
-      "x": -826.7982254291652,
-      "y": 303.76594609406726,
-      "type": "ellipse-point",
-      "label": "ellipse-point_n64",
-      "angle": 5.497787143782138,
-      "rx": 5.2631578,
-      "ry": 5,
-      "parentLabel": "wester_parking"
-    },
-    {
-      "id": "n65",
-      "x": -1212.7786,
-      "y": 489.42093,
-      "type": "ellipse-center",
-      "label": "north_parking",
-      "rx": 5.2631578,
-      "ry": 5
-    },
-    {
-      "id": "n66",
-      "x": -1207.5154422,
-      "y": 489.42093,
-      "type": "ellipse-point",
-      "label": "ellipse-point_n66",
-      "angle": 0,
-      "rx": 5.2631578,
-      "ry": 5,
-      "parentLabel": "north_parking"
-    },
-    {
-      "id": "n67",
-      "x": -1209.0569854291653,
-      "y": 492.9564639059327,
-      "type": "ellipse-point",
-      "label": "ellipse-point_n67",
-      "angle": 0.7853981633974483,
-      "rx": 5.2631578,
-      "ry": 5,
-      "parentLabel": "north_parking"
-    },
-    {
-      "id": "n68",
-      "x": -1212.7786,
-      "y": 494.42093,
-      "type": "ellipse-point",
-      "label": "ellipse-point_n68",
-      "angle": 1.5707963267948966,
-      "rx": 5.2631578,
-      "ry": 5,
-      "parentLabel": "north_parking"
-    },
-    {
-      "id": "n69",
-      "x": -1216.500214570835,
-      "y": 492.95646390593276,
-      "type": "ellipse-point",
-      "label": "ellipse-point_n69",
-      "angle": 2.356194490192345,
-      "rx": 5.2631578,
-      "ry": 5,
-      "parentLabel": "north_parking"
-    },
-    {
-      "id": "n70",
-      "x": -1218.0417578000001,
-      "y": 489.42093,
-      "type": "ellipse-point",
-      "label": "ellipse-point_n70",
-      "angle": 3.141592653589793,
-      "rx": 5.2631578,
-      "ry": 5,
-      "parentLabel": "north_parking"
-    },
-    {
-      "id": "n71",
-      "x": -1216.500214570835,
-      "y": 485.8853960940673,
-      "type": "ellipse-point",
-      "label": "ellipse-point_n71",
-      "angle": 3.9269908169872414,
-      "rx": 5.2631578,
-      "ry": 5,
-      "parentLabel": "north_parking"
-    },
-    {
-      "id": "n72",
-      "x": -1212.7786,
-      "y": 484.42093,
-      "type": "ellipse-point",
-      "label": "ellipse-point_n72",
-      "angle": 4.71238898038469,
-      "rx": 5.2631578,
-      "ry": 5,
-      "parentLabel": "north_parking"
-    },
-    {
-      "id": "n73",
-      "x": -1209.0569854291653,
-      "y": 485.88539609406723,
-      "type": "ellipse-point",
-      "label": "ellipse-point_n73",
-      "angle": 5.497787143782138,
-      "rx": 5.2631578,
-      "ry": 5,
-      "parentLabel": "north_parking"
-    },
-    {
-      "id": "n74",
-      "x": -1598.9026,
-      "y": 204.13522,
-      "type": "ellipse-center",
-      "label": "east_parking",
-      "rx": 5.2631578,
-      "ry": 5
-    },
-    {
-      "id": "n75",
-      "x": -1593.6394421999998,
-      "y": 204.13522,
-      "type": "ellipse-point",
-      "label": "ellipse-point_n75",
-      "angle": 0,
-      "rx": 5.2631578,
-      "ry": 5,
-      "parentLabel": "east_parking"
-    },
-    {
-      "id": "n76",
-      "x": -1595.180985429165,
-      "y": 207.67075390593274,
-      "type": "ellipse-point",
-      "label": "ellipse-point_n76",
-      "angle": 0.7853981633974483,
-      "rx": 5.2631578,
-      "ry": 5,
-      "parentLabel": "east_parking"
-    },
-    {
-      "id": "n77",
-      "x": -1598.9026,
-      "y": 209.13522,
-      "type": "ellipse-point",
-      "label": "ellipse-point_n77",
-      "angle": 1.5707963267948966,
-      "rx": 5.2631578,
-      "ry": 5,
-      "parentLabel": "east_parking"
-    },
-    {
-      "id": "n78",
-      "x": -1602.6242145708347,
-      "y": 207.67075390593274,
-      "type": "ellipse-point",
-      "label": "ellipse-point_n78",
-      "angle": 2.356194490192345,
-      "rx": 5.2631578,
-      "ry": 5,
-      "parentLabel": "east_parking"
-    },
-    {
-      "id": "n79",
-      "x": -1604.1657578,
-      "y": 204.13522,
-      "type": "ellipse-point",
-      "label": "ellipse-point_n79",
-      "angle": 3.141592653589793,
-      "rx": 5.2631578,
-      "ry": 5,
-      "parentLabel": "east_parking"
-    },
-    {
-      "id": "n80",
-      "x": -1602.6242145708347,
-      "y": 200.59968609406727,
-      "type": "ellipse-point",
-      "label": "ellipse-point_n80",
-      "angle": 3.9269908169872414,
-      "rx": 5.2631578,
-      "ry": 5,
-      "parentLabel": "east_parking"
-    },
-    {
-      "id": "n81",
-      "x": -1598.9026,
-      "y": 199.13522,
-      "type": "ellipse-point",
-      "label": "ellipse-point_n81",
-      "angle": 4.71238898038469,
-      "rx": 5.2631578,
-      "ry": 5,
-      "parentLabel": "east_parking"
-    },
-    {
-      "id": "n82",
-      "x": -1595.180985429165,
-      "y": 200.59968609406727,
-      "type": "ellipse-point",
-      "label": "ellipse-point_n82",
-      "angle": 5.497787143782138,
-      "rx": 5.2631578,
-      "ry": 5,
-      "parentLabel": "east_parking"
-    },
-    {
-      "id": "n83",
-      "x": -1232.0637,
-      "y": 186.17465,
-      "type": "ellipse-center",
-      "label": "jete",
-      "rx": 5.2631578,
-      "ry": 5
-    },
-    {
-      "id": "n84",
-      "x": -1226.8005421999999,
-      "y": 186.17465,
-      "type": "ellipse-point",
-      "label": "ellipse-point_n84",
-      "angle": 0,
-      "rx": 5.2631578,
-      "ry": 5,
-      "parentLabel": "jete"
-    },
-    {
-      "id": "n85",
-      "x": -1228.342085429165,
-      "y": 189.71018390593275,
-      "type": "ellipse-point",
-      "label": "ellipse-point_n85",
-      "angle": 0.7853981633974483,
-      "rx": 5.2631578,
-      "ry": 5,
-      "parentLabel": "jete"
-    },
-    {
-      "id": "n86",
-      "x": -1232.0637,
-      "y": 191.17465,
-      "type": "ellipse-point",
-      "label": "ellipse-point_n86",
-      "angle": 1.5707963267948966,
-      "rx": 5.2631578,
-      "ry": 5,
-      "parentLabel": "jete"
-    },
-    {
-      "id": "n87",
-      "x": -1235.7853145708348,
-      "y": 189.71018390593275,
-      "type": "ellipse-point",
-      "label": "ellipse-point_n87",
-      "angle": 2.356194490192345,
-      "rx": 5.2631578,
-      "ry": 5,
-      "parentLabel": "jete"
-    },
-    {
-      "id": "n88",
-      "x": -1237.3268578,
-      "y": 186.17465,
-      "type": "ellipse-point",
-      "label": "ellipse-point_n88",
-      "angle": 3.141592653589793,
-      "rx": 5.2631578,
-      "ry": 5,
-      "parentLabel": "jete"
-    },
-    {
-      "id": "n89",
-      "x": -1235.7853145708348,
-      "y": 182.63911609406728,
-      "type": "ellipse-point",
-      "label": "ellipse-point_n89",
-      "angle": 3.9269908169872414,
-      "rx": 5.2631578,
-      "ry": 5,
-      "parentLabel": "jete"
-    },
-    {
-      "id": "n90",
-      "x": -1232.0637,
-      "y": 181.17465,
-      "type": "ellipse-point",
-      "label": "ellipse-point_n90",
-      "angle": 4.71238898038469,
-      "rx": 5.2631578,
-      "ry": 5,
-      "parentLabel": "jete"
-    },
-    {
-      "id": "n91",
-      "x": -1228.342085429165,
-      "y": 182.63911609406728,
-      "type": "ellipse-point",
-      "label": "ellipse-point_n91",
-      "angle": 5.497787143782138,
-      "rx": 5.2631578,
-      "ry": 5,
-      "parentLabel": "jete"
-    },
-    {
-      "id": "n92",
       "x": -1257.1819,
       "y": 186.5618,
       "type": "ellipse-center",
@@ -971,95 +30,95 @@
       "ry": 5
     },
     {
-      "id": "n93",
+      "id": "n1",
       "x": -1251.9187422,
       "y": 186.5618,
       "type": "ellipse-point",
-      "label": "ellipse-point_n93",
+      "label": "ellipse-point_n1",
       "angle": 0,
       "rx": 5.2631578,
       "ry": 5,
       "parentLabel": "stroberi"
     },
     {
-      "id": "n94",
+      "id": "n2",
       "x": -1253.4602854291652,
       "y": 190.09733390593274,
       "type": "ellipse-point",
-      "label": "ellipse-point_n94",
+      "label": "ellipse-point_n2",
       "angle": 0.7853981633974483,
       "rx": 5.2631578,
       "ry": 5,
       "parentLabel": "stroberi"
     },
     {
-      "id": "n95",
+      "id": "n3",
       "x": -1257.1819,
       "y": 191.5618,
       "type": "ellipse-point",
-      "label": "ellipse-point_n95",
+      "label": "ellipse-point_n3",
       "angle": 1.5707963267948966,
       "rx": 5.2631578,
       "ry": 5,
       "parentLabel": "stroberi"
     },
     {
-      "id": "n96",
+      "id": "n4",
       "x": -1260.903514570835,
       "y": 190.09733390593274,
       "type": "ellipse-point",
-      "label": "ellipse-point_n96",
+      "label": "ellipse-point_n4",
       "angle": 2.356194490192345,
       "rx": 5.2631578,
       "ry": 5,
       "parentLabel": "stroberi"
     },
     {
-      "id": "n97",
+      "id": "n5",
       "x": -1262.4450578,
       "y": 186.5618,
       "type": "ellipse-point",
-      "label": "ellipse-point_n97",
+      "label": "ellipse-point_n5",
       "angle": 3.141592653589793,
       "rx": 5.2631578,
       "ry": 5,
       "parentLabel": "stroberi"
     },
     {
-      "id": "n98",
+      "id": "n6",
       "x": -1260.903514570835,
       "y": 183.02626609406727,
       "type": "ellipse-point",
-      "label": "ellipse-point_n98",
+      "label": "ellipse-point_n6",
       "angle": 3.9269908169872414,
       "rx": 5.2631578,
       "ry": 5,
       "parentLabel": "stroberi"
     },
     {
-      "id": "n99",
+      "id": "n7",
       "x": -1257.1819,
       "y": 181.5618,
       "type": "ellipse-point",
-      "label": "ellipse-point_n99",
+      "label": "ellipse-point_n7",
       "angle": 4.71238898038469,
       "rx": 5.2631578,
       "ry": 5,
       "parentLabel": "stroberi"
     },
     {
-      "id": "n100",
+      "id": "n8",
       "x": -1253.4602854291652,
       "y": 183.02626609406727,
       "type": "ellipse-point",
-      "label": "ellipse-point_n100",
+      "label": "ellipse-point_n8",
       "angle": 5.497787143782138,
       "rx": 5.2631578,
       "ry": 5,
       "parentLabel": "stroberi"
     },
     {
-      "id": "n101",
+      "id": "n9",
       "x": -1283.774,
       "y": 186.21445,
       "type": "ellipse-center",
@@ -1068,95 +127,1068 @@
       "ry": 4.75
     },
     {
-      "id": "n102",
+      "id": "n10",
       "x": -1278.774,
       "y": 186.21445,
       "type": "ellipse-point",
-      "label": "ellipse-point_n102",
+      "label": "ellipse-point_n10",
       "angle": 0,
       "rx": 5,
       "ry": 4.75,
       "parentLabel": "dua_sisi_valas"
     },
     {
-      "id": "n103",
+      "id": "n11",
       "x": -1280.2384660940672,
       "y": 189.5732072106361,
       "type": "ellipse-point",
-      "label": "ellipse-point_n103",
+      "label": "ellipse-point_n11",
       "angle": 0.7853981633974483,
       "rx": 5,
       "ry": 4.75,
       "parentLabel": "dua_sisi_valas"
     },
     {
-      "id": "n104",
+      "id": "n12",
       "x": -1283.774,
       "y": 190.96445,
       "type": "ellipse-point",
-      "label": "ellipse-point_n104",
+      "label": "ellipse-point_n12",
       "angle": 1.5707963267948966,
       "rx": 5,
       "ry": 4.75,
       "parentLabel": "dua_sisi_valas"
     },
     {
-      "id": "n105",
+      "id": "n13",
       "x": -1287.3095339059325,
       "y": 189.5732072106361,
       "type": "ellipse-point",
-      "label": "ellipse-point_n105",
+      "label": "ellipse-point_n13",
       "angle": 2.356194490192345,
       "rx": 5,
       "ry": 4.75,
       "parentLabel": "dua_sisi_valas"
     },
     {
-      "id": "n106",
+      "id": "n14",
       "x": -1288.774,
       "y": 186.21445,
       "type": "ellipse-point",
-      "label": "ellipse-point_n106",
+      "label": "ellipse-point_n14",
       "angle": 3.141592653589793,
       "rx": 5,
       "ry": 4.75,
       "parentLabel": "dua_sisi_valas"
     },
     {
-      "id": "n107",
+      "id": "n15",
       "x": -1287.3095339059325,
       "y": 182.8556927893639,
       "type": "ellipse-point",
-      "label": "ellipse-point_n107",
+      "label": "ellipse-point_n15",
       "angle": 3.9269908169872414,
       "rx": 5,
       "ry": 4.75,
       "parentLabel": "dua_sisi_valas"
     },
     {
-      "id": "n108",
+      "id": "n16",
       "x": -1283.774,
       "y": 181.46445,
       "type": "ellipse-point",
-      "label": "ellipse-point_n108",
+      "label": "ellipse-point_n16",
       "angle": 4.71238898038469,
       "rx": 5,
       "ry": 4.75,
       "parentLabel": "dua_sisi_valas"
     },
     {
-      "id": "n109",
+      "id": "n17",
       "x": -1280.2384660940672,
       "y": 182.8556927893639,
       "type": "ellipse-point",
-      "label": "ellipse-point_n109",
+      "label": "ellipse-point_n17",
       "angle": 5.497787143782138,
       "rx": 5,
       "ry": 4.75,
       "parentLabel": "dua_sisi_valas"
     },
     {
+      "id": "n18",
+      "x": -1257.2423,
+      "y": 214.56626,
+      "type": "path-point",
+      "label": "path1_point_0",
+      "parentLabel": "path1"
+    },
+    {
+      "id": "n19",
+      "x": -1257.2832999999998,
+      "y": 186.32009,
+      "type": "path-point",
+      "label": "path1_point_1",
+      "parentLabel": "path1"
+    },
+    {
+      "id": "n20",
+      "x": -1283.4777,
+      "y": 214.447,
+      "type": "path-point",
+      "label": "path2_point_0",
+      "parentLabel": "path2"
+    },
+    {
+      "id": "n21",
+      "x": -1283.638,
+      "y": 185.60458,
+      "type": "path-point",
+      "label": "path2_point_1",
+      "parentLabel": "path2"
+    },
+    {
+      "id": "n22",
+      "x": -1069.8976,
+      "y": 228.85805,
+      "type": "path-point",
+      "label": "storepath266-7-0_point_0",
+      "parentLabel": "storepath266-7-0"
+    },
+    {
+      "id": "n23",
+      "x": -970.87184,
+      "y": 52.296588,
+      "type": "path-point",
+      "label": "storepath266-7-0_point_1",
+      "parentLabel": "storepath266-7-0"
+    },
+    {
+      "id": "n24",
+      "x": -1315.9889,
+      "y": 247.47025,
+      "type": "circle-center",
+      "label": "restroom_braun_buffel",
+      "radius": 9.5
+    },
+    {
+      "id": "n25",
+      "x": -1306.4889,
+      "y": 247.47025,
+      "type": "circle-point",
+      "label": "circle-point_n25",
+      "angle": 0,
+      "radius": 9.5,
+      "parentLabel": "restroom_braun_buffel"
+    },
+    {
+      "id": "n26",
+      "x": -1309.2713855787279,
+      "y": 254.1877644212722,
+      "type": "circle-point",
+      "label": "circle-point_n26",
+      "angle": 0.7853981633974483,
+      "radius": 9.5,
+      "parentLabel": "restroom_braun_buffel"
+    },
+    {
+      "id": "n27",
+      "x": -1315.9889,
+      "y": 256.97024999999996,
+      "type": "circle-point",
+      "label": "circle-point_n27",
+      "angle": 1.5707963267948966,
+      "radius": 9.5,
+      "parentLabel": "restroom_braun_buffel"
+    },
+    {
+      "id": "n28",
+      "x": -1322.7064144212723,
+      "y": 254.1877644212722,
+      "type": "circle-point",
+      "label": "circle-point_n28",
+      "angle": 2.356194490192345,
+      "radius": 9.5,
+      "parentLabel": "restroom_braun_buffel"
+    },
+    {
+      "id": "n29",
+      "x": -1325.4889,
+      "y": 247.47025,
+      "type": "circle-point",
+      "label": "circle-point_n29",
+      "angle": 3.141592653589793,
+      "radius": 9.5,
+      "parentLabel": "restroom_braun_buffel"
+    },
+    {
+      "id": "n30",
+      "x": -1322.7064144212723,
+      "y": 240.7527355787278,
+      "type": "circle-point",
+      "label": "circle-point_n30",
+      "angle": 3.9269908169872414,
+      "radius": 9.5,
+      "parentLabel": "restroom_braun_buffel"
+    },
+    {
+      "id": "n31",
+      "x": -1315.9889,
+      "y": 237.97025,
+      "type": "circle-point",
+      "label": "circle-point_n31",
+      "angle": 4.71238898038469,
+      "radius": 9.5,
+      "parentLabel": "restroom_braun_buffel"
+    },
+    {
+      "id": "n32",
+      "x": -1309.2713855787279,
+      "y": 240.7527355787278,
+      "type": "circle-point",
+      "label": "circle-point_n32",
+      "angle": 5.497787143782138,
+      "radius": 9.5,
+      "parentLabel": "restroom_braun_buffel"
+    },
+    {
+      "id": "n33",
+      "x": -879.21368,
+      "y": 229.73007,
+      "type": "circle-center",
+      "label": "lift_west",
+      "radius": 9.5
+    },
+    {
+      "id": "n34",
+      "x": -869.71368,
+      "y": 229.73007,
+      "type": "circle-point",
+      "label": "circle-point_n34",
+      "angle": 0,
+      "radius": 9.5,
+      "parentLabel": "lift_west"
+    },
+    {
+      "id": "n35",
+      "x": -872.4961655787278,
+      "y": 236.4475844212722,
+      "type": "circle-point",
+      "label": "circle-point_n35",
+      "angle": 0.7853981633974483,
+      "radius": 9.5,
+      "parentLabel": "lift_west"
+    },
+    {
+      "id": "n36",
+      "x": -879.21368,
+      "y": 239.23007,
+      "type": "circle-point",
+      "label": "circle-point_n36",
+      "angle": 1.5707963267948966,
+      "radius": 9.5,
+      "parentLabel": "lift_west"
+    },
+    {
+      "id": "n37",
+      "x": -885.9311944212722,
+      "y": 236.4475844212722,
+      "type": "circle-point",
+      "label": "circle-point_n37",
+      "angle": 2.356194490192345,
+      "radius": 9.5,
+      "parentLabel": "lift_west"
+    },
+    {
+      "id": "n38",
+      "x": -888.71368,
+      "y": 229.73007,
+      "type": "circle-point",
+      "label": "circle-point_n38",
+      "angle": 3.141592653589793,
+      "radius": 9.5,
+      "parentLabel": "lift_west"
+    },
+    {
+      "id": "n39",
+      "x": -885.9311944212722,
+      "y": 223.0125555787278,
+      "type": "circle-point",
+      "label": "circle-point_n39",
+      "angle": 3.9269908169872414,
+      "radius": 9.5,
+      "parentLabel": "lift_west"
+    },
+    {
+      "id": "n40",
+      "x": -879.21368,
+      "y": 220.23007,
+      "type": "circle-point",
+      "label": "circle-point_n40",
+      "angle": 4.71238898038469,
+      "radius": 9.5,
+      "parentLabel": "lift_west"
+    },
+    {
+      "id": "n41",
+      "x": -872.4961655787278,
+      "y": 223.0125555787278,
+      "type": "circle-point",
+      "label": "circle-point_n41",
+      "angle": 5.497787143782138,
+      "radius": 9.5,
+      "parentLabel": "lift_west"
+    },
+    {
+      "id": "n42",
+      "x": -889.99152,
+      "y": 467.83011,
+      "type": "circle-center",
+      "label": "lift_west-5",
+      "radius": 9.5
+    },
+    {
+      "id": "n43",
+      "x": -880.49152,
+      "y": 467.83011,
+      "type": "circle-point",
+      "label": "circle-point_n43",
+      "angle": 0,
+      "radius": 9.5,
+      "parentLabel": "lift_west-5"
+    },
+    {
+      "id": "n44",
+      "x": -883.2740055787278,
+      "y": 474.5476244212722,
+      "type": "circle-point",
+      "label": "circle-point_n44",
+      "angle": 0.7853981633974483,
+      "radius": 9.5,
+      "parentLabel": "lift_west-5"
+    },
+    {
+      "id": "n45",
+      "x": -889.99152,
+      "y": 477.33011,
+      "type": "circle-point",
+      "label": "circle-point_n45",
+      "angle": 1.5707963267948966,
+      "radius": 9.5,
+      "parentLabel": "lift_west-5"
+    },
+    {
+      "id": "n46",
+      "x": -896.7090344212722,
+      "y": 474.5476244212722,
+      "type": "circle-point",
+      "label": "circle-point_n46",
+      "angle": 2.356194490192345,
+      "radius": 9.5,
+      "parentLabel": "lift_west-5"
+    },
+    {
+      "id": "n47",
+      "x": -899.49152,
+      "y": 467.83011,
+      "type": "circle-point",
+      "label": "circle-point_n47",
+      "angle": 3.141592653589793,
+      "radius": 9.5,
+      "parentLabel": "lift_west-5"
+    },
+    {
+      "id": "n48",
+      "x": -896.7090344212722,
+      "y": 461.1125955787278,
+      "type": "circle-point",
+      "label": "circle-point_n48",
+      "angle": 3.9269908169872414,
+      "radius": 9.5,
+      "parentLabel": "lift_west-5"
+    },
+    {
+      "id": "n49",
+      "x": -889.99152,
+      "y": 458.33011,
+      "type": "circle-point",
+      "label": "circle-point_n49",
+      "angle": 4.71238898038469,
+      "radius": 9.5,
+      "parentLabel": "lift_west-5"
+    },
+    {
+      "id": "n50",
+      "x": -883.2740055787278,
+      "y": 461.1125955787278,
+      "type": "circle-point",
+      "label": "circle-point_n50",
+      "angle": 5.497787143782138,
+      "radius": 9.5,
+      "parentLabel": "lift_west-5"
+    },
+    {
+      "id": "n51",
+      "x": -1231.4401,
+      "y": 246.11801,
+      "type": "circle-center",
+      "label": "escalator_bw_basement_1",
+      "radius": 9.5
+    },
+    {
+      "id": "n52",
+      "x": -1221.9401,
+      "y": 246.11801,
+      "type": "circle-point",
+      "label": "circle-point_n52",
+      "angle": 0,
+      "radius": 9.5,
+      "parentLabel": "escalator_bw_basement_1"
+    },
+    {
+      "id": "n53",
+      "x": -1224.7225855787278,
+      "y": 252.8355244212722,
+      "type": "circle-point",
+      "label": "circle-point_n53",
+      "angle": 0.7853981633974483,
+      "radius": 9.5,
+      "parentLabel": "escalator_bw_basement_1"
+    },
+    {
+      "id": "n54",
+      "x": -1231.4401,
+      "y": 255.61801,
+      "type": "circle-point",
+      "label": "circle-point_n54",
+      "angle": 1.5707963267948966,
+      "radius": 9.5,
+      "parentLabel": "escalator_bw_basement_1"
+    },
+    {
+      "id": "n55",
+      "x": -1238.1576144212722,
+      "y": 252.8355244212722,
+      "type": "circle-point",
+      "label": "circle-point_n55",
+      "angle": 2.356194490192345,
+      "radius": 9.5,
+      "parentLabel": "escalator_bw_basement_1"
+    },
+    {
+      "id": "n56",
+      "x": -1240.9401,
+      "y": 246.11801,
+      "type": "circle-point",
+      "label": "circle-point_n56",
+      "angle": 3.141592653589793,
+      "radius": 9.5,
+      "parentLabel": "escalator_bw_basement_1"
+    },
+    {
+      "id": "n57",
+      "x": -1238.1576144212722,
+      "y": 239.4004955787278,
+      "type": "circle-point",
+      "label": "circle-point_n57",
+      "angle": 3.9269908169872414,
+      "radius": 9.5,
+      "parentLabel": "escalator_bw_basement_1"
+    },
+    {
+      "id": "n58",
+      "x": -1231.4401,
+      "y": 236.61801,
+      "type": "circle-point",
+      "label": "circle-point_n58",
+      "angle": 4.71238898038469,
+      "radius": 9.5,
+      "parentLabel": "escalator_bw_basement_1"
+    },
+    {
+      "id": "n59",
+      "x": -1224.7225855787278,
+      "y": 239.4004955787278,
+      "type": "circle-point",
+      "label": "circle-point_n59",
+      "angle": 5.497787143782138,
+      "radius": 9.5,
+      "parentLabel": "escalator_bw_basement_1"
+    },
+    {
+      "id": "n60",
+      "x": -953.96375,
+      "y": 229.69028,
+      "type": "circle-center",
+      "label": "escalator_west-4",
+      "radius": 9.5
+    },
+    {
+      "id": "n61",
+      "x": -944.46375,
+      "y": 229.69028,
+      "type": "circle-point",
+      "label": "circle-point_n61",
+      "angle": 0,
+      "radius": 9.5,
+      "parentLabel": "escalator_west-4"
+    },
+    {
+      "id": "n62",
+      "x": -947.2462355787278,
+      "y": 236.4077944212722,
+      "type": "circle-point",
+      "label": "circle-point_n62",
+      "angle": 0.7853981633974483,
+      "radius": 9.5,
+      "parentLabel": "escalator_west-4"
+    },
+    {
+      "id": "n63",
+      "x": -953.96375,
+      "y": 239.19028,
+      "type": "circle-point",
+      "label": "circle-point_n63",
+      "angle": 1.5707963267948966,
+      "radius": 9.5,
+      "parentLabel": "escalator_west-4"
+    },
+    {
+      "id": "n64",
+      "x": -960.6812644212722,
+      "y": 236.4077944212722,
+      "type": "circle-point",
+      "label": "circle-point_n64",
+      "angle": 2.356194490192345,
+      "radius": 9.5,
+      "parentLabel": "escalator_west-4"
+    },
+    {
+      "id": "n65",
+      "x": -963.46375,
+      "y": 229.69028,
+      "type": "circle-point",
+      "label": "circle-point_n65",
+      "angle": 3.141592653589793,
+      "radius": 9.5,
+      "parentLabel": "escalator_west-4"
+    },
+    {
+      "id": "n66",
+      "x": -960.6812644212722,
+      "y": 222.9727655787278,
+      "type": "circle-point",
+      "label": "circle-point_n66",
+      "angle": 3.9269908169872414,
+      "radius": 9.5,
+      "parentLabel": "escalator_west-4"
+    },
+    {
+      "id": "n67",
+      "x": -953.96375,
+      "y": 220.19028,
+      "type": "circle-point",
+      "label": "circle-point_n67",
+      "angle": 4.71238898038469,
+      "radius": 9.5,
+      "parentLabel": "escalator_west-4"
+    },
+    {
+      "id": "n68",
+      "x": -947.2462355787278,
+      "y": 222.9727655787278,
+      "type": "circle-point",
+      "label": "circle-point_n68",
+      "angle": 5.497787143782138,
+      "radius": 9.5,
+      "parentLabel": "escalator_west-4"
+    },
+    {
+      "id": "n69",
+      "x": -878.93054,
+      "y": 244.68546,
+      "type": "ellipse-center",
+      "label": "klinstan",
+      "rx": 5.2631578,
+      "ry": 5
+    },
+    {
+      "id": "n70",
+      "x": -873.6673821999999,
+      "y": 244.68546,
+      "type": "ellipse-point",
+      "label": "ellipse-point_n70",
+      "angle": 0,
+      "rx": 5.2631578,
+      "ry": 5,
+      "parentLabel": "klinstan"
+    },
+    {
+      "id": "n71",
+      "x": -875.2089254291651,
+      "y": 248.22099390593274,
+      "type": "ellipse-point",
+      "label": "ellipse-point_n71",
+      "angle": 0.7853981633974483,
+      "rx": 5.2631578,
+      "ry": 5,
+      "parentLabel": "klinstan"
+    },
+    {
+      "id": "n72",
+      "x": -878.93054,
+      "y": 249.68546,
+      "type": "ellipse-point",
+      "label": "ellipse-point_n72",
+      "angle": 1.5707963267948966,
+      "rx": 5.2631578,
+      "ry": 5,
+      "parentLabel": "klinstan"
+    },
+    {
+      "id": "n73",
+      "x": -882.6521545708348,
+      "y": 248.22099390593274,
+      "type": "ellipse-point",
+      "label": "ellipse-point_n73",
+      "angle": 2.356194490192345,
+      "rx": 5.2631578,
+      "ry": 5,
+      "parentLabel": "klinstan"
+    },
+    {
+      "id": "n74",
+      "x": -884.1936978,
+      "y": 244.68546,
+      "type": "ellipse-point",
+      "label": "ellipse-point_n74",
+      "angle": 3.141592653589793,
+      "rx": 5.2631578,
+      "ry": 5,
+      "parentLabel": "klinstan"
+    },
+    {
+      "id": "n75",
+      "x": -882.6521545708348,
+      "y": 241.14992609406727,
+      "type": "ellipse-point",
+      "label": "ellipse-point_n75",
+      "angle": 3.9269908169872414,
+      "rx": 5.2631578,
+      "ry": 5,
+      "parentLabel": "klinstan"
+    },
+    {
+      "id": "n76",
+      "x": -878.93054,
+      "y": 239.68546,
+      "type": "ellipse-point",
+      "label": "ellipse-point_n76",
+      "angle": 4.71238898038469,
+      "rx": 5.2631578,
+      "ry": 5,
+      "parentLabel": "klinstan"
+    },
+    {
+      "id": "n77",
+      "x": -875.2089254291651,
+      "y": 241.14992609406727,
+      "type": "ellipse-point",
+      "label": "ellipse-point_n77",
+      "angle": 5.497787143782138,
+      "rx": 5.2631578,
+      "ry": 5,
+      "parentLabel": "klinstan"
+    },
+    {
+      "id": "n78",
+      "x": -830.51984,
+      "y": 307.30148,
+      "type": "ellipse-center",
+      "label": "wester_parking",
+      "rx": 5.2631578,
+      "ry": 5
+    },
+    {
+      "id": "n79",
+      "x": -825.2566822,
+      "y": 307.30148,
+      "type": "ellipse-point",
+      "label": "ellipse-point_n79",
+      "angle": 0,
+      "rx": 5.2631578,
+      "ry": 5,
+      "parentLabel": "wester_parking"
+    },
+    {
+      "id": "n80",
+      "x": -826.7982254291652,
+      "y": 310.83701390593274,
+      "type": "ellipse-point",
+      "label": "ellipse-point_n80",
+      "angle": 0.7853981633974483,
+      "rx": 5.2631578,
+      "ry": 5,
+      "parentLabel": "wester_parking"
+    },
+    {
+      "id": "n81",
+      "x": -830.51984,
+      "y": 312.30148,
+      "type": "ellipse-point",
+      "label": "ellipse-point_n81",
+      "angle": 1.5707963267948966,
+      "rx": 5.2631578,
+      "ry": 5,
+      "parentLabel": "wester_parking"
+    },
+    {
+      "id": "n82",
+      "x": -834.2414545708349,
+      "y": 310.83701390593274,
+      "type": "ellipse-point",
+      "label": "ellipse-point_n82",
+      "angle": 2.356194490192345,
+      "rx": 5.2631578,
+      "ry": 5,
+      "parentLabel": "wester_parking"
+    },
+    {
+      "id": "n83",
+      "x": -835.7829978000001,
+      "y": 307.30148,
+      "type": "ellipse-point",
+      "label": "ellipse-point_n83",
+      "angle": 3.141592653589793,
+      "rx": 5.2631578,
+      "ry": 5,
+      "parentLabel": "wester_parking"
+    },
+    {
+      "id": "n84",
+      "x": -834.2414545708349,
+      "y": 303.7659460940673,
+      "type": "ellipse-point",
+      "label": "ellipse-point_n84",
+      "angle": 3.9269908169872414,
+      "rx": 5.2631578,
+      "ry": 5,
+      "parentLabel": "wester_parking"
+    },
+    {
+      "id": "n85",
+      "x": -830.51984,
+      "y": 302.30148,
+      "type": "ellipse-point",
+      "label": "ellipse-point_n85",
+      "angle": 4.71238898038469,
+      "rx": 5.2631578,
+      "ry": 5,
+      "parentLabel": "wester_parking"
+    },
+    {
+      "id": "n86",
+      "x": -826.7982254291652,
+      "y": 303.76594609406726,
+      "type": "ellipse-point",
+      "label": "ellipse-point_n86",
+      "angle": 5.497787143782138,
+      "rx": 5.2631578,
+      "ry": 5,
+      "parentLabel": "wester_parking"
+    },
+    {
+      "id": "n87",
+      "x": -1212.7786,
+      "y": 489.42093,
+      "type": "ellipse-center",
+      "label": "north_parking",
+      "rx": 5.2631578,
+      "ry": 5
+    },
+    {
+      "id": "n88",
+      "x": -1207.5154422,
+      "y": 489.42093,
+      "type": "ellipse-point",
+      "label": "ellipse-point_n88",
+      "angle": 0,
+      "rx": 5.2631578,
+      "ry": 5,
+      "parentLabel": "north_parking"
+    },
+    {
+      "id": "n89",
+      "x": -1209.0569854291653,
+      "y": 492.9564639059327,
+      "type": "ellipse-point",
+      "label": "ellipse-point_n89",
+      "angle": 0.7853981633974483,
+      "rx": 5.2631578,
+      "ry": 5,
+      "parentLabel": "north_parking"
+    },
+    {
+      "id": "n90",
+      "x": -1212.7786,
+      "y": 494.42093,
+      "type": "ellipse-point",
+      "label": "ellipse-point_n90",
+      "angle": 1.5707963267948966,
+      "rx": 5.2631578,
+      "ry": 5,
+      "parentLabel": "north_parking"
+    },
+    {
+      "id": "n91",
+      "x": -1216.500214570835,
+      "y": 492.95646390593276,
+      "type": "ellipse-point",
+      "label": "ellipse-point_n91",
+      "angle": 2.356194490192345,
+      "rx": 5.2631578,
+      "ry": 5,
+      "parentLabel": "north_parking"
+    },
+    {
+      "id": "n92",
+      "x": -1218.0417578000001,
+      "y": 489.42093,
+      "type": "ellipse-point",
+      "label": "ellipse-point_n92",
+      "angle": 3.141592653589793,
+      "rx": 5.2631578,
+      "ry": 5,
+      "parentLabel": "north_parking"
+    },
+    {
+      "id": "n93",
+      "x": -1216.500214570835,
+      "y": 485.8853960940673,
+      "type": "ellipse-point",
+      "label": "ellipse-point_n93",
+      "angle": 3.9269908169872414,
+      "rx": 5.2631578,
+      "ry": 5,
+      "parentLabel": "north_parking"
+    },
+    {
+      "id": "n94",
+      "x": -1212.7786,
+      "y": 484.42093,
+      "type": "ellipse-point",
+      "label": "ellipse-point_n94",
+      "angle": 4.71238898038469,
+      "rx": 5.2631578,
+      "ry": 5,
+      "parentLabel": "north_parking"
+    },
+    {
+      "id": "n95",
+      "x": -1209.0569854291653,
+      "y": 485.88539609406723,
+      "type": "ellipse-point",
+      "label": "ellipse-point_n95",
+      "angle": 5.497787143782138,
+      "rx": 5.2631578,
+      "ry": 5,
+      "parentLabel": "north_parking"
+    },
+    {
+      "id": "n96",
+      "x": -1598.9026,
+      "y": 204.13522,
+      "type": "ellipse-center",
+      "label": "east_parking",
+      "rx": 5.2631578,
+      "ry": 5
+    },
+    {
+      "id": "n97",
+      "x": -1593.6394421999998,
+      "y": 204.13522,
+      "type": "ellipse-point",
+      "label": "ellipse-point_n97",
+      "angle": 0,
+      "rx": 5.2631578,
+      "ry": 5,
+      "parentLabel": "east_parking"
+    },
+    {
+      "id": "n98",
+      "x": -1595.180985429165,
+      "y": 207.67075390593274,
+      "type": "ellipse-point",
+      "label": "ellipse-point_n98",
+      "angle": 0.7853981633974483,
+      "rx": 5.2631578,
+      "ry": 5,
+      "parentLabel": "east_parking"
+    },
+    {
+      "id": "n99",
+      "x": -1598.9026,
+      "y": 209.13522,
+      "type": "ellipse-point",
+      "label": "ellipse-point_n99",
+      "angle": 1.5707963267948966,
+      "rx": 5.2631578,
+      "ry": 5,
+      "parentLabel": "east_parking"
+    },
+    {
+      "id": "n100",
+      "x": -1602.6242145708347,
+      "y": 207.67075390593274,
+      "type": "ellipse-point",
+      "label": "ellipse-point_n100",
+      "angle": 2.356194490192345,
+      "rx": 5.2631578,
+      "ry": 5,
+      "parentLabel": "east_parking"
+    },
+    {
+      "id": "n101",
+      "x": -1604.1657578,
+      "y": 204.13522,
+      "type": "ellipse-point",
+      "label": "ellipse-point_n101",
+      "angle": 3.141592653589793,
+      "rx": 5.2631578,
+      "ry": 5,
+      "parentLabel": "east_parking"
+    },
+    {
+      "id": "n102",
+      "x": -1602.6242145708347,
+      "y": 200.59968609406727,
+      "type": "ellipse-point",
+      "label": "ellipse-point_n102",
+      "angle": 3.9269908169872414,
+      "rx": 5.2631578,
+      "ry": 5,
+      "parentLabel": "east_parking"
+    },
+    {
+      "id": "n103",
+      "x": -1598.9026,
+      "y": 199.13522,
+      "type": "ellipse-point",
+      "label": "ellipse-point_n103",
+      "angle": 4.71238898038469,
+      "rx": 5.2631578,
+      "ry": 5,
+      "parentLabel": "east_parking"
+    },
+    {
+      "id": "n104",
+      "x": -1595.180985429165,
+      "y": 200.59968609406727,
+      "type": "ellipse-point",
+      "label": "ellipse-point_n104",
+      "angle": 5.497787143782138,
+      "rx": 5.2631578,
+      "ry": 5,
+      "parentLabel": "east_parking"
+    },
+    {
+      "id": "n105",
+      "x": -1232.0637,
+      "y": 186.17465,
+      "type": "ellipse-center",
+      "label": "jete",
+      "rx": 5.2631578,
+      "ry": 5
+    },
+    {
+      "id": "n106",
+      "x": -1226.8005421999999,
+      "y": 186.17465,
+      "type": "ellipse-point",
+      "label": "ellipse-point_n106",
+      "angle": 0,
+      "rx": 5.2631578,
+      "ry": 5,
+      "parentLabel": "jete"
+    },
+    {
+      "id": "n107",
+      "x": -1228.342085429165,
+      "y": 189.71018390593275,
+      "type": "ellipse-point",
+      "label": "ellipse-point_n107",
+      "angle": 0.7853981633974483,
+      "rx": 5.2631578,
+      "ry": 5,
+      "parentLabel": "jete"
+    },
+    {
+      "id": "n108",
+      "x": -1232.0637,
+      "y": 191.17465,
+      "type": "ellipse-point",
+      "label": "ellipse-point_n108",
+      "angle": 1.5707963267948966,
+      "rx": 5.2631578,
+      "ry": 5,
+      "parentLabel": "jete"
+    },
+    {
+      "id": "n109",
+      "x": -1235.7853145708348,
+      "y": 189.71018390593275,
+      "type": "ellipse-point",
+      "label": "ellipse-point_n109",
+      "angle": 2.356194490192345,
+      "rx": 5.2631578,
+      "ry": 5,
+      "parentLabel": "jete"
+    },
+    {
       "id": "n110",
+      "x": -1237.3268578,
+      "y": 186.17465,
+      "type": "ellipse-point",
+      "label": "ellipse-point_n110",
+      "angle": 3.141592653589793,
+      "rx": 5.2631578,
+      "ry": 5,
+      "parentLabel": "jete"
+    },
+    {
+      "id": "n111",
+      "x": -1235.7853145708348,
+      "y": 182.63911609406728,
+      "type": "ellipse-point",
+      "label": "ellipse-point_n111",
+      "angle": 3.9269908169872414,
+      "rx": 5.2631578,
+      "ry": 5,
+      "parentLabel": "jete"
+    },
+    {
+      "id": "n112",
+      "x": -1232.0637,
+      "y": 181.17465,
+      "type": "ellipse-point",
+      "label": "ellipse-point_n112",
+      "angle": 4.71238898038469,
+      "rx": 5.2631578,
+      "ry": 5,
+      "parentLabel": "jete"
+    },
+    {
+      "id": "n113",
+      "x": -1228.342085429165,
+      "y": 182.63911609406728,
+      "type": "ellipse-point",
+      "label": "ellipse-point_n113",
+      "angle": 5.497787143782138,
+      "rx": 5.2631578,
+      "ry": 5,
+      "parentLabel": "jete"
+    },
+    {
+      "id": "n114",
       "x": -1204.4652,
       "y": 49.00576,
       "type": "ellipse-center",
@@ -1165,67 +1197,23 @@
       "ry": 5
     },
     {
-      "id": "n111",
+      "id": "n115",
       "x": -1199.2020422,
       "y": 49.00576,
       "type": "ellipse-point",
-      "label": "ellipse-point_n111",
+      "label": "ellipse-point_n115",
       "angle": 0,
       "rx": 5.2631578,
       "ry": 5,
       "parentLabel": "hypermart"
     },
     {
-      "id": "n112",
+      "id": "n116",
       "x": -1200.7435854291653,
       "y": 52.54129390593274,
       "type": "ellipse-point",
-      "label": "ellipse-point_n112",
-      "angle": 0.7853981633974483,
-      "rx": 5.2631578,
-      "ry": 5,
-      "parentLabel": "hypermart"
-    },
-    {
-      "id": "n113",
-      "x": -1204.4652,
-      "y": 54.00576,
-      "type": "ellipse-point",
-      "label": "ellipse-point_n113",
-      "angle": 1.5707963267948966,
-      "rx": 5.2631578,
-      "ry": 5,
-      "parentLabel": "hypermart"
-    },
-    {
-      "id": "n114",
-      "x": -1208.186814570835,
-      "y": 52.54129390593274,
-      "type": "ellipse-point",
-      "label": "ellipse-point_n114",
-      "angle": 2.356194490192345,
-      "rx": 5.2631578,
-      "ry": 5,
-      "parentLabel": "hypermart"
-    },
-    {
-      "id": "n115",
-      "x": -1209.7283578000001,
-      "y": 49.00576,
-      "type": "ellipse-point",
-      "label": "ellipse-point_n115",
-      "angle": 3.141592653589793,
-      "rx": 5.2631578,
-      "ry": 5,
-      "parentLabel": "hypermart"
-    },
-    {
-      "id": "n116",
-      "x": -1208.186814570835,
-      "y": 45.470226094067264,
-      "type": "ellipse-point",
       "label": "ellipse-point_n116",
-      "angle": 3.9269908169872414,
+      "angle": 0.7853981633974483,
       "rx": 5.2631578,
       "ry": 5,
       "parentLabel": "hypermart"
@@ -1233,27 +1221,71 @@
     {
       "id": "n117",
       "x": -1204.4652,
-      "y": 44.00576,
+      "y": 54.00576,
       "type": "ellipse-point",
       "label": "ellipse-point_n117",
-      "angle": 4.71238898038469,
+      "angle": 1.5707963267948966,
       "rx": 5.2631578,
       "ry": 5,
       "parentLabel": "hypermart"
     },
     {
       "id": "n118",
-      "x": -1200.7435854291653,
-      "y": 45.470226094067264,
+      "x": -1208.186814570835,
+      "y": 52.54129390593274,
       "type": "ellipse-point",
       "label": "ellipse-point_n118",
-      "angle": 5.497787143782138,
+      "angle": 2.356194490192345,
       "rx": 5.2631578,
       "ry": 5,
       "parentLabel": "hypermart"
     },
     {
       "id": "n119",
+      "x": -1209.7283578000001,
+      "y": 49.00576,
+      "type": "ellipse-point",
+      "label": "ellipse-point_n119",
+      "angle": 3.141592653589793,
+      "rx": 5.2631578,
+      "ry": 5,
+      "parentLabel": "hypermart"
+    },
+    {
+      "id": "n120",
+      "x": -1208.186814570835,
+      "y": 45.470226094067264,
+      "type": "ellipse-point",
+      "label": "ellipse-point_n120",
+      "angle": 3.9269908169872414,
+      "rx": 5.2631578,
+      "ry": 5,
+      "parentLabel": "hypermart"
+    },
+    {
+      "id": "n121",
+      "x": -1204.4652,
+      "y": 44.00576,
+      "type": "ellipse-point",
+      "label": "ellipse-point_n121",
+      "angle": 4.71238898038469,
+      "rx": 5.2631578,
+      "ry": 5,
+      "parentLabel": "hypermart"
+    },
+    {
+      "id": "n122",
+      "x": -1200.7435854291653,
+      "y": 45.470226094067264,
+      "type": "ellipse-point",
+      "label": "ellipse-point_n122",
+      "angle": 5.497787143782138,
+      "rx": 5.2631578,
+      "ry": 5,
+      "parentLabel": "hypermart"
+    },
+    {
+      "id": "n123",
       "x": -1203.2913,
       "y": 215.30252,
       "type": "path-point",
@@ -1261,7 +1293,7 @@
       "parentLabel": "storepath266-7"
     },
     {
-      "id": "n120",
+      "id": "n124",
       "x": -1204.4246,
       "y": 48.18824799999999,
       "type": "path-point",
@@ -1269,7 +1301,7 @@
       "parentLabel": "storepath266-7"
     },
     {
-      "id": "n121",
+      "id": "n125",
       "x": -971.22626,
       "y": 52.591148,
       "type": "ellipse-center",
@@ -1278,67 +1310,23 @@
       "ry": 5
     },
     {
-      "id": "n122",
+      "id": "n126",
       "x": -965.9631022,
       "y": 52.591148,
       "type": "ellipse-point",
-      "label": "ellipse-point_n122",
+      "label": "ellipse-point_n126",
       "angle": 0,
       "rx": 5.2631578,
       "ry": 5,
       "parentLabel": "azko"
     },
     {
-      "id": "n123",
+      "id": "n127",
       "x": -967.5046454291652,
       "y": 56.126681905932735,
       "type": "ellipse-point",
-      "label": "ellipse-point_n123",
-      "angle": 0.7853981633974483,
-      "rx": 5.2631578,
-      "ry": 5,
-      "parentLabel": "azko"
-    },
-    {
-      "id": "n124",
-      "x": -971.22626,
-      "y": 57.591148,
-      "type": "ellipse-point",
-      "label": "ellipse-point_n124",
-      "angle": 1.5707963267948966,
-      "rx": 5.2631578,
-      "ry": 5,
-      "parentLabel": "azko"
-    },
-    {
-      "id": "n125",
-      "x": -974.9478745708349,
-      "y": 56.126681905932735,
-      "type": "ellipse-point",
-      "label": "ellipse-point_n125",
-      "angle": 2.356194490192345,
-      "rx": 5.2631578,
-      "ry": 5,
-      "parentLabel": "azko"
-    },
-    {
-      "id": "n126",
-      "x": -976.4894178000001,
-      "y": 52.591148,
-      "type": "ellipse-point",
-      "label": "ellipse-point_n126",
-      "angle": 3.141592653589793,
-      "rx": 5.2631578,
-      "ry": 5,
-      "parentLabel": "azko"
-    },
-    {
-      "id": "n127",
-      "x": -974.9478745708349,
-      "y": 49.05561409406726,
-      "type": "ellipse-point",
       "label": "ellipse-point_n127",
-      "angle": 3.9269908169872414,
+      "angle": 0.7853981633974483,
       "rx": 5.2631578,
       "ry": 5,
       "parentLabel": "azko"
@@ -1346,27 +1334,71 @@
     {
       "id": "n128",
       "x": -971.22626,
-      "y": 47.591148,
+      "y": 57.591148,
       "type": "ellipse-point",
       "label": "ellipse-point_n128",
-      "angle": 4.71238898038469,
+      "angle": 1.5707963267948966,
       "rx": 5.2631578,
       "ry": 5,
       "parentLabel": "azko"
     },
     {
       "id": "n129",
-      "x": -967.5046454291652,
-      "y": 49.05561409406726,
+      "x": -974.9478745708349,
+      "y": 56.126681905932735,
       "type": "ellipse-point",
       "label": "ellipse-point_n129",
-      "angle": 5.497787143782138,
+      "angle": 2.356194490192345,
       "rx": 5.2631578,
       "ry": 5,
       "parentLabel": "azko"
     },
     {
       "id": "n130",
+      "x": -976.4894178000001,
+      "y": 52.591148,
+      "type": "ellipse-point",
+      "label": "ellipse-point_n130",
+      "angle": 3.141592653589793,
+      "rx": 5.2631578,
+      "ry": 5,
+      "parentLabel": "azko"
+    },
+    {
+      "id": "n131",
+      "x": -974.9478745708349,
+      "y": 49.05561409406726,
+      "type": "ellipse-point",
+      "label": "ellipse-point_n131",
+      "angle": 3.9269908169872414,
+      "rx": 5.2631578,
+      "ry": 5,
+      "parentLabel": "azko"
+    },
+    {
+      "id": "n132",
+      "x": -971.22626,
+      "y": 47.591148,
+      "type": "ellipse-point",
+      "label": "ellipse-point_n132",
+      "angle": 4.71238898038469,
+      "rx": 5.2631578,
+      "ry": 5,
+      "parentLabel": "azko"
+    },
+    {
+      "id": "n133",
+      "x": -967.5046454291652,
+      "y": 49.05561409406726,
+      "type": "ellipse-point",
+      "label": "ellipse-point_n133",
+      "angle": 5.497787143782138,
+      "rx": 5.2631578,
+      "ry": 5,
+      "parentLabel": "azko"
+    },
+    {
+      "id": "n134",
       "x": -1223.3972,
       "y": 353.84976,
       "type": "ellipse-center",
@@ -1375,67 +1407,23 @@
       "ry": 4.75
     },
     {
-      "id": "n131",
+      "id": "n135",
       "x": -1218.3972,
       "y": 353.84976,
       "type": "ellipse-point",
-      "label": "ellipse-point_n131",
+      "label": "ellipse-point_n135",
       "angle": 0,
       "rx": 5,
       "ry": 4.75,
       "parentLabel": "ikea"
     },
     {
-      "id": "n132",
+      "id": "n136",
       "x": -1219.8616660940675,
       "y": 357.2085172106361,
       "type": "ellipse-point",
-      "label": "ellipse-point_n132",
-      "angle": 0.7853981633974483,
-      "rx": 5,
-      "ry": 4.75,
-      "parentLabel": "ikea"
-    },
-    {
-      "id": "n133",
-      "x": -1223.3972,
-      "y": 358.59976,
-      "type": "ellipse-point",
-      "label": "ellipse-point_n133",
-      "angle": 1.5707963267948966,
-      "rx": 5,
-      "ry": 4.75,
-      "parentLabel": "ikea"
-    },
-    {
-      "id": "n134",
-      "x": -1226.9327339059328,
-      "y": 357.2085172106361,
-      "type": "ellipse-point",
-      "label": "ellipse-point_n134",
-      "angle": 2.356194490192345,
-      "rx": 5,
-      "ry": 4.75,
-      "parentLabel": "ikea"
-    },
-    {
-      "id": "n135",
-      "x": -1228.3972,
-      "y": 353.84976,
-      "type": "ellipse-point",
-      "label": "ellipse-point_n135",
-      "angle": 3.141592653589793,
-      "rx": 5,
-      "ry": 4.75,
-      "parentLabel": "ikea"
-    },
-    {
-      "id": "n136",
-      "x": -1226.9327339059328,
-      "y": 350.4910027893639,
-      "type": "ellipse-point",
       "label": "ellipse-point_n136",
-      "angle": 3.9269908169872414,
+      "angle": 0.7853981633974483,
       "rx": 5,
       "ry": 4.75,
       "parentLabel": "ikea"
@@ -1443,27 +1431,71 @@
     {
       "id": "n137",
       "x": -1223.3972,
-      "y": 349.09976,
+      "y": 358.59976,
       "type": "ellipse-point",
       "label": "ellipse-point_n137",
-      "angle": 4.71238898038469,
+      "angle": 1.5707963267948966,
       "rx": 5,
       "ry": 4.75,
       "parentLabel": "ikea"
     },
     {
       "id": "n138",
-      "x": -1219.8616660940675,
-      "y": 350.4910027893639,
+      "x": -1226.9327339059328,
+      "y": 357.2085172106361,
       "type": "ellipse-point",
       "label": "ellipse-point_n138",
-      "angle": 5.497787143782138,
+      "angle": 2.356194490192345,
       "rx": 5,
       "ry": 4.75,
       "parentLabel": "ikea"
     },
     {
       "id": "n139",
+      "x": -1228.3972,
+      "y": 353.84976,
+      "type": "ellipse-point",
+      "label": "ellipse-point_n139",
+      "angle": 3.141592653589793,
+      "rx": 5,
+      "ry": 4.75,
+      "parentLabel": "ikea"
+    },
+    {
+      "id": "n140",
+      "x": -1226.9327339059328,
+      "y": 350.4910027893639,
+      "type": "ellipse-point",
+      "label": "ellipse-point_n140",
+      "angle": 3.9269908169872414,
+      "rx": 5,
+      "ry": 4.75,
+      "parentLabel": "ikea"
+    },
+    {
+      "id": "n141",
+      "x": -1223.3972,
+      "y": 349.09976,
+      "type": "ellipse-point",
+      "label": "ellipse-point_n141",
+      "angle": 4.71238898038469,
+      "rx": 5,
+      "ry": 4.75,
+      "parentLabel": "ikea"
+    },
+    {
+      "id": "n142",
+      "x": -1219.8616660940675,
+      "y": 350.4910027893639,
+      "type": "ellipse-point",
+      "label": "ellipse-point_n142",
+      "angle": 5.497787143782138,
+      "rx": 5,
+      "ry": 4.75,
+      "parentLabel": "ikea"
+    },
+    {
+      "id": "n143",
       "x": -956.62463,
       "y": 187.0303,
       "type": "ellipse-center",
@@ -1472,67 +1504,23 @@
       "ry": 5
     },
     {
-      "id": "n140",
+      "id": "n144",
       "x": -951.3614722,
       "y": 187.0303,
       "type": "ellipse-point",
-      "label": "ellipse-point_n140",
+      "label": "ellipse-point_n144",
       "angle": 0,
       "rx": 5.2631578,
       "ry": 5,
       "parentLabel": "chatime"
     },
     {
-      "id": "n141",
+      "id": "n145",
       "x": -952.9030154291652,
       "y": 190.56583390593275,
       "type": "ellipse-point",
-      "label": "ellipse-point_n141",
-      "angle": 0.7853981633974483,
-      "rx": 5.2631578,
-      "ry": 5,
-      "parentLabel": "chatime"
-    },
-    {
-      "id": "n142",
-      "x": -956.62463,
-      "y": 192.0303,
-      "type": "ellipse-point",
-      "label": "ellipse-point_n142",
-      "angle": 1.5707963267948966,
-      "rx": 5.2631578,
-      "ry": 5,
-      "parentLabel": "chatime"
-    },
-    {
-      "id": "n143",
-      "x": -960.3462445708349,
-      "y": 190.56583390593275,
-      "type": "ellipse-point",
-      "label": "ellipse-point_n143",
-      "angle": 2.356194490192345,
-      "rx": 5.2631578,
-      "ry": 5,
-      "parentLabel": "chatime"
-    },
-    {
-      "id": "n144",
-      "x": -961.8877878000001,
-      "y": 187.0303,
-      "type": "ellipse-point",
-      "label": "ellipse-point_n144",
-      "angle": 3.141592653589793,
-      "rx": 5.2631578,
-      "ry": 5,
-      "parentLabel": "chatime"
-    },
-    {
-      "id": "n145",
-      "x": -960.3462445708349,
-      "y": 183.49476609406727,
-      "type": "ellipse-point",
       "label": "ellipse-point_n145",
-      "angle": 3.9269908169872414,
+      "angle": 0.7853981633974483,
       "rx": 5.2631578,
       "ry": 5,
       "parentLabel": "chatime"
@@ -1540,27 +1528,71 @@
     {
       "id": "n146",
       "x": -956.62463,
-      "y": 182.0303,
+      "y": 192.0303,
       "type": "ellipse-point",
       "label": "ellipse-point_n146",
-      "angle": 4.71238898038469,
+      "angle": 1.5707963267948966,
       "rx": 5.2631578,
       "ry": 5,
       "parentLabel": "chatime"
     },
     {
       "id": "n147",
-      "x": -952.9030154291652,
-      "y": 183.49476609406727,
+      "x": -960.3462445708349,
+      "y": 190.56583390593275,
       "type": "ellipse-point",
       "label": "ellipse-point_n147",
-      "angle": 5.497787143782138,
+      "angle": 2.356194490192345,
       "rx": 5.2631578,
       "ry": 5,
       "parentLabel": "chatime"
     },
     {
       "id": "n148",
+      "x": -961.8877878000001,
+      "y": 187.0303,
+      "type": "ellipse-point",
+      "label": "ellipse-point_n148",
+      "angle": 3.141592653589793,
+      "rx": 5.2631578,
+      "ry": 5,
+      "parentLabel": "chatime"
+    },
+    {
+      "id": "n149",
+      "x": -960.3462445708349,
+      "y": 183.49476609406727,
+      "type": "ellipse-point",
+      "label": "ellipse-point_n149",
+      "angle": 3.9269908169872414,
+      "rx": 5.2631578,
+      "ry": 5,
+      "parentLabel": "chatime"
+    },
+    {
+      "id": "n150",
+      "x": -956.62463,
+      "y": 182.0303,
+      "type": "ellipse-point",
+      "label": "ellipse-point_n150",
+      "angle": 4.71238898038469,
+      "rx": 5.2631578,
+      "ry": 5,
+      "parentLabel": "chatime"
+    },
+    {
+      "id": "n151",
+      "x": -952.9030154291652,
+      "y": 183.49476609406727,
+      "type": "ellipse-point",
+      "label": "ellipse-point_n151",
+      "angle": 5.497787143782138,
+      "rx": 5.2631578,
+      "ry": 5,
+      "parentLabel": "chatime"
+    },
+    {
+      "id": "n152",
       "x": -921.34595,
       "y": 187.43271,
       "type": "ellipse-center",
@@ -1569,67 +1601,23 @@
       "ry": 5
     },
     {
-      "id": "n149",
+      "id": "n153",
       "x": -916.0827922,
       "y": 187.43271,
       "type": "ellipse-point",
-      "label": "ellipse-point_n149",
+      "label": "ellipse-point_n153",
       "angle": 0,
       "rx": 5.2631578,
       "ry": 5,
       "parentLabel": "kopi_kenangan"
     },
     {
-      "id": "n150",
+      "id": "n154",
       "x": -917.6243354291652,
       "y": 190.96824390593272,
       "type": "ellipse-point",
-      "label": "ellipse-point_n150",
-      "angle": 0.7853981633974483,
-      "rx": 5.2631578,
-      "ry": 5,
-      "parentLabel": "kopi_kenangan"
-    },
-    {
-      "id": "n151",
-      "x": -921.34595,
-      "y": 192.43271,
-      "type": "ellipse-point",
-      "label": "ellipse-point_n151",
-      "angle": 1.5707963267948966,
-      "rx": 5.2631578,
-      "ry": 5,
-      "parentLabel": "kopi_kenangan"
-    },
-    {
-      "id": "n152",
-      "x": -925.0675645708349,
-      "y": 190.96824390593272,
-      "type": "ellipse-point",
-      "label": "ellipse-point_n152",
-      "angle": 2.356194490192345,
-      "rx": 5.2631578,
-      "ry": 5,
-      "parentLabel": "kopi_kenangan"
-    },
-    {
-      "id": "n153",
-      "x": -926.6091078000001,
-      "y": 187.43271,
-      "type": "ellipse-point",
-      "label": "ellipse-point_n153",
-      "angle": 3.141592653589793,
-      "rx": 5.2631578,
-      "ry": 5,
-      "parentLabel": "kopi_kenangan"
-    },
-    {
-      "id": "n154",
-      "x": -925.0675645708349,
-      "y": 183.89717609406725,
-      "type": "ellipse-point",
       "label": "ellipse-point_n154",
-      "angle": 3.9269908169872414,
+      "angle": 0.7853981633974483,
       "rx": 5.2631578,
       "ry": 5,
       "parentLabel": "kopi_kenangan"
@@ -1637,27 +1625,71 @@
     {
       "id": "n155",
       "x": -921.34595,
-      "y": 182.43271,
+      "y": 192.43271,
       "type": "ellipse-point",
       "label": "ellipse-point_n155",
-      "angle": 4.71238898038469,
+      "angle": 1.5707963267948966,
       "rx": 5.2631578,
       "ry": 5,
       "parentLabel": "kopi_kenangan"
     },
     {
       "id": "n156",
-      "x": -917.6243354291652,
-      "y": 183.89717609406725,
+      "x": -925.0675645708349,
+      "y": 190.96824390593272,
       "type": "ellipse-point",
       "label": "ellipse-point_n156",
-      "angle": 5.497787143782138,
+      "angle": 2.356194490192345,
       "rx": 5.2631578,
       "ry": 5,
       "parentLabel": "kopi_kenangan"
     },
     {
       "id": "n157",
+      "x": -926.6091078000001,
+      "y": 187.43271,
+      "type": "ellipse-point",
+      "label": "ellipse-point_n157",
+      "angle": 3.141592653589793,
+      "rx": 5.2631578,
+      "ry": 5,
+      "parentLabel": "kopi_kenangan"
+    },
+    {
+      "id": "n158",
+      "x": -925.0675645708349,
+      "y": 183.89717609406725,
+      "type": "ellipse-point",
+      "label": "ellipse-point_n158",
+      "angle": 3.9269908169872414,
+      "rx": 5.2631578,
+      "ry": 5,
+      "parentLabel": "kopi_kenangan"
+    },
+    {
+      "id": "n159",
+      "x": -921.34595,
+      "y": 182.43271,
+      "type": "ellipse-point",
+      "label": "ellipse-point_n159",
+      "angle": 4.71238898038469,
+      "rx": 5.2631578,
+      "ry": 5,
+      "parentLabel": "kopi_kenangan"
+    },
+    {
+      "id": "n160",
+      "x": -917.6243354291652,
+      "y": 183.89717609406725,
+      "type": "ellipse-point",
+      "label": "ellipse-point_n160",
+      "angle": 5.497787143782138,
+      "rx": 5.2631578,
+      "ry": 5,
+      "parentLabel": "kopi_kenangan"
+    },
+    {
+      "id": "n161",
       "x": -938.06903,
       "y": 187.19638,
       "type": "ellipse-center",
@@ -1666,67 +1698,23 @@
       "ry": 5
     },
     {
-      "id": "n158",
+      "id": "n162",
       "x": -932.8058722,
       "y": 187.19638,
       "type": "ellipse-point",
-      "label": "ellipse-point_n158",
+      "label": "ellipse-point_n162",
       "angle": 0,
       "rx": 5.2631578,
       "ry": 5,
       "parentLabel": "shake_shake_in_a_tub"
     },
     {
-      "id": "n159",
+      "id": "n163",
       "x": -934.3474154291652,
       "y": 190.73191390593274,
       "type": "ellipse-point",
-      "label": "ellipse-point_n159",
-      "angle": 0.7853981633974483,
-      "rx": 5.2631578,
-      "ry": 5,
-      "parentLabel": "shake_shake_in_a_tub"
-    },
-    {
-      "id": "n160",
-      "x": -938.06903,
-      "y": 192.19638,
-      "type": "ellipse-point",
-      "label": "ellipse-point_n160",
-      "angle": 1.5707963267948966,
-      "rx": 5.2631578,
-      "ry": 5,
-      "parentLabel": "shake_shake_in_a_tub"
-    },
-    {
-      "id": "n161",
-      "x": -941.7906445708348,
-      "y": 190.73191390593274,
-      "type": "ellipse-point",
-      "label": "ellipse-point_n161",
-      "angle": 2.356194490192345,
-      "rx": 5.2631578,
-      "ry": 5,
-      "parentLabel": "shake_shake_in_a_tub"
-    },
-    {
-      "id": "n162",
-      "x": -943.3321878,
-      "y": 187.19638,
-      "type": "ellipse-point",
-      "label": "ellipse-point_n162",
-      "angle": 3.141592653589793,
-      "rx": 5.2631578,
-      "ry": 5,
-      "parentLabel": "shake_shake_in_a_tub"
-    },
-    {
-      "id": "n163",
-      "x": -941.7906445708348,
-      "y": 183.66084609406727,
-      "type": "ellipse-point",
       "label": "ellipse-point_n163",
-      "angle": 3.9269908169872414,
+      "angle": 0.7853981633974483,
       "rx": 5.2631578,
       "ry": 5,
       "parentLabel": "shake_shake_in_a_tub"
@@ -1734,27 +1722,71 @@
     {
       "id": "n164",
       "x": -938.06903,
-      "y": 182.19638,
+      "y": 192.19638,
       "type": "ellipse-point",
       "label": "ellipse-point_n164",
-      "angle": 4.71238898038469,
+      "angle": 1.5707963267948966,
       "rx": 5.2631578,
       "ry": 5,
       "parentLabel": "shake_shake_in_a_tub"
     },
     {
       "id": "n165",
-      "x": -934.3474154291652,
-      "y": 183.66084609406727,
+      "x": -941.7906445708348,
+      "y": 190.73191390593274,
       "type": "ellipse-point",
       "label": "ellipse-point_n165",
-      "angle": 5.497787143782138,
+      "angle": 2.356194490192345,
       "rx": 5.2631578,
       "ry": 5,
       "parentLabel": "shake_shake_in_a_tub"
     },
     {
       "id": "n166",
+      "x": -943.3321878,
+      "y": 187.19638,
+      "type": "ellipse-point",
+      "label": "ellipse-point_n166",
+      "angle": 3.141592653589793,
+      "rx": 5.2631578,
+      "ry": 5,
+      "parentLabel": "shake_shake_in_a_tub"
+    },
+    {
+      "id": "n167",
+      "x": -941.7906445708348,
+      "y": 183.66084609406727,
+      "type": "ellipse-point",
+      "label": "ellipse-point_n167",
+      "angle": 3.9269908169872414,
+      "rx": 5.2631578,
+      "ry": 5,
+      "parentLabel": "shake_shake_in_a_tub"
+    },
+    {
+      "id": "n168",
+      "x": -938.06903,
+      "y": 182.19638,
+      "type": "ellipse-point",
+      "label": "ellipse-point_n168",
+      "angle": 4.71238898038469,
+      "rx": 5.2631578,
+      "ry": 5,
+      "parentLabel": "shake_shake_in_a_tub"
+    },
+    {
+      "id": "n169",
+      "x": -934.3474154291652,
+      "y": 183.66084609406727,
+      "type": "ellipse-point",
+      "label": "ellipse-point_n169",
+      "angle": 5.497787143782138,
+      "rx": 5.2631578,
+      "ry": 5,
+      "parentLabel": "shake_shake_in_a_tub"
+    },
+    {
+      "id": "n170",
       "x": -1231.9609,
       "y": 214.92401,
       "type": "path-point",
@@ -1762,44 +1794,12 @@
       "parentLabel": "storepath266-7-6"
     },
     {
-      "id": "n167",
+      "id": "n171",
       "x": -1232.0019,
       "y": 185.12757000000002,
       "type": "path-point",
       "label": "storepath266-7-6_point_1",
       "parentLabel": "storepath266-7-6"
-    },
-    {
-      "id": "n168",
-      "x": -1257.2933,
-      "y": 215.26123,
-      "type": "path-point",
-      "label": "storepath266-7-6-7_point_0",
-      "parentLabel": "storepath266-7-6-7"
-    },
-    {
-      "id": "n169",
-      "x": -1257.3343,
-      "y": 185.74101000000002,
-      "type": "path-point",
-      "label": "storepath266-7-6-7_point_1",
-      "parentLabel": "storepath266-7-6-7"
-    },
-    {
-      "id": "n170",
-      "x": -1283.7635,
-      "y": 215.11117000000002,
-      "type": "path-point",
-      "label": "storepath266-7-6-7_point_2",
-      "parentLabel": "storepath266-7-6-7"
-    },
-    {
-      "id": "n171",
-      "x": -1283.8045,
-      "y": 185.59095000000002,
-      "type": "path-point",
-      "label": "storepath266-7-6-7_point_3",
-      "parentLabel": "storepath266-7-6-7"
     },
     {
       "id": "n172",
@@ -1987,24 +1987,24 @@
     },
     {
       "id": "n195",
-      "x": -1069.8407,
-      "y": 228.58495000000002,
+      "x": -1070.9139,
+      "y": 230.01597000000004,
       "type": "path-point",
       "label": "storepath266-7-0-3_point_1",
       "parentLabel": "storepath266-7-0-3"
     },
     {
       "id": "n196",
-      "x": -1071.9257,
-      "y": 229.52145,
+      "x": -1070.6736,
+      "y": 229.73014,
       "type": "path-point",
       "label": "path64_point_0",
       "parentLabel": "path64"
     },
     {
       "id": "n197",
-      "x": -976.07046,
-      "y": 228.90876,
+      "x": -976.44991,
+      "y": 229.37254000000001,
       "type": "path-point",
       "label": "path64_point_1",
       "parentLabel": "path64"
@@ -2067,24 +2067,24 @@
     },
     {
       "id": "n205",
-      "x": -975.96303,
-      "y": 229.96667,
+      "x": -975.89979,
+      "y": 229.54505,
       "type": "path-point",
       "label": "path68_point_1",
       "parentLabel": "path68"
     },
     {
       "id": "n206",
-      "x": -975.36673,
-      "y": 229.40151,
+      "x": -975.957,
+      "y": 229.35935,
       "type": "path-point",
       "label": "path69_point_0",
       "parentLabel": "path69"
     },
     {
       "id": "n207",
-      "x": -975.58638,
-      "y": 252.45922000000002,
+      "x": -975.6707,
+      "y": 252.12192000000002,
       "type": "path-point",
       "label": "path69_point_1",
       "parentLabel": "path69"
@@ -2219,8 +2219,8 @@
     },
     {
       "id": "n224",
-      "x": -975.32399,
-      "y": 228.64303,
+      "x": -975.49263,
+      "y": 229.31762,
       "type": "path-point",
       "label": "path79_point_0",
       "parentLabel": "path79"
@@ -2228,7 +2228,7 @@
     {
       "id": "n225",
       "x": -953.44803,
-      "y": 229.53226,
+      "y": 229.53227,
       "type": "path-point",
       "label": "path79_point_1",
       "parentLabel": "path79"
@@ -2411,8 +2411,8 @@
     },
     {
       "id": "n248",
-      "x": -1069.92,
-      "y": 229.60784,
+      "x": -1070.1287,
+      "y": 229.75690000000003,
       "type": "path-point",
       "label": "path63_point_2",
       "parentLabel": "path63"
@@ -2530,215 +2530,185 @@
     {
       "source": "n0",
       "target": "n1",
-      "type": "path-segment"
+      "type": "ellipse-radius"
+    },
+    {
+      "source": "n0",
+      "target": "n2",
+      "type": "ellipse-radius"
+    },
+    {
+      "source": "n1",
+      "target": "n2",
+      "type": "ellipse-arc"
+    },
+    {
+      "source": "n0",
+      "target": "n3",
+      "type": "ellipse-radius"
     },
     {
       "source": "n2",
       "target": "n3",
-      "type": "circle-radius"
+      "type": "ellipse-arc"
     },
     {
-      "source": "n2",
+      "source": "n0",
       "target": "n4",
-      "type": "circle-radius"
+      "type": "ellipse-radius"
     },
     {
       "source": "n3",
       "target": "n4",
-      "type": "circle-arc"
+      "type": "ellipse-arc"
     },
     {
-      "source": "n2",
+      "source": "n0",
       "target": "n5",
-      "type": "circle-radius"
+      "type": "ellipse-radius"
     },
     {
       "source": "n4",
       "target": "n5",
-      "type": "circle-arc"
+      "type": "ellipse-arc"
     },
     {
-      "source": "n2",
+      "source": "n0",
       "target": "n6",
-      "type": "circle-radius"
+      "type": "ellipse-radius"
     },
     {
       "source": "n5",
       "target": "n6",
-      "type": "circle-arc"
+      "type": "ellipse-arc"
     },
     {
-      "source": "n2",
+      "source": "n0",
       "target": "n7",
-      "type": "circle-radius"
+      "type": "ellipse-radius"
     },
     {
       "source": "n6",
       "target": "n7",
-      "type": "circle-arc"
+      "type": "ellipse-arc"
     },
     {
-      "source": "n2",
+      "source": "n0",
       "target": "n8",
-      "type": "circle-radius"
+      "type": "ellipse-radius"
     },
     {
       "source": "n7",
       "target": "n8",
-      "type": "circle-arc"
-    },
-    {
-      "source": "n2",
-      "target": "n9",
-      "type": "circle-radius"
+      "type": "ellipse-arc"
     },
     {
       "source": "n8",
-      "target": "n9",
-      "type": "circle-arc"
-    },
-    {
-      "source": "n2",
-      "target": "n10",
-      "type": "circle-radius"
+      "target": "n1",
+      "type": "ellipse-arc"
     },
     {
       "source": "n9",
       "target": "n10",
-      "type": "circle-arc"
+      "type": "ellipse-radius"
+    },
+    {
+      "source": "n9",
+      "target": "n11",
+      "type": "ellipse-radius"
     },
     {
       "source": "n10",
-      "target": "n3",
-      "type": "circle-arc"
+      "target": "n11",
+      "type": "ellipse-arc"
+    },
+    {
+      "source": "n9",
+      "target": "n12",
+      "type": "ellipse-radius"
     },
     {
       "source": "n11",
       "target": "n12",
-      "type": "circle-radius"
+      "type": "ellipse-arc"
     },
     {
-      "source": "n11",
+      "source": "n9",
       "target": "n13",
-      "type": "circle-radius"
+      "type": "ellipse-radius"
     },
     {
       "source": "n12",
       "target": "n13",
-      "type": "circle-arc"
+      "type": "ellipse-arc"
     },
     {
-      "source": "n11",
+      "source": "n9",
       "target": "n14",
-      "type": "circle-radius"
+      "type": "ellipse-radius"
     },
     {
       "source": "n13",
       "target": "n14",
-      "type": "circle-arc"
+      "type": "ellipse-arc"
     },
     {
-      "source": "n11",
+      "source": "n9",
       "target": "n15",
-      "type": "circle-radius"
+      "type": "ellipse-radius"
     },
     {
       "source": "n14",
       "target": "n15",
-      "type": "circle-arc"
+      "type": "ellipse-arc"
     },
     {
-      "source": "n11",
+      "source": "n9",
       "target": "n16",
-      "type": "circle-radius"
+      "type": "ellipse-radius"
     },
     {
       "source": "n15",
       "target": "n16",
-      "type": "circle-arc"
+      "type": "ellipse-arc"
     },
     {
-      "source": "n11",
+      "source": "n9",
       "target": "n17",
-      "type": "circle-radius"
+      "type": "ellipse-radius"
     },
     {
       "source": "n16",
       "target": "n17",
-      "type": "circle-arc"
-    },
-    {
-      "source": "n11",
-      "target": "n18",
-      "type": "circle-radius"
+      "type": "ellipse-arc"
     },
     {
       "source": "n17",
-      "target": "n18",
-      "type": "circle-arc"
-    },
-    {
-      "source": "n11",
-      "target": "n19",
-      "type": "circle-radius"
+      "target": "n10",
+      "type": "ellipse-arc"
     },
     {
       "source": "n18",
       "target": "n19",
-      "type": "circle-arc"
-    },
-    {
-      "source": "n19",
-      "target": "n12",
-      "type": "circle-arc"
+      "type": "path-segment"
     },
     {
       "source": "n20",
       "target": "n21",
-      "type": "circle-radius"
-    },
-    {
-      "source": "n20",
-      "target": "n22",
-      "type": "circle-radius"
-    },
-    {
-      "source": "n21",
-      "target": "n22",
-      "type": "circle-arc"
-    },
-    {
-      "source": "n20",
-      "target": "n23",
-      "type": "circle-radius"
+      "type": "path-segment"
     },
     {
       "source": "n22",
       "target": "n23",
-      "type": "circle-arc"
+      "type": "path-segment"
     },
     {
-      "source": "n20",
-      "target": "n24",
-      "type": "circle-radius"
-    },
-    {
-      "source": "n23",
-      "target": "n24",
-      "type": "circle-arc"
-    },
-    {
-      "source": "n20",
+      "source": "n24",
       "target": "n25",
       "type": "circle-radius"
     },
     {
       "source": "n24",
-      "target": "n25",
-      "type": "circle-arc"
-    },
-    {
-      "source": "n20",
       "target": "n26",
       "type": "circle-radius"
     },
@@ -2748,7 +2718,7 @@
       "type": "circle-arc"
     },
     {
-      "source": "n20",
+      "source": "n24",
       "target": "n27",
       "type": "circle-radius"
     },
@@ -2758,7 +2728,7 @@
       "type": "circle-arc"
     },
     {
-      "source": "n20",
+      "source": "n24",
       "target": "n28",
       "type": "circle-radius"
     },
@@ -2768,17 +2738,27 @@
       "type": "circle-arc"
     },
     {
+      "source": "n24",
+      "target": "n29",
+      "type": "circle-radius"
+    },
+    {
       "source": "n28",
-      "target": "n21",
+      "target": "n29",
       "type": "circle-arc"
     },
     {
-      "source": "n29",
+      "source": "n24",
       "target": "n30",
       "type": "circle-radius"
     },
     {
       "source": "n29",
+      "target": "n30",
+      "type": "circle-arc"
+    },
+    {
+      "source": "n24",
       "target": "n31",
       "type": "circle-radius"
     },
@@ -2788,7 +2768,7 @@
       "type": "circle-arc"
     },
     {
-      "source": "n29",
+      "source": "n24",
       "target": "n32",
       "type": "circle-radius"
     },
@@ -2798,27 +2778,17 @@
       "type": "circle-arc"
     },
     {
-      "source": "n29",
-      "target": "n33",
-      "type": "circle-radius"
-    },
-    {
       "source": "n32",
-      "target": "n33",
+      "target": "n25",
       "type": "circle-arc"
     },
     {
-      "source": "n29",
+      "source": "n33",
       "target": "n34",
       "type": "circle-radius"
     },
     {
       "source": "n33",
-      "target": "n34",
-      "type": "circle-arc"
-    },
-    {
-      "source": "n29",
       "target": "n35",
       "type": "circle-radius"
     },
@@ -2828,7 +2798,7 @@
       "type": "circle-arc"
     },
     {
-      "source": "n29",
+      "source": "n33",
       "target": "n36",
       "type": "circle-radius"
     },
@@ -2838,7 +2808,7 @@
       "type": "circle-arc"
     },
     {
-      "source": "n29",
+      "source": "n33",
       "target": "n37",
       "type": "circle-radius"
     },
@@ -2848,17 +2818,27 @@
       "type": "circle-arc"
     },
     {
+      "source": "n33",
+      "target": "n38",
+      "type": "circle-radius"
+    },
+    {
       "source": "n37",
-      "target": "n30",
+      "target": "n38",
       "type": "circle-arc"
     },
     {
-      "source": "n38",
+      "source": "n33",
       "target": "n39",
       "type": "circle-radius"
     },
     {
       "source": "n38",
+      "target": "n39",
+      "type": "circle-arc"
+    },
+    {
+      "source": "n33",
       "target": "n40",
       "type": "circle-radius"
     },
@@ -2868,7 +2848,7 @@
       "type": "circle-arc"
     },
     {
-      "source": "n38",
+      "source": "n33",
       "target": "n41",
       "type": "circle-radius"
     },
@@ -2878,27 +2858,17 @@
       "type": "circle-arc"
     },
     {
-      "source": "n38",
-      "target": "n42",
-      "type": "circle-radius"
-    },
-    {
       "source": "n41",
-      "target": "n42",
+      "target": "n34",
       "type": "circle-arc"
     },
     {
-      "source": "n38",
+      "source": "n42",
       "target": "n43",
       "type": "circle-radius"
     },
     {
       "source": "n42",
-      "target": "n43",
-      "type": "circle-arc"
-    },
-    {
-      "source": "n38",
       "target": "n44",
       "type": "circle-radius"
     },
@@ -2908,7 +2878,7 @@
       "type": "circle-arc"
     },
     {
-      "source": "n38",
+      "source": "n42",
       "target": "n45",
       "type": "circle-radius"
     },
@@ -2918,7 +2888,7 @@
       "type": "circle-arc"
     },
     {
-      "source": "n38",
+      "source": "n42",
       "target": "n46",
       "type": "circle-radius"
     },
@@ -2928,217 +2898,217 @@
       "type": "circle-arc"
     },
     {
+      "source": "n42",
+      "target": "n47",
+      "type": "circle-radius"
+    },
+    {
       "source": "n46",
-      "target": "n39",
+      "target": "n47",
       "type": "circle-arc"
+    },
+    {
+      "source": "n42",
+      "target": "n48",
+      "type": "circle-radius"
     },
     {
       "source": "n47",
       "target": "n48",
-      "type": "ellipse-radius"
+      "type": "circle-arc"
     },
     {
-      "source": "n47",
+      "source": "n42",
       "target": "n49",
-      "type": "ellipse-radius"
+      "type": "circle-radius"
     },
     {
       "source": "n48",
       "target": "n49",
-      "type": "ellipse-arc"
+      "type": "circle-arc"
     },
     {
-      "source": "n47",
+      "source": "n42",
       "target": "n50",
-      "type": "ellipse-radius"
+      "type": "circle-radius"
     },
     {
       "source": "n49",
       "target": "n50",
-      "type": "ellipse-arc"
-    },
-    {
-      "source": "n47",
-      "target": "n51",
-      "type": "ellipse-radius"
+      "type": "circle-arc"
     },
     {
       "source": "n50",
-      "target": "n51",
-      "type": "ellipse-arc"
-    },
-    {
-      "source": "n47",
-      "target": "n52",
-      "type": "ellipse-radius"
+      "target": "n43",
+      "type": "circle-arc"
     },
     {
       "source": "n51",
       "target": "n52",
-      "type": "ellipse-arc"
+      "type": "circle-radius"
     },
     {
-      "source": "n47",
+      "source": "n51",
       "target": "n53",
-      "type": "ellipse-radius"
+      "type": "circle-radius"
     },
     {
       "source": "n52",
       "target": "n53",
-      "type": "ellipse-arc"
+      "type": "circle-arc"
     },
     {
-      "source": "n47",
+      "source": "n51",
       "target": "n54",
-      "type": "ellipse-radius"
+      "type": "circle-radius"
     },
     {
       "source": "n53",
       "target": "n54",
-      "type": "ellipse-arc"
+      "type": "circle-arc"
     },
     {
-      "source": "n47",
+      "source": "n51",
       "target": "n55",
-      "type": "ellipse-radius"
+      "type": "circle-radius"
     },
     {
       "source": "n54",
       "target": "n55",
-      "type": "ellipse-arc"
+      "type": "circle-arc"
+    },
+    {
+      "source": "n51",
+      "target": "n56",
+      "type": "circle-radius"
     },
     {
       "source": "n55",
-      "target": "n48",
-      "type": "ellipse-arc"
+      "target": "n56",
+      "type": "circle-arc"
+    },
+    {
+      "source": "n51",
+      "target": "n57",
+      "type": "circle-radius"
     },
     {
       "source": "n56",
       "target": "n57",
-      "type": "ellipse-radius"
+      "type": "circle-arc"
     },
     {
-      "source": "n56",
+      "source": "n51",
       "target": "n58",
-      "type": "ellipse-radius"
+      "type": "circle-radius"
     },
     {
       "source": "n57",
       "target": "n58",
-      "type": "ellipse-arc"
+      "type": "circle-arc"
     },
     {
-      "source": "n56",
+      "source": "n51",
       "target": "n59",
-      "type": "ellipse-radius"
+      "type": "circle-radius"
     },
     {
       "source": "n58",
       "target": "n59",
-      "type": "ellipse-arc"
-    },
-    {
-      "source": "n56",
-      "target": "n60",
-      "type": "ellipse-radius"
+      "type": "circle-arc"
     },
     {
       "source": "n59",
-      "target": "n60",
-      "type": "ellipse-arc"
-    },
-    {
-      "source": "n56",
-      "target": "n61",
-      "type": "ellipse-radius"
+      "target": "n52",
+      "type": "circle-arc"
     },
     {
       "source": "n60",
       "target": "n61",
-      "type": "ellipse-arc"
+      "type": "circle-radius"
     },
     {
-      "source": "n56",
+      "source": "n60",
       "target": "n62",
-      "type": "ellipse-radius"
+      "type": "circle-radius"
     },
     {
       "source": "n61",
       "target": "n62",
-      "type": "ellipse-arc"
+      "type": "circle-arc"
     },
     {
-      "source": "n56",
+      "source": "n60",
       "target": "n63",
-      "type": "ellipse-radius"
+      "type": "circle-radius"
     },
     {
       "source": "n62",
       "target": "n63",
-      "type": "ellipse-arc"
+      "type": "circle-arc"
     },
     {
-      "source": "n56",
+      "source": "n60",
       "target": "n64",
-      "type": "ellipse-radius"
+      "type": "circle-radius"
     },
     {
       "source": "n63",
       "target": "n64",
-      "type": "ellipse-arc"
+      "type": "circle-arc"
+    },
+    {
+      "source": "n60",
+      "target": "n65",
+      "type": "circle-radius"
     },
     {
       "source": "n64",
-      "target": "n57",
-      "type": "ellipse-arc"
+      "target": "n65",
+      "type": "circle-arc"
+    },
+    {
+      "source": "n60",
+      "target": "n66",
+      "type": "circle-radius"
     },
     {
       "source": "n65",
       "target": "n66",
-      "type": "ellipse-radius"
+      "type": "circle-arc"
     },
     {
-      "source": "n65",
+      "source": "n60",
       "target": "n67",
-      "type": "ellipse-radius"
+      "type": "circle-radius"
     },
     {
       "source": "n66",
       "target": "n67",
-      "type": "ellipse-arc"
+      "type": "circle-arc"
     },
     {
-      "source": "n65",
+      "source": "n60",
       "target": "n68",
-      "type": "ellipse-radius"
+      "type": "circle-radius"
     },
     {
       "source": "n67",
       "target": "n68",
-      "type": "ellipse-arc"
-    },
-    {
-      "source": "n65",
-      "target": "n69",
-      "type": "ellipse-radius"
+      "type": "circle-arc"
     },
     {
       "source": "n68",
-      "target": "n69",
-      "type": "ellipse-arc"
+      "target": "n61",
+      "type": "circle-arc"
     },
     {
-      "source": "n65",
+      "source": "n69",
       "target": "n70",
       "type": "ellipse-radius"
     },
     {
       "source": "n69",
-      "target": "n70",
-      "type": "ellipse-arc"
-    },
-    {
-      "source": "n65",
       "target": "n71",
       "type": "ellipse-radius"
     },
@@ -3148,7 +3118,7 @@
       "type": "ellipse-arc"
     },
     {
-      "source": "n65",
+      "source": "n69",
       "target": "n72",
       "type": "ellipse-radius"
     },
@@ -3158,7 +3128,7 @@
       "type": "ellipse-arc"
     },
     {
-      "source": "n65",
+      "source": "n69",
       "target": "n73",
       "type": "ellipse-radius"
     },
@@ -3168,17 +3138,27 @@
       "type": "ellipse-arc"
     },
     {
+      "source": "n69",
+      "target": "n74",
+      "type": "ellipse-radius"
+    },
+    {
       "source": "n73",
-      "target": "n66",
+      "target": "n74",
       "type": "ellipse-arc"
     },
     {
-      "source": "n74",
+      "source": "n69",
       "target": "n75",
       "type": "ellipse-radius"
     },
     {
       "source": "n74",
+      "target": "n75",
+      "type": "ellipse-arc"
+    },
+    {
+      "source": "n69",
       "target": "n76",
       "type": "ellipse-radius"
     },
@@ -3188,7 +3168,7 @@
       "type": "ellipse-arc"
     },
     {
-      "source": "n74",
+      "source": "n69",
       "target": "n77",
       "type": "ellipse-radius"
     },
@@ -3198,27 +3178,17 @@
       "type": "ellipse-arc"
     },
     {
-      "source": "n74",
-      "target": "n78",
-      "type": "ellipse-radius"
-    },
-    {
       "source": "n77",
-      "target": "n78",
+      "target": "n70",
       "type": "ellipse-arc"
     },
     {
-      "source": "n74",
+      "source": "n78",
       "target": "n79",
       "type": "ellipse-radius"
     },
     {
       "source": "n78",
-      "target": "n79",
-      "type": "ellipse-arc"
-    },
-    {
-      "source": "n74",
       "target": "n80",
       "type": "ellipse-radius"
     },
@@ -3228,7 +3198,7 @@
       "type": "ellipse-arc"
     },
     {
-      "source": "n74",
+      "source": "n78",
       "target": "n81",
       "type": "ellipse-radius"
     },
@@ -3238,7 +3208,7 @@
       "type": "ellipse-arc"
     },
     {
-      "source": "n74",
+      "source": "n78",
       "target": "n82",
       "type": "ellipse-radius"
     },
@@ -3248,17 +3218,27 @@
       "type": "ellipse-arc"
     },
     {
+      "source": "n78",
+      "target": "n83",
+      "type": "ellipse-radius"
+    },
+    {
       "source": "n82",
-      "target": "n75",
+      "target": "n83",
       "type": "ellipse-arc"
     },
     {
-      "source": "n83",
+      "source": "n78",
       "target": "n84",
       "type": "ellipse-radius"
     },
     {
       "source": "n83",
+      "target": "n84",
+      "type": "ellipse-arc"
+    },
+    {
+      "source": "n78",
       "target": "n85",
       "type": "ellipse-radius"
     },
@@ -3268,7 +3248,7 @@
       "type": "ellipse-arc"
     },
     {
-      "source": "n83",
+      "source": "n78",
       "target": "n86",
       "type": "ellipse-radius"
     },
@@ -3278,27 +3258,17 @@
       "type": "ellipse-arc"
     },
     {
-      "source": "n83",
-      "target": "n87",
-      "type": "ellipse-radius"
-    },
-    {
       "source": "n86",
-      "target": "n87",
+      "target": "n79",
       "type": "ellipse-arc"
     },
     {
-      "source": "n83",
+      "source": "n87",
       "target": "n88",
       "type": "ellipse-radius"
     },
     {
       "source": "n87",
-      "target": "n88",
-      "type": "ellipse-arc"
-    },
-    {
-      "source": "n83",
       "target": "n89",
       "type": "ellipse-radius"
     },
@@ -3308,7 +3278,7 @@
       "type": "ellipse-arc"
     },
     {
-      "source": "n83",
+      "source": "n87",
       "target": "n90",
       "type": "ellipse-radius"
     },
@@ -3318,7 +3288,7 @@
       "type": "ellipse-arc"
     },
     {
-      "source": "n83",
+      "source": "n87",
       "target": "n91",
       "type": "ellipse-radius"
     },
@@ -3328,17 +3298,27 @@
       "type": "ellipse-arc"
     },
     {
+      "source": "n87",
+      "target": "n92",
+      "type": "ellipse-radius"
+    },
+    {
       "source": "n91",
-      "target": "n84",
+      "target": "n92",
       "type": "ellipse-arc"
     },
     {
-      "source": "n92",
+      "source": "n87",
       "target": "n93",
       "type": "ellipse-radius"
     },
     {
       "source": "n92",
+      "target": "n93",
+      "type": "ellipse-arc"
+    },
+    {
+      "source": "n87",
       "target": "n94",
       "type": "ellipse-radius"
     },
@@ -3348,7 +3328,7 @@
       "type": "ellipse-arc"
     },
     {
-      "source": "n92",
+      "source": "n87",
       "target": "n95",
       "type": "ellipse-radius"
     },
@@ -3358,27 +3338,17 @@
       "type": "ellipse-arc"
     },
     {
-      "source": "n92",
-      "target": "n96",
-      "type": "ellipse-radius"
-    },
-    {
       "source": "n95",
-      "target": "n96",
+      "target": "n88",
       "type": "ellipse-arc"
     },
     {
-      "source": "n92",
+      "source": "n96",
       "target": "n97",
       "type": "ellipse-radius"
     },
     {
       "source": "n96",
-      "target": "n97",
-      "type": "ellipse-arc"
-    },
-    {
-      "source": "n92",
       "target": "n98",
       "type": "ellipse-radius"
     },
@@ -3388,7 +3358,7 @@
       "type": "ellipse-arc"
     },
     {
-      "source": "n92",
+      "source": "n96",
       "target": "n99",
       "type": "ellipse-radius"
     },
@@ -3398,7 +3368,7 @@
       "type": "ellipse-arc"
     },
     {
-      "source": "n92",
+      "source": "n96",
       "target": "n100",
       "type": "ellipse-radius"
     },
@@ -3408,17 +3378,27 @@
       "type": "ellipse-arc"
     },
     {
+      "source": "n96",
+      "target": "n101",
+      "type": "ellipse-radius"
+    },
+    {
       "source": "n100",
-      "target": "n93",
+      "target": "n101",
       "type": "ellipse-arc"
     },
     {
-      "source": "n101",
+      "source": "n96",
       "target": "n102",
       "type": "ellipse-radius"
     },
     {
       "source": "n101",
+      "target": "n102",
+      "type": "ellipse-arc"
+    },
+    {
+      "source": "n96",
       "target": "n103",
       "type": "ellipse-radius"
     },
@@ -3428,7 +3408,7 @@
       "type": "ellipse-arc"
     },
     {
-      "source": "n101",
+      "source": "n96",
       "target": "n104",
       "type": "ellipse-radius"
     },
@@ -3438,27 +3418,17 @@
       "type": "ellipse-arc"
     },
     {
-      "source": "n101",
-      "target": "n105",
-      "type": "ellipse-radius"
-    },
-    {
       "source": "n104",
-      "target": "n105",
+      "target": "n97",
       "type": "ellipse-arc"
     },
     {
-      "source": "n101",
+      "source": "n105",
       "target": "n106",
       "type": "ellipse-radius"
     },
     {
       "source": "n105",
-      "target": "n106",
-      "type": "ellipse-arc"
-    },
-    {
-      "source": "n101",
       "target": "n107",
       "type": "ellipse-radius"
     },
@@ -3468,7 +3438,7 @@
       "type": "ellipse-arc"
     },
     {
-      "source": "n101",
+      "source": "n105",
       "target": "n108",
       "type": "ellipse-radius"
     },
@@ -3478,7 +3448,7 @@
       "type": "ellipse-arc"
     },
     {
-      "source": "n101",
+      "source": "n105",
       "target": "n109",
       "type": "ellipse-radius"
     },
@@ -3488,17 +3458,27 @@
       "type": "ellipse-arc"
     },
     {
+      "source": "n105",
+      "target": "n110",
+      "type": "ellipse-radius"
+    },
+    {
       "source": "n109",
-      "target": "n102",
+      "target": "n110",
       "type": "ellipse-arc"
     },
     {
-      "source": "n110",
+      "source": "n105",
       "target": "n111",
       "type": "ellipse-radius"
     },
     {
       "source": "n110",
+      "target": "n111",
+      "type": "ellipse-arc"
+    },
+    {
+      "source": "n105",
       "target": "n112",
       "type": "ellipse-radius"
     },
@@ -3508,7 +3488,7 @@
       "type": "ellipse-arc"
     },
     {
-      "source": "n110",
+      "source": "n105",
       "target": "n113",
       "type": "ellipse-radius"
     },
@@ -3518,27 +3498,17 @@
       "type": "ellipse-arc"
     },
     {
-      "source": "n110",
-      "target": "n114",
-      "type": "ellipse-radius"
-    },
-    {
       "source": "n113",
-      "target": "n114",
+      "target": "n106",
       "type": "ellipse-arc"
     },
     {
-      "source": "n110",
+      "source": "n114",
       "target": "n115",
       "type": "ellipse-radius"
     },
     {
       "source": "n114",
-      "target": "n115",
-      "type": "ellipse-arc"
-    },
-    {
-      "source": "n110",
       "target": "n116",
       "type": "ellipse-radius"
     },
@@ -3548,7 +3518,7 @@
       "type": "ellipse-arc"
     },
     {
-      "source": "n110",
+      "source": "n114",
       "target": "n117",
       "type": "ellipse-radius"
     },
@@ -3558,7 +3528,7 @@
       "type": "ellipse-arc"
     },
     {
-      "source": "n110",
+      "source": "n114",
       "target": "n118",
       "type": "ellipse-radius"
     },
@@ -3568,62 +3538,62 @@
       "type": "ellipse-arc"
     },
     {
+      "source": "n114",
+      "target": "n119",
+      "type": "ellipse-radius"
+    },
+    {
       "source": "n118",
-      "target": "n111",
+      "target": "n119",
       "type": "ellipse-arc"
+    },
+    {
+      "source": "n114",
+      "target": "n120",
+      "type": "ellipse-radius"
     },
     {
       "source": "n119",
       "target": "n120",
-      "type": "path-segment"
+      "type": "ellipse-arc"
     },
     {
-      "source": "n121",
+      "source": "n114",
+      "target": "n121",
+      "type": "ellipse-radius"
+    },
+    {
+      "source": "n120",
+      "target": "n121",
+      "type": "ellipse-arc"
+    },
+    {
+      "source": "n114",
       "target": "n122",
       "type": "ellipse-radius"
     },
     {
       "source": "n121",
-      "target": "n123",
-      "type": "ellipse-radius"
-    },
-    {
-      "source": "n122",
-      "target": "n123",
+      "target": "n122",
       "type": "ellipse-arc"
     },
     {
-      "source": "n121",
-      "target": "n124",
-      "type": "ellipse-radius"
+      "source": "n122",
+      "target": "n115",
+      "type": "ellipse-arc"
     },
     {
       "source": "n123",
       "target": "n124",
-      "type": "ellipse-arc"
+      "type": "path-segment"
     },
     {
-      "source": "n121",
-      "target": "n125",
-      "type": "ellipse-radius"
-    },
-    {
-      "source": "n124",
-      "target": "n125",
-      "type": "ellipse-arc"
-    },
-    {
-      "source": "n121",
+      "source": "n125",
       "target": "n126",
       "type": "ellipse-radius"
     },
     {
       "source": "n125",
-      "target": "n126",
-      "type": "ellipse-arc"
-    },
-    {
-      "source": "n121",
       "target": "n127",
       "type": "ellipse-radius"
     },
@@ -3633,7 +3603,7 @@
       "type": "ellipse-arc"
     },
     {
-      "source": "n121",
+      "source": "n125",
       "target": "n128",
       "type": "ellipse-radius"
     },
@@ -3643,7 +3613,7 @@
       "type": "ellipse-arc"
     },
     {
-      "source": "n121",
+      "source": "n125",
       "target": "n129",
       "type": "ellipse-radius"
     },
@@ -3653,17 +3623,27 @@
       "type": "ellipse-arc"
     },
     {
+      "source": "n125",
+      "target": "n130",
+      "type": "ellipse-radius"
+    },
+    {
       "source": "n129",
-      "target": "n122",
+      "target": "n130",
       "type": "ellipse-arc"
     },
     {
-      "source": "n130",
+      "source": "n125",
       "target": "n131",
       "type": "ellipse-radius"
     },
     {
       "source": "n130",
+      "target": "n131",
+      "type": "ellipse-arc"
+    },
+    {
+      "source": "n125",
       "target": "n132",
       "type": "ellipse-radius"
     },
@@ -3673,7 +3653,7 @@
       "type": "ellipse-arc"
     },
     {
-      "source": "n130",
+      "source": "n125",
       "target": "n133",
       "type": "ellipse-radius"
     },
@@ -3683,27 +3663,17 @@
       "type": "ellipse-arc"
     },
     {
-      "source": "n130",
-      "target": "n134",
-      "type": "ellipse-radius"
-    },
-    {
       "source": "n133",
-      "target": "n134",
+      "target": "n126",
       "type": "ellipse-arc"
     },
     {
-      "source": "n130",
+      "source": "n134",
       "target": "n135",
       "type": "ellipse-radius"
     },
     {
       "source": "n134",
-      "target": "n135",
-      "type": "ellipse-arc"
-    },
-    {
-      "source": "n130",
       "target": "n136",
       "type": "ellipse-radius"
     },
@@ -3713,7 +3683,7 @@
       "type": "ellipse-arc"
     },
     {
-      "source": "n130",
+      "source": "n134",
       "target": "n137",
       "type": "ellipse-radius"
     },
@@ -3723,7 +3693,7 @@
       "type": "ellipse-arc"
     },
     {
-      "source": "n130",
+      "source": "n134",
       "target": "n138",
       "type": "ellipse-radius"
     },
@@ -3733,17 +3703,27 @@
       "type": "ellipse-arc"
     },
     {
+      "source": "n134",
+      "target": "n139",
+      "type": "ellipse-radius"
+    },
+    {
       "source": "n138",
-      "target": "n131",
+      "target": "n139",
       "type": "ellipse-arc"
     },
     {
-      "source": "n139",
+      "source": "n134",
       "target": "n140",
       "type": "ellipse-radius"
     },
     {
       "source": "n139",
+      "target": "n140",
+      "type": "ellipse-arc"
+    },
+    {
+      "source": "n134",
       "target": "n141",
       "type": "ellipse-radius"
     },
@@ -3753,7 +3733,7 @@
       "type": "ellipse-arc"
     },
     {
-      "source": "n139",
+      "source": "n134",
       "target": "n142",
       "type": "ellipse-radius"
     },
@@ -3763,27 +3743,17 @@
       "type": "ellipse-arc"
     },
     {
-      "source": "n139",
-      "target": "n143",
-      "type": "ellipse-radius"
-    },
-    {
       "source": "n142",
-      "target": "n143",
+      "target": "n135",
       "type": "ellipse-arc"
     },
     {
-      "source": "n139",
+      "source": "n143",
       "target": "n144",
       "type": "ellipse-radius"
     },
     {
       "source": "n143",
-      "target": "n144",
-      "type": "ellipse-arc"
-    },
-    {
-      "source": "n139",
       "target": "n145",
       "type": "ellipse-radius"
     },
@@ -3793,7 +3763,7 @@
       "type": "ellipse-arc"
     },
     {
-      "source": "n139",
+      "source": "n143",
       "target": "n146",
       "type": "ellipse-radius"
     },
@@ -3803,7 +3773,7 @@
       "type": "ellipse-arc"
     },
     {
-      "source": "n139",
+      "source": "n143",
       "target": "n147",
       "type": "ellipse-radius"
     },
@@ -3813,17 +3783,27 @@
       "type": "ellipse-arc"
     },
     {
+      "source": "n143",
+      "target": "n148",
+      "type": "ellipse-radius"
+    },
+    {
       "source": "n147",
-      "target": "n140",
+      "target": "n148",
       "type": "ellipse-arc"
     },
     {
-      "source": "n148",
+      "source": "n143",
       "target": "n149",
       "type": "ellipse-radius"
     },
     {
       "source": "n148",
+      "target": "n149",
+      "type": "ellipse-arc"
+    },
+    {
+      "source": "n143",
       "target": "n150",
       "type": "ellipse-radius"
     },
@@ -3833,7 +3813,7 @@
       "type": "ellipse-arc"
     },
     {
-      "source": "n148",
+      "source": "n143",
       "target": "n151",
       "type": "ellipse-radius"
     },
@@ -3843,27 +3823,17 @@
       "type": "ellipse-arc"
     },
     {
-      "source": "n148",
-      "target": "n152",
-      "type": "ellipse-radius"
-    },
-    {
       "source": "n151",
-      "target": "n152",
+      "target": "n144",
       "type": "ellipse-arc"
     },
     {
-      "source": "n148",
+      "source": "n152",
       "target": "n153",
       "type": "ellipse-radius"
     },
     {
       "source": "n152",
-      "target": "n153",
-      "type": "ellipse-arc"
-    },
-    {
-      "source": "n148",
       "target": "n154",
       "type": "ellipse-radius"
     },
@@ -3873,7 +3843,7 @@
       "type": "ellipse-arc"
     },
     {
-      "source": "n148",
+      "source": "n152",
       "target": "n155",
       "type": "ellipse-radius"
     },
@@ -3883,7 +3853,7 @@
       "type": "ellipse-arc"
     },
     {
-      "source": "n148",
+      "source": "n152",
       "target": "n156",
       "type": "ellipse-radius"
     },
@@ -3893,17 +3863,27 @@
       "type": "ellipse-arc"
     },
     {
+      "source": "n152",
+      "target": "n157",
+      "type": "ellipse-radius"
+    },
+    {
       "source": "n156",
-      "target": "n149",
+      "target": "n157",
       "type": "ellipse-arc"
     },
     {
-      "source": "n157",
+      "source": "n152",
       "target": "n158",
       "type": "ellipse-radius"
     },
     {
       "source": "n157",
+      "target": "n158",
+      "type": "ellipse-arc"
+    },
+    {
+      "source": "n152",
       "target": "n159",
       "type": "ellipse-radius"
     },
@@ -3913,7 +3893,7 @@
       "type": "ellipse-arc"
     },
     {
-      "source": "n157",
+      "source": "n152",
       "target": "n160",
       "type": "ellipse-radius"
     },
@@ -3923,27 +3903,17 @@
       "type": "ellipse-arc"
     },
     {
-      "source": "n157",
-      "target": "n161",
-      "type": "ellipse-radius"
-    },
-    {
       "source": "n160",
-      "target": "n161",
+      "target": "n153",
       "type": "ellipse-arc"
     },
     {
-      "source": "n157",
+      "source": "n161",
       "target": "n162",
       "type": "ellipse-radius"
     },
     {
       "source": "n161",
-      "target": "n162",
-      "type": "ellipse-arc"
-    },
-    {
-      "source": "n157",
       "target": "n163",
       "type": "ellipse-radius"
     },
@@ -3953,7 +3923,7 @@
       "type": "ellipse-arc"
     },
     {
-      "source": "n157",
+      "source": "n161",
       "target": "n164",
       "type": "ellipse-radius"
     },
@@ -3963,7 +3933,7 @@
       "type": "ellipse-arc"
     },
     {
-      "source": "n157",
+      "source": "n161",
       "target": "n165",
       "type": "ellipse-radius"
     },
@@ -3973,24 +3943,49 @@
       "type": "ellipse-arc"
     },
     {
+      "source": "n161",
+      "target": "n166",
+      "type": "ellipse-radius"
+    },
+    {
       "source": "n165",
-      "target": "n158",
+      "target": "n166",
       "type": "ellipse-arc"
+    },
+    {
+      "source": "n161",
+      "target": "n167",
+      "type": "ellipse-radius"
     },
     {
       "source": "n166",
       "target": "n167",
-      "type": "path-segment"
+      "type": "ellipse-arc"
+    },
+    {
+      "source": "n161",
+      "target": "n168",
+      "type": "ellipse-radius"
+    },
+    {
+      "source": "n167",
+      "target": "n168",
+      "type": "ellipse-arc"
+    },
+    {
+      "source": "n161",
+      "target": "n169",
+      "type": "ellipse-radius"
     },
     {
       "source": "n168",
       "target": "n169",
-      "type": "path-segment"
+      "type": "ellipse-arc"
     },
     {
       "source": "n169",
-      "target": "n170",
-      "type": "path-segment"
+      "target": "n162",
+      "type": "ellipse-arc"
     },
     {
       "source": "n170",
