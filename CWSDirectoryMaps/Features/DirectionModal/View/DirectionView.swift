@@ -13,11 +13,12 @@ struct DirectionView: View {
     @State private var showSteps = false
     
     var body: some View {
-        VStack {
-            Spacer()
-            ZStack {
-                MapView()
-                    .ignoresSafeArea()
+        ZStack {
+            MapView()
+                .ignoresSafeArea()
+                
+            VStack {
+                Spacer()
                 
                 if showDirectionsModal {
                     DirectionsModal(showModal: $showDirectionsModal) {

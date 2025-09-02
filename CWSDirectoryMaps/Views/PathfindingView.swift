@@ -145,32 +145,32 @@ struct SearchBarsView: View {
     let onPathfindingTrigger: () -> Void
     
     var body: some View {
-        VStack {
-            SearchBarView(
-                text: $uiStateManager.startLabel,
-                placeholder: "Start",
-                locations: allLocations,
-                onLocationSelected: { selectedLocation in
-                    uiStateManager.updateStartLocation(selectedLocation)
-                    onPathfindingTrigger()
-                },
-                field: .start,
-            )
-            
-            SearchBarView(
-                text: $uiStateManager.endLabel,
-                placeholder: "Destination",
-                locations: allLocations,
-                onLocationSelected: { selectedLocation in
-                    uiStateManager.updateEndLocation(selectedLocation)
-                    onPathfindingTrigger()
-                },
-                field: .destination,
-            )
-        }
-        .padding(.top)
-        .background(Color.black.opacity(0.8))
-        .padding()
+//        VStack {
+//            SearchBarView(
+//                text: $uiStateManager.startLabel,
+//                placeholder: "Start",
+//                locations: allLocations,
+//                onLocationSelected: { selectedLocation in
+//                    uiStateManager.updateStartLocation(selectedLocation)
+//                    onPathfindingTrigger()
+//                },
+//                field: .start,
+//            )
+//            
+//            SearchBarView(
+//                text: $uiStateManager.endLabel,
+//                placeholder: "Destination",
+//                locations: allLocations,
+//                onLocationSelected: { selectedLocation in
+//                    uiStateManager.updateEndLocation(selectedLocation)
+//                    onPathfindingTrigger()
+//                },
+//                field: .destination,
+//            )
+//        }
+//        .padding(.top)
+//        .background(Color.black.opacity(0.8))
+//        .padding()
     }
 }
 

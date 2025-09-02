@@ -4,12 +4,12 @@ import Foundation
 import CoreGraphics
 
 // MARK: - Direction Step Model
-struct DirectionStep: Identifiable {
-    let id = UUID()
-    let point: CGPoint
-    var instruction: String = ""
-    var iconName: String = "arrow.up"
-}
+//struct DirectionStep: Identifiable {
+//    let id = UUID()
+//    let point: CGPoint
+//    var instruction: String = ""
+//    var iconName: String = "arrow.up"
+//}
 
 
 // MARK: - Directions Generator
@@ -87,9 +87,9 @@ class DirectionsGenerator {
         let startNode = pathNodes[0]
         if let startLabel = startNode.parentLabel ?? startNode.label {
             let formattedStartLabel = startLabel.replacingOccurrences(of: "_", with: " ").capitalized
-            steps.append(DirectionStep(point: path[0], instruction: "Proceed to the exit of \(formattedStartLabel)"))
+            steps.append(DirectionStep(point: path[0], icon: "arrow.up", description: "Proceed to the exit of \(formattedStartLabel)", shopImage: "floor-1"))
         } else {
-            steps.append(DirectionStep(point: path[0], instruction: "Begin your journey."))
+            steps.append(DirectionStep(point: path[0], icon: "arrow.up", description: "Begin your journey.",  shopImage: "floor-1"))
         }
 
         var lastParentLabel = startNode.parentLabel
@@ -139,7 +139,7 @@ class DirectionsGenerator {
                     isFirstTurnSkipped = true
                 } else {
                     if !instructionText.isEmpty {
-                        steps.append(DirectionStep(point: currPoint, instruction: instructionText, iconName: iconName))
+                        steps.append(DirectionStep(point: currPoint, icon: iconName, description: instructionText, shopImage: String()))
                     }
                 }
                 
@@ -147,11 +147,11 @@ class DirectionsGenerator {
             }
         }
         
-        steps.append(DirectionStep(point: path.last!, instruction: "You have arrived at your destination.", iconName: "mappin.circle.fill"))
+        steps.append(DirectionStep(point: path.last!, icon: "mappin.circle.fill", description: "You have arrived at your destination.", shopImage: "floor-1"))
         
         print("--- Generated \(steps.count) Directional Steps ---")
         for step in steps {
-            print("  - \(step.instruction)")
+            print("  - \(step.description)")
         }
         
         return steps

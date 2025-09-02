@@ -128,7 +128,7 @@ struct DirectionsModal: View {
     var body: some View {
         if showModal {
             VStack {
-                Spacer()
+//                Spacer()
                 
                 VStack(spacing: 16) {
                     //title
@@ -248,12 +248,12 @@ struct DirectionsModal: View {
                             .foregroundColor(.primary)
                             .cornerRadius(12)
                     }
-                    .padding(.bottom, 24)
+//                    .padding(.bottom)
                 }
                 .padding()
                 .background(Color(.systemBackground))
                 .cornerRadius(16, corners: [.topLeft, .topRight])
-                //                .shadow(radius: 10)
+                .frame(height: 300)
             }
             .ignoresSafeArea(edges: .bottom)
             .transition(.move(edge: .bottom))
@@ -348,6 +348,7 @@ struct DirectionStepsModal: View {
 
 struct DirectionStep: Identifiable {
     let id = UUID()
+    let point: CGPoint
     let icon: String
     let description: String
     let shopImage: String
@@ -355,10 +356,10 @@ struct DirectionStep: Identifiable {
 
 //dummy data
 let dummySteps: [DirectionStep] = [
-    DirectionStep(icon: "arrow.up", description: "Go straight to Marks & Spencer", shopImage: "store_logo_placeholder"),
-    DirectionStep(icon: "arrow.turn.up.right", description: "Turn right at Starbucks", shopImage: "store_logo_placeholder"),
-    DirectionStep(icon: "arrow.turn.up.left", description: "Turn left after Zara", shopImage: "store_logo_placeholder"),
-    DirectionStep(icon: "mappin", description: "Arrive at destination", shopImage: "sstore_logo_placeholder")
+    DirectionStep(point: .zero, icon: "arrow.up", description: "Go straight to Marks & Spencer", shopImage: "floor-1"),
+    DirectionStep(point: .zero, icon: "arrow.turn.up.right", description: "Turn right at Starbucks", shopImage: "floor-1"),
+    DirectionStep(point: .zero, icon: "arrow.turn.up.left", description: "Turn left after Zara", shopImage: "floor-1"),
+    DirectionStep(point: .zero, icon: "mappin", description: "Arrive at destination", shopImage: "floor-1")
 ]
 
 struct DirectionStepsListView: View {
@@ -476,8 +477,6 @@ struct RoundedCorner: Shape {
 }
 
 #Preview {
-//    MapView()
-//    DirectionsModal(showModal: .constant(true), showStepsModal: .constant(true), showSteps: .init(false) )
-    DirectionStepsModal(showStepsModal: .constant(true), showSteps: .constant(false), destinationName: "One Love Bespoke", steps: dummySteps)
-    DirectionStepsListView(showStepsModal: .constant(true), showSteps: .constant(true), destinationName: "One Love Bespoke", steps: dummySteps)
+    MapView()
+    DirectionsModal(showModal: .constant(true))
 }
