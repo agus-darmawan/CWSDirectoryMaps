@@ -9,7 +9,7 @@ import SwiftUI
 
 struct DirectionView: View {
     let startLocation: Store
-    let destinationStore: Store
+    @State var destinationStore: Store
     
     @State private var showDirectionsModal = true
     @State private var showStepsModal = false
@@ -17,9 +17,9 @@ struct DirectionView: View {
     
     var body: some View {
         ZStack {
-            MapView()
             
             VStack {
+                MapView()
                 Spacer()
                 
                 if showDirectionsModal {

@@ -475,8 +475,32 @@ struct RoundedCorner: Shape {
 }
 
 #Preview {
+    
+    let start = Store(
+        name: "Main Lobby",
+        category: .facilities,
+        imageName: "store_logo_placeholder",
+        subcategory: "Information Center",
+        description: "",
+        location: "Ground Floor, Central",
+        website: nil,
+        phone: nil,
+        hours: "06:00AM - 12:00AM",
+        detailImageName: "store_logo_placeholder"
+    )
+    
+    let dest = Store(
+        name: "One Love Bespoke",
+        category: .shop,
+        imageName: "store_logo_placeholder",
+        subcategory: "Fashion, Watches & Jewelry",
+        description: "",
+        location: "Level 1, Unit 116",
+        website: nil,
+        phone: nil,
+        hours: "10:00AM - 10:00PM",
+        detailImageName: "store_logo_placeholder"
+    )
     MapView()
-    //    DirectionsModal(showModal: .constant(true))
-    //        DirectionStepsModal(showStepsModal: .constant(true), showSteps: .constant(true), destinationName: "One Love Bespoke", steps: dummySteps)
-    //    DirectionStepsListView(showStepsModal: .constant(true), showSteps: .constant(true), destinationName: "One Love Bespoke", steps: dummySteps)
+    DirectionsModal(destinationStore: dest, startLocation: start, showModal: .constant(true))
 }
