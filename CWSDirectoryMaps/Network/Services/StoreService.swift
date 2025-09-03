@@ -181,12 +181,10 @@ class StoreService: ObservableObject {
             return .shop
         case "f&b", "food", "beverage", "restaurant", "cafe":
             return .fnb
-        case "play", "entertainment", "game", "cinema":
-            return .play
         case "facilities", "facility":
             return .facilities
-        case "entrances", "entrance", "exit":
-            return .entrances
+        case "lobbies", "lobby":
+            return .lobbies
         default:
             return .others
         }

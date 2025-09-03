@@ -10,10 +10,9 @@ import Foundation
 enum StoreCategory: String, CaseIterable, Identifiable, Codable {
     case shop = "Shop"
     case fnb = "F&B"
-    case play = "Play"
     case others = "Others"
     case facilities = "Facilities"
-    case entrances = "Entrances"
+    case lobbies = "Lobbies"
     
     var id: String { self.rawValue }
 }
@@ -33,7 +32,7 @@ struct Store: Identifiable, Codable {
     var graphLabel: String?
     
     var isFacility: Bool {
-        return category == .facilities || category == .entrances
+        return category == .facilities || category == .lobbies
     }
     
     enum CodingKeys: String, CodingKey {
