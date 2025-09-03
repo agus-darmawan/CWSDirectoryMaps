@@ -61,19 +61,55 @@ enum Field: Hashable {
 }
 
 // MARK: - Floor Enum
-enum Floor: String, CaseIterable, Identifiable {
-    case ground = "Ground"
-    case lowerground = "Lower Ground"
-    
-    var id: String { rawValue }
-    
+enum Floor: String, CaseIterable, Codable, Hashable, Identifiable {
+    case fourth
+    case third
+    case second
+    case first
+    case ground
+    case lowerGround
+
+    var id: Self { self }
+
+    // Display for menu
+    var displayName: String {
+        switch self {
+        case .fourth: return "4th Floor"
+        case .third: return "3rd Floor"
+        case .second: return "2nd Floor"
+        case .first: return "1st Floor"
+        case .ground: return "Ground Floor"
+        case .lowerGround: return "Lower Ground"
+        }
+    }
+
+    // Asset names for map images
+    var imageName: String {
+        switch self {
+        case .fourth: return "floor-4th"
+        case .third: return "floor-3rd"
+        case .second: return "floor-2nd"
+        case .first: return "floor-1st"
+        case .ground: return "floor-ground"
+        case .lowerGround: return "floor-lower-ground"
+        }
+    }
+
+    // Data file names for graphs/paths per floor
     var fileName: String {
         switch self {
-        case .ground:
-            return "ground_path"
-        case .lowerground:
-            return "lowerground_path"
+        case .fourth: return "4th_path"
+        case .third: return "3rd_path"
+        case .second: return "2nd_path"
+        case .first: return "1st_path"
+        case .ground: return "ground_path"
+        case .lowerGround: return "lowerground_path"
         }
+    }
+
+    // Custom ordering for menus (top-down)
+    static var allCases: [Floor] {
+        [.fourth, .third, .second, .first, .ground, .lowerGround]
     }
 }
 
