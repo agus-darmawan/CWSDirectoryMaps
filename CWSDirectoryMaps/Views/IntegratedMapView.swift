@@ -92,22 +92,22 @@ struct IntegratedMapView: View {
             .padding()
         }
         // Debug controls for fitting multiplier
-        .overlay(
-            VStack {
-                Spacer()
-                HStack(spacing: 12) {
-                    Button("-") { graphScaleMultiplier -= 0.01 }
-                    Text("Graph Scale: \(String(format: "%.2f", graphScaleMultiplier))")
-                        .foregroundColor(.white)
-                    Button("+") { graphScaleMultiplier += 0.01 }
-                }
-                .padding(.horizontal, 12)
-                .padding(.vertical, 8)
-                .background(.black.opacity(0.6))
-                .cornerRadius(12)
-                .padding()
-            }
-        )
+//        .overlay(
+//            VStack {
+//                Spacer()
+//                HStack(spacing: 12) {
+//                    Button("-") { graphScaleMultiplier -= 0.01 }
+//                    Text("Graph Scale: \(String(format: "%.2f", graphScaleMultiplier))")
+//                        .foregroundColor(.white)
+//                    Button("+") { graphScaleMultiplier += 0.01 }
+//                }
+//                .padding(.horizontal, 12)
+//                .padding(.vertical, 8)
+//                .background(.black.opacity(0.6))
+//                .cornerRadius(12)
+//                .padding()
+//            }
+//        )
     }
 }
 

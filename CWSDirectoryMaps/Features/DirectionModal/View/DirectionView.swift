@@ -19,7 +19,7 @@ struct DirectionView: View {
         ZStack {
             
             VStack {
-                MapView()
+                IntegratedMapView()
                 Spacer()
                 
                 if showDirectionsModal {
