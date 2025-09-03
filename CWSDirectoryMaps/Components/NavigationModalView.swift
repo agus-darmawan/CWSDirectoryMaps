@@ -144,15 +144,10 @@ struct NavigationModalView: View {
             Text("Starting location and destination cannot be the same. Please select a different location.")
         }
         .fullScreenCover(isPresented: $showDirectionView) {
-            if let start = navigationState.startLocation,
-               let end = navigationState.endLocation {
-                DirectionView(
-                    startLocation: start,
-                    destinationStore: end
-                )
-            } else {
-                EmptyView()
-            }
+            DirectionView(
+                startLocation: navigationState.startLocation!,
+                destinationStore: navigationState.endLocation!
+            )
         }
     }
     
@@ -282,6 +277,15 @@ struct NavigationModalView: View {
             }
             .padding(.horizontal)
             .padding(.vertical, 20)
+            
+            Button(action: {
+                if navigationState.startLocation != nil,
+                   navigationState.endLocation != nil {
+                    showDirectionView = true
+                }
+            }) {
+                Text("GO")
+            }
             
             CategoryFilterView(
                 categories: StoreCategory.allCases,
