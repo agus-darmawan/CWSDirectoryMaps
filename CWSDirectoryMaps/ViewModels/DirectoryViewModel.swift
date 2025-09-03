@@ -159,18 +159,6 @@ class DirectoryViewModel: ObservableObject {
                 detailImageName: "store_logo_placeholder"
             ),
             Store(
-                name: "Amazing Express",
-                category: .play,
-                imageName: "store_logo_placeholder",
-                subcategory: "Family Entertainment",
-                description: "Amazing Express offers thrilling rides and family-friendly entertainment experiences for visitors of all ages.",
-                location: "Level 2, Unit 201",
-                website: nil,
-                phone: "+62 21 5678 9012",
-                hours: "10:00AM - 10:00PM",
-                detailImageName: "store_logo_placeholder"
-            ),
-            Store(
                 name: "Starbucks",
                 category: .fnb,
                 imageName: "store_logo_placeholder",
@@ -195,18 +183,6 @@ class DirectoryViewModel: ObservableObject {
                 detailImageName: "store_logo_placeholder"
             ),
             Store(
-                name: "Cinema XXI",
-                category: .play,
-                imageName: "store_logo_placeholder",
-                subcategory: "Movies & Entertainment",
-                description: "Cinema XXI provides the latest movie releases with premium sound and visual technology for the ultimate cinema experience.",
-                location: "Level 3, Unit 301",
-                website: "https://21cineplex.com",
-                phone: "+62 21 8901 2345",
-                hours: "10:00AM - 12:00AM",
-                detailImageName: "store_logo_placeholder"
-            ),
-            Store(
                 name: "ATM Center",
                 category: .others,
                 imageName: "store_logo_placeholder",
@@ -219,8 +195,20 @@ class DirectoryViewModel: ObservableObject {
                 detailImageName: "store_logo_placeholder"
             ),
             Store(
-                name: "North Entrance",
-                category: .entrances,
+                name: "Main Lobby",
+                category: .lobbies,
+                imageName: "store_logo_placeholder",
+                subcategory: "Information Center",
+                description: "",
+                location: "Ground Floor, Central",
+                website: nil,
+                phone: nil,
+                hours: "06:00AM - 12:00AM",
+                detailImageName: "store_logo_placeholder"
+            ),
+            Store(
+                name: "North Entrance Lobby",
+                category: .lobbies,
                 imageName: "store_logo_placeholder",
                 subcategory: "Main Entrance",
                 description: "",
@@ -231,8 +219,8 @@ class DirectoryViewModel: ObservableObject {
                 detailImageName: "store_logo_placeholder"
             ),
             Store(
-                name: "South Entrance",
-                category: .entrances,
+                name: "South Entrance Lobby",
+                category: .lobbies,
                 imageName: "store_logo_placeholder",
                 subcategory: "Main Entrance",
                 description: "",
@@ -240,18 +228,6 @@ class DirectoryViewModel: ObservableObject {
                 website: nil,
                 phone: nil,
                 hours: "24 Hours",
-                detailImageName: "store_logo_placeholder"
-            ),
-            Store(
-                name: "Main Lobby",
-                category: .facilities,
-                imageName: "store_logo_placeholder",
-                subcategory: "Information Center",
-                description: "",
-                location: "Ground Floor, Central",
-                website: nil,
-                phone: nil,
-                hours: "06:00AM - 12:00AM",
                 detailImageName: "store_logo_placeholder"
             ),
             Store(
@@ -276,42 +252,6 @@ class DirectoryViewModel: ObservableObject {
                 website: nil,
                 phone: nil,
                 hours: "06:00AM - 12:00AM",
-                detailImageName: "store_logo_placeholder"
-            ),
-            Store(
-                name: "Emergency Exit A",
-                category: .entrances,
-                imageName: "store_logo_placeholder",
-                subcategory: "Emergency Exit",
-                description: "",
-                location: "Level 1, West Wing",
-                website: nil,
-                phone: nil,
-                hours: "24 Hours",
-                detailImageName: "store_logo_placeholder"
-            ),
-            Store(
-                name: "Emergency Exit B",
-                category: .entrances,
-                imageName: "store_logo_placeholder",
-                subcategory: "Emergency Exit",
-                description: "",
-                location: "Level 2, East Wing",
-                website: nil,
-                phone: nil,
-                hours: "24 Hours",
-                detailImageName: "store_logo_placeholder"
-            ),
-            Store(
-                name: "Parking Entrance",
-                category: .entrances,
-                imageName: "store_logo_placeholder",
-                subcategory: "Vehicle Access",
-                description: "",
-                location: "Basement Level",
-                website: nil,
-                phone: nil,
-                hours: "24 Hours",
                 detailImageName: "store_logo_placeholder"
             ),
             Store(

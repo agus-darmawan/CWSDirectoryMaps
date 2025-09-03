@@ -15,6 +15,8 @@ struct TenantDetailModalView: View {
     @State private var showNavigationModal = false
     @State private var navigationMode: NavigationMode? = nil
     
+    private let config = APIConfiguration.shared
+    
     private var customBlueColor: Color {
         Color(uiColor: UIColor { traitCollection in
             if traitCollection.userInterfaceStyle == .dark {
@@ -123,7 +125,7 @@ struct TenantDetailModalView: View {
     private var facilityContentView: some View {
         ScrollView {
             VStack(spacing: 20) {
-                AsyncImage(url: URL(string: store.detailImageName)) { image in
+                AsyncImage(url: URL(string: config.baseURL + (store.imageName.hasPrefix("/") ? store.imageName : "/images/" + store.imageName))) { image in
                     image
                         .resizable()
                         .aspectRatio(contentMode: .fill)
@@ -138,17 +140,6 @@ struct TenantDetailModalView: View {
                 .padding(.horizontal)
                 
                 VStack(spacing: 16) {
-                    HStack {
-                        Image(systemName: "location.fill")
-                            .frame(width: 24)
-                            .foregroundColor(.primary)
-                        
-                        Text(store.location)
-                            .font(.body)
-                        
-                        Spacer()
-                    }
-                    
                     if !store.hours.isEmpty {
                         HStack {
                             Image(systemName: "clock.fill")
@@ -173,7 +164,7 @@ struct TenantDetailModalView: View {
     private var storeDetailScrollView: some View {
         ScrollView {
             VStack(spacing: 20) {
-                AsyncImage(url: URL(string: store.detailImageName)) { image in
+                AsyncImage(url: URL(string: config.baseURL + (store.imageName.hasPrefix("/") ? store.imageName : "/images/" + store.imageName))) { image in
                     image
                         .resizable()
                         .aspectRatio(contentMode: .fill)
