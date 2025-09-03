@@ -1,4 +1,3 @@
-
 //
 //  HomePageView.swift
 //  CWSDirectoryMaps
@@ -9,7 +8,10 @@
 import SwiftUI
 
 struct HomePageView: View {
-    @StateObject private var viewModel = DirectoryViewModel()
+    
+    @EnvironmentObject var dataManager: DataManager
+    
+    @ObservedObject private var viewModel = DirectoryViewModel()
     @FocusState private var isSearchFieldFocused: Bool
     
     var body: some View {
@@ -116,10 +118,15 @@ struct HomePageView: View {
                 )
             }
         }
+        .onAppear {
+            // This passes the shared dataManager to the viewModel,
+            // which will then trigger its data loading functions.
+            viewModel.setup(dataManager: dataManager)
+        }
     }
 }
 
 #Preview {
     HomePageView()
+        .environmentObject(DataManager())
 }
-

@@ -121,7 +121,7 @@ class StoreService: ObservableObject {
         .eraseToAnyPublisher()
     }
     
-    func convertFacilityWithDetailsToStore(_ facilityDTO: FacilityWithDetailsDTO) -> Store {
+    func convertFacilityWithDetailsToStore(_ facilityDTO: FacilityWithDetailsDTO, mapLocations: [Location]) -> Store {
         let category = mapTenantCategoryToStoreCategory(facilityDTO.tenantCategory?.name)
         let hours = formatHours(
             openTime: facilityDTO.detail?.openTime,
@@ -129,6 +129,17 @@ class StoreService: ObservableObject {
         )
         let location = facilityDTO.detail?.unit ?? formatLocation(facilityDTO.location)
         
+        // --- New Logic to Find the Graph Label ---
+        let normalizedFacilityName = normalize(name: facilityDTO.name)
+        var foundGraphLabel: String? = nil
+        
+        // Find the first map location that matches the normalized facility name.
+        if let matchedLocation = mapLocations.first(where: { normalize(name: $0.name) == normalizedFacilityName }) {
+            // Construct the full, unique label (e.g., "ground_path_coach-1")
+            foundGraphLabel = "\(matchedLocation.floor.fileName)_\(matchedLocation.name)"
+        }
+        // --- End of New Logic ---
+
         return Store(
             id: String(facilityDTO.id),
             name: facilityDTO.name,
@@ -140,8 +151,24 @@ class StoreService: ObservableObject {
             website: facilityDTO.detail?.website,
             phone: facilityDTO.detail?.phone,
             hours: hours,
-            detailImageName: facilityDTO.imagePath ?? "store_logo_placeholder"
+            detailImageName: facilityDTO.imagePath ?? "store_logo_placeholder",
+            graphLabel: foundGraphLabel // <-- Assign the found label here
         )
+    }
+    
+    private func normalize(name: String) -> String {
+        var normalized = name.lowercased()
+        
+        if let range = normalized.range(of: "-\\d+$", options: .regularExpression) {
+            normalized.removeSubrange(range)
+        }
+
+        normalized = normalized.replacingOccurrences(of: " ", with: "")
+        normalized = normalized.replacingOccurrences(of: "-", with: "")
+        normalized = normalized.replacingOccurrences(of: "_", with: "")
+        normalized = normalized.replacingOccurrences(of: "&", with: "")
+        
+        return normalized
     }
     
     private func mapTenantCategoryToStoreCategory(_ tenantCategoryName: String?) -> StoreCategory {

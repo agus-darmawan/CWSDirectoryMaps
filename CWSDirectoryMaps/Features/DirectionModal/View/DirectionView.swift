@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct DirectionView: View {
+    
     let startLocation: Store
     let destinationStore: Store
     

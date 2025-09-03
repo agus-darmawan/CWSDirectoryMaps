@@ -16,12 +16,13 @@ class DataManager: ObservableObject {
     @Published var isLoading = true
     
     // MARK: - Public Methods
+    // In DataManager.swift
+
     func preloadAllFloorData() async {
         print("Starting to preload all floor data...")
         
+        // This part is fast (just reading files), so it can run first.
         var loadedData: [Floor: FloorData] = [:]
-        
-        // Load data for all floors
         for floor in Floor.allCases {
             if let data = await loadFloorData(for: floor) {
                 loadedData[floor] = data
@@ -31,23 +32,30 @@ class DataManager: ObservableObject {
             }
         }
         
-        await MainActor.run {
-            self.floorData = loadedData
-            self.isLoading = false
+        // Run the slow processing on a background thread.
+        let processedResult = await Task.detached(priority: .userInitiated) {
+            // --- This block runs in the background ---
+            let unifiedGraph = self.buildUnifiedGraph(from: loadedData)
             
-            // Build combined locations list
             var combinedLocations: [Location] = []
-            for (floor, data) in floorData {
+            for (floor, data) in loadedData {
                 for locationName in data.locations {
                     combinedLocations.append(Location(name: locationName, floor: floor))
                 }
             }
-            self.allLocations = Array(Set(combinedLocations)).sorted { $0.name < $1.name }
+            let sortedLocations = Array(Set(combinedLocations)).sorted { $0.name < $1.name }
             
-            // Build unified graph
-            buildUnifiedGraph()
-            
-            print("All floor data preloaded. \(self.allLocations.count) total locations available.")
+            // Return a tuple containing both results.
+            return (graph: unifiedGraph, locations: sortedLocations)
+        }.value // .value waits for the background task to finish and gets the result.
+        
+        // Now, switch back to the main thread to update the UI.
+        await MainActor.run {
+            self.unifiedGraph = processedResult.graph
+            self.allLocations = processedResult.locations
+            self.isLoading = false // This will hide the loading screen.
+            print("✅ Unified graph built with \(self.unifiedGraph.count) nodes.")
+            print("✅ All floor data preloaded. \(self.allLocations.count) total locations available.")
         }
     }
     
@@ -101,11 +109,14 @@ class DataManager: ObservableObject {
         ).sorted()
     }
     
-    private func buildUnifiedGraph() {
-        print("Building unified graph via code...")
+    // In DataManager.swift
+
+    // This function now takes data as an argument and returns the result.
+    private func buildUnifiedGraph(from floorData: [Floor: FloorData]) -> [String: GraphNode] {
+        print("Building unified graph...")
         var combinedGraph: [String: GraphNode] = [:]
         var connectionNodes: [String: [GraphNode]] = [:]
-        
+
         // Define connections in code
         let connectionMap: [String: String] = [
             "escalator_bw_basement_1-0": "escalator_basement",
@@ -114,23 +125,20 @@ class DataManager: ObservableObject {
             "lift_west-0": "lift_west",
             "lift_west": "lift_west"
         ]
-        
-        // Combine all nodes and edges from all floors
+
         for (floor, data) in floorData {
             let floorPrefix = floor.fileName
             let labelGraph = buildLabelGraph(from: data.graph)
-            
+
             for (label, var node) in labelGraph {
                 let uniqueLabel = "\(floorPrefix)_\(label)"
                 node.label = uniqueLabel
                 node.floor = floor
-                
-                // Remap neighbors to have unique labels
+
                 node.neighbors = node.neighbors.map { neighbor in
                     return (node: "\(floorPrefix)_\(neighbor.node)", cost: neighbor.cost)
                 }
-                
-                // Identify connection points
+
                 if let connectionId = connectionMap[label] {
                     node.connectionId = connectionId
                     connectionNodes[connectionId, default: []].append(node)
@@ -139,16 +147,15 @@ class DataManager: ObservableObject {
                 combinedGraph[uniqueLabel] = node
             }
         }
-        
-        // Add edges between floors at connection points
+
         for (_, nodes) in connectionNodes {
             guard nodes.count > 1 else { continue }
-            
+
             for i in 0..<nodes.count {
                 for j in (i + 1)..<nodes.count {
                     let nodeA = nodes[i]
                     let nodeB = nodes[j]
-                    let costOfChangingFloors = 50.0
+                    let costOfChangingFloors = 50.0 // Aribtrary high cost for floor changes
                     
                     combinedGraph[nodeA.label]?.neighbors.append((node: nodeB.label, cost: costOfChangingFloors))
                     combinedGraph[nodeB.label]?.neighbors.append((node: nodeA.label, cost: costOfChangingFloors))
@@ -156,7 +163,7 @@ class DataManager: ObservableObject {
             }
         }
         
-        self.unifiedGraph = combinedGraph
-        print("Unified graph built with \(self.unifiedGraph.count) nodes.")
+        // Instead of setting a class property, we return the completed graph.
+        return combinedGraph
     }
 }

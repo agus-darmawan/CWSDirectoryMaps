@@ -32,16 +32,24 @@ class DirectoryViewModel: ObservableObject {
     private let storeService = StoreService()
     private var cancellables = Set<AnyCancellable>()
     
+    private var dataManager: DataManager
     
     private let useAPI = APIConfiguration.shared.useAPI
     
     init() {
+        self.dataManager = DataManager()
         if useAPI {
             loadStoresFromAPI()
         } else {
             loadMockData()
         }
         setupFiltering()
+    }
+    
+    func setup(dataManager: DataManager) {
+        self.dataManager = dataManager
+        // Optionally refresh data after setting up with the shared dataManager
+        refreshData()
     }
     
     private func loadStoresFromAPI() {
@@ -64,13 +72,17 @@ class DirectoryViewModel: ObservableObject {
                     
                     var allStores: [Store] = []
                     
+                    // Pass the dataManager.allLocations to the conversion function.
+                    let mapLocations = dataManager.allLocations
+                    
                     for facilityWithDetails in facilitiesWithDetails {
-                        let store = self.storeService.convertFacilityWithDetailsToStore(facilityWithDetails)
+                        let store = self.storeService.convertFacilityWithDetailsToStore(facilityWithDetails, mapLocations: mapLocations)
                         allStores.append(store)
                     }
                     
                     self.allStores = allStores
-                    print("✅ Loaded \(allStores.count) stores from API (Facilities with details: \(facilitiesWithDetails.count))")
+                    self.debug_checkStoresAgainstMap()
+                    print("✅ Loaded and processed \(allStores.count) stores from API.")
                 }
             )
             .store(in: &cancellables)
@@ -83,6 +95,7 @@ class DirectoryViewModel: ObservableObject {
         
         isLoading = true
         errorMessage = nil
+        
         
         let filtered = allStores.filter { store in
             store.name.lowercased().contains(query.lowercased())
@@ -101,6 +114,50 @@ class DirectoryViewModel: ObservableObject {
         } else {
             loadMockData()
         }
+    }
+
+    private func debug_checkStoresAgainstMap() {
+        if dataManager.allLocations.isEmpty {
+            print("[Debug Check] DataManager has no locations. Skipping check.")
+            return
+        }
+        
+        print("\n--- [Debug] Normalizing all locations from DataManager ---")
+        
+        var normalizedMapLocations: [String: String] = [:]
+        for location in dataManager.allLocations {
+            let normalizedName = normalize(name: location.name)
+            normalizedMapLocations[normalizedName] = location.name
+            print("  - Original: '\(location.name)' -> Normalized: '\(normalizedName)'")
+        }
+
+        print("\n--- [Debug] Comparing API/mock store list against normalized map data ---")
+
+        for store in self.allStores {
+            let normalizedStoreName = normalize(name: store.name)
+            if let originalMapName = normalizedMapLocations[normalizedStoreName] {
+                print("  ✅ Match Found: Store '\(store.name)' (as '\(normalizedStoreName)') matches map location '\(originalMapName)'.")
+            } else {
+                print("  ❌ MISSING: Store '\(store.name)' (as '\(normalizedStoreName)') was NOT found in the normalized map locations.")
+            }
+        }
+        
+        print("--- [Debug Check] Verification complete ---\n")
+    }
+    
+    private func normalize(name: String) -> String {
+        var normalized = name.lowercased()
+        
+        if let range = normalized.range(of: "-\\d+$", options: .regularExpression) {
+            normalized.removeSubrange(range)
+        }
+
+        normalized = normalized.replacingOccurrences(of: " ", with: "")
+        normalized = normalized.replacingOccurrences(of: "-", with: "")
+        normalized = normalized.replacingOccurrences(of: "_", with: "")
+        normalized = normalized.replacingOccurrences(of: "&", with: "")
+        
+        return normalized
     }
     
     private func loadMockData() {

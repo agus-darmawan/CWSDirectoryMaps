@@ -55,6 +55,7 @@ struct FacilityWithDetailsDTO: Identifiable, Codable {
     let tenantCategory: TenantCategoryDTO?
     let location: LocationDTO
     let detail: DetailDTO?
+    var graphLabel: String? = nil
     
     enum CodingKeys: String, CodingKey {
         case id
