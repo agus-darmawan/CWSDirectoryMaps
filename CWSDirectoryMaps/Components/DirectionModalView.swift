@@ -93,7 +93,7 @@ struct ZoomableScrollView<Content: View>: View {
         let maxX = max((scaledWidth - screenWidth) / 2, 0)
         
         // Custom margin for bottom
-        let bottomMargin: CGFloat = 150
+        let bottomMargin: CGFloat = 0
         
         let maxY: CGFloat
         let minY: CGFloat
@@ -127,9 +127,7 @@ struct DirectionsModal: View {
     
     var body: some View {
         if showModal {
-            VStack {
-//                Spacer()
-                
+            VStack (alignment: .trailing){
                 VStack(spacing: 16) {
                     //title
                     HStack {
@@ -248,7 +246,6 @@ struct DirectionsModal: View {
                             .foregroundColor(.primary)
                             .cornerRadius(12)
                     }
-//                    .padding(.bottom)
                 }
                 .padding()
                 .background(Color(.systemBackground))
@@ -272,8 +269,7 @@ struct DirectionStepsModal: View {
     
     var body: some View {
         if showStepsModal{
-            VStack {
-                Spacer()
+            VStack (alignment: .trailing) {
                 
                 VStack(spacing: 16) {
                     //title
@@ -314,16 +310,17 @@ struct DirectionStepsModal: View {
                                     .clipShape(Circle())
                                     .padding(.horizontal, 8)
                             }
+                            .frame(maxWidth: .infinity)
                             .padding(8)
                             .background(customBlueColor)
                             .cornerRadius(16)
                             .padding(.vertical, 12)
+                            .padding(.horizontal, 12)
                             .tag(index)
                         }
                     }
                     .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
                     .frame(maxHeight: 60)
-                    .padding(0)
                     
                     //indicator card
                     HStack {
@@ -338,7 +335,6 @@ struct DirectionStepsModal: View {
                 .padding()
                 .background(Color(.systemBackground))
                 .cornerRadius(16, corners: [.topLeft, .topRight])
-                .shadow(radius: 10)
             }
             .ignoresSafeArea(edges: .bottom)
             .transition(.move(edge: .bottom))
@@ -370,7 +366,7 @@ struct DirectionStepsListView: View {
     let steps: [DirectionStep]
     
     var body: some View {
-        Spacer()
+//        Spacer()
         VStack(spacing: 0) {
             HStack {
                 VStack(alignment: .leading, spacing: 2) {
@@ -425,6 +421,7 @@ struct DirectionStepsListView: View {
                 }
                 .padding()
             }
+            .background(Color(.systemGray6))
             
             // End button
             Button(action: {
@@ -443,7 +440,6 @@ struct DirectionStepsListView: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color(.systemBackground))
-        .ignoresSafeArea()
     }
 }
 
@@ -478,5 +474,7 @@ struct RoundedCorner: Shape {
 
 #Preview {
     MapView()
-    DirectionsModal(showModal: .constant(true))
+//    DirectionsModal(showModal: .constant(true))
+//        DirectionStepsModal(showStepsModal: .constant(true), showSteps: .constant(true), destinationName: "One Love Bespoke", steps: dummySteps)
+    DirectionStepsListView(showStepsModal: .constant(true), showSteps: .constant(true), destinationName: "One Love Bespoke", steps: dummySteps)
 }

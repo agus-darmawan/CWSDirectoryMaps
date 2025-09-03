@@ -15,8 +15,6 @@ struct DirectionView: View {
     var body: some View {
         ZStack {
             MapView()
-                .ignoresSafeArea()
-                
             VStack {
                 Spacer()
                 
@@ -25,25 +23,30 @@ struct DirectionView: View {
                         showStepsModal = true
                     }
                 }
-                if showStepsModal {
-                    if showSteps {
-                        DirectionStepsListView(
-                            showStepsModal: $showStepsModal,
-                            showSteps: $showSteps,
-                            destinationName: "One Love Bespoke",
-                            steps: dummySteps
-                        )
-                    } else {
-                        DirectionStepsModal(
-                            showStepsModal: $showStepsModal,
-                            showSteps: $showSteps,
-                            destinationName: "One Love Bespoke",
-                            steps: dummySteps
-                        )
-                    }
+                
+                if showStepsModal && !showSteps {
+                    DirectionStepsModal(
+                        showStepsModal: $showStepsModal,
+                        showSteps: $showSteps,
+                        destinationName: "One Love Bespoke",
+                        steps: dummySteps
+                    )
                 }
             }
+            if showStepsModal && showSteps {
+                DirectionStepsListView(
+                    showStepsModal: $showStepsModal,
+                    showSteps: $showSteps,
+                    destinationName: "One Love Bespoke",
+                    steps: dummySteps
+                )
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .background(Color(.systemBackground))
+                .ignoresSafeArea(.all, edges: .bottom)
+            }
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .ignoresSafeArea(.all, edges: .bottom)
     }
 }
 
