@@ -11,13 +11,14 @@ struct HomePageView: View {
     
     @EnvironmentObject var dataManager: DataManager
     
-    @ObservedObject private var viewModel = DirectoryViewModel()
+    @StateObject private var viewModel = DirectoryViewModel()
     @FocusState private var isSearchFieldFocused: Bool
     
     var body: some View {
         NavigationView {
             
             VStack(spacing: 0) {
+            
                 SearchBarView(
                     searchText: $viewModel.searchText,
                     isSearching: $viewModel.isSearching,

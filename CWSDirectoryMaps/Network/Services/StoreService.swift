@@ -137,6 +137,7 @@ class StoreService: ObservableObject {
         if let matchedLocation = mapLocations.first(where: { normalize(name: $0.name) == normalizedFacilityName }) {
             // Construct the full, unique label (e.g., "ground_path_coach-1")
             foundGraphLabel = "\(matchedLocation.floor.fileName)_\(matchedLocation.name)"
+//            print("Matched \(facilityDTO.name) to graph label: \(foundGraphLabel!)")
         }
         // --- End of New Logic ---
 
@@ -152,7 +153,7 @@ class StoreService: ObservableObject {
             phone: facilityDTO.detail?.phone,
             hours: hours,
             detailImageName: facilityDTO.imagePath ?? "store_logo_placeholder",
-            graphLabel: foundGraphLabel // <-- Assign the found label here
+            graphLabel: foundGraphLabel
         )
     }
     

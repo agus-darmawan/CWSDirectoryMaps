@@ -39,15 +39,16 @@ class NetworkManager: ObservableObject {
             request.httpBody = body
         }
         
-        print("🌐 Making API call to: \(url.absoluteString)")
+//        print("🌐 Making API call to: \(url.absoluteString)")
         
         return session.dataTaskPublisher(for: request)
             .tryMap { data, response -> Data in
                 guard let httpResponse = response as? HTTPURLResponse else {
                     throw APIError.networkError
+                    
                 }
                 
-                print("📡 Response status: \(httpResponse.statusCode)")
+//                print("📡 Response status: \(httpResponse.statusCode)")
                 
                 switch httpResponse.statusCode {
                 case 200...299:

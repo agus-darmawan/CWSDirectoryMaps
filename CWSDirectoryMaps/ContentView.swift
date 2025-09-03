@@ -17,7 +17,9 @@ struct ContentView: View {
             .environmentObject(dataManager)
             // 2. When the view appears, start pre-loading all the floor data.
             .task {
+                print("--- Preloading all floor data on app launch ---")
                 await dataManager.preloadAllFloorData()
+                
             }
     }
 }

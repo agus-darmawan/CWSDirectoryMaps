@@ -282,6 +282,7 @@ struct NavigationModalView: View {
                 if navigationState.startLocation != nil,
                    navigationState.endLocation != nil {
                     showDirectionView = true
+                    triggerPathfinding()
                 }
             }) {
                 Text("GO")
@@ -328,5 +329,26 @@ struct NavigationModalView: View {
             destinationText = store.name
             activeField = .startLocation
         }
+    }
+    
+    // In NavigationModalView.swift
+
+    private func triggerPathfinding() {
+        // 1. Safely unwrap the start and end locations.
+        guard let startStore = navigationState.startLocation,
+              let endStore = navigationState.endLocation else {
+            print("Pathfinding failed: Start or end location is missing.")
+            return
+        }
+        
+        print("Start Location: \(String(describing: navigationState.startLocation))")
+        print("End Location: \(String(describing: navigationState.endLocation))")
+
+        // 2. Call the findPath function on the viewModel.
+        //    This will run the A* algorithm and store the result in `viewModel.calculatedPath`.
+        viewModel.findPath(from: startStore, to: endStore)
+
+        // 3. Set the state to true to show the DirectionView with the map.
+        showDirectionView = true
     }
 }

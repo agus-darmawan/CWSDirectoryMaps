@@ -29,10 +29,14 @@ class DirectoryViewModel: ObservableObject {
     @Published var toLocation: String = ""
     @Published var shouldNavigateToDirection = false
     
+    @Published var calculatedPath: [(point: CGPoint, label: String)] = []
+    
     private let storeService = StoreService()
     private var cancellables = Set<AnyCancellable>()
     
-    private var dataManager: DataManager
+    private var hasVerifiedOnce = false
+    
+    var dataManager: DataManager
     
     private let useAPI = APIConfiguration.shared.useAPI
     
@@ -83,6 +87,7 @@ class DirectoryViewModel: ObservableObject {
                     self.allStores = allStores
                     self.debug_checkStoresAgainstMap()
                     print("✅ Loaded and processed \(allStores.count) stores from API.")
+                    
                 }
             )
             .store(in: &cancellables)
@@ -115,11 +120,15 @@ class DirectoryViewModel: ObservableObject {
             loadMockData()
         }
     }
-
+    
     private func debug_checkStoresAgainstMap() {
+        guard !hasVerifiedOnce else { return }   // <--- prevents second run
+        hasVerifiedOnce = true
+        
         if dataManager.allLocations.isEmpty {
             print("[Debug Check] DataManager has no locations. Skipping check.")
             return
+            
         }
         
         print("\n--- [Debug] Normalizing all locations from DataManager ---")
@@ -128,11 +137,11 @@ class DirectoryViewModel: ObservableObject {
         for location in dataManager.allLocations {
             let normalizedName = normalize(name: location.name)
             normalizedMapLocations[normalizedName] = location.name
-            print("  - Original: '\(location.name)' -> Normalized: '\(normalizedName)'")
+            //            print("  - Original: '\(location.name)' -> Normalized: '\(normalizedName)'")
         }
-
+        
         print("\n--- [Debug] Comparing API/mock store list against normalized map data ---")
-
+        
         for store in self.allStores {
             let normalizedStoreName = normalize(name: store.name)
             if let originalMapName = normalizedMapLocations[normalizedStoreName] {
@@ -151,7 +160,7 @@ class DirectoryViewModel: ObservableObject {
         if let range = normalized.range(of: "-\\d+$", options: .regularExpression) {
             normalized.removeSubrange(range)
         }
-
+        
         normalized = normalized.replacingOccurrences(of: " ", with: "")
         normalized = normalized.replacingOccurrences(of: "-", with: "")
         normalized = normalized.replacingOccurrences(of: "_", with: "")
@@ -402,6 +411,50 @@ class DirectoryViewModel: ObservableObject {
     func selectStore(_ store: Store) {
         selectedStore = store
         searchText = store.name
+    }
+    
+    // In DirectoryViewModel.swift
+    
+    func findPath(from startStore: Store, to endStore: Store) {
+        // 1. Get the pre-matched graph labels directly from the store objects.
+        guard let startLabel = startStore.graphLabel,
+              let endLabel = endStore.graphLabel else {
+            print("--- Pathfinding Halted: Start or end store is missing its graphLabel. ---")
+            self.calculatedPath = [] // Clear any old path if labels are missing
+            return
+        }
+        
+        print("\n--- Pathfinding Initiated ---")
+        print("   Start Node: \(startLabel)")
+        print("   End Node:   \(endLabel)")
+        
+        // 2. The unifiedGraph is now ready from the DataManager.
+        let graph = self.dataManager.unifiedGraph
+        guard !graph.isEmpty else {
+            print("   ❌ Error: Unified graph is empty.")
+            return
+        }
+        
+        // 3. Run the A* algorithm on a background thread to keep the UI smooth.
+        Task(priority: .userInitiated) {
+            let pathResult = aStarByLabel(
+                graph: graph,
+                startLabel: startLabel,
+                goalLabel: endLabel
+            )
+            
+            // 4. Switch back to the main thread to update the UI with the result.
+            await MainActor.run {
+                if let foundPath = pathResult {
+                    self.calculatedPath = foundPath
+                    print("   ✅ Path Found with \(foundPath.count) points.")
+                } else {
+                    self.calculatedPath = [] // Clear the path if none was found
+                    print("   ❌ No path could be found between the points.")
+                }
+                print("--------------------------\n")
+            }
+        }
     }
     
     func showDirections(for store: Store) {
