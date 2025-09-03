@@ -128,10 +128,10 @@ struct FloorSelectorView: View {
                 
                 Button("Lower Ground") {
                     print("Manual Lower Ground button pressed")
-                    selectedFloor = .lowerground
-                    onFloorChange(.lowerground)
+                    selectedFloor = .lowerGround
+                    onFloorChange(.lowerGround)
                 }
-                .foregroundColor(selectedFloor == .lowerground ? .yellow : .white)
+                .foregroundColor(selectedFloor == .lowerGround ? .yellow : .white)
             }
             .font(.caption)
         }
