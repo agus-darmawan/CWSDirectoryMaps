@@ -21,20 +21,19 @@ class DataManager: ObservableObject {
     func preloadAllFloorData() async {
         print("Starting to preload all floor data...")
         
-        // This part is fast (just reading files), so it can run first.
+        // Step 1: Load JSONs (raw data per floor)
         var loadedData: [Floor: FloorData] = [:]
         for floor in Floor.allCases {
             if let data = await loadFloorData(for: floor) {
                 loadedData[floor] = data
-                print("Loaded data for \(floor.rawValue)")
+                print("📥 Loaded data for \(floor.rawValue) with \(data.graph.nodes.count) nodes and \(data.locations.count) locations.")
             } else {
-                print("Failed to load data for \(floor.rawValue)")
+                print("⚠️ Failed to load data for \(floor.rawValue)")
             }
         }
         
-        // Run the slow processing on a background thread.
+        // Step 2: Process into unifiedGraph + combinedLocations
         let processedResult = await Task.detached(priority: .userInitiated) {
-            // --- This block runs in the background ---
             let unifiedGraph = self.buildUnifiedGraph(from: loadedData)
             
             var combinedLocations: [Location] = []
@@ -45,19 +44,24 @@ class DataManager: ObservableObject {
             }
             let sortedLocations = Array(Set(combinedLocations)).sorted { $0.name < $1.name }
             
-            // Return a tuple containing both results.
-            return (graph: unifiedGraph, locations: sortedLocations)
-        }.value // .value waits for the background task to finish and gets the result.
+            return (graph: unifiedGraph, locations: sortedLocations, floorData: loadedData)
+        }.value
         
-        // Now, switch back to the main thread to update the UI.
+        // Step 3: Assign back to main thread
         await MainActor.run {
             self.unifiedGraph = processedResult.graph
             self.allLocations = processedResult.locations
-            self.isLoading = false // This will hide the loading screen.
-            print("✅ Unified graph built with \(self.unifiedGraph.count) nodes.")
+            self.floorData = processedResult.floorData
+            self.isLoading = false
+            
+            print("✅ Unified graph built with \(self.unifiedGraph.count) nodes total.")
+            for (floor, data) in self.floorData {
+                print("   • \(floor.rawValue): \(data.graph.nodes.count) nodes, \(data.locations.count) locations")
+            }
             print("✅ All floor data preloaded. \(self.allLocations.count) total locations available.")
         }
     }
+
     
     func getFloorData(for floor: Floor) -> FloorData? {
         return floorData[floor]
@@ -77,7 +81,7 @@ class DataManager: ObservableObject {
         return FloorData(graph: processedGraph, locations: locations)
     }
     
-    private func processGraph(_ graph: Graph) -> Graph {
+    func processGraph(_ graph: Graph) -> Graph {
         let xs = graph.nodes.map { $0.x }
         guard let minX = xs.min() else { return graph }
         let offsetX = minX < 0 ? -minX : 0
@@ -102,7 +106,7 @@ class DataManager: ObservableObject {
         return Graph(metadata: graph.metadata, nodes: normalizedNodes, edges: graph.edges)
     }
     
-    private func extractLocations(from graph: Graph) -> [String] {
+    func extractLocations(from graph: Graph) -> [String] {
         return Set(graph.nodes
             .filter { $0.type == "ellipse-center" || $0.type == "circle-center" || $0.type == "rect-corner" }
             .compactMap { $0.parentLabel ?? $0.label }
@@ -112,7 +116,7 @@ class DataManager: ObservableObject {
     // In DataManager.swift
 
     // This function now takes data as an argument and returns the result.
-    private func buildUnifiedGraph(from floorData: [Floor: FloorData]) -> [String: GraphNode] {
+    func buildUnifiedGraph(from floorData: [Floor: FloorData]) -> [String: GraphNode] {
         print("Building unified graph...")
         var combinedGraph: [String: GraphNode] = [:]
         var connectionNodes: [String: [GraphNode]] = [:]

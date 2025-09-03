@@ -20,6 +20,8 @@ struct NavigationModalView: View {
     
     private let selectedStore: Store
     
+    @State private var path: [(CGPoint, String)] = []
+    
     enum ActiveField {
         case startLocation
         case destination
@@ -39,6 +41,7 @@ struct NavigationModalView: View {
         self.viewModel = viewModel
         self._isPresented = isPresented
         self.selectedStore = selectedStore
+        self.path = []
         
         var initialState = NavigationState(startLocation: nil, endLocation: nil, mode: mode)
         initialState.setLocation(selectedStore, for: mode)
@@ -120,12 +123,21 @@ struct NavigationModalView: View {
                         Spacer()
                         
                         Button(action: {
+                            // Close NavigationModal
                             isPresented = false
+
+                            // Reset start/destination locations
+                            navigationState.startLocation = nil
+                            navigationState.endLocation = nil
+                            
+                            // Also close the DirectionView if it's open
+                            showDirectionView = false
                         }) {
                             Image(systemName: "xmark.circle.fill")
                                 .font(.title2)
                                 .foregroundColor(.secondary)
                         }
+
                     }
                     .padding(.horizontal)
                     .padding(.bottom, 20)
@@ -144,10 +156,13 @@ struct NavigationModalView: View {
             Text("Starting location and destination cannot be the same. Please select a different location.")
         }
         .fullScreenCover(isPresented: $showDirectionView) {
-            DirectionView(
-                startLocation: navigationState.startLocation!,
-                destinationStore: navigationState.endLocation!
-            )
+            if let start = navigationState.startLocation,
+               let end = navigationState.endLocation {
+                DirectionView(
+                    startLocation: navigationState.startLocation!,
+                    destinationStore: navigationState.endLocation!,
+                )
+            }
         }
     }
     
@@ -282,7 +297,6 @@ struct NavigationModalView: View {
                 if navigationState.startLocation != nil,
                    navigationState.endLocation != nil {
                     showDirectionView = true
-                    triggerPathfinding()
                 }
             }) {
                 Text("GO")
@@ -309,6 +323,10 @@ struct NavigationModalView: View {
             }
             .listStyle(.plain)
         }
+        .onReceive(viewModel.$calculatedPath) { newPath in
+            path = newPath
+            print("Paths updated: \(path)")
+        }
     }
     
     private func selectLocation(_ store: Store) {
@@ -329,26 +347,5 @@ struct NavigationModalView: View {
             destinationText = store.name
             activeField = .startLocation
         }
-    }
-    
-    // In NavigationModalView.swift
-
-    private func triggerPathfinding() {
-        // 1. Safely unwrap the start and end locations.
-        guard let startStore = navigationState.startLocation,
-              let endStore = navigationState.endLocation else {
-            print("Pathfinding failed: Start or end location is missing.")
-            return
-        }
-        
-        print("Start Location: \(String(describing: navigationState.startLocation))")
-        print("End Location: \(String(describing: navigationState.endLocation))")
-
-        // 2. Call the findPath function on the viewModel.
-        //    This will run the A* algorithm and store the result in `viewModel.calculatedPath`.
-        viewModel.findPath(from: startStore, to: endStore)
-
-        // 3. Set the state to true to show the DirectionView with the map.
-        showDirectionView = true
     }
 }

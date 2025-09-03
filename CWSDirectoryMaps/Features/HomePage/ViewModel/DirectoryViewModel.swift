@@ -413,50 +413,6 @@ class DirectoryViewModel: ObservableObject {
         searchText = store.name
     }
     
-    // In DirectoryViewModel.swift
-    
-    func findPath(from startStore: Store, to endStore: Store) {
-        // 1. Get the pre-matched graph labels directly from the store objects.
-        guard let startLabel = startStore.graphLabel,
-              let endLabel = endStore.graphLabel else {
-            print("--- Pathfinding Halted: Start or end store is missing its graphLabel. ---")
-            self.calculatedPath = [] // Clear any old path if labels are missing
-            return
-        }
-        
-        print("\n--- Pathfinding Initiated ---")
-        print("   Start Node: \(startLabel)")
-        print("   End Node:   \(endLabel)")
-        
-        // 2. The unifiedGraph is now ready from the DataManager.
-        let graph = self.dataManager.unifiedGraph
-        guard !graph.isEmpty else {
-            print("   ❌ Error: Unified graph is empty.")
-            return
-        }
-        
-        // 3. Run the A* algorithm on a background thread to keep the UI smooth.
-        Task(priority: .userInitiated) {
-            let pathResult = aStarByLabel(
-                graph: graph,
-                startLabel: startLabel,
-                goalLabel: endLabel
-            )
-            
-            // 4. Switch back to the main thread to update the UI with the result.
-            await MainActor.run {
-                if let foundPath = pathResult {
-                    self.calculatedPath = foundPath
-                    print("   ✅ Path Found with \(foundPath.count) points.")
-                } else {
-                    self.calculatedPath = [] // Clear the path if none was found
-                    print("   ❌ No path could be found between the points.")
-                }
-                print("--------------------------\n")
-            }
-        }
-    }
-    
     func showDirections(for store: Store) {
         selectedStoreForDirection = store
         showDirectionModal = true
