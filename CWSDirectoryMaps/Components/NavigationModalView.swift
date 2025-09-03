@@ -16,6 +16,9 @@ struct NavigationModalView: View {
     @State private var selectedCategory: StoreCategory? = nil
     @State private var showingSameLocationAlert: Bool = false
     @State private var activeField: ActiveField? = nil
+    @State private var showDirectionView: Bool = false
+    
+    private let selectedStore: Store
     
     enum ActiveField {
         case startLocation
@@ -35,6 +38,7 @@ struct NavigationModalView: View {
     init(viewModel: DirectoryViewModel, isPresented: Binding<Bool>, selectedStore: Store, mode: NavigationMode) {
         self.viewModel = viewModel
         self._isPresented = isPresented
+        self.selectedStore = selectedStore
         
         var initialState = NavigationState(startLocation: nil, endLocation: nil, mode: mode)
         initialState.setLocation(selectedStore, for: mode)
@@ -138,6 +142,26 @@ struct NavigationModalView: View {
             Button("OK") { }
         } message: {
             Text("Starting location and destination cannot be the same. Please select a different location.")
+        }
+        .fullScreenCover(isPresented: $showDirectionView) {
+            if let start = navigationState.startLocation,
+               let end = navigationState.endLocation {
+                DirectionView(
+                    startLocation: start,
+                    destinationStore: end
+                )
+            } else {
+                EmptyView()
+            }
+        }
+    }
+    
+    private func checkAndNavigateToDirection() {
+        if navigationState.startLocation != nil && navigationState.endLocation != nil {
+            // Small delay to ensure UI updates smoothly
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                showDirectionView = true
+            }
         }
     }
     

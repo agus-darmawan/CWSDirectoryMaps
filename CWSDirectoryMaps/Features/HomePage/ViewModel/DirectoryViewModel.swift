@@ -22,6 +22,13 @@ class DirectoryViewModel: ObservableObject {
     
     @Published var selectedStore: Store? = nil
     
+    @Published var showDirectionModal = false
+    @Published var selectedStoreForDirection: Store?
+    
+    @Published var fromLocation: String = ""
+    @Published var toLocation: String = ""
+    @Published var shouldNavigateToDirection = false
+    
     private let storeService = StoreService()
     private var cancellables = Set<AnyCancellable>()
     
@@ -398,5 +405,16 @@ class DirectoryViewModel: ObservableObject {
     func selectStore(_ store: Store) {
         selectedStore = store
         searchText = store.name
+    }
+    
+    func showDirections(for store: Store) {
+        selectedStoreForDirection = store
+        showDirectionModal = true
+    }
+    
+    func navigateToDirection() {
+        if !fromLocation.isEmpty && !toLocation.isEmpty {
+            shouldNavigateToDirection = true
+        }
     }
 }

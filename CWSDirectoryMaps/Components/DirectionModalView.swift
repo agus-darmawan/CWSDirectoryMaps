@@ -113,6 +113,8 @@ struct ZoomableScrollView<Content: View>: View {
 }
 
 struct DirectionsModal: View {
+    @State var destinationStore: Store
+    @State var startLocation: Store
     @Binding var showModal: Bool
     @State private var selectedMode: String = "walk"
     var onGoTapped: (() -> Void)?
@@ -189,22 +191,22 @@ struct DirectionsModal: View {
                     // from-to
                     ZStack {
                         VStack(spacing: 0) {
-                            //from
+                            // from
                             HStack {
                                 Image(systemName: "location.circle.fill")
                                     .foregroundColor(.blue)
-                                Text("Skechers")
+                                Text(startLocation.name)
                                     .foregroundColor(.primary)
                                 Spacer()
                             }
                             .padding(8)
                             .background(Color(.secondarySystemBackground))
                             
-                            //to
+                            // to
                             HStack {
                                 Image(systemName: "mappin.circle.fill")
                                     .foregroundColor(.red)
-                                Text("One Love Bespoke")
+                                Text(destinationStore.name)
                                     .foregroundColor(.primary)
                                 Spacer()
                             }
@@ -222,7 +224,7 @@ struct DirectionsModal: View {
                                 HStack {
                                     Spacer()
                                     Button(action: {
-                                        print("Swap tapped")
+                                        swap(&startLocation, &destinationStore)
                                     }) {
                                         Image(systemName: "arrow.up.arrow.down")
                                             .foregroundColor(.blue)
@@ -263,7 +265,7 @@ struct DirectionStepsModal: View {
     @Binding var showStepsModal: Bool
     @Binding var showSteps: Bool
     
-    let destinationName: String
+    let destinationStore: Store
     let steps: [DirectionStep]
     @State private var currentStepIndex: Int = 0
     
@@ -276,7 +278,7 @@ struct DirectionStepsModal: View {
                     HStack {
                         VStack(alignment: .leading, spacing: 2) {
                             HStack {
-                                Text("To  \(destinationName)")
+                                Text("To  \(destinationStore.name)")
                                     .font(.title3)
                                     .bold()
                             }
@@ -362,15 +364,15 @@ struct DirectionStepsListView: View {
     @Binding var showStepsModal: Bool
     @Binding var showSteps: Bool
     
-    let destinationName: String
+    let destinationStore: Store
     let steps: [DirectionStep]
     
     var body: some View {
-//        Spacer()
+        //        Spacer()
         VStack(spacing: 0) {
             HStack {
                 VStack(alignment: .leading, spacing: 2) {
-                    Text("To \(destinationName)")
+                    Text("To \(destinationStore.name)")
                         .font(.title3)
                         .bold()
                     Text("200m – 4 mins")
@@ -474,7 +476,7 @@ struct RoundedCorner: Shape {
 
 #Preview {
     MapView()
-//    DirectionsModal(showModal: .constant(true))
-//        DirectionStepsModal(showStepsModal: .constant(true), showSteps: .constant(true), destinationName: "One Love Bespoke", steps: dummySteps)
-    DirectionStepsListView(showStepsModal: .constant(true), showSteps: .constant(true), destinationName: "One Love Bespoke", steps: dummySteps)
+    //    DirectionsModal(showModal: .constant(true))
+    //        DirectionStepsModal(showStepsModal: .constant(true), showSteps: .constant(true), destinationName: "One Love Bespoke", steps: dummySteps)
+    //    DirectionStepsListView(showStepsModal: .constant(true), showSteps: .constant(true), destinationName: "One Love Bespoke", steps: dummySteps)
 }

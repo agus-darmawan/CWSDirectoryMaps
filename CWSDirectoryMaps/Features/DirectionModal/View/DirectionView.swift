@@ -8,6 +8,9 @@
 import SwiftUI
 
 struct DirectionView: View {
+    let startLocation: Store
+    let destinationStore: Store
+    
     @State private var showDirectionsModal = true
     @State private var showStepsModal = false
     @State private var showSteps = false
@@ -15,11 +18,17 @@ struct DirectionView: View {
     var body: some View {
         ZStack {
             MapView()
+            
             VStack {
                 Spacer()
                 
                 if showDirectionsModal {
-                    DirectionsModal(showModal: $showDirectionsModal) {
+                    DirectionsModal(
+                        destinationStore: destinationStore,
+                        startLocation: startLocation,
+                        showModal: $showDirectionsModal
+                    ) {
+                        showDirectionsModal = false
                         showStepsModal = true
                     }
                 }
@@ -28,16 +37,17 @@ struct DirectionView: View {
                     DirectionStepsModal(
                         showStepsModal: $showStepsModal,
                         showSteps: $showSteps,
-                        destinationName: "One Love Bespoke",
+                        destinationStore: destinationStore,
                         steps: dummySteps
                     )
                 }
             }
+            
             if showStepsModal && showSteps {
                 DirectionStepsListView(
                     showStepsModal: $showStepsModal,
                     showSteps: $showSteps,
-                    destinationName: "One Love Bespoke",
+                    destinationStore: destinationStore,
                     steps: dummySteps
                 )
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -51,5 +61,32 @@ struct DirectionView: View {
 }
 
 #Preview {
-    DirectionView()
+
+    let start = Store(
+        name: "Main Lobby",
+        category: .facilities,
+        imageName: "store_logo_placeholder",
+        subcategory: "Information Center",
+        description: "",
+        location: "Ground Floor, Central",
+        website: nil,
+        phone: nil,
+        hours: "06:00AM - 12:00AM",
+        detailImageName: "store_logo_placeholder"
+    )
+    
+    let dest = Store(
+        name: "One Love Bespoke",
+        category: .shop,
+        imageName: "store_logo_placeholder",
+        subcategory: "Fashion, Watches & Jewelry",
+        description: "",
+        location: "Level 1, Unit 116",
+        website: nil,
+        phone: nil,
+        hours: "10:00AM - 10:00PM",
+        detailImageName: "store_logo_placeholder"
+    )
+    
+    return DirectionView(startLocation: start, destinationStore: dest)
 }
