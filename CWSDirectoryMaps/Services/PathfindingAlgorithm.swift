@@ -81,7 +81,7 @@ func aStarByLabel(graph: [String: GraphNode], startLabel: String, goalLabel: Str
                 }
                 
                 // Check if we're already using 2 storepaths and this is a new one
-                if usedStorepaths.count >= 2 && !usedStorepaths.contains(storepathBase) {
+                if usedStorepaths.count >= 3 && !usedStorepaths.contains(storepathBase) {
                     print("❌ Blocking storepath \(storepathBase): already using 2 storepaths \(usedStorepaths)")
                     continue // Block: already using 2 different storepaths
                 }
