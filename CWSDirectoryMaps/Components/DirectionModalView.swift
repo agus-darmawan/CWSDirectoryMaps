@@ -116,6 +116,7 @@ struct DirectionsModal: View {
     @State var destinationStore: Store
     @State var startLocation: Store
     @Binding var showModal: Bool
+    @Binding var showNavigationModal: Bool
     @State private var selectedMode: String = "walk"
     var onGoTapped: (() -> Void)?
     
@@ -146,7 +147,10 @@ struct DirectionsModal: View {
                         }
                         Spacer()
                         
-                        Button(action: { showModal = false }) {
+                        Button(action: {
+                            showModal = false
+                            showNavigationModal = true
+                        }) {
                             Image(systemName: "xmark.circle.fill")
                                 .font(.title2)
                                 .foregroundColor(.secondary)
@@ -474,33 +478,33 @@ struct RoundedCorner: Shape {
     }
 }
 
-#Preview {
-    
-    let start = Store(
-        name: "Main Lobby",
-        category: .facilities,
-        imageName: "store_logo_placeholder",
-        subcategory: "Information Center",
-        description: "",
-        location: "Ground Floor, Central",
-        website: nil,
-        phone: nil,
-        hours: "06:00AM - 12:00AM",
-        detailImageName: "store_logo_placeholder"
-    )
-    
-    let dest = Store(
-        name: "One Love Bespoke",
-        category: .shop,
-        imageName: "store_logo_placeholder",
-        subcategory: "Fashion, Watches & Jewelry",
-        description: "",
-        location: "Level 1, Unit 116",
-        website: nil,
-        phone: nil,
-        hours: "10:00AM - 10:00PM",
-        detailImageName: "store_logo_placeholder"
-    )
-    MapView()
-    DirectionsModal(destinationStore: dest, startLocation: start, showModal: .constant(true))
-}
+//#Preview {
+//    
+//    let start = Store(
+//        name: "Main Lobby",
+//        category: .facilities,
+//        imageName: "store_logo_placeholder",
+//        subcategory: "Information Center",
+//        description: "",
+//        location: "Ground Floor, Central",
+//        website: nil,
+//        phone: nil,
+//        hours: "06:00AM - 12:00AM",
+//        detailImageName: "store_logo_placeholder"
+//    )
+//    
+//    let dest = Store(
+//        name: "One Love Bespoke",
+//        category: .shop,
+//        imageName: "store_logo_placeholder",
+//        subcategory: "Fashion, Watches & Jewelry",
+//        description: "",
+//        location: "Level 1, Unit 116",
+//        website: nil,
+//        phone: nil,
+//        hours: "10:00AM - 10:00PM",
+//        detailImageName: "store_logo_placeholder"
+//    )
+//    MapView()
+//    DirectionsModal(destinationStore: dest, startLocation: start, showModal: .constant(true))
+//}

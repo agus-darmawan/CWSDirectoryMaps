@@ -18,6 +18,7 @@ struct DirectionView: View {
     @State private var showDirectionsModal = true
     @State private var showStepsModal = false
     @State private var showSteps = false
+    @State private var showNavigationModal = false
     
     
     @State var pathWithLabels: [(point: CGPoint, label: String)] = []
@@ -46,7 +47,8 @@ struct DirectionView: View {
                     DirectionsModal(
                         destinationStore: destinationStore,
                         startLocation: startLocation,
-                        showModal: $showDirectionsModal
+                        showModal: $showDirectionsModal,
+                        showNavigationModal: $showNavigationModal
                     ) {
                         showDirectionsModal = false
                         showStepsModal = true
@@ -84,6 +86,14 @@ struct DirectionView: View {
             // Update local state whenever the manager publishes a new path
             self.pathWithLabels = newPath
         }
+        .sheet(isPresented: $showNavigationModal) {
+                    NavigationModalView(
+                        viewModel: DirectoryViewModel(),
+                        isPresented: $showNavigationModal,
+                        selectedStore: destinationStore,
+                        mode: .toHere
+                    )
+                }
     }
     
     private func runPathfinding() {
@@ -119,7 +129,7 @@ struct DirectionView: View {
 //        hours: "06:00AM - 12:00AM",
 //        detailImageName: "store_logo_placeholder"
 //    )
-//    
+//
 //    let dest = Store(
 //        name: "One Love Bespoke",
 //        category: .shop,
@@ -132,6 +142,6 @@ struct DirectionView: View {
 //        hours: "10:00AM - 10:00PM",
 //        detailImageName: "store_logo_placeholder"
 //    )
-//    
+//
 //    return DirectionView(startLocation: start, destinationStore: dest)
 //}
