@@ -19,6 +19,7 @@ struct SearchBarView: View {
             HStack {
                 Image(systemName: "magnifyingglass")
                     .foregroundColor(.secondary)
+                    .accessibilityHidden(true)
                 
                 TextField("Search stores, exits, etc", text: $searchText)
                     .focused(isSearchFieldFocused)
@@ -27,17 +28,22 @@ struct SearchBarView: View {
                             isSearching = true
                         }
                     }
+                    .accessibilityLabel("Search field")
+                    .accessibilityHint("Tap to search for stores, restaurants, or facilities")
                 
                 if !searchText.isEmpty {
                     Button(action: onClear) {
                         Image(systemName: "xmark.circle.fill")
                             .foregroundColor(.secondary)
                     }
+                    .accessibilityLabel("Clear search")
+                    .accessibilityHint("Tap to clear search text")
                 }
             }
             .padding(12)
             .background(Color(.systemGray6))
             .cornerRadius(12)
+            .contentShape(Rectangle())
             
             if isSearching {
                 Button(action: {
@@ -45,10 +51,12 @@ struct SearchBarView: View {
                         onCloseSearch()
                     }
                 }) {
-                    Image(systemName: "xmark.circle.fill")
-                        .foregroundColor(.secondary)
-                        .font(.system(size: 24, weight: .medium))
+                    Text("Cancel")
+                        .font(.system(size: 17, weight: .regular))
+                        .foregroundColor(.blue)
                 }
+                .accessibilityLabel("Cancel search")
+                .accessibilityHint("Tap to close search and return to map view")
             }
         }
     }
