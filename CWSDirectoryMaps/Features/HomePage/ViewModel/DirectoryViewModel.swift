@@ -29,19 +29,31 @@ class DirectoryViewModel: ObservableObject {
     @Published var toLocation: String = ""
     @Published var shouldNavigateToDirection = false
     
+    @Published var calculatedPath: [(point: CGPoint, label: String)] = []
+    
     private let storeService = StoreService()
     private var cancellables = Set<AnyCancellable>()
     
+    private var hasVerifiedOnce = false
+    
+    var dataManager: DataManager
     
     private let useAPI = APIConfiguration.shared.useAPI
     
     init() {
+        self.dataManager = DataManager()
         if useAPI {
             loadStoresFromAPI()
         } else {
             loadMockData()
         }
         setupFiltering()
+    }
+    
+    func setup(dataManager: DataManager) {
+        self.dataManager = dataManager
+        // Optionally refresh data after setting up with the shared dataManager
+        refreshData()
     }
     
     private func loadStoresFromAPI() {
@@ -64,13 +76,18 @@ class DirectoryViewModel: ObservableObject {
                     
                     var allStores: [Store] = []
                     
+                    // Pass the dataManager.allLocations to the conversion function.
+                    let mapLocations = dataManager.allLocations
+                    
                     for facilityWithDetails in facilitiesWithDetails {
-                        let store = self.storeService.convertFacilityWithDetailsToStore(facilityWithDetails)
+                        let store = self.storeService.convertFacilityWithDetailsToStore(facilityWithDetails, mapLocations: mapLocations)
                         allStores.append(store)
                     }
                     
                     self.allStores = allStores
-                    print("✅ Loaded \(allStores.count) stores from API (Facilities with details: \(facilitiesWithDetails.count))")
+                    self.debug_checkStoresAgainstMap()
+                    print("✅ Loaded and processed \(allStores.count) stores from API.")
+                    
                 }
             )
             .store(in: &cancellables)
@@ -83,6 +100,7 @@ class DirectoryViewModel: ObservableObject {
         
         isLoading = true
         errorMessage = nil
+        
         
         let filtered = allStores.filter { store in
             store.name.lowercased().contains(query.lowercased())
@@ -101,6 +119,54 @@ class DirectoryViewModel: ObservableObject {
         } else {
             loadMockData()
         }
+    }
+    
+    private func debug_checkStoresAgainstMap() {
+        guard !hasVerifiedOnce else { return }   // <--- prevents second run
+        hasVerifiedOnce = true
+        
+        if dataManager.allLocations.isEmpty {
+            print("[Debug Check] DataManager has no locations. Skipping check.")
+            return
+            
+        }
+        
+        print("\n--- [Debug] Normalizing all locations from DataManager ---")
+        
+        var normalizedMapLocations: [String: String] = [:]
+        for location in dataManager.allLocations {
+            let normalizedName = normalize(name: location.name)
+            normalizedMapLocations[normalizedName] = location.name
+            //            print("  - Original: '\(location.name)' -> Normalized: '\(normalizedName)'")
+        }
+        
+        print("\n--- [Debug] Comparing API/mock store list against normalized map data ---")
+        
+        for store in self.allStores {
+            let normalizedStoreName = normalize(name: store.name)
+            if let originalMapName = normalizedMapLocations[normalizedStoreName] {
+                print("  ✅ Match Found: Store '\(store.name)' (as '\(normalizedStoreName)') matches map location '\(originalMapName)'.")
+            } else {
+                print("  ❌ MISSING: Store '\(store.name)' (as '\(normalizedStoreName)') was NOT found in the normalized map locations.")
+            }
+        }
+        
+        print("--- [Debug Check] Verification complete ---\n")
+    }
+    
+    private func normalize(name: String) -> String {
+        var normalized = name.lowercased()
+        
+        if let range = normalized.range(of: "-\\d+$", options: .regularExpression) {
+            normalized.removeSubrange(range)
+        }
+        
+        normalized = normalized.replacingOccurrences(of: " ", with: "")
+        normalized = normalized.replacingOccurrences(of: "-", with: "")
+        normalized = normalized.replacingOccurrences(of: "_", with: "")
+        normalized = normalized.replacingOccurrences(of: "&", with: "")
+        
+        return normalized
     }
     
     private func loadMockData() {
@@ -166,18 +232,6 @@ class DirectoryViewModel: ObservableObject {
                 detailImageName: "store_logo_placeholder"
             ),
             Store(
-                name: "Amazing Express",
-                category: .play,
-                imageName: "store_logo_placeholder",
-                subcategory: "Family Entertainment",
-                description: "Amazing Express offers thrilling rides and family-friendly entertainment experiences for visitors of all ages.",
-                location: "Level 2, Unit 201",
-                website: nil,
-                phone: "+62 21 5678 9012",
-                hours: "10:00AM - 10:00PM",
-                detailImageName: "store_logo_placeholder"
-            ),
-            Store(
                 name: "Starbucks",
                 category: .fnb,
                 imageName: "store_logo_placeholder",
@@ -202,18 +256,6 @@ class DirectoryViewModel: ObservableObject {
                 detailImageName: "store_logo_placeholder"
             ),
             Store(
-                name: "Cinema XXI",
-                category: .play,
-                imageName: "store_logo_placeholder",
-                subcategory: "Movies & Entertainment",
-                description: "Cinema XXI provides the latest movie releases with premium sound and visual technology for the ultimate cinema experience.",
-                location: "Level 3, Unit 301",
-                website: "https://21cineplex.com",
-                phone: "+62 21 8901 2345",
-                hours: "10:00AM - 12:00AM",
-                detailImageName: "store_logo_placeholder"
-            ),
-            Store(
                 name: "ATM Center",
                 category: .others,
                 imageName: "store_logo_placeholder",
@@ -227,8 +269,20 @@ class DirectoryViewModel: ObservableObject {
             ),
             // New Facility entries
             Store(
-                name: "North Entrance",
-                category: .entrances,
+                name: "Main Lobby",
+                category: .lobbies,
+                imageName: "store_logo_placeholder",
+                subcategory: "Information Center",
+                description: "",
+                location: "Ground Floor, Central",
+                website: nil,
+                phone: nil,
+                hours: "06:00AM - 12:00AM",
+                detailImageName: "store_logo_placeholder"
+            ),
+            Store(
+                name: "North Entrance Lobby",
+                category: .lobbies,
                 imageName: "store_logo_placeholder",
                 subcategory: "Main Entrance",
                 description: "",
@@ -239,8 +293,8 @@ class DirectoryViewModel: ObservableObject {
                 detailImageName: "store_logo_placeholder"
             ),
             Store(
-                name: "South Entrance",
-                category: .entrances,
+                name: "South Entrance Lobby",
+                category: .lobbies,
                 imageName: "store_logo_placeholder",
                 subcategory: "Main Entrance",
                 description: "",
@@ -248,18 +302,6 @@ class DirectoryViewModel: ObservableObject {
                 website: nil,
                 phone: nil,
                 hours: "24 Hours",
-                detailImageName: "store_logo_placeholder"
-            ),
-            Store(
-                name: "Main Lobby",
-                category: .facilities,
-                imageName: "store_logo_placeholder",
-                subcategory: "Information Center",
-                description: "",
-                location: "Ground Floor, Central",
-                website: nil,
-                phone: nil,
-                hours: "06:00AM - 12:00AM",
                 detailImageName: "store_logo_placeholder"
             ),
             Store(
@@ -284,42 +326,6 @@ class DirectoryViewModel: ObservableObject {
                 website: nil,
                 phone: nil,
                 hours: "06:00AM - 12:00AM",
-                detailImageName: "store_logo_placeholder"
-            ),
-            Store(
-                name: "Emergency Exit A",
-                category: .entrances,
-                imageName: "store_logo_placeholder",
-                subcategory: "Emergency Exit",
-                description: "",
-                location: "Level 1, West Wing",
-                website: nil,
-                phone: nil,
-                hours: "24 Hours",
-                detailImageName: "store_logo_placeholder"
-            ),
-            Store(
-                name: "Emergency Exit B",
-                category: .entrances,
-                imageName: "store_logo_placeholder",
-                subcategory: "Emergency Exit",
-                description: "",
-                location: "Level 2, East Wing",
-                website: nil,
-                phone: nil,
-                hours: "24 Hours",
-                detailImageName: "store_logo_placeholder"
-            ),
-            Store(
-                name: "Parking Entrance",
-                category: .entrances,
-                imageName: "store_logo_placeholder",
-                subcategory: "Vehicle Access",
-                description: "",
-                location: "Basement Level",
-                website: nil,
-                phone: nil,
-                hours: "24 Hours",
                 detailImageName: "store_logo_placeholder"
             ),
             Store(

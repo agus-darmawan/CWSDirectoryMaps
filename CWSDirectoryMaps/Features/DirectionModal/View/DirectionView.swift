@@ -8,6 +8,10 @@
 import SwiftUI
 
 struct DirectionView: View {
+    
+    @EnvironmentObject var dataManager: DataManager
+    @StateObject var pathfindingManager = PathfindingManager() // make it a StateObject so it can publish changes
+    
     let startLocation: Store
     @State var destinationStore: Store
     
@@ -15,11 +19,27 @@ struct DirectionView: View {
     @State private var showStepsModal = false
     @State private var showSteps = false
     
+    
+    @State var pathWithLabels: [(point: CGPoint, label: String)] = []
+    
     var body: some View {
         ZStack {
             
             VStack {
-                IntegratedMapView()
+                if pathWithLabels.isEmpty {
+                    // Show a loading indicator while path is being calculated
+                    ProgressView("Calculating route...")
+                        .progressViewStyle(CircularProgressViewStyle(tint: .blue))
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                } else {
+                    // Show the map only when path is ready
+                    IntegratedMapView(
+                        dataManager: dataManager,
+                        pathWithLabels: $pathWithLabels,
+                        pathfindingManager: pathfindingManager
+                    )
+                    .transition(.opacity)
+                }
                 Spacer()
                 
                 if showDirectionsModal {
@@ -57,36 +77,61 @@ struct DirectionView: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .ignoresSafeArea(.all, edges: .bottom)
+        .onAppear {
+            runPathfinding()
+        }
+        .onReceive(pathfindingManager.$pathWithLabels) { newPath in
+            // Update local state whenever the manager publishes a new path
+            self.pathWithLabels = newPath
+        }
+    }
+    
+    private func runPathfinding() {
+        guard let startLabel = startLocation.graphLabel,
+              let endLabel = destinationStore.graphLabel else {
+            print("Missing graph labels, cannot pathfind")
+            return
+        }
+        
+        let unifiedGraph = dataManager.unifiedGraph
+        
+        pathfindingManager.runPathfinding(
+            startStore: startLocation,
+            endStore: destinationStore,
+            unifiedGraph: unifiedGraph
+        )
     }
 }
 
-#Preview {
 
-    let start = Store(
-        name: "Main Lobby",
-        category: .facilities,
-        imageName: "store_logo_placeholder",
-        subcategory: "Information Center",
-        description: "",
-        location: "Ground Floor, Central",
-        website: nil,
-        phone: nil,
-        hours: "06:00AM - 12:00AM",
-        detailImageName: "store_logo_placeholder"
-    )
-    
-    let dest = Store(
-        name: "One Love Bespoke",
-        category: .shop,
-        imageName: "store_logo_placeholder",
-        subcategory: "Fashion, Watches & Jewelry",
-        description: "",
-        location: "Level 1, Unit 116",
-        website: nil,
-        phone: nil,
-        hours: "10:00AM - 10:00PM",
-        detailImageName: "store_logo_placeholder"
-    )
-    
-    return DirectionView(startLocation: start, destinationStore: dest)
-}
+
+//#Preview {
+//
+//    let start = Store(
+//        name: "Main Lobby",
+//        category: .facilities,
+//        imageName: "store_logo_placeholder",
+//        subcategory: "Information Center",
+//        description: "",
+//        location: "Ground Floor, Central",
+//        website: nil,
+//        phone: nil,
+//        hours: "06:00AM - 12:00AM",
+//        detailImageName: "store_logo_placeholder"
+//    )
+//    
+//    let dest = Store(
+//        name: "One Love Bespoke",
+//        category: .shop,
+//        imageName: "store_logo_placeholder",
+//        subcategory: "Fashion, Watches & Jewelry",
+//        description: "",
+//        location: "Level 1, Unit 116",
+//        website: nil,
+//        phone: nil,
+//        hours: "10:00AM - 10:00PM",
+//        detailImageName: "store_logo_placeholder"
+//    )
+//    
+//    return DirectionView(startLocation: start, destinationStore: dest)
+//}

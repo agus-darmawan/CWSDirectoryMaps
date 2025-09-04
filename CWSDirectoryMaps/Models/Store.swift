@@ -10,10 +10,9 @@ import Foundation
 enum StoreCategory: String, CaseIterable, Identifiable, Codable {
     case shop = "Shop"
     case fnb = "F&B"
-    case play = "Play"
     case others = "Others"
     case facilities = "Facilities"
-    case entrances = "Entrances"
+    case lobbies = "Lobbies"
     
     var id: String { self.rawValue }
 }
@@ -30,9 +29,10 @@ struct Store: Identifiable, Codable {
     let phone: String?
     let hours: String
     let detailImageName: String
+    var graphLabel: String?
     
     var isFacility: Bool {
-        return category == .facilities || category == .entrances
+        return category == .facilities || category == .lobbies
     }
     
     enum CodingKeys: String, CodingKey {
@@ -49,7 +49,7 @@ struct Store: Identifiable, Codable {
         case detailImageName
     }
     
-    init(id: String = UUID().uuidString, name: String, category: StoreCategory, imageName: String, subcategory: String, description: String, location: String, website: String?, phone: String?, hours: String, detailImageName: String) {
+    init(id: String = UUID().uuidString, name: String, category: StoreCategory, imageName: String, subcategory: String, description: String, location: String, website: String?, phone: String?, hours: String, detailImageName: String, graphLabel: String? = nil) { // <-- Add graphLabel here
         self.id = id
         self.name = name
         self.category = category
@@ -61,5 +61,6 @@ struct Store: Identifiable, Codable {
         self.phone = phone
         self.hours = hours
         self.detailImageName = detailImageName
+        self.graphLabel = graphLabel // <-- And assign it here
     }
 }

@@ -9,9 +9,13 @@
 import SwiftUI
 
 struct IntegratedMapView: View {
-    @StateObject private var dataManager = DataManager()
+    
+    @ObservedObject var dataManager: DataManager
+    @Binding var pathWithLabels: [(point: CGPoint, label: String)]
     @StateObject private var mapViewManager = MapViewManager()
-    @StateObject private var pathfindingManager = PathfindingManager()
+    @StateObject var pathfindingManager: PathfindingManager
+    
+    @State private var showPath: Bool = false
     
     // Selected floor for menu and image switching
     @State private var selectedFloor: Floor = .ground
@@ -35,7 +39,7 @@ struct IntegratedMapView: View {
                                     GeometryReader { imageGeo in
                                         IntegratedMapOverlayView(
                                             graph: graph,
-                                            pathWithLabels: pathfindingManager.pathWithLabels,
+                                            pathWithLabels: pathWithLabels,
                                             unifiedGraph: dataManager.unifiedGraph,
                                             imageGeo: imageGeo,
                                             mapViewManager: mapViewManager,
@@ -53,15 +57,19 @@ struct IntegratedMapView: View {
         }
         .task {
             await dataManager.preloadAllFloorData()
-            if dataManager.floorData[selectedFloor] != nil {
-                mapViewManager.switchToFloor(selectedFloor, floorData: dataManager.floorData)
+            await MainActor.run {
+                selectInitialFloorIfAvailable()
             }
         }
-        .onChange(of: selectedFloor) { newFloor in
-            mapViewManager.switchToFloor(newFloor, floorData: dataManager.floorData)
+        .onChange(of: selectedFloor) { oldValue, newValue in
+            mapViewManager.switchToFloor(newValue, floorData: dataManager.floorData)
+        }
+        .onChange(of: dataManager.isLoading) { oldValue, newValue in
+            if newValue == false {
+                selectInitialFloorIfAvailable()
+            }
         }
         // Floor menu (top-right)
-        // swift
         .overlay(alignment: .topTrailing) {
             Menu {
                 ForEach(Floor.allCases, id: \.self) { floor in
@@ -86,7 +94,7 @@ struct IntegratedMapView: View {
                 .padding(.vertical, 8)
                 .background(Color(.systemBackground))
                 .cornerRadius(8)
-                .shadow(color: Color.black.opacity(0.2), radius: 3)
+                .shadow(color: Color.black, radius: 3)
                 .foregroundColor(.primary)
             }
             .padding()
@@ -109,8 +117,47 @@ struct IntegratedMapView: View {
 //            }
 //        )
     }
-}
+    
+    // ✅ Helper to always pick ground if available
+    private func selectInitialFloorIfAvailable() {
+        print("---- [Debug] selectInitialFloorIfAvailable ----")
+        print("Currently loading? \(dataManager.isLoading)")
+        
+        // FloorData details
+        if dataManager.floorData.isEmpty {
+            print("⚠️ floorData is EMPTY")
+        } else {
+            for (floor, data) in dataManager.floorData {
+                print("✅ Floor '\(floor.displayName)': \(data.graph.nodes.count) nodes, \(data.graph.edges.count) edges, \(data.locations.count) locations")
+            }
+        }
+        
+        // Unified graph details
+        print("UnifiedGraph has \(dataManager.unifiedGraph.count) nodes")
+        if !dataManager.unifiedGraph.isEmpty {
+            let sample = dataManager.unifiedGraph.prefix(5)
+            print("Sample unifiedGraph nodes:")
+            for (label, node) in sample {
+                print(" - \(label) @ floor \(node.floor) pos(\(node.x),\(node.y))")
+            }
+        }
+        
+        // Floor switching logic
+        if let _ = dataManager.floorData[selectedFloor] {
+            print("➡️ Switching to \(selectedFloor.displayName)")
+            mapViewManager.switchToFloor(selectedFloor, floorData: dataManager.floorData)
+        } else if let _ = dataManager.floorData[.ground] {
+            print("➡️ Fallback to .ground")
+            selectedFloor = .ground
+            mapViewManager.switchToFloor(.ground, floorData: dataManager.floorData)
+        } else {
+            print("⚠️ No floor data found, cannot switch")
+        }
+        print("---- [End Debug] ----")
+    }
 
+
+}
 struct IntegratedMapOverlayView: View {
     let graph: Graph
     let pathWithLabels: [(point: CGPoint, label: String)]
@@ -139,6 +186,11 @@ struct IntegratedMapOverlayView: View {
             
             // Pathfinding path (draws only within the same floor segments)
             if pathWithLabels.count > 1 {
+                ForEach(pathWithLabels.indices, id: \.self) { i in
+                    let point = pathWithLabels[i].point
+                    let label = pathWithLabels[i].label
+                    let _ = print("Path point: \(point) with label \(label)")
+                }
                 Path { path in
                     path.move(to: pathWithLabels[0].point)
                     for i in 1..<pathWithLabels.count {
@@ -157,6 +209,8 @@ struct IntegratedMapOverlayView: View {
                     }
                 }
                 .stroke(Color.yellow, lineWidth: 4)
+            } else {
+                let _ = print("Path has less than 2 points, skipping path drawing. pathcount=\(pathWithLabels.count)")
             }
             
             // Nodes
@@ -173,6 +227,27 @@ struct IntegratedMapOverlayView: View {
 }
 
 // MARK: - Preview
-#Preview {
-    IntegratedMapView()
+private func makePreviewDataManager() -> DataManager {
+    let previewManager = DataManager()
+
+    if let url = Bundle.main.url(forResource: Floor.ground.fileName, withExtension: "json"),
+       let data = try? Data(contentsOf: url),
+       let graph = try? JSONDecoder().decode(Graph.self, from: data) {
+
+        let processedGraph = previewManager.processGraph(graph)
+        let locations = previewManager.extractLocations(from: processedGraph)
+
+        previewManager.floorData[.ground] = FloorData(graph: processedGraph, locations: locations)
+        previewManager.unifiedGraph = previewManager.buildUnifiedGraph(from: previewManager.floorData)
+        previewManager.isLoading = false
+    }
+
+    return previewManager
 }
+
+//#Preview {
+//    IntegratedMapView(dataManager: makePreviewDataManager())
+//}
+
+
+

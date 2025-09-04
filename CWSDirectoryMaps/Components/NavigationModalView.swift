@@ -20,6 +20,8 @@ struct NavigationModalView: View {
     
     private let selectedStore: Store
     
+    @State private var path: [(CGPoint, String)] = []
+    
     enum ActiveField {
         case startLocation
         case destination
@@ -39,6 +41,7 @@ struct NavigationModalView: View {
         self.viewModel = viewModel
         self._isPresented = isPresented
         self.selectedStore = selectedStore
+        self.path = []
         
         var initialState = NavigationState(startLocation: nil, endLocation: nil, mode: mode)
         initialState.setLocation(selectedStore, for: mode)
@@ -120,12 +123,21 @@ struct NavigationModalView: View {
                         Spacer()
                         
                         Button(action: {
+                            // Close NavigationModal
                             isPresented = false
+
+                            // Reset start/destination locations
+                            navigationState.startLocation = nil
+                            navigationState.endLocation = nil
+                            
+                            // Also close the DirectionView if it's open
+                            showDirectionView = false
                         }) {
                             Image(systemName: "xmark.circle.fill")
                                 .font(.title2)
                                 .foregroundColor(.secondary)
                         }
+
                     }
                     .padding(.horizontal)
                     .padding(.bottom, 20)
@@ -144,10 +156,13 @@ struct NavigationModalView: View {
             Text("Starting location and destination cannot be the same. Please select a different location.")
         }
         .fullScreenCover(isPresented: $showDirectionView) {
-            DirectionView(
-                startLocation: navigationState.startLocation!,
-                destinationStore: navigationState.endLocation!
-            )
+            if let start = navigationState.startLocation,
+               let end = navigationState.endLocation {
+                DirectionView(
+                    startLocation: navigationState.startLocation!,
+                    destinationStore: navigationState.endLocation!,
+                )
+            }
         }
     }
     
@@ -307,6 +322,10 @@ struct NavigationModalView: View {
                     }
             }
             .listStyle(.plain)
+        }
+        .onReceive(viewModel.$calculatedPath) { newPath in
+            path = newPath
+            print("Paths updated: \(path)")
         }
     }
     

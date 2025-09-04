@@ -18,28 +18,42 @@ class PathfindingManager: ObservableObject {
     
     // MARK: - Public Methods
     func runPathfinding(
-        startLabel: String,
-        endLabel: String,
-        startFloor: Floor,
-        endFloor: Floor,
+        startStore: Store,
+        endStore: Store,
         unifiedGraph: [String: GraphNode]
     ) {
-        // Guard against missing data
-        guard !unifiedGraph.isEmpty,
-              !startLabel.isEmpty,
-              !endLabel.isEmpty else {
+        // Ensure we have graph labels
+        guard let startLabel = startStore.graphLabel,
+              let endLabel = endStore.graphLabel else {
+            print("Missing graph labels, cannot pathfind")
             clearPath()
             return
         }
         
+        // Derive floors from graphLabel
+        func floorFromGraphLabel(_ label: String) -> Floor {
+            // Example: if graphLabel is "ground_path_metro"
+            if label.contains("ground") { return .ground }
+            if label.contains("lowerground") { return .lowerGround }
+            if label.contains("1st") { return .first }
+            if label.contains("2nd") { return .second }
+            if label.contains("3rd") { return .third }
+            if label.contains("4th") { return .fourth }
+            // Default fallback
+            return .ground
+            
+        }
+        
+        let startFloor = floorFromGraphLabel(startLabel)
+        let endFloor = floorFromGraphLabel(endLabel)
+        
         // Create unique labels using floor info
-        let uniqueStartLabel = "\(startFloor.fileName)_\(startLabel)"
-        let uniqueEndLabel = "\(endFloor.fileName)_\(endLabel)"
+        let uniqueStartLabel = "\(startLabel)"
+        let uniqueEndLabel = "\(endLabel)"
         
         print("Running pathfinding from \(uniqueStartLabel) to \(uniqueEndLabel)")
         
         Task(priority: .userInitiated) {
-            // Call A* on the unified graph
             let foundPathData = aStarByLabel(
                 graph: unifiedGraph,
                 startLabel: uniqueStartLabel,
@@ -58,7 +72,7 @@ class PathfindingManager: ObservableObject {
             }
         }
     }
-    
+
     func clearPath() {
         pathWithLabels = []
         directionSteps = []

@@ -40,7 +40,7 @@ struct CategoryFilterView: View {
         } else {
             VStack(spacing: 12) {
                 HStack(spacing: 12) {
-                    ForEach([StoreCategory.shop, .fnb, .play, .others], id: \.self) { category in
+                    ForEach([StoreCategory.shop, .fnb, .others], id: \.self) { category in
                         Button(action: {
                             onSelect(category)
                         }) {
@@ -56,7 +56,7 @@ struct CategoryFilterView: View {
                 }
                 
                 HStack(spacing: 12) {
-                    ForEach([StoreCategory.facilities, .entrances], id: \.self) { category in
+                    ForEach([StoreCategory.facilities, .lobbies], id: \.self) { category in
                         Button(action: {
                             onSelect(category)
                         }) {

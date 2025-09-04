@@ -25,7 +25,7 @@
       "x": 6099.2881,
       "y": 11318.245,
       "type": "circle-center",
-      "label": "escalator_express-9",
+      "label": "escalator_express",
       "radius": 7
     },
     {
@@ -36,7 +36,7 @@
       "label": "circle-point_n1",
       "angle": 0,
       "radius": 7,
-      "parentLabel": "escalator_express-9"
+      "parentLabel": "escalator_express"
     },
     {
       "id": "n2",
@@ -46,7 +46,7 @@
       "label": "circle-point_n2",
       "angle": 0.7853981633974483,
       "radius": 7,
-      "parentLabel": "escalator_express-9"
+      "parentLabel": "escalator_express"
     },
     {
       "id": "n3",
@@ -56,7 +56,7 @@
       "label": "circle-point_n3",
       "angle": 1.5707963267948966,
       "radius": 7,
-      "parentLabel": "escalator_express-9"
+      "parentLabel": "escalator_express"
     },
     {
       "id": "n4",
@@ -66,7 +66,7 @@
       "label": "circle-point_n4",
       "angle": 2.356194490192345,
       "radius": 7,
-      "parentLabel": "escalator_express-9"
+      "parentLabel": "escalator_express"
     },
     {
       "id": "n5",
@@ -76,7 +76,7 @@
       "label": "circle-point_n5",
       "angle": 3.141592653589793,
       "radius": 7,
-      "parentLabel": "escalator_express-9"
+      "parentLabel": "escalator_express"
     },
     {
       "id": "n6",
@@ -86,7 +86,7 @@
       "label": "circle-point_n6",
       "angle": 3.9269908169872414,
       "radius": 7,
-      "parentLabel": "escalator_express-9"
+      "parentLabel": "escalator_express"
     },
     {
       "id": "n7",
@@ -96,7 +96,7 @@
       "label": "circle-point_n7",
       "angle": 4.71238898038469,
       "radius": 7,
-      "parentLabel": "escalator_express-9"
+      "parentLabel": "escalator_express"
     },
     {
       "id": "n8",
@@ -106,7 +106,7 @@
       "label": "circle-point_n8",
       "angle": 5.497787143782138,
       "radius": 7,
-      "parentLabel": "escalator_express-9"
+      "parentLabel": "escalator_express"
     },
     {
       "id": "n9",
@@ -129,7 +129,7 @@
       "x": 5702.1396,
       "y": 10912.763,
       "type": "circle-center",
-      "label": "restroom_frederique-3",
+      "label": "restroom_frederique",
       "radius": 7
     },
     {
@@ -140,7 +140,7 @@
       "label": "circle-point_n12",
       "angle": 0,
       "radius": 7,
-      "parentLabel": "restroom_frederique-3"
+      "parentLabel": "restroom_frederique"
     },
     {
       "id": "n13",
@@ -150,7 +150,7 @@
       "label": "circle-point_n13",
       "angle": 0.7853981633974483,
       "radius": 7,
-      "parentLabel": "restroom_frederique-3"
+      "parentLabel": "restroom_frederique"
     },
     {
       "id": "n14",
@@ -160,7 +160,7 @@
       "label": "circle-point_n14",
       "angle": 1.5707963267948966,
       "radius": 7,
-      "parentLabel": "restroom_frederique-3"
+      "parentLabel": "restroom_frederique"
     },
     {
       "id": "n15",
@@ -170,7 +170,7 @@
       "label": "circle-point_n15",
       "angle": 2.356194490192345,
       "radius": 7,
-      "parentLabel": "restroom_frederique-3"
+      "parentLabel": "restroom_frederique"
     },
     {
       "id": "n16",
@@ -180,7 +180,7 @@
       "label": "circle-point_n16",
       "angle": 3.141592653589793,
       "radius": 7,
-      "parentLabel": "restroom_frederique-3"
+      "parentLabel": "restroom_frederique"
     },
     {
       "id": "n17",
@@ -190,7 +190,7 @@
       "label": "circle-point_n17",
       "angle": 3.9269908169872414,
       "radius": 7,
-      "parentLabel": "restroom_frederique-3"
+      "parentLabel": "restroom_frederique"
     },
     {
       "id": "n18",
@@ -200,7 +200,7 @@
       "label": "circle-point_n18",
       "angle": 4.71238898038469,
       "radius": 7,
-      "parentLabel": "restroom_frederique-3"
+      "parentLabel": "restroom_frederique"
     },
     {
       "id": "n19",
@@ -210,14 +210,14 @@
       "label": "circle-point_n19",
       "angle": 5.497787143782138,
       "radius": 7,
-      "parentLabel": "restroom_frederique-3"
+      "parentLabel": "restroom_frederique"
     },
     {
       "id": "n20",
       "x": 6119.6577,
       "y": 10838.644,
       "type": "circle-center",
-      "label": "restroom_south_lobby-0",
+      "label": "restroom_south_lobby",
       "radius": 7
     },
     {
@@ -228,7 +228,7 @@
       "label": "circle-point_n21",
       "angle": 0,
       "radius": 7,
-      "parentLabel": "restroom_south_lobby-0"
+      "parentLabel": "restroom_south_lobby"
     },
     {
       "id": "n22",
@@ -238,7 +238,7 @@
       "label": "circle-point_n22",
       "angle": 0.7853981633974483,
       "radius": 7,
-      "parentLabel": "restroom_south_lobby-0"
+      "parentLabel": "restroom_south_lobby"
     },
     {
       "id": "n23",
@@ -248,7 +248,7 @@
       "label": "circle-point_n23",
       "angle": 1.5707963267948966,
       "radius": 7,
-      "parentLabel": "restroom_south_lobby-0"
+      "parentLabel": "restroom_south_lobby"
     },
     {
       "id": "n24",
@@ -258,7 +258,7 @@
       "label": "circle-point_n24",
       "angle": 2.356194490192345,
       "radius": 7,
-      "parentLabel": "restroom_south_lobby-0"
+      "parentLabel": "restroom_south_lobby"
     },
     {
       "id": "n25",
@@ -268,7 +268,7 @@
       "label": "circle-point_n25",
       "angle": 3.141592653589793,
       "radius": 7,
-      "parentLabel": "restroom_south_lobby-0"
+      "parentLabel": "restroom_south_lobby"
     },
     {
       "id": "n26",
@@ -278,7 +278,7 @@
       "label": "circle-point_n26",
       "angle": 3.9269908169872414,
       "radius": 7,
-      "parentLabel": "restroom_south_lobby-0"
+      "parentLabel": "restroom_south_lobby"
     },
     {
       "id": "n27",
@@ -288,7 +288,7 @@
       "label": "circle-point_n27",
       "angle": 4.71238898038469,
       "radius": 7,
-      "parentLabel": "restroom_south_lobby-0"
+      "parentLabel": "restroom_south_lobby"
     },
     {
       "id": "n28",
@@ -298,14 +298,14 @@
       "label": "circle-point_n28",
       "angle": 5.497787143782138,
       "radius": 7,
-      "parentLabel": "restroom_south_lobby-0"
+      "parentLabel": "restroom_south_lobby"
     },
     {
       "id": "n29",
       "x": 6436.4429,
       "y": 11252.146,
       "type": "circle-center",
-      "label": "restroom_braun_buffel-9",
+      "label": "restroom_braun_buffel",
       "radius": 7
     },
     {
@@ -316,7 +316,7 @@
       "label": "circle-point_n30",
       "angle": 0,
       "radius": 7,
-      "parentLabel": "restroom_braun_buffel-9"
+      "parentLabel": "restroom_braun_buffel"
     },
     {
       "id": "n31",
@@ -326,7 +326,7 @@
       "label": "circle-point_n31",
       "angle": 0.7853981633974483,
       "radius": 7,
-      "parentLabel": "restroom_braun_buffel-9"
+      "parentLabel": "restroom_braun_buffel"
     },
     {
       "id": "n32",
@@ -336,7 +336,7 @@
       "label": "circle-point_n32",
       "angle": 1.5707963267948966,
       "radius": 7,
-      "parentLabel": "restroom_braun_buffel-9"
+      "parentLabel": "restroom_braun_buffel"
     },
     {
       "id": "n33",
@@ -346,7 +346,7 @@
       "label": "circle-point_n33",
       "angle": 2.356194490192345,
       "radius": 7,
-      "parentLabel": "restroom_braun_buffel-9"
+      "parentLabel": "restroom_braun_buffel"
     },
     {
       "id": "n34",
@@ -356,7 +356,7 @@
       "label": "circle-point_n34",
       "angle": 3.141592653589793,
       "radius": 7,
-      "parentLabel": "restroom_braun_buffel-9"
+      "parentLabel": "restroom_braun_buffel"
     },
     {
       "id": "n35",
@@ -366,7 +366,7 @@
       "label": "circle-point_n35",
       "angle": 3.9269908169872414,
       "radius": 7,
-      "parentLabel": "restroom_braun_buffel-9"
+      "parentLabel": "restroom_braun_buffel"
     },
     {
       "id": "n36",
@@ -376,7 +376,7 @@
       "label": "circle-point_n36",
       "angle": 4.71238898038469,
       "radius": 7,
-      "parentLabel": "restroom_braun_buffel-9"
+      "parentLabel": "restroom_braun_buffel"
     },
     {
       "id": "n37",
@@ -386,14 +386,14 @@
       "label": "circle-point_n37",
       "angle": 5.497787143782138,
       "radius": 7,
-      "parentLabel": "restroom_braun_buffel-9"
+      "parentLabel": "restroom_braun_buffel"
     },
     {
       "id": "n38",
       "x": 5795.7358,
       "y": 11198.599,
       "type": "circle-center",
-      "label": "escalator_bw_parking-7",
+      "label": "escalator_bw_parking",
       "radius": 7
     },
     {
@@ -404,7 +404,7 @@
       "label": "circle-point_n39",
       "angle": 0,
       "radius": 7,
-      "parentLabel": "escalator_bw_parking-7"
+      "parentLabel": "escalator_bw_parking"
     },
     {
       "id": "n40",
@@ -414,7 +414,7 @@
       "label": "circle-point_n40",
       "angle": 0.7853981633974483,
       "radius": 7,
-      "parentLabel": "escalator_bw_parking-7"
+      "parentLabel": "escalator_bw_parking"
     },
     {
       "id": "n41",
@@ -424,7 +424,7 @@
       "label": "circle-point_n41",
       "angle": 1.5707963267948966,
       "radius": 7,
-      "parentLabel": "escalator_bw_parking-7"
+      "parentLabel": "escalator_bw_parking"
     },
     {
       "id": "n42",
@@ -434,7 +434,7 @@
       "label": "circle-point_n42",
       "angle": 2.356194490192345,
       "radius": 7,
-      "parentLabel": "escalator_bw_parking-7"
+      "parentLabel": "escalator_bw_parking"
     },
     {
       "id": "n43",
@@ -444,7 +444,7 @@
       "label": "circle-point_n43",
       "angle": 3.141592653589793,
       "radius": 7,
-      "parentLabel": "escalator_bw_parking-7"
+      "parentLabel": "escalator_bw_parking"
     },
     {
       "id": "n44",
@@ -454,7 +454,7 @@
       "label": "circle-point_n44",
       "angle": 3.9269908169872414,
       "radius": 7,
-      "parentLabel": "escalator_bw_parking-7"
+      "parentLabel": "escalator_bw_parking"
     },
     {
       "id": "n45",
@@ -464,7 +464,7 @@
       "label": "circle-point_n45",
       "angle": 4.71238898038469,
       "radius": 7,
-      "parentLabel": "escalator_bw_parking-7"
+      "parentLabel": "escalator_bw_parking"
     },
     {
       "id": "n46",
@@ -474,14 +474,14 @@
       "label": "circle-point_n46",
       "angle": 5.497787143782138,
       "radius": 7,
-      "parentLabel": "escalator_bw_parking-7"
+      "parentLabel": "escalator_bw_parking"
     },
     {
       "id": "n47",
       "x": 5656.0874,
       "y": 10987.194,
       "type": "circle-center",
-      "label": "escalator_bw_uniqlo-1",
+      "label": "escalator_bw_uniqlo",
       "radius": 7
     },
     {
@@ -492,7 +492,7 @@
       "label": "circle-point_n48",
       "angle": 0,
       "radius": 7,
-      "parentLabel": "escalator_bw_uniqlo-1"
+      "parentLabel": "escalator_bw_uniqlo"
     },
     {
       "id": "n49",
@@ -502,7 +502,7 @@
       "label": "circle-point_n49",
       "angle": 0.7853981633974483,
       "radius": 7,
-      "parentLabel": "escalator_bw_uniqlo-1"
+      "parentLabel": "escalator_bw_uniqlo"
     },
     {
       "id": "n50",
@@ -512,7 +512,7 @@
       "label": "circle-point_n50",
       "angle": 1.5707963267948966,
       "radius": 7,
-      "parentLabel": "escalator_bw_uniqlo-1"
+      "parentLabel": "escalator_bw_uniqlo"
     },
     {
       "id": "n51",
@@ -522,7 +522,7 @@
       "label": "circle-point_n51",
       "angle": 2.356194490192345,
       "radius": 7,
-      "parentLabel": "escalator_bw_uniqlo-1"
+      "parentLabel": "escalator_bw_uniqlo"
     },
     {
       "id": "n52",
@@ -532,7 +532,7 @@
       "label": "circle-point_n52",
       "angle": 3.141592653589793,
       "radius": 7,
-      "parentLabel": "escalator_bw_uniqlo-1"
+      "parentLabel": "escalator_bw_uniqlo"
     },
     {
       "id": "n53",
@@ -542,7 +542,7 @@
       "label": "circle-point_n53",
       "angle": 3.9269908169872414,
       "radius": 7,
-      "parentLabel": "escalator_bw_uniqlo-1"
+      "parentLabel": "escalator_bw_uniqlo"
     },
     {
       "id": "n54",
@@ -552,7 +552,7 @@
       "label": "circle-point_n54",
       "angle": 4.71238898038469,
       "radius": 7,
-      "parentLabel": "escalator_bw_uniqlo-1"
+      "parentLabel": "escalator_bw_uniqlo"
     },
     {
       "id": "n55",
@@ -562,14 +562,14 @@
       "label": "circle-point_n55",
       "angle": 5.497787143782138,
       "radius": 7,
-      "parentLabel": "escalator_bw_uniqlo-1"
+      "parentLabel": "escalator_bw_uniqlo"
     },
     {
       "id": "n56",
       "x": 5678.6616,
       "y": 10908.896,
       "type": "circle-center",
-      "label": "lift_frederique-8",
+      "label": "lift_frederique",
       "radius": 7
     },
     {
@@ -580,7 +580,7 @@
       "label": "circle-point_n57",
       "angle": 0,
       "radius": 7,
-      "parentLabel": "lift_frederique-8"
+      "parentLabel": "lift_frederique"
     },
     {
       "id": "n58",
@@ -590,7 +590,7 @@
       "label": "circle-point_n58",
       "angle": 0.7853981633974483,
       "radius": 7,
-      "parentLabel": "lift_frederique-8"
+      "parentLabel": "lift_frederique"
     },
     {
       "id": "n59",
@@ -600,7 +600,7 @@
       "label": "circle-point_n59",
       "angle": 1.5707963267948966,
       "radius": 7,
-      "parentLabel": "lift_frederique-8"
+      "parentLabel": "lift_frederique"
     },
     {
       "id": "n60",
@@ -610,7 +610,7 @@
       "label": "circle-point_n60",
       "angle": 2.356194490192345,
       "radius": 7,
-      "parentLabel": "lift_frederique-8"
+      "parentLabel": "lift_frederique"
     },
     {
       "id": "n61",
@@ -620,7 +620,7 @@
       "label": "circle-point_n61",
       "angle": 3.141592653589793,
       "radius": 7,
-      "parentLabel": "lift_frederique-8"
+      "parentLabel": "lift_frederique"
     },
     {
       "id": "n62",
@@ -630,7 +630,7 @@
       "label": "circle-point_n62",
       "angle": 3.9269908169872414,
       "radius": 7,
-      "parentLabel": "lift_frederique-8"
+      "parentLabel": "lift_frederique"
     },
     {
       "id": "n63",
@@ -640,7 +640,7 @@
       "label": "circle-point_n63",
       "angle": 4.71238898038469,
       "radius": 7,
-      "parentLabel": "lift_frederique-8"
+      "parentLabel": "lift_frederique"
     },
     {
       "id": "n64",
@@ -650,14 +650,14 @@
       "label": "circle-point_n64",
       "angle": 5.497787143782138,
       "radius": 7,
-      "parentLabel": "lift_frederique-8"
+      "parentLabel": "lift_frederique"
     },
     {
       "id": "n65",
       "x": 6100.9473,
       "y": 10838.023,
       "type": "circle-center",
-      "label": "lift_south_lobby-5",
+      "label": "lift_south_lobby",
       "radius": 7
     },
     {
@@ -668,7 +668,7 @@
       "label": "circle-point_n66",
       "angle": 0,
       "radius": 7,
-      "parentLabel": "lift_south_lobby-5"
+      "parentLabel": "lift_south_lobby"
     },
     {
       "id": "n67",
@@ -678,7 +678,7 @@
       "label": "circle-point_n67",
       "angle": 0.7853981633974483,
       "radius": 7,
-      "parentLabel": "lift_south_lobby-5"
+      "parentLabel": "lift_south_lobby"
     },
     {
       "id": "n68",
@@ -688,7 +688,7 @@
       "label": "circle-point_n68",
       "angle": 1.5707963267948966,
       "radius": 7,
-      "parentLabel": "lift_south_lobby-5"
+      "parentLabel": "lift_south_lobby"
     },
     {
       "id": "n69",
@@ -698,7 +698,7 @@
       "label": "circle-point_n69",
       "angle": 2.356194490192345,
       "radius": 7,
-      "parentLabel": "lift_south_lobby-5"
+      "parentLabel": "lift_south_lobby"
     },
     {
       "id": "n70",
@@ -708,7 +708,7 @@
       "label": "circle-point_n70",
       "angle": 3.141592653589793,
       "radius": 7,
-      "parentLabel": "lift_south_lobby-5"
+      "parentLabel": "lift_south_lobby"
     },
     {
       "id": "n71",
@@ -718,7 +718,7 @@
       "label": "circle-point_n71",
       "angle": 3.9269908169872414,
       "radius": 7,
-      "parentLabel": "lift_south_lobby-5"
+      "parentLabel": "lift_south_lobby"
     },
     {
       "id": "n72",
@@ -728,7 +728,7 @@
       "label": "circle-point_n72",
       "angle": 4.71238898038469,
       "radius": 7,
-      "parentLabel": "lift_south_lobby-5"
+      "parentLabel": "lift_south_lobby"
     },
     {
       "id": "n73",
@@ -738,14 +738,14 @@
       "label": "circle-point_n73",
       "angle": 5.497787143782138,
       "radius": 7,
-      "parentLabel": "lift_south_lobby-5"
+      "parentLabel": "lift_south_lobby"
     },
     {
       "id": "n74",
       "x": 6405.4233,
       "y": 11094.632,
       "type": "circle-center",
-      "label": "lift_west-0",
+      "label": "lift_west",
       "radius": 7
     },
     {
@@ -756,7 +756,7 @@
       "label": "circle-point_n75",
       "angle": 0,
       "radius": 7,
-      "parentLabel": "lift_west-0"
+      "parentLabel": "lift_west"
     },
     {
       "id": "n76",
@@ -766,7 +766,7 @@
       "label": "circle-point_n76",
       "angle": 0.7853981633974483,
       "radius": 7,
-      "parentLabel": "lift_west-0"
+      "parentLabel": "lift_west"
     },
     {
       "id": "n77",
@@ -776,7 +776,7 @@
       "label": "circle-point_n77",
       "angle": 1.5707963267948966,
       "radius": 7,
-      "parentLabel": "lift_west-0"
+      "parentLabel": "lift_west"
     },
     {
       "id": "n78",
@@ -786,7 +786,7 @@
       "label": "circle-point_n78",
       "angle": 2.356194490192345,
       "radius": 7,
-      "parentLabel": "lift_west-0"
+      "parentLabel": "lift_west"
     },
     {
       "id": "n79",
@@ -796,7 +796,7 @@
       "label": "circle-point_n79",
       "angle": 3.141592653589793,
       "radius": 7,
-      "parentLabel": "lift_west-0"
+      "parentLabel": "lift_west"
     },
     {
       "id": "n80",
@@ -806,7 +806,7 @@
       "label": "circle-point_n80",
       "angle": 3.9269908169872414,
       "radius": 7,
-      "parentLabel": "lift_west-0"
+      "parentLabel": "lift_west"
     },
     {
       "id": "n81",
@@ -816,7 +816,7 @@
       "label": "circle-point_n81",
       "angle": 4.71238898038469,
       "radius": 7,
-      "parentLabel": "lift_west-0"
+      "parentLabel": "lift_west"
     },
     {
       "id": "n82",
@@ -826,14 +826,14 @@
       "label": "circle-point_n82",
       "angle": 5.497787143782138,
       "radius": 7,
-      "parentLabel": "lift_west-0"
+      "parentLabel": "lift_west"
     },
     {
       "id": "n83",
       "x": 6378.564,
       "y": 11094.405,
       "type": "circle-center",
-      "label": "escalator_west-4",
+      "label": "escalator_west",
       "radius": 7
     },
     {
@@ -844,7 +844,7 @@
       "label": "circle-point_n84",
       "angle": 0,
       "radius": 7,
-      "parentLabel": "escalator_west-4"
+      "parentLabel": "escalator_west"
     },
     {
       "id": "n85",
@@ -854,7 +854,7 @@
       "label": "circle-point_n85",
       "angle": 0.7853981633974483,
       "radius": 7,
-      "parentLabel": "escalator_west-4"
+      "parentLabel": "escalator_west"
     },
     {
       "id": "n86",
@@ -864,7 +864,7 @@
       "label": "circle-point_n86",
       "angle": 1.5707963267948966,
       "radius": 7,
-      "parentLabel": "escalator_west-4"
+      "parentLabel": "escalator_west"
     },
     {
       "id": "n87",
@@ -874,7 +874,7 @@
       "label": "circle-point_n87",
       "angle": 2.356194490192345,
       "radius": 7,
-      "parentLabel": "escalator_west-4"
+      "parentLabel": "escalator_west"
     },
     {
       "id": "n88",
@@ -884,7 +884,7 @@
       "label": "circle-point_n88",
       "angle": 3.141592653589793,
       "radius": 7,
-      "parentLabel": "escalator_west-4"
+      "parentLabel": "escalator_west"
     },
     {
       "id": "n89",
@@ -894,7 +894,7 @@
       "label": "circle-point_n89",
       "angle": 3.9269908169872414,
       "radius": 7,
-      "parentLabel": "escalator_west-4"
+      "parentLabel": "escalator_west"
     },
     {
       "id": "n90",
@@ -904,7 +904,7 @@
       "label": "circle-point_n90",
       "angle": 4.71238898038469,
       "radius": 7,
-      "parentLabel": "escalator_west-4"
+      "parentLabel": "escalator_west"
     },
     {
       "id": "n91",
@@ -914,14 +914,14 @@
       "label": "circle-point_n91",
       "angle": 5.497787143782138,
       "radius": 7,
-      "parentLabel": "escalator_west-4"
+      "parentLabel": "escalator_west"
     },
     {
       "id": "n92",
       "x": 5491.0786,
       "y": 11101.289,
       "type": "circle-center",
-      "label": "lift_mph-2",
+      "label": "lift_mph",
       "radius": 7
     },
     {
@@ -932,7 +932,7 @@
       "label": "circle-point_n93",
       "angle": 0,
       "radius": 7,
-      "parentLabel": "lift_mph-2"
+      "parentLabel": "lift_mph"
     },
     {
       "id": "n94",
@@ -942,7 +942,7 @@
       "label": "circle-point_n94",
       "angle": 0.7853981633974483,
       "radius": 7,
-      "parentLabel": "lift_mph-2"
+      "parentLabel": "lift_mph"
     },
     {
       "id": "n95",
@@ -952,7 +952,7 @@
       "label": "circle-point_n95",
       "angle": 1.5707963267948966,
       "radius": 7,
-      "parentLabel": "lift_mph-2"
+      "parentLabel": "lift_mph"
     },
     {
       "id": "n96",
@@ -962,7 +962,7 @@
       "label": "circle-point_n96",
       "angle": 2.356194490192345,
       "radius": 7,
-      "parentLabel": "lift_mph-2"
+      "parentLabel": "lift_mph"
     },
     {
       "id": "n97",
@@ -972,7 +972,7 @@
       "label": "circle-point_n97",
       "angle": 3.141592653589793,
       "radius": 7,
-      "parentLabel": "lift_mph-2"
+      "parentLabel": "lift_mph"
     },
     {
       "id": "n98",
@@ -982,7 +982,7 @@
       "label": "circle-point_n98",
       "angle": 3.9269908169872414,
       "radius": 7,
-      "parentLabel": "lift_mph-2"
+      "parentLabel": "lift_mph"
     },
     {
       "id": "n99",
@@ -992,7 +992,7 @@
       "label": "circle-point_n99",
       "angle": 4.71238898038469,
       "radius": 7,
-      "parentLabel": "lift_mph-2"
+      "parentLabel": "lift_mph"
     },
     {
       "id": "n100",
@@ -1002,14 +1002,14 @@
       "label": "circle-point_n100",
       "angle": 5.497787143782138,
       "radius": 7,
-      "parentLabel": "lift_mph-2"
+      "parentLabel": "lift_mph"
     },
     {
       "id": "n101",
       "x": 5875.7329,
       "y": 11231.104,
       "type": "circle-center",
-      "label": "lift_2-6",
+      "label": "lift_2",
       "radius": 7
     },
     {
@@ -1020,7 +1020,7 @@
       "label": "circle-point_n102",
       "angle": 0,
       "radius": 7,
-      "parentLabel": "lift_2-6"
+      "parentLabel": "lift_2"
     },
     {
       "id": "n103",
@@ -1030,7 +1030,7 @@
       "label": "circle-point_n103",
       "angle": 0.7853981633974483,
       "radius": 7,
-      "parentLabel": "lift_2-6"
+      "parentLabel": "lift_2"
     },
     {
       "id": "n104",
@@ -1040,7 +1040,7 @@
       "label": "circle-point_n104",
       "angle": 1.5707963267948966,
       "radius": 7,
-      "parentLabel": "lift_2-6"
+      "parentLabel": "lift_2"
     },
     {
       "id": "n105",
@@ -1050,7 +1050,7 @@
       "label": "circle-point_n105",
       "angle": 2.356194490192345,
       "radius": 7,
-      "parentLabel": "lift_2-6"
+      "parentLabel": "lift_2"
     },
     {
       "id": "n106",
@@ -1060,7 +1060,7 @@
       "label": "circle-point_n106",
       "angle": 3.141592653589793,
       "radius": 7,
-      "parentLabel": "lift_2-6"
+      "parentLabel": "lift_2"
     },
     {
       "id": "n107",
@@ -1070,7 +1070,7 @@
       "label": "circle-point_n107",
       "angle": 3.9269908169872414,
       "radius": 7,
-      "parentLabel": "lift_2-6"
+      "parentLabel": "lift_2"
     },
     {
       "id": "n108",
@@ -1080,7 +1080,7 @@
       "label": "circle-point_n108",
       "angle": 4.71238898038469,
       "radius": 7,
-      "parentLabel": "lift_2-6"
+      "parentLabel": "lift_2"
     },
     {
       "id": "n109",
@@ -1090,14 +1090,14 @@
       "label": "circle-point_n109",
       "angle": 5.497787143782138,
       "radius": 7,
-      "parentLabel": "lift_2-6"
+      "parentLabel": "lift_2"
     },
     {
       "id": "n110",
       "x": 6127.4805,
       "y": 11109.605,
       "type": "circle-center",
-      "label": "escalator_bw_basement_1-0",
+      "label": "escalator_bw_basement_1",
       "radius": 7
     },
     {
@@ -1108,7 +1108,7 @@
       "label": "circle-point_n111",
       "angle": 0,
       "radius": 7,
-      "parentLabel": "escalator_bw_basement_1-0"
+      "parentLabel": "escalator_bw_basement_1"
     },
     {
       "id": "n112",
@@ -1118,7 +1118,7 @@
       "label": "circle-point_n112",
       "angle": 0.7853981633974483,
       "radius": 7,
-      "parentLabel": "escalator_bw_basement_1-0"
+      "parentLabel": "escalator_bw_basement_1"
     },
     {
       "id": "n113",
@@ -1128,7 +1128,7 @@
       "label": "circle-point_n113",
       "angle": 1.5707963267948966,
       "radius": 7,
-      "parentLabel": "escalator_bw_basement_1-0"
+      "parentLabel": "escalator_bw_basement_1"
     },
     {
       "id": "n114",
@@ -1138,7 +1138,7 @@
       "label": "circle-point_n114",
       "angle": 2.356194490192345,
       "radius": 7,
-      "parentLabel": "escalator_bw_basement_1-0"
+      "parentLabel": "escalator_bw_basement_1"
     },
     {
       "id": "n115",
@@ -1148,7 +1148,7 @@
       "label": "circle-point_n115",
       "angle": 3.141592653589793,
       "radius": 7,
-      "parentLabel": "escalator_bw_basement_1-0"
+      "parentLabel": "escalator_bw_basement_1"
     },
     {
       "id": "n116",
@@ -1158,7 +1158,7 @@
       "label": "circle-point_n116",
       "angle": 3.9269908169872414,
       "radius": 7,
-      "parentLabel": "escalator_bw_basement_1-0"
+      "parentLabel": "escalator_bw_basement_1"
     },
     {
       "id": "n117",
@@ -1168,7 +1168,7 @@
       "label": "circle-point_n117",
       "angle": 4.71238898038469,
       "radius": 7,
-      "parentLabel": "escalator_bw_basement_1-0"
+      "parentLabel": "escalator_bw_basement_1"
     },
     {
       "id": "n118",
@@ -1178,14 +1178,14 @@
       "label": "circle-point_n118",
       "angle": 5.497787143782138,
       "radius": 7,
-      "parentLabel": "escalator_bw_basement_1-0"
+      "parentLabel": "escalator_bw_basement_1"
     },
     {
       "id": "n119",
       "x": 6182.1885,
       "y": 11094.387,
       "type": "circle-center",
-      "label": "escalator_bw_linear_atrium-9",
+      "label": "escalator_bw_linear_atrium",
       "radius": 7
     },
     {
@@ -1196,7 +1196,7 @@
       "label": "circle-point_n120",
       "angle": 0,
       "radius": 7,
-      "parentLabel": "escalator_bw_linear_atrium-9"
+      "parentLabel": "escalator_bw_linear_atrium"
     },
     {
       "id": "n121",
@@ -1206,7 +1206,7 @@
       "label": "circle-point_n121",
       "angle": 0.7853981633974483,
       "radius": 7,
-      "parentLabel": "escalator_bw_linear_atrium-9"
+      "parentLabel": "escalator_bw_linear_atrium"
     },
     {
       "id": "n122",
@@ -1216,7 +1216,7 @@
       "label": "circle-point_n122",
       "angle": 1.5707963267948966,
       "radius": 7,
-      "parentLabel": "escalator_bw_linear_atrium-9"
+      "parentLabel": "escalator_bw_linear_atrium"
     },
     {
       "id": "n123",
@@ -1226,7 +1226,7 @@
       "label": "circle-point_n123",
       "angle": 2.356194490192345,
       "radius": 7,
-      "parentLabel": "escalator_bw_linear_atrium-9"
+      "parentLabel": "escalator_bw_linear_atrium"
     },
     {
       "id": "n124",
@@ -1236,7 +1236,7 @@
       "label": "circle-point_n124",
       "angle": 3.141592653589793,
       "radius": 7,
-      "parentLabel": "escalator_bw_linear_atrium-9"
+      "parentLabel": "escalator_bw_linear_atrium"
     },
     {
       "id": "n125",
@@ -1246,7 +1246,7 @@
       "label": "circle-point_n125",
       "angle": 3.9269908169872414,
       "radius": 7,
-      "parentLabel": "escalator_bw_linear_atrium-9"
+      "parentLabel": "escalator_bw_linear_atrium"
     },
     {
       "id": "n126",
@@ -1256,7 +1256,7 @@
       "label": "circle-point_n126",
       "angle": 4.71238898038469,
       "radius": 7,
-      "parentLabel": "escalator_bw_linear_atrium-9"
+      "parentLabel": "escalator_bw_linear_atrium"
     },
     {
       "id": "n127",
@@ -1266,14 +1266,14 @@
       "label": "circle-point_n127",
       "angle": 5.497787143782138,
       "radius": 7,
-      "parentLabel": "escalator_bw_linear_atrium-9"
+      "parentLabel": "escalator_bw_linear_atrium"
     },
     {
       "id": "n128",
       "x": 6356.8271,
       "y": 11175.994,
       "type": "circle-center",
-      "label": "escalator_bw_braun_buffel-9",
+      "label": "escalator_bw_braun_buffel",
       "radius": 7
     },
     {
@@ -1284,7 +1284,7 @@
       "label": "circle-point_n129",
       "angle": 0,
       "radius": 7,
-      "parentLabel": "escalator_bw_braun_buffel-9"
+      "parentLabel": "escalator_bw_braun_buffel"
     },
     {
       "id": "n130",
@@ -1294,7 +1294,7 @@
       "label": "circle-point_n130",
       "angle": 0.7853981633974483,
       "radius": 7,
-      "parentLabel": "escalator_bw_braun_buffel-9"
+      "parentLabel": "escalator_bw_braun_buffel"
     },
     {
       "id": "n131",
@@ -1304,7 +1304,7 @@
       "label": "circle-point_n131",
       "angle": 1.5707963267948966,
       "radius": 7,
-      "parentLabel": "escalator_bw_braun_buffel-9"
+      "parentLabel": "escalator_bw_braun_buffel"
     },
     {
       "id": "n132",
@@ -1314,7 +1314,7 @@
       "label": "circle-point_n132",
       "angle": 2.356194490192345,
       "radius": 7,
-      "parentLabel": "escalator_bw_braun_buffel-9"
+      "parentLabel": "escalator_bw_braun_buffel"
     },
     {
       "id": "n133",
@@ -1324,7 +1324,7 @@
       "label": "circle-point_n133",
       "angle": 3.141592653589793,
       "radius": 7,
-      "parentLabel": "escalator_bw_braun_buffel-9"
+      "parentLabel": "escalator_bw_braun_buffel"
     },
     {
       "id": "n134",
@@ -1334,7 +1334,7 @@
       "label": "circle-point_n134",
       "angle": 3.9269908169872414,
       "radius": 7,
-      "parentLabel": "escalator_bw_braun_buffel-9"
+      "parentLabel": "escalator_bw_braun_buffel"
     },
     {
       "id": "n135",
@@ -1344,7 +1344,7 @@
       "label": "circle-point_n135",
       "angle": 4.71238898038469,
       "radius": 7,
-      "parentLabel": "escalator_bw_braun_buffel-9"
+      "parentLabel": "escalator_bw_braun_buffel"
     },
     {
       "id": "n136",
@@ -1354,14 +1354,14 @@
       "label": "circle-point_n136",
       "angle": 5.497787143782138,
       "radius": 7,
-      "parentLabel": "escalator_bw_braun_buffel-9"
+      "parentLabel": "escalator_bw_braun_buffel"
     },
     {
       "id": "n137",
       "x": 5889.1973,
       "y": 11169.387,
       "type": "circle-center",
-      "label": "escalator_bw_oval_east_atrium-8",
+      "label": "escalator_bw_oval_east_atrium",
       "radius": 7
     },
     {
@@ -1372,7 +1372,7 @@
       "label": "circle-point_n138",
       "angle": 0,
       "radius": 7,
-      "parentLabel": "escalator_bw_oval_east_atrium-8"
+      "parentLabel": "escalator_bw_oval_east_atrium"
     },
     {
       "id": "n139",
@@ -1382,7 +1382,7 @@
       "label": "circle-point_n139",
       "angle": 0.7853981633974483,
       "radius": 7,
-      "parentLabel": "escalator_bw_oval_east_atrium-8"
+      "parentLabel": "escalator_bw_oval_east_atrium"
     },
     {
       "id": "n140",
@@ -1392,7 +1392,7 @@
       "label": "circle-point_n140",
       "angle": 1.5707963267948966,
       "radius": 7,
-      "parentLabel": "escalator_bw_oval_east_atrium-8"
+      "parentLabel": "escalator_bw_oval_east_atrium"
     },
     {
       "id": "n141",
@@ -1402,7 +1402,7 @@
       "label": "circle-point_n141",
       "angle": 2.356194490192345,
       "radius": 7,
-      "parentLabel": "escalator_bw_oval_east_atrium-8"
+      "parentLabel": "escalator_bw_oval_east_atrium"
     },
     {
       "id": "n142",
@@ -1412,7 +1412,7 @@
       "label": "circle-point_n142",
       "angle": 3.141592653589793,
       "radius": 7,
-      "parentLabel": "escalator_bw_oval_east_atrium-8"
+      "parentLabel": "escalator_bw_oval_east_atrium"
     },
     {
       "id": "n143",
@@ -1422,7 +1422,7 @@
       "label": "circle-point_n143",
       "angle": 3.9269908169872414,
       "radius": 7,
-      "parentLabel": "escalator_bw_oval_east_atrium-8"
+      "parentLabel": "escalator_bw_oval_east_atrium"
     },
     {
       "id": "n144",
@@ -1432,7 +1432,7 @@
       "label": "circle-point_n144",
       "angle": 4.71238898038469,
       "radius": 7,
-      "parentLabel": "escalator_bw_oval_east_atrium-8"
+      "parentLabel": "escalator_bw_oval_east_atrium"
     },
     {
       "id": "n145",
@@ -1442,14 +1442,14 @@
       "label": "circle-point_n145",
       "angle": 5.497787143782138,
       "radius": 7,
-      "parentLabel": "escalator_bw_oval_east_atrium-8"
+      "parentLabel": "escalator_bw_oval_east_atrium"
     },
     {
       "id": "n146",
       "x": 5829.2773,
       "y": 10967.922,
       "type": "circle-center",
-      "label": "escalator_bw_linear_east_atrium-9-9",
+      "label": "escalator_bw_linear_east_atrium-9",
       "radius": 7
     },
     {
@@ -1460,7 +1460,7 @@
       "label": "circle-point_n147",
       "angle": 0,
       "radius": 7,
-      "parentLabel": "escalator_bw_linear_east_atrium-9-9"
+      "parentLabel": "escalator_bw_linear_east_atrium-9"
     },
     {
       "id": "n148",
@@ -1470,7 +1470,7 @@
       "label": "circle-point_n148",
       "angle": 0.7853981633974483,
       "radius": 7,
-      "parentLabel": "escalator_bw_linear_east_atrium-9-9"
+      "parentLabel": "escalator_bw_linear_east_atrium-9"
     },
     {
       "id": "n149",
@@ -1480,7 +1480,7 @@
       "label": "circle-point_n149",
       "angle": 1.5707963267948966,
       "radius": 7,
-      "parentLabel": "escalator_bw_linear_east_atrium-9-9"
+      "parentLabel": "escalator_bw_linear_east_atrium-9"
     },
     {
       "id": "n150",
@@ -1490,7 +1490,7 @@
       "label": "circle-point_n150",
       "angle": 2.356194490192345,
       "radius": 7,
-      "parentLabel": "escalator_bw_linear_east_atrium-9-9"
+      "parentLabel": "escalator_bw_linear_east_atrium-9"
     },
     {
       "id": "n151",
@@ -1500,7 +1500,7 @@
       "label": "circle-point_n151",
       "angle": 3.141592653589793,
       "radius": 7,
-      "parentLabel": "escalator_bw_linear_east_atrium-9-9"
+      "parentLabel": "escalator_bw_linear_east_atrium-9"
     },
     {
       "id": "n152",
@@ -1510,7 +1510,7 @@
       "label": "circle-point_n152",
       "angle": 3.9269908169872414,
       "radius": 7,
-      "parentLabel": "escalator_bw_linear_east_atrium-9-9"
+      "parentLabel": "escalator_bw_linear_east_atrium-9"
     },
     {
       "id": "n153",
@@ -1520,7 +1520,7 @@
       "label": "circle-point_n153",
       "angle": 4.71238898038469,
       "radius": 7,
-      "parentLabel": "escalator_bw_linear_east_atrium-9-9"
+      "parentLabel": "escalator_bw_linear_east_atrium-9"
     },
     {
       "id": "n154",
@@ -1530,14 +1530,14 @@
       "label": "circle-point_n154",
       "angle": 5.497787143782138,
       "radius": 7,
-      "parentLabel": "escalator_bw_linear_east_atrium-9-9"
+      "parentLabel": "escalator_bw_linear_east_atrium-9"
     },
     {
       "id": "n155",
       "x": 6057.5718,
       "y": 10909.257,
       "type": "circle-center",
-      "label": "escalator_bw_south_lobby-2",
+      "label": "escalator_bw_south_lobby",
       "radius": 7
     },
     {
@@ -1548,7 +1548,7 @@
       "label": "circle-point_n156",
       "angle": 0,
       "radius": 7,
-      "parentLabel": "escalator_bw_south_lobby-2"
+      "parentLabel": "escalator_bw_south_lobby"
     },
     {
       "id": "n157",
@@ -1558,7 +1558,7 @@
       "label": "circle-point_n157",
       "angle": 0.7853981633974483,
       "radius": 7,
-      "parentLabel": "escalator_bw_south_lobby-2"
+      "parentLabel": "escalator_bw_south_lobby"
     },
     {
       "id": "n158",
@@ -1568,7 +1568,7 @@
       "label": "circle-point_n158",
       "angle": 1.5707963267948966,
       "radius": 7,
-      "parentLabel": "escalator_bw_south_lobby-2"
+      "parentLabel": "escalator_bw_south_lobby"
     },
     {
       "id": "n159",
@@ -1578,7 +1578,7 @@
       "label": "circle-point_n159",
       "angle": 2.356194490192345,
       "radius": 7,
-      "parentLabel": "escalator_bw_south_lobby-2"
+      "parentLabel": "escalator_bw_south_lobby"
     },
     {
       "id": "n160",
@@ -1588,7 +1588,7 @@
       "label": "circle-point_n160",
       "angle": 3.141592653589793,
       "radius": 7,
-      "parentLabel": "escalator_bw_south_lobby-2"
+      "parentLabel": "escalator_bw_south_lobby"
     },
     {
       "id": "n161",
@@ -1598,7 +1598,7 @@
       "label": "circle-point_n161",
       "angle": 3.9269908169872414,
       "radius": 7,
-      "parentLabel": "escalator_bw_south_lobby-2"
+      "parentLabel": "escalator_bw_south_lobby"
     },
     {
       "id": "n162",
@@ -1608,7 +1608,7 @@
       "label": "circle-point_n162",
       "angle": 4.71238898038469,
       "radius": 7,
-      "parentLabel": "escalator_bw_south_lobby-2"
+      "parentLabel": "escalator_bw_south_lobby"
     },
     {
       "id": "n163",
@@ -1618,14 +1618,14 @@
       "label": "circle-point_n163",
       "angle": 5.497787143782138,
       "radius": 7,
-      "parentLabel": "escalator_bw_south_lobby-2"
+      "parentLabel": "escalator_bw_south_lobby"
     },
     {
       "id": "n164",
       "x": 5929.9937,
       "y": 11158.422,
       "type": "circle-center",
-      "label": "informant_1-2",
+      "label": "informant_1",
       "radius": 7
     },
     {
@@ -1636,7 +1636,7 @@
       "label": "circle-point_n165",
       "angle": 0,
       "radius": 7,
-      "parentLabel": "informant_1-2"
+      "parentLabel": "informant_1"
     },
     {
       "id": "n166",
@@ -1646,7 +1646,7 @@
       "label": "circle-point_n166",
       "angle": 0.7853981633974483,
       "radius": 7,
-      "parentLabel": "informant_1-2"
+      "parentLabel": "informant_1"
     },
     {
       "id": "n167",
@@ -1656,7 +1656,7 @@
       "label": "circle-point_n167",
       "angle": 1.5707963267948966,
       "radius": 7,
-      "parentLabel": "informant_1-2"
+      "parentLabel": "informant_1"
     },
     {
       "id": "n168",
@@ -1666,7 +1666,7 @@
       "label": "circle-point_n168",
       "angle": 2.356194490192345,
       "radius": 7,
-      "parentLabel": "informant_1-2"
+      "parentLabel": "informant_1"
     },
     {
       "id": "n169",
@@ -1676,7 +1676,7 @@
       "label": "circle-point_n169",
       "angle": 3.141592653589793,
       "radius": 7,
-      "parentLabel": "informant_1-2"
+      "parentLabel": "informant_1"
     },
     {
       "id": "n170",
@@ -1686,7 +1686,7 @@
       "label": "circle-point_n170",
       "angle": 3.9269908169872414,
       "radius": 7,
-      "parentLabel": "informant_1-2"
+      "parentLabel": "informant_1"
     },
     {
       "id": "n171",
@@ -1696,7 +1696,7 @@
       "label": "circle-point_n171",
       "angle": 4.71238898038469,
       "radius": 7,
-      "parentLabel": "informant_1-2"
+      "parentLabel": "informant_1"
     },
     {
       "id": "n172",
@@ -1706,14 +1706,14 @@
       "label": "circle-point_n172",
       "angle": 5.497787143782138,
       "radius": 7,
-      "parentLabel": "informant_1-2"
+      "parentLabel": "informant_1"
     },
     {
       "id": "n173",
       "x": 6349.7593,
       "y": 11154.405,
       "type": "circle-center",
-      "label": "informant_2-8",
+      "label": "informant_2",
       "radius": 7
     },
     {
@@ -1724,7 +1724,7 @@
       "label": "circle-point_n174",
       "angle": 0,
       "radius": 7,
-      "parentLabel": "informant_2-8"
+      "parentLabel": "informant_2"
     },
     {
       "id": "n175",
@@ -1734,7 +1734,7 @@
       "label": "circle-point_n175",
       "angle": 0.7853981633974483,
       "radius": 7,
-      "parentLabel": "informant_2-8"
+      "parentLabel": "informant_2"
     },
     {
       "id": "n176",
@@ -1744,7 +1744,7 @@
       "label": "circle-point_n176",
       "angle": 1.5707963267948966,
       "radius": 7,
-      "parentLabel": "informant_2-8"
+      "parentLabel": "informant_2"
     },
     {
       "id": "n177",
@@ -1754,7 +1754,7 @@
       "label": "circle-point_n177",
       "angle": 2.356194490192345,
       "radius": 7,
-      "parentLabel": "informant_2-8"
+      "parentLabel": "informant_2"
     },
     {
       "id": "n178",
@@ -1764,7 +1764,7 @@
       "label": "circle-point_n178",
       "angle": 3.141592653589793,
       "radius": 7,
-      "parentLabel": "informant_2-8"
+      "parentLabel": "informant_2"
     },
     {
       "id": "n179",
@@ -1774,7 +1774,7 @@
       "label": "circle-point_n179",
       "angle": 3.9269908169872414,
       "radius": 7,
-      "parentLabel": "informant_2-8"
+      "parentLabel": "informant_2"
     },
     {
       "id": "n180",
@@ -1784,7 +1784,7 @@
       "label": "circle-point_n180",
       "angle": 4.71238898038469,
       "radius": 7,
-      "parentLabel": "informant_2-8"
+      "parentLabel": "informant_2"
     },
     {
       "id": "n181",
@@ -1794,14 +1794,14 @@
       "label": "circle-point_n181",
       "angle": 5.497787143782138,
       "radius": 7,
-      "parentLabel": "informant_2-8"
+      "parentLabel": "informant_2"
     },
     {
       "id": "n182",
       "x": 6042.6396,
       "y": -11182.123,
       "type": "circle-center",
-      "label": "tumi-7",
+      "label": "tumi",
       "radius": 5
     },
     {
@@ -1812,7 +1812,7 @@
       "label": "circle-point_n183",
       "angle": 0,
       "radius": 5,
-      "parentLabel": "tumi-7"
+      "parentLabel": "tumi"
     },
     {
       "id": "n184",
@@ -1822,7 +1822,7 @@
       "label": "circle-point_n184",
       "angle": 0.7853981633974483,
       "radius": 5,
-      "parentLabel": "tumi-7"
+      "parentLabel": "tumi"
     },
     {
       "id": "n185",
@@ -1832,7 +1832,7 @@
       "label": "circle-point_n185",
       "angle": 1.5707963267948966,
       "radius": 5,
-      "parentLabel": "tumi-7"
+      "parentLabel": "tumi"
     },
     {
       "id": "n186",
@@ -1842,7 +1842,7 @@
       "label": "circle-point_n186",
       "angle": 2.356194490192345,
       "radius": 5,
-      "parentLabel": "tumi-7"
+      "parentLabel": "tumi"
     },
     {
       "id": "n187",
@@ -1852,7 +1852,7 @@
       "label": "circle-point_n187",
       "angle": 3.141592653589793,
       "radius": 5,
-      "parentLabel": "tumi-7"
+      "parentLabel": "tumi"
     },
     {
       "id": "n188",
@@ -1862,7 +1862,7 @@
       "label": "circle-point_n188",
       "angle": 3.9269908169872414,
       "radius": 5,
-      "parentLabel": "tumi-7"
+      "parentLabel": "tumi"
     },
     {
       "id": "n189",
@@ -1872,7 +1872,7 @@
       "label": "circle-point_n189",
       "angle": 4.71238898038469,
       "radius": 5,
-      "parentLabel": "tumi-7"
+      "parentLabel": "tumi"
     },
     {
       "id": "n190",
@@ -1882,14 +1882,14 @@
       "label": "circle-point_n190",
       "angle": 5.497787143782138,
       "radius": 5,
-      "parentLabel": "tumi-7"
+      "parentLabel": "tumi"
     },
     {
       "id": "n191",
       "x": 6102.6396,
       "y": -11184.726,
       "type": "circle-center",
-      "label": "coach-1",
+      "label": "coach",
       "radius": 5
     },
     {
@@ -1900,7 +1900,7 @@
       "label": "circle-point_n192",
       "angle": 0,
       "radius": 5,
-      "parentLabel": "coach-1"
+      "parentLabel": "coach"
     },
     {
       "id": "n193",
@@ -1910,7 +1910,7 @@
       "label": "circle-point_n193",
       "angle": 0.7853981633974483,
       "radius": 5,
-      "parentLabel": "coach-1"
+      "parentLabel": "coach"
     },
     {
       "id": "n194",
@@ -1920,7 +1920,7 @@
       "label": "circle-point_n194",
       "angle": 1.5707963267948966,
       "radius": 5,
-      "parentLabel": "coach-1"
+      "parentLabel": "coach"
     },
     {
       "id": "n195",
@@ -1930,7 +1930,7 @@
       "label": "circle-point_n195",
       "angle": 2.356194490192345,
       "radius": 5,
-      "parentLabel": "coach-1"
+      "parentLabel": "coach"
     },
     {
       "id": "n196",
@@ -1940,7 +1940,7 @@
       "label": "circle-point_n196",
       "angle": 3.141592653589793,
       "radius": 5,
-      "parentLabel": "coach-1"
+      "parentLabel": "coach"
     },
     {
       "id": "n197",
@@ -1950,7 +1950,7 @@
       "label": "circle-point_n197",
       "angle": 3.9269908169872414,
       "radius": 5,
-      "parentLabel": "coach-1"
+      "parentLabel": "coach"
     },
     {
       "id": "n198",
@@ -1960,7 +1960,7 @@
       "label": "circle-point_n198",
       "angle": 4.71238898038469,
       "radius": 5,
-      "parentLabel": "coach-1"
+      "parentLabel": "coach"
     },
     {
       "id": "n199",
@@ -1970,14 +1970,14 @@
       "label": "circle-point_n199",
       "angle": 5.497787143782138,
       "radius": 5,
-      "parentLabel": "coach-1"
+      "parentLabel": "coach"
     },
     {
       "id": "n200",
       "x": 6132.4219,
       "y": -11271.479,
       "type": "circle-center",
-      "label": "bowie-2",
+      "label": "bowie",
       "radius": 5
     },
     {
@@ -1988,7 +1988,7 @@
       "label": "circle-point_n201",
       "angle": 0,
       "radius": 5,
-      "parentLabel": "bowie-2"
+      "parentLabel": "bowie"
     },
     {
       "id": "n202",
@@ -1998,7 +1998,7 @@
       "label": "circle-point_n202",
       "angle": 0.7853981633974483,
       "radius": 5,
-      "parentLabel": "bowie-2"
+      "parentLabel": "bowie"
     },
     {
       "id": "n203",
@@ -2008,7 +2008,7 @@
       "label": "circle-point_n203",
       "angle": 1.5707963267948966,
       "radius": 5,
-      "parentLabel": "bowie-2"
+      "parentLabel": "bowie"
     },
     {
       "id": "n204",
@@ -2018,7 +2018,7 @@
       "label": "circle-point_n204",
       "angle": 2.356194490192345,
       "radius": 5,
-      "parentLabel": "bowie-2"
+      "parentLabel": "bowie"
     },
     {
       "id": "n205",
@@ -2028,7 +2028,7 @@
       "label": "circle-point_n205",
       "angle": 3.141592653589793,
       "radius": 5,
-      "parentLabel": "bowie-2"
+      "parentLabel": "bowie"
     },
     {
       "id": "n206",
@@ -2038,7 +2038,7 @@
       "label": "circle-point_n206",
       "angle": 3.9269908169872414,
       "radius": 5,
-      "parentLabel": "bowie-2"
+      "parentLabel": "bowie"
     },
     {
       "id": "n207",
@@ -2048,7 +2048,7 @@
       "label": "circle-point_n207",
       "angle": 4.71238898038469,
       "radius": 5,
-      "parentLabel": "bowie-2"
+      "parentLabel": "bowie"
     },
     {
       "id": "n208",
@@ -2058,14 +2058,14 @@
       "label": "circle-point_n208",
       "angle": 5.497787143782138,
       "radius": 5,
-      "parentLabel": "bowie-2"
+      "parentLabel": "bowie"
     },
     {
       "id": "n209",
       "x": 6185.3164,
       "y": -11331.211,
       "type": "circle-center",
-      "label": "aigner-6",
+      "label": "aigner",
       "radius": 5
     },
     {
@@ -2076,7 +2076,7 @@
       "label": "circle-point_n210",
       "angle": 0,
       "radius": 5,
-      "parentLabel": "aigner-6"
+      "parentLabel": "aigner"
     },
     {
       "id": "n211",
@@ -2086,7 +2086,7 @@
       "label": "circle-point_n211",
       "angle": 0.7853981633974483,
       "radius": 5,
-      "parentLabel": "aigner-6"
+      "parentLabel": "aigner"
     },
     {
       "id": "n212",
@@ -2096,7 +2096,7 @@
       "label": "circle-point_n212",
       "angle": 1.5707963267948966,
       "radius": 5,
-      "parentLabel": "aigner-6"
+      "parentLabel": "aigner"
     },
     {
       "id": "n213",
@@ -2106,7 +2106,7 @@
       "label": "circle-point_n213",
       "angle": 2.356194490192345,
       "radius": 5,
-      "parentLabel": "aigner-6"
+      "parentLabel": "aigner"
     },
     {
       "id": "n214",
@@ -2116,7 +2116,7 @@
       "label": "circle-point_n214",
       "angle": 3.141592653589793,
       "radius": 5,
-      "parentLabel": "aigner-6"
+      "parentLabel": "aigner"
     },
     {
       "id": "n215",
@@ -2126,7 +2126,7 @@
       "label": "circle-point_n215",
       "angle": 3.9269908169872414,
       "radius": 5,
-      "parentLabel": "aigner-6"
+      "parentLabel": "aigner"
     },
     {
       "id": "n216",
@@ -2136,7 +2136,7 @@
       "label": "circle-point_n216",
       "angle": 4.71238898038469,
       "radius": 5,
-      "parentLabel": "aigner-6"
+      "parentLabel": "aigner"
     },
     {
       "id": "n217",
@@ -2146,14 +2146,14 @@
       "label": "circle-point_n217",
       "angle": 5.497787143782138,
       "radius": 5,
-      "parentLabel": "aigner-6"
+      "parentLabel": "aigner"
     },
     {
       "id": "n218",
       "x": 6227.0308,
       "y": -11353.322,
       "type": "circle-center",
-      "label": "lexus-9",
+      "label": "lexus",
       "radius": 5
     },
     {
@@ -2164,7 +2164,7 @@
       "label": "circle-point_n219",
       "angle": 0,
       "radius": 5,
-      "parentLabel": "lexus-9"
+      "parentLabel": "lexus"
     },
     {
       "id": "n220",
@@ -2174,7 +2174,7 @@
       "label": "circle-point_n220",
       "angle": 0.7853981633974483,
       "radius": 5,
-      "parentLabel": "lexus-9"
+      "parentLabel": "lexus"
     },
     {
       "id": "n221",
@@ -2184,7 +2184,7 @@
       "label": "circle-point_n221",
       "angle": 1.5707963267948966,
       "radius": 5,
-      "parentLabel": "lexus-9"
+      "parentLabel": "lexus"
     },
     {
       "id": "n222",
@@ -2194,7 +2194,7 @@
       "label": "circle-point_n222",
       "angle": 2.356194490192345,
       "radius": 5,
-      "parentLabel": "lexus-9"
+      "parentLabel": "lexus"
     },
     {
       "id": "n223",
@@ -2204,7 +2204,7 @@
       "label": "circle-point_n223",
       "angle": 3.141592653589793,
       "radius": 5,
-      "parentLabel": "lexus-9"
+      "parentLabel": "lexus"
     },
     {
       "id": "n224",
@@ -2214,7 +2214,7 @@
       "label": "circle-point_n224",
       "angle": 3.9269908169872414,
       "radius": 5,
-      "parentLabel": "lexus-9"
+      "parentLabel": "lexus"
     },
     {
       "id": "n225",
@@ -2224,7 +2224,7 @@
       "label": "circle-point_n225",
       "angle": 4.71238898038469,
       "radius": 5,
-      "parentLabel": "lexus-9"
+      "parentLabel": "lexus"
     },
     {
       "id": "n226",
@@ -2234,14 +2234,14 @@
       "label": "circle-point_n226",
       "angle": 5.497787143782138,
       "radius": 5,
-      "parentLabel": "lexus-9"
+      "parentLabel": "lexus"
     },
     {
       "id": "n227",
       "x": 6407.6357,
       "y": -11211.102,
       "type": "circle-center",
-      "label": "braun_buffel-5",
+      "label": "braun_buffel",
       "radius": 5
     },
     {
@@ -2252,7 +2252,7 @@
       "label": "circle-point_n228",
       "angle": 0,
       "radius": 5,
-      "parentLabel": "braun_buffel-5"
+      "parentLabel": "braun_buffel"
     },
     {
       "id": "n229",
@@ -2262,7 +2262,7 @@
       "label": "circle-point_n229",
       "angle": 0.7853981633974483,
       "radius": 5,
-      "parentLabel": "braun_buffel-5"
+      "parentLabel": "braun_buffel"
     },
     {
       "id": "n230",
@@ -2272,7 +2272,7 @@
       "label": "circle-point_n230",
       "angle": 1.5707963267948966,
       "radius": 5,
-      "parentLabel": "braun_buffel-5"
+      "parentLabel": "braun_buffel"
     },
     {
       "id": "n231",
@@ -2282,7 +2282,7 @@
       "label": "circle-point_n231",
       "angle": 2.356194490192345,
       "radius": 5,
-      "parentLabel": "braun_buffel-5"
+      "parentLabel": "braun_buffel"
     },
     {
       "id": "n232",
@@ -2292,7 +2292,7 @@
       "label": "circle-point_n232",
       "angle": 3.141592653589793,
       "radius": 5,
-      "parentLabel": "braun_buffel-5"
+      "parentLabel": "braun_buffel"
     },
     {
       "id": "n233",
@@ -2302,7 +2302,7 @@
       "label": "circle-point_n233",
       "angle": 3.9269908169872414,
       "radius": 5,
-      "parentLabel": "braun_buffel-5"
+      "parentLabel": "braun_buffel"
     },
     {
       "id": "n234",
@@ -2312,7 +2312,7 @@
       "label": "circle-point_n234",
       "angle": 4.71238898038469,
       "radius": 5,
-      "parentLabel": "braun_buffel-5"
+      "parentLabel": "braun_buffel"
     },
     {
       "id": "n235",
@@ -2322,14 +2322,14 @@
       "label": "circle-point_n235",
       "angle": 5.497787143782138,
       "radius": 5,
-      "parentLabel": "braun_buffel-5"
+      "parentLabel": "braun_buffel"
     },
     {
       "id": "n236",
       "x": 6285.8594,
       "y": -10953.856,
       "type": "circle-center",
-      "label": "metro-8",
+      "label": "metro",
       "radius": 5
     },
     {
@@ -2340,7 +2340,7 @@
       "label": "circle-point_n237",
       "angle": 0,
       "radius": 5,
-      "parentLabel": "metro-8"
+      "parentLabel": "metro"
     },
     {
       "id": "n238",
@@ -2350,7 +2350,7 @@
       "label": "circle-point_n238",
       "angle": 0.7853981633974483,
       "radius": 5,
-      "parentLabel": "metro-8"
+      "parentLabel": "metro"
     },
     {
       "id": "n239",
@@ -2360,7 +2360,7 @@
       "label": "circle-point_n239",
       "angle": 1.5707963267948966,
       "radius": 5,
-      "parentLabel": "metro-8"
+      "parentLabel": "metro"
     },
     {
       "id": "n240",
@@ -2370,7 +2370,7 @@
       "label": "circle-point_n240",
       "angle": 2.356194490192345,
       "radius": 5,
-      "parentLabel": "metro-8"
+      "parentLabel": "metro"
     },
     {
       "id": "n241",
@@ -2380,7 +2380,7 @@
       "label": "circle-point_n241",
       "angle": 3.141592653589793,
       "radius": 5,
-      "parentLabel": "metro-8"
+      "parentLabel": "metro"
     },
     {
       "id": "n242",
@@ -2390,7 +2390,7 @@
       "label": "circle-point_n242",
       "angle": 3.9269908169872414,
       "radius": 5,
-      "parentLabel": "metro-8"
+      "parentLabel": "metro"
     },
     {
       "id": "n243",
@@ -2400,7 +2400,7 @@
       "label": "circle-point_n243",
       "angle": 4.71238898038469,
       "radius": 5,
-      "parentLabel": "metro-8"
+      "parentLabel": "metro"
     },
     {
       "id": "n244",
@@ -2410,14 +2410,14 @@
       "label": "circle-point_n244",
       "angle": 5.497787143782138,
       "radius": 5,
-      "parentLabel": "metro-8"
+      "parentLabel": "metro"
     },
     {
       "id": "n245",
       "x": 6151.2441,
       "y": -10955.39,
       "type": "circle-center",
-      "label": "d2i_store-5",
+      "label": "d2i_store",
       "radius": 5
     },
     {
@@ -2428,7 +2428,7 @@
       "label": "circle-point_n246",
       "angle": 0,
       "radius": 5,
-      "parentLabel": "d2i_store-5"
+      "parentLabel": "d2i_store"
     },
     {
       "id": "n247",
@@ -2438,7 +2438,7 @@
       "label": "circle-point_n247",
       "angle": 0.7853981633974483,
       "radius": 5,
-      "parentLabel": "d2i_store-5"
+      "parentLabel": "d2i_store"
     },
     {
       "id": "n248",
@@ -2448,7 +2448,7 @@
       "label": "circle-point_n248",
       "angle": 1.5707963267948966,
       "radius": 5,
-      "parentLabel": "d2i_store-5"
+      "parentLabel": "d2i_store"
     },
     {
       "id": "n249",
@@ -2458,7 +2458,7 @@
       "label": "circle-point_n249",
       "angle": 2.356194490192345,
       "radius": 5,
-      "parentLabel": "d2i_store-5"
+      "parentLabel": "d2i_store"
     },
     {
       "id": "n250",
@@ -2468,7 +2468,7 @@
       "label": "circle-point_n250",
       "angle": 3.141592653589793,
       "radius": 5,
-      "parentLabel": "d2i_store-5"
+      "parentLabel": "d2i_store"
     },
     {
       "id": "n251",
@@ -2478,7 +2478,7 @@
       "label": "circle-point_n251",
       "angle": 3.9269908169872414,
       "radius": 5,
-      "parentLabel": "d2i_store-5"
+      "parentLabel": "d2i_store"
     },
     {
       "id": "n252",
@@ -2488,7 +2488,7 @@
       "label": "circle-point_n252",
       "angle": 4.71238898038469,
       "radius": 5,
-      "parentLabel": "d2i_store-5"
+      "parentLabel": "d2i_store"
     },
     {
       "id": "n253",
@@ -2498,14 +2498,14 @@
       "label": "circle-point_n253",
       "angle": 5.497787143782138,
       "radius": 5,
-      "parentLabel": "d2i_store-5"
+      "parentLabel": "d2i_store"
     },
     {
       "id": "n254",
       "x": 6209.0552,
       "y": -11115.263,
       "type": "circle-center",
-      "label": "frank_n_co-8",
+      "label": "frank_n_co",
       "radius": 5
     },
     {
@@ -2516,7 +2516,7 @@
       "label": "circle-point_n255",
       "angle": 0,
       "radius": 5,
-      "parentLabel": "frank_n_co-8"
+      "parentLabel": "frank_n_co"
     },
     {
       "id": "n256",
@@ -2526,7 +2526,7 @@
       "label": "circle-point_n256",
       "angle": 0.7853981633974483,
       "radius": 5,
-      "parentLabel": "frank_n_co-8"
+      "parentLabel": "frank_n_co"
     },
     {
       "id": "n257",
@@ -2536,7 +2536,7 @@
       "label": "circle-point_n257",
       "angle": 1.5707963267948966,
       "radius": 5,
-      "parentLabel": "frank_n_co-8"
+      "parentLabel": "frank_n_co"
     },
     {
       "id": "n258",
@@ -2546,7 +2546,7 @@
       "label": "circle-point_n258",
       "angle": 2.356194490192345,
       "radius": 5,
-      "parentLabel": "frank_n_co-8"
+      "parentLabel": "frank_n_co"
     },
     {
       "id": "n259",
@@ -2556,7 +2556,7 @@
       "label": "circle-point_n259",
       "angle": 3.141592653589793,
       "radius": 5,
-      "parentLabel": "frank_n_co-8"
+      "parentLabel": "frank_n_co"
     },
     {
       "id": "n260",
@@ -2566,7 +2566,7 @@
       "label": "circle-point_n260",
       "angle": 3.9269908169872414,
       "radius": 5,
-      "parentLabel": "frank_n_co-8"
+      "parentLabel": "frank_n_co"
     },
     {
       "id": "n261",
@@ -2576,7 +2576,7 @@
       "label": "circle-point_n261",
       "angle": 4.71238898038469,
       "radius": 5,
-      "parentLabel": "frank_n_co-8"
+      "parentLabel": "frank_n_co"
     },
     {
       "id": "n262",
@@ -2586,14 +2586,14 @@
       "label": "circle-point_n262",
       "angle": 5.497787143782138,
       "radius": 5,
-      "parentLabel": "frank_n_co-8"
+      "parentLabel": "frank_n_co"
     },
     {
       "id": "n263",
       "x": 6237.0801,
       "y": -11160.932,
       "type": "circle-center",
-      "label": "boss-3",
+      "label": "boss",
       "radius": 5
     },
     {
@@ -2604,7 +2604,7 @@
       "label": "circle-point_n264",
       "angle": 0,
       "radius": 5,
-      "parentLabel": "boss-3"
+      "parentLabel": "boss"
     },
     {
       "id": "n265",
@@ -2614,7 +2614,7 @@
       "label": "circle-point_n265",
       "angle": 0.7853981633974483,
       "radius": 5,
-      "parentLabel": "boss-3"
+      "parentLabel": "boss"
     },
     {
       "id": "n266",
@@ -2624,7 +2624,7 @@
       "label": "circle-point_n266",
       "angle": 1.5707963267948966,
       "radius": 5,
-      "parentLabel": "boss-3"
+      "parentLabel": "boss"
     },
     {
       "id": "n267",
@@ -2634,7 +2634,7 @@
       "label": "circle-point_n267",
       "angle": 2.356194490192345,
       "radius": 5,
-      "parentLabel": "boss-3"
+      "parentLabel": "boss"
     },
     {
       "id": "n268",
@@ -2644,7 +2644,7 @@
       "label": "circle-point_n268",
       "angle": 3.141592653589793,
       "radius": 5,
-      "parentLabel": "boss-3"
+      "parentLabel": "boss"
     },
     {
       "id": "n269",
@@ -2654,7 +2654,7 @@
       "label": "circle-point_n269",
       "angle": 3.9269908169872414,
       "radius": 5,
-      "parentLabel": "boss-3"
+      "parentLabel": "boss"
     },
     {
       "id": "n270",
@@ -2664,7 +2664,7 @@
       "label": "circle-point_n270",
       "angle": 4.71238898038469,
       "radius": 5,
-      "parentLabel": "boss-3"
+      "parentLabel": "boss"
     },
     {
       "id": "n271",
@@ -2674,14 +2674,14 @@
       "label": "circle-point_n271",
       "angle": 5.497787143782138,
       "radius": 5,
-      "parentLabel": "boss-3"
+      "parentLabel": "boss"
     },
     {
       "id": "n272",
       "x": 6045.8037,
       "y": -10870.326,
       "type": "circle-center",
-      "label": "marketing_gallery-7",
+      "label": "marketing_gallery",
       "radius": 5
     },
     {
@@ -2692,7 +2692,7 @@
       "label": "circle-point_n273",
       "angle": 0,
       "radius": 5,
-      "parentLabel": "marketing_gallery-7"
+      "parentLabel": "marketing_gallery"
     },
     {
       "id": "n274",
@@ -2702,7 +2702,7 @@
       "label": "circle-point_n274",
       "angle": 0.7853981633974483,
       "radius": 5,
-      "parentLabel": "marketing_gallery-7"
+      "parentLabel": "marketing_gallery"
     },
     {
       "id": "n275",
@@ -2712,7 +2712,7 @@
       "label": "circle-point_n275",
       "angle": 1.5707963267948966,
       "radius": 5,
-      "parentLabel": "marketing_gallery-7"
+      "parentLabel": "marketing_gallery"
     },
     {
       "id": "n276",
@@ -2722,7 +2722,7 @@
       "label": "circle-point_n276",
       "angle": 2.356194490192345,
       "radius": 5,
-      "parentLabel": "marketing_gallery-7"
+      "parentLabel": "marketing_gallery"
     },
     {
       "id": "n277",
@@ -2732,7 +2732,7 @@
       "label": "circle-point_n277",
       "angle": 3.141592653589793,
       "radius": 5,
-      "parentLabel": "marketing_gallery-7"
+      "parentLabel": "marketing_gallery"
     },
     {
       "id": "n278",
@@ -2742,7 +2742,7 @@
       "label": "circle-point_n278",
       "angle": 3.9269908169872414,
       "radius": 5,
-      "parentLabel": "marketing_gallery-7"
+      "parentLabel": "marketing_gallery"
     },
     {
       "id": "n279",
@@ -2752,7 +2752,7 @@
       "label": "circle-point_n279",
       "angle": 4.71238898038469,
       "radius": 5,
-      "parentLabel": "marketing_gallery-7"
+      "parentLabel": "marketing_gallery"
     },
     {
       "id": "n280",
@@ -2762,14 +2762,14 @@
       "label": "circle-point_n280",
       "angle": 5.497787143782138,
       "radius": 5,
-      "parentLabel": "marketing_gallery-7"
+      "parentLabel": "marketing_gallery"
     },
     {
       "id": "n281",
       "x": 5938.1475,
       "y": -10947.103,
       "type": "circle-center",
-      "label": "tissot-5",
+      "label": "tissot",
       "radius": 5
     },
     {
@@ -2780,7 +2780,7 @@
       "label": "circle-point_n282",
       "angle": 0,
       "radius": 5,
-      "parentLabel": "tissot-5"
+      "parentLabel": "tissot"
     },
     {
       "id": "n283",
@@ -2790,7 +2790,7 @@
       "label": "circle-point_n283",
       "angle": 0.7853981633974483,
       "radius": 5,
-      "parentLabel": "tissot-5"
+      "parentLabel": "tissot"
     },
     {
       "id": "n284",
@@ -2800,7 +2800,7 @@
       "label": "circle-point_n284",
       "angle": 1.5707963267948966,
       "radius": 5,
-      "parentLabel": "tissot-5"
+      "parentLabel": "tissot"
     },
     {
       "id": "n285",
@@ -2810,7 +2810,7 @@
       "label": "circle-point_n285",
       "angle": 2.356194490192345,
       "radius": 5,
-      "parentLabel": "tissot-5"
+      "parentLabel": "tissot"
     },
     {
       "id": "n286",
@@ -2820,7 +2820,7 @@
       "label": "circle-point_n286",
       "angle": 3.141592653589793,
       "radius": 5,
-      "parentLabel": "tissot-5"
+      "parentLabel": "tissot"
     },
     {
       "id": "n287",
@@ -2830,7 +2830,7 @@
       "label": "circle-point_n287",
       "angle": 3.9269908169872414,
       "radius": 5,
-      "parentLabel": "tissot-5"
+      "parentLabel": "tissot"
     },
     {
       "id": "n288",
@@ -2840,7 +2840,7 @@
       "label": "circle-point_n288",
       "angle": 4.71238898038469,
       "radius": 5,
-      "parentLabel": "tissot-5"
+      "parentLabel": "tissot"
     },
     {
       "id": "n289",
@@ -2850,14 +2850,14 @@
       "label": "circle-point_n289",
       "angle": 5.497787143782138,
       "radius": 5,
-      "parentLabel": "tissot-5"
+      "parentLabel": "tissot"
     },
     {
       "id": "n290",
       "x": 5843.438,
       "y": -10947.396,
       "type": "circle-center",
-      "label": "memo_paris-4",
+      "label": "memo_paris",
       "radius": 5
     },
     {
@@ -2868,7 +2868,7 @@
       "label": "circle-point_n291",
       "angle": 0,
       "radius": 5,
-      "parentLabel": "memo_paris-4"
+      "parentLabel": "memo_paris"
     },
     {
       "id": "n292",
@@ -2878,7 +2878,7 @@
       "label": "circle-point_n292",
       "angle": 0.7853981633974483,
       "radius": 5,
-      "parentLabel": "memo_paris-4"
+      "parentLabel": "memo_paris"
     },
     {
       "id": "n293",
@@ -2888,7 +2888,7 @@
       "label": "circle-point_n293",
       "angle": 1.5707963267948966,
       "radius": 5,
-      "parentLabel": "memo_paris-4"
+      "parentLabel": "memo_paris"
     },
     {
       "id": "n294",
@@ -2898,7 +2898,7 @@
       "label": "circle-point_n294",
       "angle": 2.356194490192345,
       "radius": 5,
-      "parentLabel": "memo_paris-4"
+      "parentLabel": "memo_paris"
     },
     {
       "id": "n295",
@@ -2908,7 +2908,7 @@
       "label": "circle-point_n295",
       "angle": 3.141592653589793,
       "radius": 5,
-      "parentLabel": "memo_paris-4"
+      "parentLabel": "memo_paris"
     },
     {
       "id": "n296",
@@ -2918,7 +2918,7 @@
       "label": "circle-point_n296",
       "angle": 3.9269908169872414,
       "radius": 5,
-      "parentLabel": "memo_paris-4"
+      "parentLabel": "memo_paris"
     },
     {
       "id": "n297",
@@ -2928,7 +2928,7 @@
       "label": "circle-point_n297",
       "angle": 4.71238898038469,
       "radius": 5,
-      "parentLabel": "memo_paris-4"
+      "parentLabel": "memo_paris"
     },
     {
       "id": "n298",
@@ -2938,14 +2938,14 @@
       "label": "circle-point_n298",
       "angle": 5.497787143782138,
       "radius": 5,
-      "parentLabel": "memo_paris-4"
+      "parentLabel": "memo_paris"
     },
     {
       "id": "n299",
       "x": 5752.8101,
       "y": -10943.073,
       "type": "circle-center",
-      "label": "frederique_constant-4",
+      "label": "frederique_constant",
       "radius": 5
     },
     {
@@ -2956,7 +2956,7 @@
       "label": "circle-point_n300",
       "angle": 0,
       "radius": 5,
-      "parentLabel": "frederique_constant-4"
+      "parentLabel": "frederique_constant"
     },
     {
       "id": "n301",
@@ -2966,7 +2966,7 @@
       "label": "circle-point_n301",
       "angle": 0.7853981633974483,
       "radius": 5,
-      "parentLabel": "frederique_constant-4"
+      "parentLabel": "frederique_constant"
     },
     {
       "id": "n302",
@@ -2976,7 +2976,7 @@
       "label": "circle-point_n302",
       "angle": 1.5707963267948966,
       "radius": 5,
-      "parentLabel": "frederique_constant-4"
+      "parentLabel": "frederique_constant"
     },
     {
       "id": "n303",
@@ -2986,7 +2986,7 @@
       "label": "circle-point_n303",
       "angle": 2.356194490192345,
       "radius": 5,
-      "parentLabel": "frederique_constant-4"
+      "parentLabel": "frederique_constant"
     },
     {
       "id": "n304",
@@ -2996,7 +2996,7 @@
       "label": "circle-point_n304",
       "angle": 3.141592653589793,
       "radius": 5,
-      "parentLabel": "frederique_constant-4"
+      "parentLabel": "frederique_constant"
     },
     {
       "id": "n305",
@@ -3006,7 +3006,7 @@
       "label": "circle-point_n305",
       "angle": 3.9269908169872414,
       "radius": 5,
-      "parentLabel": "frederique_constant-4"
+      "parentLabel": "frederique_constant"
     },
     {
       "id": "n306",
@@ -3016,7 +3016,7 @@
       "label": "circle-point_n306",
       "angle": 4.71238898038469,
       "radius": 5,
-      "parentLabel": "frederique_constant-4"
+      "parentLabel": "frederique_constant"
     },
     {
       "id": "n307",
@@ -3026,14 +3026,14 @@
       "label": "circle-point_n307",
       "angle": 5.497787143782138,
       "radius": 5,
-      "parentLabel": "frederique_constant-4"
+      "parentLabel": "frederique_constant"
     },
     {
       "id": "n308",
       "x": 5784.8618,
       "y": -11041.857,
       "type": "circle-center",
-      "label": "molton_brown-5",
+      "label": "molton_brown",
       "radius": 5
     },
     {
@@ -3044,7 +3044,7 @@
       "label": "circle-point_n309",
       "angle": 0,
       "radius": 5,
-      "parentLabel": "molton_brown-5"
+      "parentLabel": "molton_brown"
     },
     {
       "id": "n310",
@@ -3054,7 +3054,7 @@
       "label": "circle-point_n310",
       "angle": 0.7853981633974483,
       "radius": 5,
-      "parentLabel": "molton_brown-5"
+      "parentLabel": "molton_brown"
     },
     {
       "id": "n311",
@@ -3064,7 +3064,7 @@
       "label": "circle-point_n311",
       "angle": 1.5707963267948966,
       "radius": 5,
-      "parentLabel": "molton_brown-5"
+      "parentLabel": "molton_brown"
     },
     {
       "id": "n312",
@@ -3074,7 +3074,7 @@
       "label": "circle-point_n312",
       "angle": 2.356194490192345,
       "radius": 5,
-      "parentLabel": "molton_brown-5"
+      "parentLabel": "molton_brown"
     },
     {
       "id": "n313",
@@ -3084,7 +3084,7 @@
       "label": "circle-point_n313",
       "angle": 3.141592653589793,
       "radius": 5,
-      "parentLabel": "molton_brown-5"
+      "parentLabel": "molton_brown"
     },
     {
       "id": "n314",
@@ -3094,7 +3094,7 @@
       "label": "circle-point_n314",
       "angle": 3.9269908169872414,
       "radius": 5,
-      "parentLabel": "molton_brown-5"
+      "parentLabel": "molton_brown"
     },
     {
       "id": "n315",
@@ -3104,7 +3104,7 @@
       "label": "circle-point_n315",
       "angle": 4.71238898038469,
       "radius": 5,
-      "parentLabel": "molton_brown-5"
+      "parentLabel": "molton_brown"
     },
     {
       "id": "n316",
@@ -3114,14 +3114,14 @@
       "label": "circle-point_n316",
       "angle": 5.497787143782138,
       "radius": 5,
-      "parentLabel": "molton_brown-5"
+      "parentLabel": "molton_brown"
     },
     {
       "id": "n317",
       "x": 5859.5967,
       "y": -11041.067,
       "type": "circle-center",
-      "label": "filosofia-0",
+      "label": "filosofia",
       "radius": 5
     },
     {
@@ -3132,7 +3132,7 @@
       "label": "circle-point_n318",
       "angle": 0,
       "radius": 5,
-      "parentLabel": "filosofia-0"
+      "parentLabel": "filosofia"
     },
     {
       "id": "n319",
@@ -3142,7 +3142,7 @@
       "label": "circle-point_n319",
       "angle": 0.7853981633974483,
       "radius": 5,
-      "parentLabel": "filosofia-0"
+      "parentLabel": "filosofia"
     },
     {
       "id": "n320",
@@ -3152,7 +3152,7 @@
       "label": "circle-point_n320",
       "angle": 1.5707963267948966,
       "radius": 5,
-      "parentLabel": "filosofia-0"
+      "parentLabel": "filosofia"
     },
     {
       "id": "n321",
@@ -3162,7 +3162,7 @@
       "label": "circle-point_n321",
       "angle": 2.356194490192345,
       "radius": 5,
-      "parentLabel": "filosofia-0"
+      "parentLabel": "filosofia"
     },
     {
       "id": "n322",
@@ -3172,7 +3172,7 @@
       "label": "circle-point_n322",
       "angle": 3.141592653589793,
       "radius": 5,
-      "parentLabel": "filosofia-0"
+      "parentLabel": "filosofia"
     },
     {
       "id": "n323",
@@ -3182,7 +3182,7 @@
       "label": "circle-point_n323",
       "angle": 3.9269908169872414,
       "radius": 5,
-      "parentLabel": "filosofia-0"
+      "parentLabel": "filosofia"
     },
     {
       "id": "n324",
@@ -3192,7 +3192,7 @@
       "label": "circle-point_n324",
       "angle": 4.71238898038469,
       "radius": 5,
-      "parentLabel": "filosofia-0"
+      "parentLabel": "filosofia"
     },
     {
       "id": "n325",
@@ -3202,14 +3202,14 @@
       "label": "circle-point_n325",
       "angle": 5.497787143782138,
       "radius": 5,
-      "parentLabel": "filosofia-0"
+      "parentLabel": "filosofia"
     },
     {
       "id": "n326",
       "x": 5909.3354,
       "y": -11029.763,
       "type": "circle-center",
-      "label": "pandora-3",
+      "label": "pandora",
       "radius": 5
     },
     {
@@ -3220,7 +3220,7 @@
       "label": "circle-point_n327",
       "angle": 0,
       "radius": 5,
-      "parentLabel": "pandora-3"
+      "parentLabel": "pandora"
     },
     {
       "id": "n328",
@@ -3230,7 +3230,7 @@
       "label": "circle-point_n328",
       "angle": 0.7853981633974483,
       "radius": 5,
-      "parentLabel": "pandora-3"
+      "parentLabel": "pandora"
     },
     {
       "id": "n329",
@@ -3240,7 +3240,7 @@
       "label": "circle-point_n329",
       "angle": 1.5707963267948966,
       "radius": 5,
-      "parentLabel": "pandora-3"
+      "parentLabel": "pandora"
     },
     {
       "id": "n330",
@@ -3250,7 +3250,7 @@
       "label": "circle-point_n330",
       "angle": 2.356194490192345,
       "radius": 5,
-      "parentLabel": "pandora-3"
+      "parentLabel": "pandora"
     },
     {
       "id": "n331",
@@ -3260,7 +3260,7 @@
       "label": "circle-point_n331",
       "angle": 3.141592653589793,
       "radius": 5,
-      "parentLabel": "pandora-3"
+      "parentLabel": "pandora"
     },
     {
       "id": "n332",
@@ -3270,7 +3270,7 @@
       "label": "circle-point_n332",
       "angle": 3.9269908169872414,
       "radius": 5,
-      "parentLabel": "pandora-3"
+      "parentLabel": "pandora"
     },
     {
       "id": "n333",
@@ -3280,7 +3280,7 @@
       "label": "circle-point_n333",
       "angle": 4.71238898038469,
       "radius": 5,
-      "parentLabel": "pandora-3"
+      "parentLabel": "pandora"
     },
     {
       "id": "n334",
@@ -3290,14 +3290,14 @@
       "label": "circle-point_n334",
       "angle": 5.497787143782138,
       "radius": 5,
-      "parentLabel": "pandora-3"
+      "parentLabel": "pandora"
     },
     {
       "id": "n335",
       "x": 5891.5449,
       "y": -11094.199,
       "type": "circle-center",
-      "label": "sandro-9",
+      "label": "sandro",
       "radius": 5
     },
     {
@@ -3308,7 +3308,7 @@
       "label": "circle-point_n336",
       "angle": 0,
       "radius": 5,
-      "parentLabel": "sandro-9"
+      "parentLabel": "sandro"
     },
     {
       "id": "n337",
@@ -3318,7 +3318,7 @@
       "label": "circle-point_n337",
       "angle": 0.7853981633974483,
       "radius": 5,
-      "parentLabel": "sandro-9"
+      "parentLabel": "sandro"
     },
     {
       "id": "n338",
@@ -3328,7 +3328,7 @@
       "label": "circle-point_n338",
       "angle": 1.5707963267948966,
       "radius": 5,
-      "parentLabel": "sandro-9"
+      "parentLabel": "sandro"
     },
     {
       "id": "n339",
@@ -3338,7 +3338,7 @@
       "label": "circle-point_n339",
       "angle": 2.356194490192345,
       "radius": 5,
-      "parentLabel": "sandro-9"
+      "parentLabel": "sandro"
     },
     {
       "id": "n340",
@@ -3348,7 +3348,7 @@
       "label": "circle-point_n340",
       "angle": 3.141592653589793,
       "radius": 5,
-      "parentLabel": "sandro-9"
+      "parentLabel": "sandro"
     },
     {
       "id": "n341",
@@ -3358,7 +3358,7 @@
       "label": "circle-point_n341",
       "angle": 3.9269908169872414,
       "radius": 5,
-      "parentLabel": "sandro-9"
+      "parentLabel": "sandro"
     },
     {
       "id": "n342",
@@ -3368,7 +3368,7 @@
       "label": "circle-point_n342",
       "angle": 4.71238898038469,
       "radius": 5,
-      "parentLabel": "sandro-9"
+      "parentLabel": "sandro"
     },
     {
       "id": "n343",
@@ -3378,14 +3378,14 @@
       "label": "circle-point_n343",
       "angle": 5.497787143782138,
       "radius": 5,
-      "parentLabel": "sandro-9"
+      "parentLabel": "sandro"
     },
     {
       "id": "n344",
       "x": 5981.6274,
       "y": -11094.707,
       "type": "circle-center",
-      "label": "kate_spade-8",
+      "label": "kate_spade",
       "radius": 5
     },
     {
@@ -3396,7 +3396,7 @@
       "label": "circle-point_n345",
       "angle": 0,
       "radius": 5,
-      "parentLabel": "kate_spade-8"
+      "parentLabel": "kate_spade"
     },
     {
       "id": "n346",
@@ -3406,7 +3406,7 @@
       "label": "circle-point_n346",
       "angle": 0.7853981633974483,
       "radius": 5,
-      "parentLabel": "kate_spade-8"
+      "parentLabel": "kate_spade"
     },
     {
       "id": "n347",
@@ -3416,7 +3416,7 @@
       "label": "circle-point_n347",
       "angle": 1.5707963267948966,
       "radius": 5,
-      "parentLabel": "kate_spade-8"
+      "parentLabel": "kate_spade"
     },
     {
       "id": "n348",
@@ -3426,7 +3426,7 @@
       "label": "circle-point_n348",
       "angle": 2.356194490192345,
       "radius": 5,
-      "parentLabel": "kate_spade-8"
+      "parentLabel": "kate_spade"
     },
     {
       "id": "n349",
@@ -3436,7 +3436,7 @@
       "label": "circle-point_n349",
       "angle": 3.141592653589793,
       "radius": 5,
-      "parentLabel": "kate_spade-8"
+      "parentLabel": "kate_spade"
     },
     {
       "id": "n350",
@@ -3446,7 +3446,7 @@
       "label": "circle-point_n350",
       "angle": 3.9269908169872414,
       "radius": 5,
-      "parentLabel": "kate_spade-8"
+      "parentLabel": "kate_spade"
     },
     {
       "id": "n351",
@@ -3456,7 +3456,7 @@
       "label": "circle-point_n351",
       "angle": 4.71238898038469,
       "radius": 5,
-      "parentLabel": "kate_spade-8"
+      "parentLabel": "kate_spade"
     },
     {
       "id": "n352",
@@ -3466,14 +3466,14 @@
       "label": "circle-point_n352",
       "angle": 5.497787143782138,
       "radius": 5,
-      "parentLabel": "kate_spade-8"
+      "parentLabel": "kate_spade"
     },
     {
       "id": "n353",
       "x": 5854.2246,
       "y": -11153.87,
       "type": "circle-center",
-      "label": "oval_east_atrium-9",
+      "label": "oval_east_atrium",
       "radius": 17.5
     },
     {
@@ -3484,7 +3484,7 @@
       "label": "circle-point_n354",
       "angle": 0,
       "radius": 17.5,
-      "parentLabel": "oval_east_atrium-9"
+      "parentLabel": "oval_east_atrium"
     },
     {
       "id": "n355",
@@ -3494,7 +3494,7 @@
       "label": "circle-point_n355",
       "angle": 0.7853981633974483,
       "radius": 17.5,
-      "parentLabel": "oval_east_atrium-9"
+      "parentLabel": "oval_east_atrium"
     },
     {
       "id": "n356",
@@ -3504,7 +3504,7 @@
       "label": "circle-point_n356",
       "angle": 1.5707963267948966,
       "radius": 17.5,
-      "parentLabel": "oval_east_atrium-9"
+      "parentLabel": "oval_east_atrium"
     },
     {
       "id": "n357",
@@ -3514,7 +3514,7 @@
       "label": "circle-point_n357",
       "angle": 2.356194490192345,
       "radius": 17.5,
-      "parentLabel": "oval_east_atrium-9"
+      "parentLabel": "oval_east_atrium"
     },
     {
       "id": "n358",
@@ -3524,7 +3524,7 @@
       "label": "circle-point_n358",
       "angle": 3.141592653589793,
       "radius": 17.5,
-      "parentLabel": "oval_east_atrium-9"
+      "parentLabel": "oval_east_atrium"
     },
     {
       "id": "n359",
@@ -3534,7 +3534,7 @@
       "label": "circle-point_n359",
       "angle": 3.9269908169872414,
       "radius": 17.5,
-      "parentLabel": "oval_east_atrium-9"
+      "parentLabel": "oval_east_atrium"
     },
     {
       "id": "n360",
@@ -3544,7 +3544,7 @@
       "label": "circle-point_n360",
       "angle": 4.71238898038469,
       "radius": 17.5,
-      "parentLabel": "oval_east_atrium-9"
+      "parentLabel": "oval_east_atrium"
     },
     {
       "id": "n361",
@@ -3554,14 +3554,14 @@
       "label": "circle-point_n361",
       "angle": 5.497787143782138,
       "radius": 17.5,
-      "parentLabel": "oval_east_atrium-9"
+      "parentLabel": "oval_east_atrium"
     },
     {
       "id": "n362",
       "x": 5686.0562,
       "y": -11102.522,
       "type": "circle-center",
-      "label": "east_lobby-9",
+      "label": "east_lobby",
       "radius": 17.5
     },
     {
@@ -3572,7 +3572,7 @@
       "label": "circle-point_n363",
       "angle": 0,
       "radius": 17.5,
-      "parentLabel": "east_lobby-9"
+      "parentLabel": "east_lobby"
     },
     {
       "id": "n364",
@@ -3582,7 +3582,7 @@
       "label": "circle-point_n364",
       "angle": 0.7853981633974483,
       "radius": 17.5,
-      "parentLabel": "east_lobby-9"
+      "parentLabel": "east_lobby"
     },
     {
       "id": "n365",
@@ -3592,7 +3592,7 @@
       "label": "circle-point_n365",
       "angle": 1.5707963267948966,
       "radius": 17.5,
-      "parentLabel": "east_lobby-9"
+      "parentLabel": "east_lobby"
     },
     {
       "id": "n366",
@@ -3602,7 +3602,7 @@
       "label": "circle-point_n366",
       "angle": 2.356194490192345,
       "radius": 17.5,
-      "parentLabel": "east_lobby-9"
+      "parentLabel": "east_lobby"
     },
     {
       "id": "n367",
@@ -3612,7 +3612,7 @@
       "label": "circle-point_n367",
       "angle": 3.141592653589793,
       "radius": 17.5,
-      "parentLabel": "east_lobby-9"
+      "parentLabel": "east_lobby"
     },
     {
       "id": "n368",
@@ -3622,7 +3622,7 @@
       "label": "circle-point_n368",
       "angle": 3.9269908169872414,
       "radius": 17.5,
-      "parentLabel": "east_lobby-9"
+      "parentLabel": "east_lobby"
     },
     {
       "id": "n369",
@@ -3632,7 +3632,7 @@
       "label": "circle-point_n369",
       "angle": 4.71238898038469,
       "radius": 17.5,
-      "parentLabel": "east_lobby-9"
+      "parentLabel": "east_lobby"
     },
     {
       "id": "n370",
@@ -3642,14 +3642,14 @@
       "label": "circle-point_n370",
       "angle": 5.497787143782138,
       "radius": 17.5,
-      "parentLabel": "east_lobby-9"
+      "parentLabel": "east_lobby"
     },
     {
       "id": "n371",
       "x": 5877.4077,
       "y": -10982.89,
       "type": "circle-center",
-      "label": "linear_east_atrium-5",
+      "label": "linear_east_atrium",
       "radius": 17.5
     },
     {
@@ -3660,7 +3660,7 @@
       "label": "circle-point_n372",
       "angle": 0,
       "radius": 17.5,
-      "parentLabel": "linear_east_atrium-5"
+      "parentLabel": "linear_east_atrium"
     },
     {
       "id": "n373",
@@ -3670,7 +3670,7 @@
       "label": "circle-point_n373",
       "angle": 0.7853981633974483,
       "radius": 17.5,
-      "parentLabel": "linear_east_atrium-5"
+      "parentLabel": "linear_east_atrium"
     },
     {
       "id": "n374",
@@ -3680,7 +3680,7 @@
       "label": "circle-point_n374",
       "angle": 1.5707963267948966,
       "radius": 17.5,
-      "parentLabel": "linear_east_atrium-5"
+      "parentLabel": "linear_east_atrium"
     },
     {
       "id": "n375",
@@ -3690,7 +3690,7 @@
       "label": "circle-point_n375",
       "angle": 2.356194490192345,
       "radius": 17.5,
-      "parentLabel": "linear_east_atrium-5"
+      "parentLabel": "linear_east_atrium"
     },
     {
       "id": "n376",
@@ -3700,7 +3700,7 @@
       "label": "circle-point_n376",
       "angle": 3.141592653589793,
       "radius": 17.5,
-      "parentLabel": "linear_east_atrium-5"
+      "parentLabel": "linear_east_atrium"
     },
     {
       "id": "n377",
@@ -3710,7 +3710,7 @@
       "label": "circle-point_n377",
       "angle": 3.9269908169872414,
       "radius": 17.5,
-      "parentLabel": "linear_east_atrium-5"
+      "parentLabel": "linear_east_atrium"
     },
     {
       "id": "n378",
@@ -3720,7 +3720,7 @@
       "label": "circle-point_n378",
       "angle": 4.71238898038469,
       "radius": 17.5,
-      "parentLabel": "linear_east_atrium-5"
+      "parentLabel": "linear_east_atrium"
     },
     {
       "id": "n379",
@@ -3730,14 +3730,14 @@
       "label": "circle-point_n379",
       "angle": 5.497787143782138,
       "radius": 17.5,
-      "parentLabel": "linear_east_atrium-5"
+      "parentLabel": "linear_east_atrium"
     },
     {
       "id": "n380",
       "x": 6042.0698,
       "y": -10988.908,
       "type": "circle-center",
-      "label": "void_atrium-3",
+      "label": "void_atrium",
       "radius": 17.5
     },
     {
@@ -3748,7 +3748,7 @@
       "label": "circle-point_n381",
       "angle": 0,
       "radius": 17.5,
-      "parentLabel": "void_atrium-3"
+      "parentLabel": "void_atrium"
     },
     {
       "id": "n382",
@@ -3758,7 +3758,7 @@
       "label": "circle-point_n382",
       "angle": 0.7853981633974483,
       "radius": 17.5,
-      "parentLabel": "void_atrium-3"
+      "parentLabel": "void_atrium"
     },
     {
       "id": "n383",
@@ -3768,7 +3768,7 @@
       "label": "circle-point_n383",
       "angle": 1.5707963267948966,
       "radius": 17.5,
-      "parentLabel": "void_atrium-3"
+      "parentLabel": "void_atrium"
     },
     {
       "id": "n384",
@@ -3778,7 +3778,7 @@
       "label": "circle-point_n384",
       "angle": 2.356194490192345,
       "radius": 17.5,
-      "parentLabel": "void_atrium-3"
+      "parentLabel": "void_atrium"
     },
     {
       "id": "n385",
@@ -3788,7 +3788,7 @@
       "label": "circle-point_n385",
       "angle": 3.141592653589793,
       "radius": 17.5,
-      "parentLabel": "void_atrium-3"
+      "parentLabel": "void_atrium"
     },
     {
       "id": "n386",
@@ -3798,7 +3798,7 @@
       "label": "circle-point_n386",
       "angle": 3.9269908169872414,
       "radius": 17.5,
-      "parentLabel": "void_atrium-3"
+      "parentLabel": "void_atrium"
     },
     {
       "id": "n387",
@@ -3808,7 +3808,7 @@
       "label": "circle-point_n387",
       "angle": 4.71238898038469,
       "radius": 17.5,
-      "parentLabel": "void_atrium-3"
+      "parentLabel": "void_atrium"
     },
     {
       "id": "n388",
@@ -3818,14 +3818,14 @@
       "label": "circle-point_n388",
       "angle": 5.497787143782138,
       "radius": 17.5,
-      "parentLabel": "void_atrium-3"
+      "parentLabel": "void_atrium"
     },
     {
       "id": "n389",
       "x": 6084.3887,
       "y": -10832.913,
       "type": "circle-center",
-      "label": "south_lobby-8",
+      "label": "south_lobby",
       "radius": 7.5
     },
     {
@@ -3836,7 +3836,7 @@
       "label": "circle-point_n390",
       "angle": 0,
       "radius": 7.5,
-      "parentLabel": "south_lobby-8"
+      "parentLabel": "south_lobby"
     },
     {
       "id": "n391",
@@ -3846,7 +3846,7 @@
       "label": "circle-point_n391",
       "angle": 0.7853981633974483,
       "radius": 7.5,
-      "parentLabel": "south_lobby-8"
+      "parentLabel": "south_lobby"
     },
     {
       "id": "n392",
@@ -3856,7 +3856,7 @@
       "label": "circle-point_n392",
       "angle": 1.5707963267948966,
       "radius": 7.5,
-      "parentLabel": "south_lobby-8"
+      "parentLabel": "south_lobby"
     },
     {
       "id": "n393",
@@ -3866,7 +3866,7 @@
       "label": "circle-point_n393",
       "angle": 2.356194490192345,
       "radius": 7.5,
-      "parentLabel": "south_lobby-8"
+      "parentLabel": "south_lobby"
     },
     {
       "id": "n394",
@@ -3876,7 +3876,7 @@
       "label": "circle-point_n394",
       "angle": 3.141592653589793,
       "radius": 7.5,
-      "parentLabel": "south_lobby-8"
+      "parentLabel": "south_lobby"
     },
     {
       "id": "n395",
@@ -3886,7 +3886,7 @@
       "label": "circle-point_n395",
       "angle": 3.9269908169872414,
       "radius": 7.5,
-      "parentLabel": "south_lobby-8"
+      "parentLabel": "south_lobby"
     },
     {
       "id": "n396",
@@ -3896,7 +3896,7 @@
       "label": "circle-point_n396",
       "angle": 4.71238898038469,
       "radius": 7.5,
-      "parentLabel": "south_lobby-8"
+      "parentLabel": "south_lobby"
     },
     {
       "id": "n397",
@@ -3906,14 +3906,14 @@
       "label": "circle-point_n397",
       "angle": 5.497787143782138,
       "radius": 7.5,
-      "parentLabel": "south_lobby-8"
+      "parentLabel": "south_lobby"
     },
     {
       "id": "n398",
       "x": 5659.2974,
       "y": -10899.37,
       "type": "circle-center",
-      "label": "idk_entrance_1-4",
+      "label": "idk_entrance_1",
       "radius": 7.5
     },
     {
@@ -3924,7 +3924,7 @@
       "label": "circle-point_n399",
       "angle": 0,
       "radius": 7.5,
-      "parentLabel": "idk_entrance_1-4"
+      "parentLabel": "idk_entrance_1"
     },
     {
       "id": "n400",
@@ -3934,7 +3934,7 @@
       "label": "circle-point_n400",
       "angle": 0.7853981633974483,
       "radius": 7.5,
-      "parentLabel": "idk_entrance_1-4"
+      "parentLabel": "idk_entrance_1"
     },
     {
       "id": "n401",
@@ -3944,7 +3944,7 @@
       "label": "circle-point_n401",
       "angle": 1.5707963267948966,
       "radius": 7.5,
-      "parentLabel": "idk_entrance_1-4"
+      "parentLabel": "idk_entrance_1"
     },
     {
       "id": "n402",
@@ -3954,7 +3954,7 @@
       "label": "circle-point_n402",
       "angle": 2.356194490192345,
       "radius": 7.5,
-      "parentLabel": "idk_entrance_1-4"
+      "parentLabel": "idk_entrance_1"
     },
     {
       "id": "n403",
@@ -3964,7 +3964,7 @@
       "label": "circle-point_n403",
       "angle": 3.141592653589793,
       "radius": 7.5,
-      "parentLabel": "idk_entrance_1-4"
+      "parentLabel": "idk_entrance_1"
     },
     {
       "id": "n404",
@@ -3974,7 +3974,7 @@
       "label": "circle-point_n404",
       "angle": 3.9269908169872414,
       "radius": 7.5,
-      "parentLabel": "idk_entrance_1-4"
+      "parentLabel": "idk_entrance_1"
     },
     {
       "id": "n405",
@@ -3984,7 +3984,7 @@
       "label": "circle-point_n405",
       "angle": 4.71238898038469,
       "radius": 7.5,
-      "parentLabel": "idk_entrance_1-4"
+      "parentLabel": "idk_entrance_1"
     },
     {
       "id": "n406",
@@ -3994,14 +3994,14 @@
       "label": "circle-point_n406",
       "angle": 5.497787143782138,
       "radius": 7.5,
-      "parentLabel": "idk_entrance_1-4"
+      "parentLabel": "idk_entrance_1"
     },
     {
       "id": "n407",
       "x": 5960.271,
       "y": -10941.02,
       "type": "circle-center",
-      "label": "idk_entrance_2-7",
+      "label": "idk_entrance_2",
       "radius": 7.5
     },
     {
@@ -4012,7 +4012,7 @@
       "label": "circle-point_n408",
       "angle": 0,
       "radius": 7.5,
-      "parentLabel": "idk_entrance_2-7"
+      "parentLabel": "idk_entrance_2"
     },
     {
       "id": "n409",
@@ -4022,7 +4022,7 @@
       "label": "circle-point_n409",
       "angle": 0.7853981633974483,
       "radius": 7.5,
-      "parentLabel": "idk_entrance_2-7"
+      "parentLabel": "idk_entrance_2"
     },
     {
       "id": "n410",
@@ -4032,7 +4032,7 @@
       "label": "circle-point_n410",
       "angle": 1.5707963267948966,
       "radius": 7.5,
-      "parentLabel": "idk_entrance_2-7"
+      "parentLabel": "idk_entrance_2"
     },
     {
       "id": "n411",
@@ -4042,7 +4042,7 @@
       "label": "circle-point_n411",
       "angle": 2.356194490192345,
       "radius": 7.5,
-      "parentLabel": "idk_entrance_2-7"
+      "parentLabel": "idk_entrance_2"
     },
     {
       "id": "n412",
@@ -4052,7 +4052,7 @@
       "label": "circle-point_n412",
       "angle": 3.141592653589793,
       "radius": 7.5,
-      "parentLabel": "idk_entrance_2-7"
+      "parentLabel": "idk_entrance_2"
     },
     {
       "id": "n413",
@@ -4062,7 +4062,7 @@
       "label": "circle-point_n413",
       "angle": 3.9269908169872414,
       "radius": 7.5,
-      "parentLabel": "idk_entrance_2-7"
+      "parentLabel": "idk_entrance_2"
     },
     {
       "id": "n414",
@@ -4072,7 +4072,7 @@
       "label": "circle-point_n414",
       "angle": 4.71238898038469,
       "radius": 7.5,
-      "parentLabel": "idk_entrance_2-7"
+      "parentLabel": "idk_entrance_2"
     },
     {
       "id": "n415",
@@ -4082,14 +4082,14 @@
       "label": "circle-point_n415",
       "angle": 5.497787143782138,
       "radius": 7.5,
-      "parentLabel": "idk_entrance_2-7"
+      "parentLabel": "idk_entrance_2"
     },
     {
       "id": "n416",
       "x": 5519.5586,
       "y": -11101.508,
       "type": "circle-center",
-      "label": "redback-7",
+      "label": "redback",
       "radius": 5
     },
     {
@@ -4100,7 +4100,7 @@
       "label": "circle-point_n417",
       "angle": 0,
       "radius": 5,
-      "parentLabel": "redback-7"
+      "parentLabel": "redback"
     },
     {
       "id": "n418",
@@ -4110,7 +4110,7 @@
       "label": "circle-point_n418",
       "angle": 0.7853981633974483,
       "radius": 5,
-      "parentLabel": "redback-7"
+      "parentLabel": "redback"
     },
     {
       "id": "n419",
@@ -4120,7 +4120,7 @@
       "label": "circle-point_n419",
       "angle": 1.5707963267948966,
       "radius": 5,
-      "parentLabel": "redback-7"
+      "parentLabel": "redback"
     },
     {
       "id": "n420",
@@ -4130,7 +4130,7 @@
       "label": "circle-point_n420",
       "angle": 2.356194490192345,
       "radius": 5,
-      "parentLabel": "redback-7"
+      "parentLabel": "redback"
     },
     {
       "id": "n421",
@@ -4140,7 +4140,7 @@
       "label": "circle-point_n421",
       "angle": 3.141592653589793,
       "radius": 5,
-      "parentLabel": "redback-7"
+      "parentLabel": "redback"
     },
     {
       "id": "n422",
@@ -4150,7 +4150,7 @@
       "label": "circle-point_n422",
       "angle": 3.9269908169872414,
       "radius": 5,
-      "parentLabel": "redback-7"
+      "parentLabel": "redback"
     },
     {
       "id": "n423",
@@ -4160,7 +4160,7 @@
       "label": "circle-point_n423",
       "angle": 4.71238898038469,
       "radius": 5,
-      "parentLabel": "redback-7"
+      "parentLabel": "redback"
     },
     {
       "id": "n424",
@@ -4170,14 +4170,14 @@
       "label": "circle-point_n424",
       "angle": 5.497787143782138,
       "radius": 5,
-      "parentLabel": "redback-7"
+      "parentLabel": "redback"
     },
     {
       "id": "n425",
       "x": 5674.6792,
       "y": -11342.005,
       "type": "circle-center",
-      "label": "alba_ristorante-1",
+      "label": "alba_ristorante",
       "radius": 5
     },
     {
@@ -4188,7 +4188,7 @@
       "label": "circle-point_n426",
       "angle": 0,
       "radius": 5,
-      "parentLabel": "alba_ristorante-1"
+      "parentLabel": "alba_ristorante"
     },
     {
       "id": "n427",
@@ -4198,7 +4198,7 @@
       "label": "circle-point_n427",
       "angle": 0.7853981633974483,
       "radius": 5,
-      "parentLabel": "alba_ristorante-1"
+      "parentLabel": "alba_ristorante"
     },
     {
       "id": "n428",
@@ -4208,7 +4208,7 @@
       "label": "circle-point_n428",
       "angle": 1.5707963267948966,
       "radius": 5,
-      "parentLabel": "alba_ristorante-1"
+      "parentLabel": "alba_ristorante"
     },
     {
       "id": "n429",
@@ -4218,7 +4218,7 @@
       "label": "circle-point_n429",
       "angle": 2.356194490192345,
       "radius": 5,
-      "parentLabel": "alba_ristorante-1"
+      "parentLabel": "alba_ristorante"
     },
     {
       "id": "n430",
@@ -4228,7 +4228,7 @@
       "label": "circle-point_n430",
       "angle": 3.141592653589793,
       "radius": 5,
-      "parentLabel": "alba_ristorante-1"
+      "parentLabel": "alba_ristorante"
     },
     {
       "id": "n431",
@@ -4238,7 +4238,7 @@
       "label": "circle-point_n431",
       "angle": 3.9269908169872414,
       "radius": 5,
-      "parentLabel": "alba_ristorante-1"
+      "parentLabel": "alba_ristorante"
     },
     {
       "id": "n432",
@@ -4248,7 +4248,7 @@
       "label": "circle-point_n432",
       "angle": 4.71238898038469,
       "radius": 5,
-      "parentLabel": "alba_ristorante-1"
+      "parentLabel": "alba_ristorante"
     },
     {
       "id": "n433",
@@ -4258,14 +4258,14 @@
       "label": "circle-point_n433",
       "angle": 5.497787143782138,
       "radius": 5,
-      "parentLabel": "alba_ristorante-1"
+      "parentLabel": "alba_ristorante"
     },
     {
       "id": "n434",
       "x": 5726.2036,
       "y": -11209.742,
       "type": "circle-center",
-      "label": "h_n_m-2",
+      "label": "h_n_m",
       "radius": 5
     },
     {
@@ -4276,7 +4276,7 @@
       "label": "circle-point_n435",
       "angle": 0,
       "radius": 5,
-      "parentLabel": "h_n_m-2"
+      "parentLabel": "h_n_m"
     },
     {
       "id": "n436",
@@ -4286,7 +4286,7 @@
       "label": "circle-point_n436",
       "angle": 0.7853981633974483,
       "radius": 5,
-      "parentLabel": "h_n_m-2"
+      "parentLabel": "h_n_m"
     },
     {
       "id": "n437",
@@ -4296,7 +4296,7 @@
       "label": "circle-point_n437",
       "angle": 1.5707963267948966,
       "radius": 5,
-      "parentLabel": "h_n_m-2"
+      "parentLabel": "h_n_m"
     },
     {
       "id": "n438",
@@ -4306,7 +4306,7 @@
       "label": "circle-point_n438",
       "angle": 2.356194490192345,
       "radius": 5,
-      "parentLabel": "h_n_m-2"
+      "parentLabel": "h_n_m"
     },
     {
       "id": "n439",
@@ -4316,7 +4316,7 @@
       "label": "circle-point_n439",
       "angle": 3.141592653589793,
       "radius": 5,
-      "parentLabel": "h_n_m-2"
+      "parentLabel": "h_n_m"
     },
     {
       "id": "n440",
@@ -4326,7 +4326,7 @@
       "label": "circle-point_n440",
       "angle": 3.9269908169872414,
       "radius": 5,
-      "parentLabel": "h_n_m-2"
+      "parentLabel": "h_n_m"
     },
     {
       "id": "n441",
@@ -4336,7 +4336,7 @@
       "label": "circle-point_n441",
       "angle": 4.71238898038469,
       "radius": 5,
-      "parentLabel": "h_n_m-2"
+      "parentLabel": "h_n_m"
     },
     {
       "id": "n442",
@@ -4346,14 +4346,14 @@
       "label": "circle-point_n442",
       "angle": 5.497787143782138,
       "radius": 5,
-      "parentLabel": "h_n_m-2"
+      "parentLabel": "h_n_m"
     },
     {
       "id": "n443",
       "x": 5934.3252,
       "y": -11219.75,
       "type": "circle-center",
-      "label": "digimap-8",
+      "label": "digimap",
       "radius": 5
     },
     {
@@ -4364,7 +4364,7 @@
       "label": "circle-point_n444",
       "angle": 0,
       "radius": 5,
-      "parentLabel": "digimap-8"
+      "parentLabel": "digimap"
     },
     {
       "id": "n445",
@@ -4374,7 +4374,7 @@
       "label": "circle-point_n445",
       "angle": 0.7853981633974483,
       "radius": 5,
-      "parentLabel": "digimap-8"
+      "parentLabel": "digimap"
     },
     {
       "id": "n446",
@@ -4384,7 +4384,7 @@
       "label": "circle-point_n446",
       "angle": 1.5707963267948966,
       "radius": 5,
-      "parentLabel": "digimap-8"
+      "parentLabel": "digimap"
     },
     {
       "id": "n447",
@@ -4394,7 +4394,7 @@
       "label": "circle-point_n447",
       "angle": 2.356194490192345,
       "radius": 5,
-      "parentLabel": "digimap-8"
+      "parentLabel": "digimap"
     },
     {
       "id": "n448",
@@ -4404,7 +4404,7 @@
       "label": "circle-point_n448",
       "angle": 3.141592653589793,
       "radius": 5,
-      "parentLabel": "digimap-8"
+      "parentLabel": "digimap"
     },
     {
       "id": "n449",
@@ -4414,7 +4414,7 @@
       "label": "circle-point_n449",
       "angle": 3.9269908169872414,
       "radius": 5,
-      "parentLabel": "digimap-8"
+      "parentLabel": "digimap"
     },
     {
       "id": "n450",
@@ -4424,7 +4424,7 @@
       "label": "circle-point_n450",
       "angle": 4.71238898038469,
       "radius": 5,
-      "parentLabel": "digimap-8"
+      "parentLabel": "digimap"
     },
     {
       "id": "n451",
@@ -4434,14 +4434,14 @@
       "label": "circle-point_n451",
       "angle": 5.497787143782138,
       "radius": 5,
-      "parentLabel": "digimap-8"
+      "parentLabel": "digimap"
     },
     {
       "id": "n452",
       "x": 5969.0796,
       "y": -11205.775,
       "type": "circle-center",
-      "label": "starbucks-7",
+      "label": "starbucks",
       "radius": 5
     },
     {
@@ -4452,7 +4452,7 @@
       "label": "circle-point_n453",
       "angle": 0,
       "radius": 5,
-      "parentLabel": "starbucks-7"
+      "parentLabel": "starbucks"
     },
     {
       "id": "n454",
@@ -4462,7 +4462,7 @@
       "label": "circle-point_n454",
       "angle": 0.7853981633974483,
       "radius": 5,
-      "parentLabel": "starbucks-7"
+      "parentLabel": "starbucks"
     },
     {
       "id": "n455",
@@ -4472,7 +4472,7 @@
       "label": "circle-point_n455",
       "angle": 1.5707963267948966,
       "radius": 5,
-      "parentLabel": "starbucks-7"
+      "parentLabel": "starbucks"
     },
     {
       "id": "n456",
@@ -4482,7 +4482,7 @@
       "label": "circle-point_n456",
       "angle": 2.356194490192345,
       "radius": 5,
-      "parentLabel": "starbucks-7"
+      "parentLabel": "starbucks"
     },
     {
       "id": "n457",
@@ -4492,7 +4492,7 @@
       "label": "circle-point_n457",
       "angle": 3.141592653589793,
       "radius": 5,
-      "parentLabel": "starbucks-7"
+      "parentLabel": "starbucks"
     },
     {
       "id": "n458",
@@ -4502,7 +4502,7 @@
       "label": "circle-point_n458",
       "angle": 3.9269908169872414,
       "radius": 5,
-      "parentLabel": "starbucks-7"
+      "parentLabel": "starbucks"
     },
     {
       "id": "n459",
@@ -4512,7 +4512,7 @@
       "label": "circle-point_n459",
       "angle": 4.71238898038469,
       "radius": 5,
-      "parentLabel": "starbucks-7"
+      "parentLabel": "starbucks"
     },
     {
       "id": "n460",
@@ -4522,14 +4522,14 @@
       "label": "circle-point_n460",
       "angle": 5.497787143782138,
       "radius": 5,
-      "parentLabel": "starbucks-7"
+      "parentLabel": "starbucks"
     },
     {
       "id": "n461",
       "x": 5998.1294,
       "y": -11193.422,
       "type": "circle-center",
-      "label": "cole_haan-4",
+      "label": "cole_haan",
       "radius": 5
     },
     {
@@ -4540,7 +4540,7 @@
       "label": "circle-point_n462",
       "angle": 0,
       "radius": 5,
-      "parentLabel": "cole_haan-4"
+      "parentLabel": "cole_haan"
     },
     {
       "id": "n463",
@@ -4550,7 +4550,7 @@
       "label": "circle-point_n463",
       "angle": 0.7853981633974483,
       "radius": 5,
-      "parentLabel": "cole_haan-4"
+      "parentLabel": "cole_haan"
     },
     {
       "id": "n464",
@@ -4560,7 +4560,7 @@
       "label": "circle-point_n464",
       "angle": 1.5707963267948966,
       "radius": 5,
-      "parentLabel": "cole_haan-4"
+      "parentLabel": "cole_haan"
     },
     {
       "id": "n465",
@@ -4570,7 +4570,7 @@
       "label": "circle-point_n465",
       "angle": 2.356194490192345,
       "radius": 5,
-      "parentLabel": "cole_haan-4"
+      "parentLabel": "cole_haan"
     },
     {
       "id": "n466",
@@ -4580,7 +4580,7 @@
       "label": "circle-point_n466",
       "angle": 3.141592653589793,
       "radius": 5,
-      "parentLabel": "cole_haan-4"
+      "parentLabel": "cole_haan"
     },
     {
       "id": "n467",
@@ -4590,7 +4590,7 @@
       "label": "circle-point_n467",
       "angle": 3.9269908169872414,
       "radius": 5,
-      "parentLabel": "cole_haan-4"
+      "parentLabel": "cole_haan"
     },
     {
       "id": "n468",
@@ -4600,7 +4600,7 @@
       "label": "circle-point_n468",
       "angle": 4.71238898038469,
       "radius": 5,
-      "parentLabel": "cole_haan-4"
+      "parentLabel": "cole_haan"
     },
     {
       "id": "n469",
@@ -4610,14 +4610,14 @@
       "label": "circle-point_n469",
       "angle": 5.497787143782138,
       "radius": 5,
-      "parentLabel": "cole_haan-4"
+      "parentLabel": "cole_haan"
     },
     {
       "id": "n470",
       "x": 6262.8843,
       "y": -11084.162,
       "type": "circle-center",
-      "label": "linear_atrium-2",
+      "label": "linear_atrium",
       "radius": 17.5
     },
     {
@@ -4628,7 +4628,7 @@
       "label": "circle-point_n471",
       "angle": 0,
       "radius": 17.5,
-      "parentLabel": "linear_atrium-2"
+      "parentLabel": "linear_atrium"
     },
     {
       "id": "n472",
@@ -4638,7 +4638,7 @@
       "label": "circle-point_n472",
       "angle": 0.7853981633974483,
       "radius": 17.5,
-      "parentLabel": "linear_atrium-2"
+      "parentLabel": "linear_atrium"
     },
     {
       "id": "n473",
@@ -4648,7 +4648,7 @@
       "label": "circle-point_n473",
       "angle": 1.5707963267948966,
       "radius": 17.5,
-      "parentLabel": "linear_atrium-2"
+      "parentLabel": "linear_atrium"
     },
     {
       "id": "n474",
@@ -4658,7 +4658,7 @@
       "label": "circle-point_n474",
       "angle": 2.356194490192345,
       "radius": 17.5,
-      "parentLabel": "linear_atrium-2"
+      "parentLabel": "linear_atrium"
     },
     {
       "id": "n475",
@@ -4668,7 +4668,7 @@
       "label": "circle-point_n475",
       "angle": 3.141592653589793,
       "radius": 17.5,
-      "parentLabel": "linear_atrium-2"
+      "parentLabel": "linear_atrium"
     },
     {
       "id": "n476",
@@ -4678,7 +4678,7 @@
       "label": "circle-point_n476",
       "angle": 3.9269908169872414,
       "radius": 17.5,
-      "parentLabel": "linear_atrium-2"
+      "parentLabel": "linear_atrium"
     },
     {
       "id": "n477",
@@ -4688,7 +4688,7 @@
       "label": "circle-point_n477",
       "angle": 4.71238898038469,
       "radius": 17.5,
-      "parentLabel": "linear_atrium-2"
+      "parentLabel": "linear_atrium"
     },
     {
       "id": "n478",
@@ -4698,14 +4698,14 @@
       "label": "circle-point_n478",
       "angle": 5.497787143782138,
       "radius": 17.5,
-      "parentLabel": "linear_atrium-2"
+      "parentLabel": "linear_atrium"
     },
     {
       "id": "n479",
       "x": 6185.6294,
       "y": -11224.572,
       "type": "circle-center",
-      "label": "oval_atrium-6",
+      "label": "oval_atrium",
       "radius": 17.5
     },
     {
@@ -4716,7 +4716,7 @@
       "label": "circle-point_n480",
       "angle": 0,
       "radius": 17.5,
-      "parentLabel": "oval_atrium-6"
+      "parentLabel": "oval_atrium"
     },
     {
       "id": "n481",
@@ -4726,7 +4726,7 @@
       "label": "circle-point_n481",
       "angle": 0.7853981633974483,
       "radius": 17.5,
-      "parentLabel": "oval_atrium-6"
+      "parentLabel": "oval_atrium"
     },
     {
       "id": "n482",
@@ -4736,7 +4736,7 @@
       "label": "circle-point_n482",
       "angle": 1.5707963267948966,
       "radius": 17.5,
-      "parentLabel": "oval_atrium-6"
+      "parentLabel": "oval_atrium"
     },
     {
       "id": "n483",
@@ -4746,7 +4746,7 @@
       "label": "circle-point_n483",
       "angle": 2.356194490192345,
       "radius": 17.5,
-      "parentLabel": "oval_atrium-6"
+      "parentLabel": "oval_atrium"
     },
     {
       "id": "n484",
@@ -4756,7 +4756,7 @@
       "label": "circle-point_n484",
       "angle": 3.141592653589793,
       "radius": 17.5,
-      "parentLabel": "oval_atrium-6"
+      "parentLabel": "oval_atrium"
     },
     {
       "id": "n485",
@@ -4766,7 +4766,7 @@
       "label": "circle-point_n485",
       "angle": 3.9269908169872414,
       "radius": 17.5,
-      "parentLabel": "oval_atrium-6"
+      "parentLabel": "oval_atrium"
     },
     {
       "id": "n486",
@@ -4776,7 +4776,7 @@
       "label": "circle-point_n486",
       "angle": 4.71238898038469,
       "radius": 17.5,
-      "parentLabel": "oval_atrium-6"
+      "parentLabel": "oval_atrium"
     },
     {
       "id": "n487",
@@ -4786,14 +4786,14 @@
       "label": "circle-point_n487",
       "angle": 5.497787143782138,
       "radius": 17.5,
-      "parentLabel": "oval_atrium-6"
+      "parentLabel": "oval_atrium"
     },
     {
       "id": "n488",
       "x": 5996.2646,
       "y": -11332.246,
       "type": "circle-center",
-      "label": "outdoor_park-5",
+      "label": "outdoor_park",
       "radius": 17.5
     },
     {
@@ -4804,7 +4804,7 @@
       "label": "circle-point_n489",
       "angle": 0,
       "radius": 17.5,
-      "parentLabel": "outdoor_park-5"
+      "parentLabel": "outdoor_park"
     },
     {
       "id": "n490",
@@ -4814,7 +4814,7 @@
       "label": "circle-point_n490",
       "angle": 0.7853981633974483,
       "radius": 17.5,
-      "parentLabel": "outdoor_park-5"
+      "parentLabel": "outdoor_park"
     },
     {
       "id": "n491",
@@ -4824,7 +4824,7 @@
       "label": "circle-point_n491",
       "angle": 1.5707963267948966,
       "radius": 17.5,
-      "parentLabel": "outdoor_park-5"
+      "parentLabel": "outdoor_park"
     },
     {
       "id": "n492",
@@ -4834,7 +4834,7 @@
       "label": "circle-point_n492",
       "angle": 2.356194490192345,
       "radius": 17.5,
-      "parentLabel": "outdoor_park-5"
+      "parentLabel": "outdoor_park"
     },
     {
       "id": "n493",
@@ -4844,7 +4844,7 @@
       "label": "circle-point_n493",
       "angle": 3.141592653589793,
       "radius": 17.5,
-      "parentLabel": "outdoor_park-5"
+      "parentLabel": "outdoor_park"
     },
     {
       "id": "n494",
@@ -4854,7 +4854,7 @@
       "label": "circle-point_n494",
       "angle": 3.9269908169872414,
       "radius": 17.5,
-      "parentLabel": "outdoor_park-5"
+      "parentLabel": "outdoor_park"
     },
     {
       "id": "n495",
@@ -4864,7 +4864,7 @@
       "label": "circle-point_n495",
       "angle": 4.71238898038469,
       "radius": 17.5,
-      "parentLabel": "outdoor_park-5"
+      "parentLabel": "outdoor_park"
     },
     {
       "id": "n496",
@@ -4874,14 +4874,14 @@
       "label": "circle-point_n496",
       "angle": 5.497787143782138,
       "radius": 17.5,
-      "parentLabel": "outdoor_park-5"
+      "parentLabel": "outdoor_park"
     },
     {
       "id": "n497",
       "x": 6292.7388,
       "y": -11352.536,
       "type": "circle-center",
-      "label": "north_lobby-3",
+      "label": "north_lobby",
       "radius": 17.5
     },
     {
@@ -4892,7 +4892,7 @@
       "label": "circle-point_n498",
       "angle": 0,
       "radius": 17.5,
-      "parentLabel": "north_lobby-3"
+      "parentLabel": "north_lobby"
     },
     {
       "id": "n499",
@@ -4902,7 +4902,7 @@
       "label": "circle-point_n499",
       "angle": 0.7853981633974483,
       "radius": 17.5,
-      "parentLabel": "north_lobby-3"
+      "parentLabel": "north_lobby"
     },
     {
       "id": "n500",
@@ -4912,7 +4912,7 @@
       "label": "circle-point_n500",
       "angle": 1.5707963267948966,
       "radius": 17.5,
-      "parentLabel": "north_lobby-3"
+      "parentLabel": "north_lobby"
     },
     {
       "id": "n501",
@@ -4922,7 +4922,7 @@
       "label": "circle-point_n501",
       "angle": 2.356194490192345,
       "radius": 17.5,
-      "parentLabel": "north_lobby-3"
+      "parentLabel": "north_lobby"
     },
     {
       "id": "n502",
@@ -4932,7 +4932,7 @@
       "label": "circle-point_n502",
       "angle": 3.141592653589793,
       "radius": 17.5,
-      "parentLabel": "north_lobby-3"
+      "parentLabel": "north_lobby"
     },
     {
       "id": "n503",
@@ -4942,7 +4942,7 @@
       "label": "circle-point_n503",
       "angle": 3.9269908169872414,
       "radius": 17.5,
-      "parentLabel": "north_lobby-3"
+      "parentLabel": "north_lobby"
     },
     {
       "id": "n504",
@@ -4952,7 +4952,7 @@
       "label": "circle-point_n504",
       "angle": 4.71238898038469,
       "radius": 17.5,
-      "parentLabel": "north_lobby-3"
+      "parentLabel": "north_lobby"
     },
     {
       "id": "n505",
@@ -4962,14 +4962,14 @@
       "label": "circle-point_n505",
       "angle": 5.497787143782138,
       "radius": 17.5,
-      "parentLabel": "north_lobby-3"
+      "parentLabel": "north_lobby"
     },
     {
       "id": "n506",
       "x": 5519.8848,
       "y": 10966.188,
       "type": "ellipse-center",
-      "label": "norther_east_parking-0",
+      "label": "norther_east_parking",
       "rx": 5,
       "ry": 4.75
     },
@@ -4982,7 +4982,7 @@
       "angle": 0,
       "rx": 5,
       "ry": 4.75,
-      "parentLabel": "norther_east_parking-0"
+      "parentLabel": "norther_east_parking"
     },
     {
       "id": "n508",
@@ -4993,7 +4993,7 @@
       "angle": 0.7853981633974483,
       "rx": 5,
       "ry": 4.75,
-      "parentLabel": "norther_east_parking-0"
+      "parentLabel": "norther_east_parking"
     },
     {
       "id": "n509",
@@ -5004,7 +5004,7 @@
       "angle": 1.5707963267948966,
       "rx": 5,
       "ry": 4.75,
-      "parentLabel": "norther_east_parking-0"
+      "parentLabel": "norther_east_parking"
     },
     {
       "id": "n510",
@@ -5015,7 +5015,7 @@
       "angle": 2.356194490192345,
       "rx": 5,
       "ry": 4.75,
-      "parentLabel": "norther_east_parking-0"
+      "parentLabel": "norther_east_parking"
     },
     {
       "id": "n511",
@@ -5026,7 +5026,7 @@
       "angle": 3.141592653589793,
       "rx": 5,
       "ry": 4.75,
-      "parentLabel": "norther_east_parking-0"
+      "parentLabel": "norther_east_parking"
     },
     {
       "id": "n512",
@@ -5037,7 +5037,7 @@
       "angle": 3.9269908169872414,
       "rx": 5,
       "ry": 4.75,
-      "parentLabel": "norther_east_parking-0"
+      "parentLabel": "norther_east_parking"
     },
     {
       "id": "n513",
@@ -5048,7 +5048,7 @@
       "angle": 4.71238898038469,
       "rx": 5,
       "ry": 4.75,
-      "parentLabel": "norther_east_parking-0"
+      "parentLabel": "norther_east_parking"
     },
     {
       "id": "n514",
@@ -5059,14 +5059,14 @@
       "angle": 5.497787143782138,
       "rx": 5,
       "ry": 4.75,
-      "parentLabel": "norther_east_parking-0"
+      "parentLabel": "norther_east_parking"
     },
     {
       "id": "n515",
       "x": 5519.6377,
       "y": 11265.587,
       "type": "ellipse-center",
-      "label": "souther_east_parking-2",
+      "label": "souther_east_parking",
       "rx": 5,
       "ry": 4.75
     },
@@ -5079,7 +5079,7 @@
       "angle": 0,
       "rx": 5,
       "ry": 4.75,
-      "parentLabel": "souther_east_parking-2"
+      "parentLabel": "souther_east_parking"
     },
     {
       "id": "n517",
@@ -5090,7 +5090,7 @@
       "angle": 0.7853981633974483,
       "rx": 5,
       "ry": 4.75,
-      "parentLabel": "souther_east_parking-2"
+      "parentLabel": "souther_east_parking"
     },
     {
       "id": "n518",
@@ -5101,7 +5101,7 @@
       "angle": 1.5707963267948966,
       "rx": 5,
       "ry": 4.75,
-      "parentLabel": "souther_east_parking-2"
+      "parentLabel": "souther_east_parking"
     },
     {
       "id": "n519",
@@ -5112,7 +5112,7 @@
       "angle": 2.356194490192345,
       "rx": 5,
       "ry": 4.75,
-      "parentLabel": "souther_east_parking-2"
+      "parentLabel": "souther_east_parking"
     },
     {
       "id": "n520",
@@ -5123,7 +5123,7 @@
       "angle": 3.141592653589793,
       "rx": 5,
       "ry": 4.75,
-      "parentLabel": "souther_east_parking-2"
+      "parentLabel": "souther_east_parking"
     },
     {
       "id": "n521",
@@ -5134,7 +5134,7 @@
       "angle": 3.9269908169872414,
       "rx": 5,
       "ry": 4.75,
-      "parentLabel": "souther_east_parking-2"
+      "parentLabel": "souther_east_parking"
     },
     {
       "id": "n522",
@@ -5145,7 +5145,7 @@
       "angle": 4.71238898038469,
       "rx": 5,
       "ry": 4.75,
-      "parentLabel": "souther_east_parking-2"
+      "parentLabel": "souther_east_parking"
     },
     {
       "id": "n523",
@@ -5156,14 +5156,14 @@
       "angle": 5.497787143782138,
       "rx": 5,
       "ry": 4.75,
-      "parentLabel": "souther_east_parking-2"
+      "parentLabel": "souther_east_parking"
     },
     {
       "id": "n524",
       "x": 5651.8828,
       "y": 11269.091,
       "type": "ellipse-center",
-      "label": "office_tower_lobby-0",
+      "label": "office_tower_lobby",
       "rx": 5,
       "ry": 4.75
     },
@@ -5176,7 +5176,7 @@
       "angle": 0,
       "rx": 5,
       "ry": 4.75,
-      "parentLabel": "office_tower_lobby-0"
+      "parentLabel": "office_tower_lobby"
     },
     {
       "id": "n526",
@@ -5187,7 +5187,7 @@
       "angle": 0.7853981633974483,
       "rx": 5,
       "ry": 4.75,
-      "parentLabel": "office_tower_lobby-0"
+      "parentLabel": "office_tower_lobby"
     },
     {
       "id": "n527",
@@ -5198,7 +5198,7 @@
       "angle": 1.5707963267948966,
       "rx": 5,
       "ry": 4.75,
-      "parentLabel": "office_tower_lobby-0"
+      "parentLabel": "office_tower_lobby"
     },
     {
       "id": "n528",
@@ -5209,7 +5209,7 @@
       "angle": 2.356194490192345,
       "rx": 5,
       "ry": 4.75,
-      "parentLabel": "office_tower_lobby-0"
+      "parentLabel": "office_tower_lobby"
     },
     {
       "id": "n529",
@@ -5220,7 +5220,7 @@
       "angle": 3.141592653589793,
       "rx": 5,
       "ry": 4.75,
-      "parentLabel": "office_tower_lobby-0"
+      "parentLabel": "office_tower_lobby"
     },
     {
       "id": "n530",
@@ -5231,7 +5231,7 @@
       "angle": 3.9269908169872414,
       "rx": 5,
       "ry": 4.75,
-      "parentLabel": "office_tower_lobby-0"
+      "parentLabel": "office_tower_lobby"
     },
     {
       "id": "n531",
@@ -5242,7 +5242,7 @@
       "angle": 4.71238898038469,
       "rx": 5,
       "ry": 4.75,
-      "parentLabel": "office_tower_lobby-0"
+      "parentLabel": "office_tower_lobby"
     },
     {
       "id": "n532",
@@ -5253,14 +5253,14 @@
       "angle": 5.497787143782138,
       "rx": 5,
       "ry": 4.75,
-      "parentLabel": "office_tower_lobby-0"
+      "parentLabel": "office_tower_lobby"
     },
     {
       "id": "n533",
       "x": 6319.3638,
       "y": 11382.005,
       "type": "ellipse-center",
-      "label": "taxi-0",
+      "label": "taxi",
       "rx": 5,
       "ry": 4.75
     },
@@ -5273,7 +5273,7 @@
       "angle": 0,
       "rx": 5,
       "ry": 4.75,
-      "parentLabel": "taxi-0"
+      "parentLabel": "taxi"
     },
     {
       "id": "n535",
@@ -5284,7 +5284,7 @@
       "angle": 0.7853981633974483,
       "rx": 5,
       "ry": 4.75,
-      "parentLabel": "taxi-0"
+      "parentLabel": "taxi"
     },
     {
       "id": "n536",
@@ -5295,7 +5295,7 @@
       "angle": 1.5707963267948966,
       "rx": 5,
       "ry": 4.75,
-      "parentLabel": "taxi-0"
+      "parentLabel": "taxi"
     },
     {
       "id": "n537",
@@ -5306,7 +5306,7 @@
       "angle": 2.356194490192345,
       "rx": 5,
       "ry": 4.75,
-      "parentLabel": "taxi-0"
+      "parentLabel": "taxi"
     },
     {
       "id": "n538",
@@ -5317,7 +5317,7 @@
       "angle": 3.141592653589793,
       "rx": 5,
       "ry": 4.75,
-      "parentLabel": "taxi-0"
+      "parentLabel": "taxi"
     },
     {
       "id": "n539",
@@ -5328,7 +5328,7 @@
       "angle": 3.9269908169872414,
       "rx": 5,
       "ry": 4.75,
-      "parentLabel": "taxi-0"
+      "parentLabel": "taxi"
     },
     {
       "id": "n540",
@@ -5339,7 +5339,7 @@
       "angle": 4.71238898038469,
       "rx": 5,
       "ry": 4.75,
-      "parentLabel": "taxi-0"
+      "parentLabel": "taxi"
     },
     {
       "id": "n541",
@@ -5350,14 +5350,14 @@
       "angle": 5.497787143782138,
       "rx": 5,
       "ry": 4.75,
-      "parentLabel": "taxi-0"
+      "parentLabel": "taxi"
     },
     {
       "id": "n542",
       "x": 5888.1748,
       "y": 10911.264,
       "type": "ellipse-center",
-      "label": "vertue_lobby-3",
+      "label": "vertue_lobby",
       "rx": 5,
       "ry": 4.75
     },
@@ -5370,7 +5370,7 @@
       "angle": 0,
       "rx": 5,
       "ry": 4.75,
-      "parentLabel": "vertue_lobby-3"
+      "parentLabel": "vertue_lobby"
     },
     {
       "id": "n544",
@@ -5381,7 +5381,7 @@
       "angle": 0.7853981633974483,
       "rx": 5,
       "ry": 4.75,
-      "parentLabel": "vertue_lobby-3"
+      "parentLabel": "vertue_lobby"
     },
     {
       "id": "n545",
@@ -5392,7 +5392,7 @@
       "angle": 1.5707963267948966,
       "rx": 5,
       "ry": 4.75,
-      "parentLabel": "vertue_lobby-3"
+      "parentLabel": "vertue_lobby"
     },
     {
       "id": "n546",
@@ -5403,7 +5403,7 @@
       "angle": 2.356194490192345,
       "rx": 5,
       "ry": 4.75,
-      "parentLabel": "vertue_lobby-3"
+      "parentLabel": "vertue_lobby"
     },
     {
       "id": "n547",
@@ -5414,7 +5414,7 @@
       "angle": 3.141592653589793,
       "rx": 5,
       "ry": 4.75,
-      "parentLabel": "vertue_lobby-3"
+      "parentLabel": "vertue_lobby"
     },
     {
       "id": "n548",
@@ -5425,7 +5425,7 @@
       "angle": 3.9269908169872414,
       "rx": 5,
       "ry": 4.75,
-      "parentLabel": "vertue_lobby-3"
+      "parentLabel": "vertue_lobby"
     },
     {
       "id": "n549",
@@ -5436,7 +5436,7 @@
       "angle": 4.71238898038469,
       "rx": 5,
       "ry": 4.75,
-      "parentLabel": "vertue_lobby-3"
+      "parentLabel": "vertue_lobby"
     },
     {
       "id": "n550",
@@ -5447,14 +5447,14 @@
       "angle": 5.497787143782138,
       "rx": 5,
       "ry": 4.75,
-      "parentLabel": "vertue_lobby-3"
+      "parentLabel": "vertue_lobby"
     },
     {
       "id": "n551",
       "x": 5789.5303,
       "y": 10810.716,
       "type": "ellipse-center",
-      "label": "skyloft_hotel-3",
+      "label": "skyloft_hotel",
       "rx": 5,
       "ry": 4.75
     },
@@ -5467,7 +5467,7 @@
       "angle": 0,
       "rx": 5,
       "ry": 4.75,
-      "parentLabel": "skyloft_hotel-3"
+      "parentLabel": "skyloft_hotel"
     },
     {
       "id": "n553",
@@ -5478,7 +5478,7 @@
       "angle": 0.7853981633974483,
       "rx": 5,
       "ry": 4.75,
-      "parentLabel": "skyloft_hotel-3"
+      "parentLabel": "skyloft_hotel"
     },
     {
       "id": "n554",
@@ -5489,7 +5489,7 @@
       "angle": 1.5707963267948966,
       "rx": 5,
       "ry": 4.75,
-      "parentLabel": "skyloft_hotel-3"
+      "parentLabel": "skyloft_hotel"
     },
     {
       "id": "n555",
@@ -5500,7 +5500,7 @@
       "angle": 2.356194490192345,
       "rx": 5,
       "ry": 4.75,
-      "parentLabel": "skyloft_hotel-3"
+      "parentLabel": "skyloft_hotel"
     },
     {
       "id": "n556",
@@ -5511,7 +5511,7 @@
       "angle": 3.141592653589793,
       "rx": 5,
       "ry": 4.75,
-      "parentLabel": "skyloft_hotel-3"
+      "parentLabel": "skyloft_hotel"
     },
     {
       "id": "n557",
@@ -5522,7 +5522,7 @@
       "angle": 3.9269908169872414,
       "rx": 5,
       "ry": 4.75,
-      "parentLabel": "skyloft_hotel-3"
+      "parentLabel": "skyloft_hotel"
     },
     {
       "id": "n558",
@@ -5533,7 +5533,7 @@
       "angle": 4.71238898038469,
       "rx": 5,
       "ry": 4.75,
-      "parentLabel": "skyloft_hotel-3"
+      "parentLabel": "skyloft_hotel"
     },
     {
       "id": "n559",
@@ -5544,7 +5544,7 @@
       "angle": 5.497787143782138,
       "rx": 5,
       "ry": 4.75,
-      "parentLabel": "skyloft_hotel-3"
+      "parentLabel": "skyloft_hotel"
     },
     {
       "id": "n560",
