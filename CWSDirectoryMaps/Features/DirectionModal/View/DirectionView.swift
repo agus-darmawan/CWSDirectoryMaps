@@ -58,7 +58,7 @@ struct DirectionView: View {
                         showStepsModal: $showStepsModal,
                         showSteps: $showSteps,
                         destinationStore: destinationStore,
-                        steps: dummySteps
+                        steps: pathfindingManager.directionSteps // Use real direction steps
                     )
                 }
             }
@@ -68,7 +68,7 @@ struct DirectionView: View {
                     showStepsModal: $showStepsModal,
                     showSteps: $showSteps,
                     destinationStore: destinationStore,
-                    steps: dummySteps
+                    steps: pathfindingManager.directionSteps // Use real direction steps
                 )
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .background(Color(.systemBackground))
@@ -83,6 +83,13 @@ struct DirectionView: View {
         .onReceive(pathfindingManager.$pathWithLabels) { newPath in
             // Update local state whenever the manager publishes a new path
             self.pathWithLabels = newPath
+        }
+        .onReceive(pathfindingManager.$directionSteps) { newSteps in
+            // Listen for direction steps updates
+            print("Direction steps updated: \(newSteps.count) steps received")
+            for (index, step) in newSteps.enumerated() {
+                print("Step \(index + 1): \(step.description)")
+            }
         }
     }
     
@@ -119,7 +126,7 @@ struct DirectionView: View {
 //        hours: "06:00AM - 12:00AM",
 //        detailImageName: "store_logo_placeholder"
 //    )
-//    
+//
 //    let dest = Store(
 //        name: "One Love Bespoke",
 //        category: .shop,
@@ -132,6 +139,7 @@ struct DirectionView: View {
 //        hours: "10:00AM - 10:00PM",
 //        detailImageName: "store_logo_placeholder"
 //    )
-//    
+//
 //    return DirectionView(startLocation: start, destinationStore: dest)
 //}
+

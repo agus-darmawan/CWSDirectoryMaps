@@ -297,41 +297,79 @@ struct DirectionStepsModal: View {
                     }
                     
                     //steps card
-                    TabView(selection: $currentStepIndex) {
-                        ForEach(Array(steps.enumerated()), id: \.1.id) { index, step in
-                            HStack {
-                                Image(systemName: step.icon)
-                                    .foregroundColor(.white)
-                                Text(step.description)
-                                    .foregroundColor(.white)
-                                    .lineLimit(2)
-                                Image(step.shopImage)
-                                    .resizable()
-                                    .scaledToFill()
-                                    .frame(width: 32, height: 32)
-                                    .clipShape(Circle())
-                                    .padding(.horizontal, 8)
+                    if steps.isEmpty {
+                        // Show loading state when no steps available
+                        HStack {
+                            ProgressView()
+                                .progressViewStyle(CircularProgressViewStyle(tint: .white))
+                                .scaleEffect(0.8)
+                            Text("Generating directions...")
+                                .foregroundColor(.white)
+                                .font(.subheadline)
+                        }
+                        .frame(maxWidth: .infinity)
+                        .padding(16)
+                        .background(customBlueColor)
+                        .cornerRadius(16)
+                        .padding(.horizontal, 12)
+                    } else {
+                        TabView(selection: $currentStepIndex) {
+                            ForEach(Array(steps.enumerated()), id: \.1.id) { index, step in
+                                HStack {
+                                    Image(systemName: step.icon)
+                                        .foregroundColor(.white)
+                                        .font(.system(size: 18, weight: .medium))
+                                    
+                                    VStack(alignment: .leading, spacing: 2) {
+                                        Text(step.description)
+                                            .foregroundColor(.white)
+                                            .font(.system(size: 14, weight: .medium))
+                                            .lineLimit(2)
+                                            .multilineTextAlignment(.leading)
+                                        
+                                        Text("Step \(index + 1) of \(steps.count)")
+                                            .foregroundColor(.white.opacity(0.8))
+                                            .font(.system(size: 12))
+                                    }
+                                    
+                                    Spacer()
+                                    
+                                    Image(step.shopImage)
+                                        .resizable()
+                                        .scaledToFill()
+                                        .frame(width: 32, height: 32)
+                                        .clipShape(Circle())
+                                        .padding(.horizontal, 8)
+                                }
+                                .frame(maxWidth: .infinity)
+                                .padding(12)
+                                .background(customBlueColor)
+                                .cornerRadius(16)
+                                .padding(.vertical, 8)
+                                .padding(.horizontal, 12)
+                                .tag(index)
                             }
-                            .frame(maxWidth: .infinity)
-                            .padding(8)
-                            .background(customBlueColor)
-                            .cornerRadius(16)
-                            .padding(.vertical, 12)
-                            .padding(.horizontal, 12)
-                            .tag(index)
                         }
-                    }
-                    .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
-                    .frame(maxHeight: 60)
-                    
-                    //indicator card
-                    HStack {
-                        ForEach(0..<steps.count, id: \.self) { index in
-                            Circle()
-                                .fill(index == currentStepIndex ? Color.primary : Color.secondary.opacity(0.4))
-                                .frame(width: 8, height: 8)
-                                .padding(.bottom, 8)
+                        .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
+                        .frame(height: 80)
+                        
+                        //indicator card without navigation buttons
+                        HStack {
+                            Spacer()
+                            
+                            HStack(spacing: 6) {
+                                ForEach(0..<steps.count, id: \.self) { index in
+                                    Circle()
+                                        .fill(index == currentStepIndex ? Color.primary : Color.secondary.opacity(0.4))
+                                        .frame(width: 8, height: 8)
+                                        .animation(.easeInOut(duration: 0.2), value: currentStepIndex)
+                                }
+                            }
+                            
+                            Spacer()
                         }
+                        .padding(.horizontal, 16)
+                        .padding(.bottom, 8)
                     }
                 }
                 .padding()
@@ -368,7 +406,6 @@ struct DirectionStepsListView: View {
     let steps: [DirectionStep]
     
     var body: some View {
-        //        Spacer()
         VStack(spacing: 0) {
             HStack {
                 VStack(alignment: .leading, spacing: 2) {
@@ -394,36 +431,51 @@ struct DirectionStepsListView: View {
             .background(Color(.systemBackground))
             
             // List steps
-            ScrollView {
-                VStack(spacing: 12) {
-                    ForEach(steps) { step in
-                        HStack {
-                            Image(systemName: step.icon)
-                                .foregroundColor(.white)
-                                .frame(width: 28, height: 28)
-                            
-                            Text(step.description)
-                                .foregroundColor(.white)
-                                .lineLimit(nil)
-                                .multilineTextAlignment(.leading)
-                                .padding(.leading, 4)
-                            
-                            Spacer()
-                            
-                            Image(step.shopImage)
-                                .resizable()
-                                .scaledToFill()
-                                .frame(width: 40, height: 40)
-                                .clipShape(Circle())
-                        }
-                        .padding()
-                        .background(customBlueColor)
-                        .cornerRadius(12)
-                    }
+            if steps.isEmpty {
+                // Show loading state when no steps available
+                VStack(spacing: 16) {
+                    ProgressView()
+                        .progressViewStyle(CircularProgressViewStyle(tint: customBlueColor))
+                        .scaleEffect(1.2)
+                    Text("Generating step-by-step directions...")
+                        .font(.body)
+                        .foregroundColor(.secondary)
+                        .multilineTextAlignment(.center)
                 }
-                .padding()
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .background(Color(.systemGray6))
+            } else {
+                ScrollView {
+                    VStack(spacing: 12) {
+                        ForEach(steps) { step in
+                            HStack {
+                                Image(systemName: step.icon)
+                                    .foregroundColor(.white)
+                                    .frame(width: 28, height: 28)
+                                
+                                Text(step.description)
+                                    .foregroundColor(.white)
+                                    .lineLimit(nil)
+                                    .multilineTextAlignment(.leading)
+                                    .padding(.leading, 4)
+                                
+                                Spacer()
+                                
+                                Image(step.shopImage)
+                                    .resizable()
+                                    .scaledToFill()
+                                    .frame(width: 40, height: 40)
+                                    .clipShape(Circle())
+                            }
+                            .padding()
+                            .background(customBlueColor)
+                            .cornerRadius(12)
+                        }
+                    }
+                    .padding()
+                }
+                .background(Color(.systemGray6))
             }
-            .background(Color(.systemGray6))
             
             // End button
             Button(action: {
