@@ -125,7 +125,7 @@ struct NavigationModalView: View {
                         Button(action: {
                             // Close NavigationModal
                             isPresented = false
-
+                            
                             // Reset start/destination locations
                             navigationState.startLocation = nil
                             navigationState.endLocation = nil
@@ -137,7 +137,7 @@ struct NavigationModalView: View {
                                 .font(.title2)
                                 .foregroundColor(.secondary)
                         }
-
+                        
                     }
                     .padding(.horizontal)
                     .padding(.bottom, 20)
@@ -262,7 +262,6 @@ struct NavigationModalView: View {
                 Button(action: {
                     if canReverse {
                         withAnimation(.easeInOut(duration: 0.2)) {
-                            // Move the filled field to the empty field
                             if navigationState.startLocation != nil && navigationState.endLocation == nil {
                                 // Move start to destination
                                 navigationState.endLocation = navigationState.startLocation
@@ -271,7 +270,6 @@ struct NavigationModalView: View {
                                 startLocationText = ""
                                 activeField = .startLocation
                             } else if navigationState.endLocation != nil && navigationState.startLocation == nil {
-                                // Move destination to start
                                 navigationState.startLocation = navigationState.endLocation
                                 navigationState.endLocation = nil
                                 startLocationText = destinationText
@@ -299,8 +297,26 @@ struct NavigationModalView: View {
                     showDirectionView = true
                 }
             }) {
-                Text("GO")
+                HStack {
+                    Image(systemName: "arrow.right.circle.fill")
+                        .font(.system(size: 18, weight: .medium))
+                    
+                    Text("GO")
+                        .font(.system(size: 16, weight: .semibold))
+                }
+                .foregroundColor(.white)
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 14)
+                .background(
+                    (navigationState.startLocation != nil && navigationState.endLocation != nil)
+                    ? customBlueColor
+                    : Color(.systemGray3)
+                )
+                .cornerRadius(12)
             }
+            .disabled(navigationState.startLocation == nil || navigationState.endLocation == nil)
+            .padding(.horizontal)
+            .padding(.bottom, 16)
             
             CategoryFilterView(
                 categories: StoreCategory.allCases,

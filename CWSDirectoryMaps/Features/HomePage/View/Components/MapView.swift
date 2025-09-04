@@ -26,21 +26,34 @@ struct MapView: View {
                     .resizable()
                     .scaledToFit()
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .accessibilityLabel("Mall map for \(selectedFloor)")
+                    .accessibilityHint("Pinch to zoom, drag to pan around the map")
             }
             .clipped()
+            .accessibilityElement(children: .combine)
+            
             Menu {
                 ForEach(floors, id: \.self) { floor in
                     Button(action: {
                         selectedFloor = floor
                     }) {
-                        Text(floor)
+                        HStack {
+                            Text(floor)
+                            if floor == selectedFloor {
+                                Image(systemName: "checkmark")
+                                    .accessibilityHidden(true)
+                            }
+                        }
                     }
+                    .accessibilityLabel(floor)
+                    .accessibilityAddTraits(floor == selectedFloor ? .isSelected : [])
                 }
             } label: {
                 HStack {
                     Text(selectedFloor)
                         .font(.headline)
                     Image(systemName: "chevron.down")
+                        .accessibilityHidden(true)
                 }
                 .padding(.horizontal, 12)
                 .padding(.vertical, 8)
@@ -49,6 +62,9 @@ struct MapView: View {
                 .shadow(color: Color.black.opacity(0.2), radius: 3)
                 .foregroundColor(.primary)
             }
+            .accessibilityLabel("Floor selector")
+            .accessibilityHint("Currently showing \(selectedFloor). Tap to select a different floor")
+            .accessibilityValue(selectedFloor)
             .padding()
         }
     }

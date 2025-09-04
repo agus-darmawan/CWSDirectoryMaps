@@ -18,14 +18,22 @@ struct SearchListView: View {
                 onSelect: viewModel.selectCategory
             )
             .padding(.vertical)
+            .accessibilityLabel("Category filters")
+            .accessibilityHint("Select a category to filter search results")
             
             List(viewModel.filteredStores) { store in
                 StoreRowView(store: store)
                     .onTapGesture {
                         viewModel.selectStore(store)
                     }
+                    .accessibilityElement(children: .combine)
+                    .accessibilityLabel("\(store.name), \(store.category.rawValue)")
+                    .accessibilityHint("Tap to view details for \(store.name)")
+                    .accessibilityAddTraits(.isButton)
             }
             .listStyle(.plain)
+            .accessibilityLabel("Search results list")
+            .accessibilityValue("\(viewModel.filteredStores.count) results found")
         }
     }
 }
