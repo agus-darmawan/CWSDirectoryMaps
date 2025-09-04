@@ -99,14 +99,12 @@ struct NavigationModalView: View {
     var canReverse: Bool {
         let hasStartLocation = navigationState.startLocation != nil
         let hasEndLocation = navigationState.endLocation != nil
-        
-        return hasStartLocation != hasEndLocation
+        return hasStartLocation || hasEndLocation
     }
     
     var body: some View {
         NavigationView {
             VStack(spacing: 0) {
-                // Header with drag indicator
                 VStack(spacing: 0) {
                     Rectangle()
                         .fill(Color(.systemGray4))
@@ -123,14 +121,11 @@ struct NavigationModalView: View {
                         Spacer()
                         
                         Button(action: {
-                            // Close NavigationModal
                             isPresented = false
                             
-                            // Reset start/destination locations
                             navigationState.startLocation = nil
                             navigationState.endLocation = nil
                             
-                            // Also close the DirectionView if it's open
                             showDirectionView = false
                         }) {
                             Image(systemName: "xmark.circle.fill")
@@ -168,7 +163,6 @@ struct NavigationModalView: View {
     
     private func checkAndNavigateToDirection() {
         if navigationState.startLocation != nil && navigationState.endLocation != nil {
-            // Small delay to ensure UI updates smoothly
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                 showDirectionView = true
             }
@@ -270,11 +264,22 @@ struct NavigationModalView: View {
                                 startLocationText = ""
                                 activeField = .startLocation
                             } else if navigationState.endLocation != nil && navigationState.startLocation == nil {
+                                // Move destination to start
                                 navigationState.startLocation = navigationState.endLocation
                                 navigationState.endLocation = nil
                                 startLocationText = destinationText
                                 destinationText = ""
                                 activeField = .destination
+                            } else if navigationState.startLocation != nil && navigationState.endLocation != nil {
+                                // Both fields are filled - swap them
+                                let tempLocation = navigationState.startLocation
+                                let tempText = startLocationText
+                                
+                                navigationState.startLocation = navigationState.endLocation
+                                startLocationText = destinationText
+                                
+                                navigationState.endLocation = tempLocation
+                                destinationText = tempText
                             }
                         }
                     }
@@ -298,11 +303,10 @@ struct NavigationModalView: View {
                 }
             }) {
                 HStack {
-                    Image(systemName: "arrow.right.circle.fill")
-                        .font(.system(size: 18, weight: .medium))
-                    
                     Text("GO")
                         .font(.system(size: 16, weight: .semibold))
+                    Image(systemName: "arrow.right.circle.fill")
+                        .font(.system(size: 18, weight: .medium))
                 }
                 .foregroundColor(.white)
                 .frame(maxWidth: .infinity)
