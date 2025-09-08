@@ -64,3 +64,22 @@ struct Store: Identifiable, Codable {
         self.graphLabel = graphLabel // <-- And assign it here
     }
 }
+
+extension Store {
+    init(from location: Location) {
+        self.init(
+            id: UUID().uuidString,
+            name: location.name,
+            category: .others,
+            imageName: "",
+            subcategory: "",
+            description: "",
+            location: location.floor.displayName,
+            website: nil,
+            phone: nil,
+            hours: "",
+            detailImageName: "",
+            graphLabel: location.name
+        )
+    }
+}

@@ -13,6 +13,8 @@ struct HomePageView: View {
     
     @StateObject private var viewModel = DirectoryViewModel()
     @FocusState private var isSearchFieldFocused: Bool
+    @StateObject var pathfindingManager = PathfindingManager()
+    @State var pathWithLabels: [(point: CGPoint, label: String)] = []
     
     var body: some View {
         NavigationView {
@@ -90,11 +92,15 @@ struct HomePageView: View {
                         }
                     } else {
                         ZStack {
-                            MapView()
-                                .accessibilityLabel("Interactive mall map")
-                                .accessibilityHint("Shows the mall layout with different floors. Use the floor selector to switch between levels.")
-                                .allowsHitTesting(!viewModel.isSearching)
-                                .clipped()
+                            IntegratedMapView(
+                                dataManager: dataManager,
+                                pathWithLabels: $pathWithLabels,
+                                pathfindingManager: pathfindingManager
+                            )
+                            .accessibilityLabel("Interactive mall map")
+                            .accessibilityHint("Shows the mall layout with different floors. Use the floor selector to switch between levels.")
+                            .allowsHitTesting(!viewModel.isSearching)
+                            .clipped()
                         }
                         .zIndex(1)
                     }

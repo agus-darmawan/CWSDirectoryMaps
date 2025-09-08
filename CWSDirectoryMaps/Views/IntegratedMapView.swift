@@ -14,7 +14,9 @@ struct IntegratedMapView: View {
     @Binding var pathWithLabels: [(point: CGPoint, label: String)]
     @StateObject private var mapViewManager = MapViewManager()
     @StateObject var pathfindingManager: PathfindingManager
-    
+    @StateObject private var viewModel = DirectoryViewModel()
+    @State private var selectedStore: Store? = nil
+
     @State private var showPath: Bool = false
     
     // Selected floor for menu and image switching
@@ -43,7 +45,10 @@ struct IntegratedMapView: View {
                                             unifiedGraph: dataManager.unifiedGraph,
                                             imageGeo: imageGeo,
                                             mapViewManager: mapViewManager,
-                                            graphScaleMultiplier: graphScaleMultiplier
+                                            graphScaleMultiplier: graphScaleMultiplier,
+                                            dataManager: dataManager,
+                                            viewModel: viewModel,
+                                            selectedStore: $selectedStore
                                         )
                                     }
                                 )
@@ -148,6 +153,10 @@ struct IntegratedMapOverlayView: View {
     let imageGeo: GeometryProxy
     let mapViewManager: MapViewManager
     let graphScaleMultiplier: CGFloat
+    let dataManager: DataManager
+    let viewModel: DirectoryViewModel
+    @Binding var selectedStore: Store?
+    @State private var showTenantDetail = false
     
     var body: some View {
         let bounds = mapViewManager.graphBounds(graph)
@@ -155,18 +164,47 @@ struct IntegratedMapOverlayView: View {
         let overlayOffset = mapViewManager.fittingOffset(bounds: bounds, in: imageGeo.size, scale: overlayScale)
         
         ZStack {
-            // Hide edges and nodes for cleaner map view
-            // Only show pathfinding path when available
-            // Draw the navigation path with smooth curves
+            // MARK: - Show only ellipse/circle centers
+            ForEach(graph.nodes.filter {
+                let type = $0.type.lowercased() ?? ""
+                let label = $0.label?.lowercased() ?? ""
+                return type.contains("center") &&
+                !label.contains("escalator") &&
+                !label.contains("lift")
+            }, id: \.id) { node in
+                Button {
+                    handleNodeTap(node: node)
+                } label: {
+                    Circle()
+                        .fill(Color.blue.opacity(0.7))
+                        .stroke(Color.white, lineWidth: 1)
+                        .frame(width: 12, height: 12)
+                        .overlay(
+                            Circle()
+                                .fill(Color.white)
+                                .frame(width: 4, height: 4)
+                        )
+                }
+                .position(CGPoint(x: node.x, y: node.y))
+            }
+            
+            // MARK: - Draw navigation path
             if pathWithLabels.count > 1 {
                 Path { path in
                     let points = pathWithLabels.map { $0.point }
-                    let smoothedPath = createSmoothPath(points: points, pathWithLabels: pathWithLabels, unifiedGraph: unifiedGraph)
+                    let smoothedPath = createSmoothPath(
+                        points: points,
+                        pathWithLabels: pathWithLabels,
+                        unifiedGraph: unifiedGraph
+                    )
                     path.addPath(smoothedPath)
                 }
-                .stroke(Color.yellow, style: StrokeStyle(lineWidth: 4, lineCap: .round, lineJoin: .round))
+                .stroke(Color.yellow,
+                        style: StrokeStyle(lineWidth: 4,
+                                           lineCap: .round,
+                                           lineJoin: .round))
                 
-                // Show start point (green circle)
+                // Start point
                 if let startPoint = pathWithLabels.first {
                     Circle()
                         .fill(Color.green)
@@ -180,7 +218,7 @@ struct IntegratedMapOverlayView: View {
                         )
                 }
                 
-                // Show end point (red circle)
+                // End point
                 if let endPoint = pathWithLabels.last {
                     Circle()
                         .fill(Color.red)
@@ -194,12 +232,62 @@ struct IntegratedMapOverlayView: View {
                         )
                 }
             }
-            
-            // Removed: Edges display
-            // Removed: All nodes display (red dots)
         }
         .scaleEffect(overlayScale, anchor: .topLeading)
         .offset(overlayOffset)
+        .sheet(item: $selectedStore) { store in
+            TenantDetailModalView(
+                store: store,
+                viewModel: viewModel,
+                isPresented: Binding(
+                    get: { selectedStore != nil },
+                    set: { if !$0 { selectedStore = nil } }
+                )
+            )
+        }
+    }
+    
+    private func findStoreByNode(_ node: Node) -> Store? {
+        // Ambil tenant name dari parentLabel atau label
+        guard let rawTenant = node.parentLabel ?? node.label else { return nil }
+        let tenantName = rawTenant.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
+        guard !tenantName.isEmpty else { return nil }
+
+        // Normalize function (sama kayak di DirectoryViewModel)
+        func normalize(_ name: String) -> String {
+            var normalized = name.lowercased()
+            if let range = normalized.range(of: "-\\d+$", options: .regularExpression) {
+                normalized.removeSubrange(range)
+            }
+            normalized = normalized.replacingOccurrences(of: " ", with: "")
+            normalized = normalized.replacingOccurrences(of: "-", with: "")
+            normalized = normalized.replacingOccurrences(of: "_", with: "")
+            normalized = normalized.replacingOccurrences(of: "&", with: "")
+            return normalized
+        }
+
+        let normalizedTenant = normalize(tenantName)
+
+        // ✅ PAKAI viewModel yang sudah diinject, bukan DirectoryViewModel() baru
+        if let match = viewModel.allStores.first(where: { normalize($0.name) == normalizedTenant }) {
+            return match
+        }
+
+        // fallback contain match
+        if let partial = viewModel.allStores.first(where: { normalize($0.name).contains(normalizedTenant) }) {
+            return partial
+        }
+
+        return nil
+    }
+
+    private func handleNodeTap(node: Node) {
+        if let store = findStoreByNode(node) {
+            selectedStore = store
+            print("✅ Store found: \(store.name)")
+        } else {
+            print("⚠️ Store not found for node: \(node.parentLabel ?? node.label ?? "No label")")
+        }
     }
 }
 
@@ -214,7 +302,7 @@ func createSmoothPath(points: [CGPoint], pathWithLabels: [(point: CGPoint, label
     var currentFloorPoints: [CGPoint] = []
     var currentFloor: Floor? = nil
     
-    for (index, pathItem) in pathWithLabels.enumerated() {
+    for (_, pathItem) in pathWithLabels.enumerated() {
         let floor = extractFloorFromLabel(pathItem.label)
         
         if currentFloor != floor {
@@ -349,4 +437,3 @@ private func makePreviewDataManager() -> DataManager {
 //#Preview {
 //    IntegratedMapView(dataManager: makePreviewDataManager())
 //}
-
