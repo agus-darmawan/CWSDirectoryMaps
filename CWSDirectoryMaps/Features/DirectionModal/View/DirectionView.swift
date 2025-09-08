@@ -60,7 +60,7 @@ struct DirectionView: View {
                         showStepsModal: $showStepsModal,
                         showSteps: $showSteps,
                         destinationStore: destinationStore,
-                        steps: dummySteps
+                        steps: pathfindingManager.directionSteps // Use real direction steps
                     )
                 }
             }
@@ -70,7 +70,7 @@ struct DirectionView: View {
                     showStepsModal: $showStepsModal,
                     showSteps: $showSteps,
                     destinationStore: destinationStore,
-                    steps: dummySteps
+                    steps: pathfindingManager.directionSteps // Use real direction steps
                 )
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .background(Color(.systemBackground))
@@ -86,14 +86,13 @@ struct DirectionView: View {
             // Update local state whenever the manager publishes a new path
             self.pathWithLabels = newPath
         }
-        .sheet(isPresented: $showNavigationModal) {
-                    NavigationModalView(
-                        viewModel: DirectoryViewModel(),
-                        isPresented: $showNavigationModal,
-                        selectedStore: destinationStore,
-                        mode: .toHere
-                    )
-                }
+        .onReceive(pathfindingManager.$directionSteps) { newSteps in
+            // Listen for direction steps updates
+            print("Direction steps updated: \(newSteps.count) steps received")
+            for (index, step) in newSteps.enumerated() {
+                print("Step \(index + 1): \(step.description)")
+            }
+        }
     }
     
     private func runPathfinding() {
@@ -145,3 +144,4 @@ struct DirectionView: View {
 //
 //    return DirectionView(startLocation: start, destinationStore: dest)
 //}
+
