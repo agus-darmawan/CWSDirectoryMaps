@@ -268,108 +268,196 @@ struct DirectionStepsModal: View {
     let destinationStore: Store
     let steps: [DirectionStep]
     @State private var currentStepIndex: Int = 0
+    @State private var showFloorChangeContent = false
     
     var body: some View {
         if showStepsModal{
             VStack (alignment: .trailing) {
                 
                 VStack(spacing: 16) {
-                    //title
-                    HStack {
-                        VStack(alignment: .leading, spacing: 2) {
-                            HStack {
-                                Text("To  \(destinationStore.name)")
-                                    .font(.title3)
-                                    .bold()
-                            }
-                            Text("200m – 4 mins")
-                                .font(.subheadline)
-                                .foregroundColor(.secondary)
-                        }
-                        Spacer()
-                        
-                        Button(action: { showSteps = true }) {
-                            Image(systemName: "chevron.up.circle.fill")
+                    // Check if current step is floor change and show different title
+                    if !steps.isEmpty && currentStepIndex < steps.count && steps[currentStepIndex].isFloorChange {
+                        // Floor Change Title
+                        HStack {
+                            Text("Change Floors")
                                 .font(.title2)
-                                .foregroundColor(.secondary)
+                                .fontWeight(.bold)
+                                .foregroundColor(.primary)
+                            
+                            Spacer()
+                            
+                            Button(action: {
+                                // Close the modal when in floor change mode
+                                showStepsModal = false
+                            }) {
+                                Image(systemName: "xmark")
+                                    .font(.title2)
+                                    .foregroundColor(.secondary)
+                            }
                         }
-                        .padding(.bottom, 12)
+                        .padding(.horizontal, 4)
+                    } else {
+                        // Regular title for normal steps
+                        HStack {
+                            VStack(alignment: .leading, spacing: 2) {
+                                HStack {
+                                    Text("To  \(destinationStore.name)")
+                                        .font(.title3)
+                                        .bold()
+                                }
+                                Text("200m – 4 mins")
+                                    .font(.subheadline)
+                                    .foregroundColor(.secondary)
+                            }
+                            Spacer()
+                            
+                            Button(action: { showSteps = true }) {
+                                Image(systemName: "chevron.up.circle.fill")
+                                    .font(.title2)
+                                    .foregroundColor(.secondary)
+                            }
+                            .padding(.bottom, 12)
+                        }
                     }
                     
-                    //steps card
-                    if steps.isEmpty {
-                        // Show loading state when no steps available
-                        HStack {
-                            ProgressView()
-                                .progressViewStyle(CircularProgressViewStyle(tint: .white))
-                                .scaleEffect(0.8)
-                            Text("Generating directions...")
-                                .foregroundColor(.white)
-                                .font(.subheadline)
-                        }
-                        .frame(maxWidth: .infinity)
-                        .padding(16)
-                        .background(customBlueColor)
-                        .cornerRadius(16)
-                        .padding(.horizontal, 12)
+                    // Check if current step is floor change and show appropriate content
+                    if !steps.isEmpty && currentStepIndex < steps.count && steps[currentStepIndex].isFloorChange {
+                        // Floor Change Content
+                        FloorChangeContentView(
+                            step: steps[currentStepIndex],
+                            onConfirm: {
+                                // Move to next step after confirming floor change
+                                if currentStepIndex < steps.count - 1 {
+                                    currentStepIndex += 1
+                                }
+                            }
+                        )
                     } else {
-                        TabView(selection: $currentStepIndex) {
-                            ForEach(Array(steps.enumerated()), id: \.1.id) { index, step in
-                                HStack {
-                                    Image(systemName: step.icon)
-                                        .foregroundColor(.white)
-                                        .font(.system(size: 18, weight: .medium))
-                                    
-                                    VStack(alignment: .leading, spacing: 2) {
-                                        Text(step.description)
-                                            .foregroundColor(.white)
-                                            .font(.system(size: 14, weight: .medium))
-                                            .lineLimit(2)
-                                            .multilineTextAlignment(.leading)
-                                        
-                                        Text("Step \(index + 1) of \(steps.count)")
-                                            .foregroundColor(.white.opacity(0.8))
-                                            .font(.system(size: 12))
+                        // Regular Steps Content
+                        if steps.isEmpty {
+                            // Show loading state when no steps available
+                            HStack {
+                                ProgressView()
+                                    .progressViewStyle(CircularProgressViewStyle(tint: .white))
+                                    .scaleEffect(0.8)
+                                Text("Generating directions...")
+                                    .foregroundColor(.white)
+                                    .font(.subheadline)
+                            }
+                            .frame(maxWidth: .infinity)
+                            .padding(16)
+                            .background(customBlueColor)
+                            .cornerRadius(16)
+                            .padding(.horizontal, 12)
+                        } else {
+                            TabView(selection: $currentStepIndex) {
+                                ForEach(Array(steps.enumerated()), id: \.1.id) { index, step in
+                                    if step.isFloorChange {
+                                        // Floor change step placeholder - will trigger content change
+                                        HStack {
+                                            Image(systemName: "arrow.up.down.circle")
+                                                .foregroundColor(.white)
+                                                .font(.system(size: 18, weight: .medium))
+                                            
+                                            VStack(alignment: .leading, spacing: 2) {
+                                                Text("Floor Change Required")
+                                                    .foregroundColor(.white)
+                                                    .font(.system(size: 14, weight: .medium))
+                                                    .lineLimit(2)
+                                                    .multilineTextAlignment(.leading)
+                                                
+                                                Text("Step \(index + 1) of \(steps.count)")
+                                                    .foregroundColor(.white.opacity(0.8))
+                                                    .font(.system(size: 12))
+                                            }
+                                            
+                                            Spacer()
+                                            
+                                            Image("floor-1")
+                                                .resizable()
+                                                .scaledToFill()
+                                                .frame(width: 32, height: 32)
+                                                .clipShape(Circle())
+                                                .padding(.horizontal, 8)
+                                        }
+                                        .frame(maxWidth: .infinity)
+                                        .padding(12)
+                                        .background(customBlueColor)
+                                        .cornerRadius(16)
+                                        .padding(.vertical, 8)
+                                        .padding(.horizontal, 12)
+                                        .tag(index)
+                                    } else {
+                                        // Regular step
+                                        HStack {
+                                            Image(systemName: step.icon)
+                                                .foregroundColor(.white)
+                                                .font(.system(size: 18, weight: .medium))
+                                            
+                                            VStack(alignment: .leading, spacing: 2) {
+                                                Text(step.description)
+                                                    .foregroundColor(.white)
+                                                    .font(.system(size: 14, weight: .medium))
+                                                    .lineLimit(2)
+                                                    .multilineTextAlignment(.leading)
+                                                
+                                                Text("Step \(index + 1) of \(steps.count)")
+                                                    .foregroundColor(.white.opacity(0.8))
+                                                    .font(.system(size: 12))
+                                            }
+                                            
+                                            Spacer()
+                                            
+                                            Image(step.shopImage)
+                                                .resizable()
+                                                .scaledToFill()
+                                                .frame(width: 32, height: 32)
+                                                .clipShape(Circle())
+                                                .padding(.horizontal, 8)
+                                        }
+                                        .frame(maxWidth: .infinity)
+                                        .padding(12)
+                                        .background(customBlueColor)
+                                        .cornerRadius(16)
+                                        .padding(.vertical, 8)
+                                        .padding(.horizontal, 12)
+                                        .tag(index)
                                     }
-                                    
-                                    Spacer()
-                                    
-                                    Image(step.shopImage)
-                                        .resizable()
-                                        .scaledToFill()
-                                        .frame(width: 32, height: 32)
-                                        .clipShape(Circle())
-                                        .padding(.horizontal, 8)
                                 }
-                                .frame(maxWidth: .infinity)
-                                .padding(12)
-                                .background(customBlueColor)
-                                .cornerRadius(16)
-                                .padding(.vertical, 8)
-                                .padding(.horizontal, 12)
-                                .tag(index)
                             }
-                        }
-                        .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
-                        .frame(height: 80)
-                        
-                        //indicator card without navigation buttons
-                        HStack {
-                            Spacer()
-                            
-                            HStack(spacing: 6) {
-                                ForEach(0..<steps.count, id: \.self) { index in
-                                    Circle()
-                                        .fill(index == currentStepIndex ? Color.primary : Color.secondary.opacity(0.4))
-                                        .frame(width: 8, height: 8)
-                                        .animation(.easeInOut(duration: 0.2), value: currentStepIndex)
+                            .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
+                            .frame(height: 80)
+                            .onChange(of: currentStepIndex) { newIndex in
+                                // Update showFloorChangeContent when step changes
+                                if newIndex < steps.count {
+                                    showFloorChangeContent = steps[newIndex].isFloorChange
+                                }
+                            }
+                            .onAppear {
+                                // Set initial state
+                                if !steps.isEmpty && currentStepIndex < steps.count {
+                                    showFloorChangeContent = steps[currentStepIndex].isFloorChange
                                 }
                             }
                             
-                            Spacer()
+                            //indicator card without navigation buttons
+                            HStack {
+                                Spacer()
+                                
+                                HStack(spacing: 6) {
+                                    ForEach(0..<steps.count, id: \.self) { index in
+                                        Circle()
+                                            .fill(index == currentStepIndex ? Color.primary : Color.secondary.opacity(0.4))
+                                            .frame(width: 8, height: 8)
+                                            .animation(.easeInOut(duration: 0.2), value: currentStepIndex)
+                                    }
+                                }
+                                
+                                Spacer()
+                            }
+                            .padding(.horizontal, 16)
+                            .padding(.bottom, 8)
                         }
-                        .padding(.horizontal, 16)
-                        .padding(.bottom, 8)
                     }
                 }
                 .padding()
@@ -382,12 +470,59 @@ struct DirectionStepsModal: View {
     }
 }
 
+// New Floor Change Content View that replaces the modal content
+struct FloorChangeContentView: View {
+    let step: DirectionStep
+    var onConfirm: (() -> Void)?
+    
+    var body: some View {
+        VStack(spacing: 32) {
+            // Floor change message with proper styling - full width like button
+            if let fromFloor = step.fromFloor, let toFloor = step.toFloor {
+                Text("Switch from \(fromFloor.displayName) to \(toFloor.displayName).")
+                    .font(.body)
+                    .foregroundColor(.primary)
+                    .multilineTextAlignment(.center)
+                    .lineLimit(nil)
+                    .frame(maxWidth: .infinity)
+                    .padding(.horizontal, 12)
+                    .padding(.vertical, 16)
+                    .background(
+                        RoundedRectangle(cornerRadius: 12)
+                            .fill(Color(.secondarySystemBackground))
+                    )
+            }
+            
+            // Confirm button
+            Button(action: {
+                onConfirm?()
+            }) {
+                Text("Confirm")
+                    .font(.headline)
+                    .fontWeight(.semibold)
+                    .foregroundColor(.white)
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 50)
+                    .background(
+                        RoundedRectangle(cornerRadius: 12)
+                            .fill(Color.blue)
+                    )
+            }
+        }
+        .padding(.horizontal, 0)
+        .padding(.vertical, 20)
+    }
+}
+
 struct DirectionStep: Identifiable {
     let id = UUID()
     let point: CGPoint
     let icon: String
     let description: String
     let shopImage: String
+    var isFloorChange: Bool = false
+    var fromFloor: Floor?
+    var toFloor: Floor?
 }
 
 //dummy data
