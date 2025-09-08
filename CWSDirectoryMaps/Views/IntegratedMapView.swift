@@ -99,23 +99,6 @@ struct IntegratedMapView: View {
             }
             .padding()
         }
-        // Debug controls for fitting multiplier
-        .overlay(
-            VStack {
-                Spacer()
-                HStack(spacing: 12) {
-                    Button("-") { graphScaleMultiplier -= 0.01 }
-                    Text("Graph Scale: \(String(format: "%.2f", graphScaleMultiplier))")
-                        .foregroundColor(.white)
-                    Button("+") { graphScaleMultiplier += 0.01 }
-                }
-                .padding(.horizontal, 12)
-                .padding(.vertical, 8)
-                .background(.black.opacity(0.6))
-                .cornerRadius(12)
-                .padding()
-            }
-        )
     }
     
     // ✅ Helper to always pick ground if available
@@ -155,8 +138,8 @@ struct IntegratedMapView: View {
         }
         print("---- [End Debug] ----")
     }
-
-
+    
+    
 }
 struct IntegratedMapOverlayView: View {
     let graph: Graph
@@ -172,82 +155,198 @@ struct IntegratedMapOverlayView: View {
         let overlayOffset = mapViewManager.fittingOffset(bounds: bounds, in: imageGeo.size, scale: overlayScale)
         
         ZStack {
-            // Edges
-            ForEach(graph.edges) { edge in
-                if let from = graph.nodes.first(where: { $0.id == edge.source }),
-                   let to = graph.nodes.first(where: { $0.id == edge.target }) {
-                    Path { path in
-                        path.move(to: CGPoint(x: from.x, y: from.y))
-                        path.addLine(to: CGPoint(x: to.x, y: to.y))
-                    }
-                    .stroke(Color.white.opacity(0.6), lineWidth: 2)
-                }
-            }
-            
-            // Pathfinding path (draws only within the same floor segments)
+            // Hide edges and nodes for cleaner map view
+            // Only show pathfinding path when available
+            // Draw the navigation path with smooth curves
             if pathWithLabels.count > 1 {
-                ForEach(pathWithLabels.indices, id: \.self) { i in
-                    let point = pathWithLabels[i].point
-                    let label = pathWithLabels[i].label
-                    let _ = print("Path point: \(point) with label \(label)")
-                }
                 Path { path in
-                    path.move(to: pathWithLabels[0].point)
-                    for i in 1..<pathWithLabels.count {
-                        let prevLabel = pathWithLabels[i - 1].label
-                        let currentLabel = pathWithLabels[i].label
-                        guard let prevNode = unifiedGraph[prevLabel],
-                              let currentNode = unifiedGraph[currentLabel] else {
-                            path.move(to: pathWithLabels[i].point)
-                            continue
-                        }
-                        if prevNode.floor == currentNode.floor {
-                            path.addLine(to: pathWithLabels[i].point)
-                        } else {
-                            path.move(to: pathWithLabels[i].point)
-                        }
-                    }
+                    let points = pathWithLabels.map { $0.point }
+                    let smoothedPath = createSmoothPath(points: points, pathWithLabels: pathWithLabels, unifiedGraph: unifiedGraph)
+                    path.addPath(smoothedPath)
                 }
-                .stroke(Color.yellow, lineWidth: 4)
-            } else {
-                let _ = print("Path has less than 2 points, skipping path drawing. pathcount=\(pathWithLabels.count)")
+                .stroke(Color.yellow, style: StrokeStyle(lineWidth: 4, lineCap: .round, lineJoin: .round))
+                
+                // Show start point (green circle)
+                if let startPoint = pathWithLabels.first {
+                    Circle()
+                        .fill(Color.green)
+                        .frame(width: 16, height: 16)
+                        .position(startPoint.point)
+                        .overlay(
+                            Circle()
+                                .stroke(Color.white, lineWidth: 2)
+                                .frame(width: 16, height: 16)
+                                .position(startPoint.point)
+                        )
+                }
+                
+                // Show end point (red circle)
+                if let endPoint = pathWithLabels.last {
+                    Circle()
+                        .fill(Color.red)
+                        .frame(width: 16, height: 16)
+                        .position(endPoint.point)
+                        .overlay(
+                            Circle()
+                                .stroke(Color.white, lineWidth: 2)
+                                .frame(width: 16, height: 16)
+                                .position(endPoint.point)
+                        )
+                }
             }
             
-            // Nodes
-            ForEach(graph.nodes) { node in
-                Circle()
-                    .fill(Color.red)
-                    .frame(width: 5, height: 5)
-                    .position(x: node.x, y: node.y)
-            }
+            // Removed: Edges display
+            // Removed: All nodes display (red dots)
         }
         .scaleEffect(overlayScale, anchor: .topLeading)
         .offset(overlayOffset)
     }
 }
 
+// MARK: - Path Smoothing Helper Function
+func createSmoothPath(points: [CGPoint], pathWithLabels: [(point: CGPoint, label: String)], unifiedGraph: [String: GraphNode]) -> Path {
+    guard points.count > 1 else { return Path() }
+    
+    var path = Path()
+    
+    // Group consecutive points by floor to handle multi-floor paths properly
+    var floorSegments: [(floor: Floor, points: [CGPoint])] = []
+    var currentFloorPoints: [CGPoint] = []
+    var currentFloor: Floor? = nil
+    
+    for (index, pathItem) in pathWithLabels.enumerated() {
+        let floor = extractFloorFromLabel(pathItem.label)
+        
+        if currentFloor != floor {
+            if !currentFloorPoints.isEmpty {
+                floorSegments.append((floor: currentFloor!, points: currentFloorPoints))
+            }
+            currentFloorPoints = [pathItem.point]
+            currentFloor = floor
+        } else {
+            currentFloorPoints.append(pathItem.point)
+        }
+    }
+    
+    if !currentFloorPoints.isEmpty, let floor = currentFloor {
+        floorSegments.append((floor: floor, points: currentFloorPoints))
+    }
+    
+    // Draw smooth curves for each floor segment
+    for segment in floorSegments {
+        if segment.points.count < 2 { continue }
+        
+        let smoothedPoints = smoothPoints(segment.points)
+        
+        // Start the path segment
+        path.move(to: smoothedPoints[0])
+        
+        if smoothedPoints.count == 2 {
+            // Simple line for 2 points
+            path.addLine(to: smoothedPoints[1])
+        } else {
+            // Create smooth curves for multiple points
+            for i in 1..<smoothedPoints.count {
+                let currentPoint = smoothedPoints[i]
+                let previousPoint = smoothedPoints[i - 1]
+                
+                if i == 1 {
+                    // First curve - start with a line then curve
+                    path.addLine(to: currentPoint)
+                } else {
+                    // Calculate control points for smooth curve
+                    let nextPoint = i < smoothedPoints.count - 1 ? smoothedPoints[i + 1] : currentPoint
+                    let controlPoint1 = calculateControlPoint(
+                        previous: smoothedPoints[max(0, i - 2)],
+                        current: previousPoint,
+                        next: currentPoint
+                    )
+                    let controlPoint2 = calculateControlPoint(
+                        previous: previousPoint,
+                        current: currentPoint,
+                        next: nextPoint
+                    )
+                    
+                    path.addCurve(
+                        to: currentPoint,
+                        control1: controlPoint1,
+                        control2: controlPoint2
+                    )
+                }
+            }
+        }
+    }
+    
+    return path
+}
+
+private func extractFloorFromLabel(_ label: String) -> Floor {
+    if label.hasPrefix("ground_") { return .ground }
+    if label.hasPrefix("lowerground_") { return .lowerGround }
+    if label.hasPrefix("1st_") { return .first }
+    if label.hasPrefix("2nd_") { return .second }
+    if label.hasPrefix("3rd_") { return .third }
+    if label.hasPrefix("4th_") { return .fourth }
+    return .ground
+}
+
+private func smoothPoints(_ points: [CGPoint]) -> [CGPoint] {
+    guard points.count > 2 else { return points }
+    
+    var smoothed: [CGPoint] = []
+    let smoothingFactor: CGFloat = 0.15
+    
+    smoothed.append(points[0]) // Keep first point unchanged
+    
+    for i in 1..<(points.count - 1) {
+        let prev = points[i - 1]
+        let current = points[i]
+        let next = points[i + 1]
+        
+        // Apply gentle smoothing
+        let smoothedX = current.x + smoothingFactor * (prev.x + next.x - 2 * current.x)
+        let smoothedY = current.y + smoothingFactor * (prev.y + next.y - 2 * current.y)
+        
+        smoothed.append(CGPoint(x: smoothedX, y: smoothedY))
+    }
+    
+    smoothed.append(points.last!) // Keep last point unchanged
+    
+    return smoothed
+}
+
+private func calculateControlPoint(previous: CGPoint, current: CGPoint, next: CGPoint) -> CGPoint {
+    let smoothness: CGFloat = 0.3
+    
+    let deltaX = next.x - previous.x
+    let deltaY = next.y - previous.y
+    
+    return CGPoint(
+        x: current.x + smoothness * deltaX * 0.25,
+        y: current.y + smoothness * deltaY * 0.25
+    )
+}
+
 // MARK: - Preview
 private func makePreviewDataManager() -> DataManager {
     let previewManager = DataManager()
-
+    
     if let url = Bundle.main.url(forResource: Floor.ground.fileName, withExtension: "json"),
        let data = try? Data(contentsOf: url),
        let graph = try? JSONDecoder().decode(Graph.self, from: data) {
-
+        
         let processedGraph = previewManager.processGraph(graph)
         let locations = previewManager.extractLocations(from: processedGraph)
-
+        
         previewManager.floorData[.ground] = FloorData(graph: processedGraph, locations: locations)
         previewManager.unifiedGraph = previewManager.buildUnifiedGraph(from: previewManager.floorData)
         previewManager.isLoading = false
     }
-
+    
     return previewManager
 }
 
 //#Preview {
 //    IntegratedMapView(dataManager: makePreviewDataManager())
 //}
-
-
 
