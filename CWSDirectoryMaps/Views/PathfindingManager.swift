@@ -1,8 +1,8 @@
 //
-//  PathfindingManager.swift - FIXED VERSION with Bounds Checking
+//  ImprovedPathfindingManager.swift
 //  CWSDirectoryMaps
 //
-//  Created by Steven Gonawan on 02/09/25.
+//  Enhanced with better distance and time calculations
 //
 
 import Foundation
@@ -17,17 +17,18 @@ struct EnhancedDirectionStep: Identifiable {
     let shopImage: String
     let distanceFromStart: Double // in meters
     let estimatedTimeFromStart: Double // in seconds
+    let segmentDistance: Double // distance for this specific segment
 }
 
-// MARK: - Travel Mode (renamed from NavigationMode to avoid conflicts)
+// MARK: - Travel Mode
 enum TravelMode: String, CaseIterable {
     case walk = "walk"
     case wheelchair = "wheelchair"
     
     var speed: Double { // meters per second
         switch self {
-        case .walk: return 1.39 // 5 km/h
-        case .wheelchair: return 0.83 // 3 km/h
+        case .walk: return 1.25 // 4.5 km/h (more realistic indoor walking speed)
+        case .wheelchair: return 0.9 // 3.2 km/h (realistic wheelchair speed)
         }
     }
     
@@ -55,20 +56,20 @@ class PathfindingManager: ObservableObject {
     private let directionsGenerator = DirectionsGenerator()
     private let pathCleaner = PathCleaner()
     
-    // MARK: - Distance Calculation Helper
+    // MARK: - Improved Distance Calculation
     private func calculateDistance(from point1: CGPoint, to point2: CGPoint) -> Double {
         let dx = Double(point2.x - point1.x)
         let dy = Double(point2.y - point1.y)
         
-        // Convert from graph units to meters (approximate conversion)
-        // This conversion factor should be calibrated based on your actual mall dimensions
-        let graphToMeterConversionFactor: Double = 0.1 // Adjust this based on your graph scale
+        // Improved conversion factor based on typical mall scale
+        // Assuming 1 graph unit = approximately 0.5 meters (adjust based on your mall's actual scale)
+        let graphToMeterConversionFactor: Double = 0.5
         
         let distanceInGraphUnits = sqrt(dx * dx + dy * dy)
         return distanceInGraphUnits * graphToMeterConversionFactor
     }
     
-    // MARK: - Path Distance Calculation
+    // MARK: - Enhanced Path Distance Calculation
     private func calculateTotalPathDistance(_ pathData: [(point: CGPoint, label: String)]) -> Double {
         guard pathData.count > 1 else { return 0.0 }
         
@@ -78,12 +79,25 @@ class PathfindingManager: ObservableObject {
             let distance = calculateDistance(from: pathData[i-1].point, to: pathData[i].point)
             totalDistance += distance
         }
-        totalDistance = totalDistance/100
         
         return totalDistance
     }
     
-    // MARK: - Enhanced Direction Steps Generation (FIXED with bounds checking)
+    // MARK: - Segment Distance Calculation
+    private func calculateSegmentDistances(_ pathData: [(point: CGPoint, label: String)]) -> [Double] {
+        guard pathData.count > 1 else { return [] }
+        
+        var segmentDistances: [Double] = []
+        
+        for i in 1..<pathData.count {
+            let distance = calculateDistance(from: pathData[i-1].point, to: pathData[i].point)
+            segmentDistances.append(distance)
+        }
+        
+        return segmentDistances
+    }
+    
+    // MARK: - Enhanced Direction Steps Generation
     private func generateEnhancedDirectionSteps(from pathData: [(point: CGPoint, label: String)], unifiedGraph: [String: GraphNode]) {
         guard !pathData.isEmpty else {
             self.enhancedDirectionSteps = []
@@ -100,50 +114,61 @@ class PathfindingManager: ObservableObject {
             return
         }
         
+        // Calculate segment distances for the entire path
+        let segmentDistances = calculateSegmentDistances(pathData)
+        
         // Then enhance them with distance and time information
         var enhancedSteps: [EnhancedDirectionStep] = []
-        var cumulativeDistance: Double = 0.0
         
         // Map direction steps to path segments with safer bounds checking
         let stepToPathMapping = mapStepsToPathSegments(steps: directionSteps, pathData: pathData)
         
         for (index, step) in directionSteps.enumerated() {
-            // Reset cumulative distance
-            cumulativeDistance = 0.0
-
-            // Hitung distance dari start sampai step ini (dengan bounds check)
+            var cumulativeDistance: Double = 0.0
+            var segmentDistance: Double = 0.0
+            
+            // Calculate cumulative distance up to this step
             if let pathIndex = stepToPathMapping[index], pathIndex < pathData.count {
                 let safeEndIndex = min(pathIndex, pathData.count - 1)
-
-                if safeEndIndex >= 1 {
-                    let segmentPoints = pathData.prefix(safeEndIndex + 1).map { $0.point }
-                    cumulativeDistance = zip(segmentPoints, segmentPoints.dropFirst())
-                        .map { calculateDistance(from: $0, to: $1) }
-                        .reduce(0, +)
+                
+                // Sum up all segment distances up to this point
+                for i in 0..<min(safeEndIndex, segmentDistances.count) {
+                    cumulativeDistance += segmentDistances[i]
+                }
+                
+                // Get segment distance for this specific step
+                if safeEndIndex > 0 && safeEndIndex <= segmentDistances.count {
+                    segmentDistance = segmentDistances[safeEndIndex - 1]
                 }
             }
-
-            // Hitung estimated time berdasarkan mode perjalanan
+            
+            // Calculate estimated time based on travel mode
             let estimatedTime = cumulativeDistance / currentTravelMode.speed
-
-            // Buat enhanced step
+            
+            // Create enhanced step with improved data
             let enhancedStep = EnhancedDirectionStep(
                 point: step.point,
                 icon: step.icon,
                 description: step.description,
                 shopImage: step.shopImage,
                 distanceFromStart: cumulativeDistance,
-                estimatedTimeFromStart: estimatedTime
+                estimatedTimeFromStart: estimatedTime,
+                segmentDistance: segmentDistance
             )
-
+            
             enhancedSteps.append(enhancedStep)
         }
         
         self.enhancedDirectionSteps = enhancedSteps
-        print("✅ Generated \(enhancedSteps.count) enhanced direction steps")
+        print("✅ Generated \(enhancedSteps.count) enhanced direction steps with improved metrics")
+        
+        // Debug information
+        for (index, step) in enhancedSteps.enumerated() {
+            print("Step \(index + 1): \(formatDistance(step.distanceFromStart)) total, \(formatTime(step.estimatedTimeFromStart)) time")
+        }
     }
     
-    // MARK: - Create Basic Enhanced Steps (fallback method)
+    // MARK: - Create Basic Enhanced Steps
     private func createBasicEnhancedSteps(from pathData: [(point: CGPoint, label: String)]) {
         guard pathData.count >= 2 else {
             self.enhancedDirectionSteps = []
@@ -151,21 +176,22 @@ class PathfindingManager: ObservableObject {
         }
         
         var enhancedSteps: [EnhancedDirectionStep] = []
-        let stepCount = min(5, pathData.count) // Create max 5 basic steps
+        let stepCount = min(max(3, pathData.count / 10), 8) // Dynamic step count based on path length
+        
+        let segmentDistances = calculateSegmentDistances(pathData)
         
         for i in 0..<stepCount {
             let pathIndex = (i * (pathData.count - 1)) / max(1, stepCount - 1)
             let safeIndex = min(pathIndex, pathData.count - 1)
             let pathPoint = pathData[safeIndex]
             
-            // Calculate cumulative distance
+            // Calculate cumulative distance more accurately
             var cumulativeDistance: Double = 0.0
-            for j in 1...safeIndex {
-                if j < pathData.count {
-                    cumulativeDistance += calculateDistance(from: pathData[j-1].point, to: pathData[j].point)
-                }
+            for j in 0..<min(safeIndex, segmentDistances.count) {
+                cumulativeDistance += segmentDistances[j]
             }
             
+            let segmentDistance = safeIndex > 0 && safeIndex <= segmentDistances.count ? segmentDistances[safeIndex - 1] : 0.0
             let estimatedTime = cumulativeDistance / currentTravelMode.speed
             
             let description: String
@@ -179,7 +205,7 @@ class PathfindingManager: ObservableObject {
                 description = "Arrive at your destination"
                 icon = "mappin.circle.fill"
             default:
-                description = "Continue straight"
+                description = "Continue on your route"
                 icon = "arrow.up"
             }
             
@@ -189,7 +215,8 @@ class PathfindingManager: ObservableObject {
                 description: description,
                 shopImage: "floor-1",
                 distanceFromStart: cumulativeDistance,
-                estimatedTimeFromStart: estimatedTime
+                estimatedTimeFromStart: estimatedTime,
+                segmentDistance: segmentDistance
             )
             
             enhancedSteps.append(enhancedStep)
@@ -199,7 +226,7 @@ class PathfindingManager: ObservableObject {
         print("✅ Generated \(enhancedSteps.count) basic enhanced direction steps")
     }
     
-    // MARK: - Map Steps to Path Segments (FIXED with bounds checking)
+    // MARK: - Map Steps to Path Segments
     private func mapStepsToPathSegments(steps: [DirectionStep], pathData: [(point: CGPoint, label: String)]) -> [Int: Int] {
         var mapping: [Int: Int] = [:]
         
@@ -208,7 +235,6 @@ class PathfindingManager: ObservableObject {
         }
         
         for (stepIndex, step) in steps.enumerated() {
-            // Find the closest path point to this step with bounds checking
             var closestPathIndex = 0
             var minDistance = Double.infinity
             
@@ -220,7 +246,6 @@ class PathfindingManager: ObservableObject {
                 }
             }
             
-            // Ensure the mapping is within bounds
             if closestPathIndex < pathData.count {
                 mapping[stepIndex] = closestPathIndex
             }
@@ -229,7 +254,7 @@ class PathfindingManager: ObservableObject {
         return mapping
     }
     
-    // MARK: - Current Location Calculation (FIXED with bounds checking)
+    // MARK: - Current Location Calculation
     func getCurrentLocation() -> CGPoint? {
         guard !pathWithLabels.isEmpty else { return nil }
         
@@ -240,7 +265,7 @@ class PathfindingManager: ObservableObject {
         return pathWithLabels.last?.point
     }
     
-    // MARK: - Remaining Distance Calculation (FIXED with bounds checking)
+    // MARK: - Remaining Distance Calculation
     func getRemainingDistance() -> Double {
         guard currentStepIndex < enhancedDirectionSteps.count else { return 0.0 }
         
@@ -265,6 +290,9 @@ class PathfindingManager: ObservableObject {
         
         // Update total estimated time
         totalEstimatedTime = totalDistance / currentTravelMode.speed
+        
+        print("🚶‍♂️ Travel mode updated to \(mode.rawValue)")
+        print("📊 New estimated time: \(formatTime(totalEstimatedTime))")
     }
     
     // MARK: - Public Methods
@@ -273,7 +301,6 @@ class PathfindingManager: ObservableObject {
         endStore: Store,
         unifiedGraph: [String: GraphNode]
     ) {
-        // Ensure we have graph labels
         guard let startLabel = startStore.graphLabel,
               let endLabel = endStore.graphLabel else {
             print("Missing graph labels, cannot pathfind")
@@ -281,11 +308,10 @@ class PathfindingManager: ObservableObject {
             return
         }
         
-        // Create unique labels using floor info
         let uniqueStartLabel = "\(startLabel)"
         let uniqueEndLabel = "\(endLabel)"
         
-        print("Running pathfinding from \(uniqueStartLabel) to \(uniqueEndLabel)")
+        print("🗺️ Running pathfinding from \(uniqueStartLabel) to \(uniqueEndLabel)")
         
         Task(priority: .userInitiated) {
             let foundPathData = aStarByLabel(
@@ -296,31 +322,31 @@ class PathfindingManager: ObservableObject {
             
             await MainActor.run {
                 if let pathData = foundPathData, !pathData.isEmpty {
-                    print("Multi-floor path found! It has \(pathData.count) points.")
+                    print("✅ Multi-floor path found! It has \(pathData.count) points.")
                     self.pathWithLabels = pathData
                     
-                    // Calculate total distance
+                    // Calculate total distance with improved accuracy
                     self.totalDistance = self.calculateTotalPathDistance(pathData)
                     
                     // Calculate total estimated time
                     self.totalEstimatedTime = self.totalDistance / self.currentTravelMode.speed
                     
-                    // Group path by floors for better management
+                    // Group path by floors
                     self.groupPathByFloors(pathData)
                     
-                    // Generate enhanced direction steps with error handling
+                    // Generate enhanced direction steps
                     self.generateEnhancedDirectionSteps(from: pathData, unifiedGraph: unifiedGraph)
                     
-                    // Reset current step index with bounds checking
+                    // Reset current step index
                     self.currentStepIndex = 0
                     
-                    print("✅ Navigation calculated:")
-                    print("   Total distance: \(String(format: "%.1f", self.totalDistance))m")
-                    print("   Estimated time: \(String(format: "%.1f", self.totalEstimatedTime))s (\(String(format: "%.1f", self.totalEstimatedTime/60))min)")
-                    print("   Travel mode: \(self.currentTravelMode.rawValue)")
-                    print("   Enhanced steps: \(self.enhancedDirectionSteps.count)")
+                    print("📍 Navigation calculated:")
+                    print("   📏 Total distance: \(self.formatDistance(self.totalDistance))")
+                    print("   ⏱️ Estimated time: \(self.formatTime(self.totalEstimatedTime))")
+                    print("   🚶‍♂️ Travel mode: \(self.currentTravelMode.rawValue)")
+                    print("   📋 Enhanced steps: \(self.enhancedDirectionSteps.count)")
                 } else {
-                    print("No multi-floor path found.")
+                    print("❌ No multi-floor path found.")
                     self.clearPath()
                 }
             }
@@ -349,7 +375,6 @@ class PathfindingManager: ObservableObject {
         
         let floor = extractFloorFromLabel(firstLabel)
         
-        // Create a simplified graph for direction generation
         let graphNodes = unifiedGraph.values.filter { $0.floor == floor }
         let nodes = graphNodes.map { graphNode in
             Node(
@@ -366,7 +391,6 @@ class PathfindingManager: ObservableObject {
             )
         }
         
-        // Create metadata for the graph
         let metadata = Metadata(
             totalNodes: nodes.count,
             totalEdges: 0,
@@ -376,14 +400,13 @@ class PathfindingManager: ObservableObject {
         
         let simpleGraph = Graph(metadata: metadata, nodes: nodes, edges: [])
         
-        // Generate direction steps using the correct method signature
         do {
             self.directionSteps = directionsGenerator.generate(
                 from: pathData,
                 graph: simpleGraph,
                 unifiedGraph: unifiedGraph
             )
-            print("Generated \(self.directionSteps.count) direction steps")
+            print("📋 Generated \(self.directionSteps.count) direction steps")
         } catch {
             print("❌ Error generating direction steps: \(error)")
             self.directionSteps = []
@@ -414,26 +437,29 @@ class PathfindingManager: ObservableObject {
         return pathsByFloor[floor] ?? []
     }
     
-    // MARK: - Step Navigation (FIXED with bounds checking)
+    // MARK: - Step Navigation
     func moveToNextStep() {
         if currentStepIndex < enhancedDirectionSteps.count - 1 {
             currentStepIndex += 1
+            print("📍 Moved to step \(currentStepIndex + 1)/\(enhancedDirectionSteps.count)")
         }
     }
     
     func moveToPreviousStep() {
         if currentStepIndex > 0 {
             currentStepIndex -= 1
+            print("📍 Moved to step \(currentStepIndex + 1)/\(enhancedDirectionSteps.count)")
         }
     }
     
     func moveToStep(_ index: Int) {
         if index >= 0 && index < enhancedDirectionSteps.count {
             currentStepIndex = index
+            print("📍 Jumped to step \(currentStepIndex + 1)/\(enhancedDirectionSteps.count)")
         }
     }
     
-    // MARK: - Progress Calculation (FIXED with bounds checking)
+    // MARK: - Progress Calculation
     func getProgressPercentage() -> Double {
         guard enhancedDirectionSteps.count > 1 else { return 0.0 }
         return Double(currentStepIndex) / Double(enhancedDirectionSteps.count - 1)
@@ -449,30 +475,41 @@ class PathfindingManager: ObservableObject {
         return enhancedDirectionSteps[currentStepIndex].estimatedTimeFromStart
     }
     
-    // MARK: - Formatting Helpers
+    // MARK: - Improved Formatting Helpers
     func formatDistance(_ meters: Double) -> String {
-        if meters < 1000 {
-            return "\(Int(meters))m"
+        if meters < 1.0 {
+            return "\(Int(meters * 100))cm"
+        } else if meters < 1000 {
+            return String(format: "%.0fm", meters)
         } else {
             return String(format: "%.1fkm", meters / 1000)
         }
     }
     
     func formatTime(_ seconds: Double) -> String {
-        let minutes = Int(seconds / 60)
+        let totalMinutes = Int(seconds / 60)
+        let remainingSeconds = Int(seconds.truncatingRemainder(dividingBy: 60))
         
-        if minutes < 1 {
-            return "< 1 min"
-        } else if minutes < 60 {
-            return "\(minutes) min\(minutes > 1 ? "s" : "")"
+        if totalMinutes < 1 {
+            if remainingSeconds < 30 {
+                return "< 30 sec"
+            } else {
+                return "< 1 min"
+            }
+        } else if totalMinutes < 60 {
+            if remainingSeconds > 0 {
+                return "\(totalMinutes)min \(remainingSeconds)sec"
+            } else {
+                return "\(totalMinutes) min"
+            }
         } else {
-            let hours = minutes / 60
-            let remainingMinutes = minutes % 60
-            return "\(hours)h \(remainingMinutes)min"
+            let hours = totalMinutes / 60
+            let minutes = totalMinutes % 60
+            return "\(hours)h \(minutes)min"
         }
     }
     
-    // MARK: - Current Step Information (FIXED with bounds checking)
+    // MARK: - Current Step Information
     func getCurrentStepDescription() -> String {
         guard currentStepIndex < enhancedDirectionSteps.count else { return "Arrived at destination" }
         return enhancedDirectionSteps[currentStepIndex].description
@@ -481,5 +518,20 @@ class PathfindingManager: ObservableObject {
     func getCurrentStepIcon() -> String {
         guard currentStepIndex < enhancedDirectionSteps.count else { return "mappin" }
         return enhancedDirectionSteps[currentStepIndex].icon
+    }
+    
+    // MARK: - Step Distance Information
+    func getCurrentStepSegmentDistance() -> Double {
+        guard currentStepIndex < enhancedDirectionSteps.count else { return 0.0 }
+        return enhancedDirectionSteps[currentStepIndex].segmentDistance
+    }
+    
+    // MARK: - Navigation Status
+    func isNavigationActive() -> Bool {
+        return !pathWithLabels.isEmpty && !enhancedDirectionSteps.isEmpty
+    }
+    
+    func isAtDestination() -> Bool {
+        return currentStepIndex >= enhancedDirectionSteps.count - 1 && !enhancedDirectionSteps.isEmpty
     }
 }
