@@ -733,7 +733,7 @@ struct ZoomableScrollView<Content: View>: View {
                                 offset = clampedOffset(offset, geo: geo)
                             }
                             .onEnded { _ in
-                                lastScale = max(min(scale, 6.0), 0.5)
+                                lastScale = max(min(scale, 6.0), 2)
                                 scale = lastScale
                                 offset = clampedOffset(offset, geo: geo)
                                 lastOffset = offset
