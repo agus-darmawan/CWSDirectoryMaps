@@ -16,7 +16,7 @@ struct IntegratedMapView: View {
     @StateObject var pathfindingManager: PathfindingManager
     @StateObject private var viewModel = DirectoryViewModel()
     @State private var selectedStore: Store? = nil
-
+    
     @State private var showPath: Bool = false
     
     // Selected floor for menu and image switching
@@ -163,29 +163,59 @@ struct IntegratedMapOverlayView: View {
         let overlayScale = mapViewManager.fittingScale(bounds: bounds, in: imageGeo.size) * graphScaleMultiplier
         let overlayOffset = mapViewManager.fittingOffset(bounds: bounds, in: imageGeo.size, scale: overlayScale)
         
+        let baseIconSize: CGFloat = 8
+        let baseFontSize: CGFloat = 2
+        
+        let iconSize = baseIconSize / sqrt(overlayScale)
+        let fontSize = baseFontSize / sqrt(overlayScale)
+        
         ZStack {
             // MARK: - Show only ellipse/circle centers
             ForEach(graph.nodes.filter {
-                let type = $0.type.lowercased() ?? ""
+                let type = $0.type.lowercased()
                 let label = $0.label?.lowercased() ?? ""
                 return type.contains("center") &&
                 !label.contains("escalator") &&
                 !label.contains("lift")
             }, id: \.id) { node in
-                Button {
-                    handleNodeTap(node: node)
-                } label: {
-                    Circle()
-                        .fill(Color.blue.opacity(0.7))
-                        .stroke(Color.white, lineWidth: 1)
-                        .frame(width: 12, height: 12)
-                        .overlay(
-                            Circle()
-                                .fill(Color.white)
-                                .frame(width: 4, height: 4)
-                        )
+                if let store = findStoreByNode(node) {
+                    Button {
+                        handleNodeTap(node: node)
+                    } label: {
+                        VStack(spacing: 2) {
+                            if store.name.lowercased().contains("restroom")
+                                || store.name.lowercased().contains("babystroller")
+                                || store.name.lowercased().contains("wheelchair")
+                                || store.name.lowercased().contains("atrium") {
+                                
+                                Circle()
+                                    .fill(Color.blue.opacity(1.0))
+                                    .frame(width: iconSize, height: iconSize)
+                                    .overlay(
+                                        Circle()
+                                            .stroke(Color.white, lineWidth: 1)
+                                    )
+                                
+                            } else {
+                                Image(systemName: "handbag.circle.fill")
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: iconSize, height: iconSize)
+                                    .background(Circle().fill(Color.white))
+                            }
+                            StrokeText(
+                                text: store.name,
+                                fontSize: fontSize,
+                                textColor: Color(UIColor.systemBlue),
+                                outlineColor: .white,
+                                lineWidth: 0.5,
+                                maxWidth: iconSize * 3
+                            )
+
+                        }
+                    }
+                    .position(CGPoint(x: node.x, y: node.y))
                 }
-                .position(CGPoint(x: node.x, y: node.y))
             }
             
             // MARK: - Draw navigation path
@@ -248,12 +278,11 @@ struct IntegratedMapOverlayView: View {
     }
     
     private func findStoreByNode(_ node: Node) -> Store? {
-        // Ambil tenant name dari parentLabel atau label
         guard let rawTenant = node.parentLabel ?? node.label else { return nil }
         let tenantName = rawTenant.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
         guard !tenantName.isEmpty else { return nil }
-
-        // Normalize function (sama kayak di DirectoryViewModel)
+        
+        // Normalize function
         func normalize(_ name: String) -> String {
             var normalized = name.lowercased()
             if let range = normalized.range(of: "-\\d+$", options: .regularExpression) {
@@ -265,22 +294,20 @@ struct IntegratedMapOverlayView: View {
             normalized = normalized.replacingOccurrences(of: "&", with: "")
             return normalized
         }
-
+        
         let normalizedTenant = normalize(tenantName)
-
-        // ✅ PAKAI viewModel yang sudah diinject, bukan DirectoryViewModel() baru
+        
         if let match = viewModel.allStores.first(where: { normalize($0.name) == normalizedTenant }) {
             return match
         }
-
-        // fallback contain match
+        
         if let partial = viewModel.allStores.first(where: { normalize($0.name).contains(normalizedTenant) }) {
             return partial
         }
-
+        
         return nil
     }
-
+    
     private func handleNodeTap(node: Node) {
         if let store = findStoreByNode(node) {
             selectedStore = store
@@ -290,6 +317,41 @@ struct IntegratedMapOverlayView: View {
         }
     }
 }
+
+// Text outline
+struct StrokeText: View {
+    let text: String
+    let fontSize: CGFloat
+    let textColor: Color
+    let outlineColor: Color
+    let lineWidth: CGFloat
+    let maxWidth: CGFloat?
+
+    var body: some View {
+        ZStack {
+            Text(text)
+                .font(.system(size: fontSize, weight: .bold))
+                .offset(x: lineWidth, y: lineWidth)
+            Text(text)
+                .font(.system(size: fontSize, weight: .bold))
+                .offset(x: -lineWidth, y: -lineWidth)
+            Text(text)
+                .font(.system(size: fontSize, weight: .bold))
+                .offset(x: -lineWidth, y: lineWidth)
+            Text(text)
+                .font(.system(size: fontSize, weight: .bold))
+                .offset(x: lineWidth, y: -lineWidth)
+            // Isi utama
+            Text(text)
+                .font(.system(size: fontSize, weight: .bold))
+                .foregroundColor(textColor)
+                .lineLimit(1)
+                .frame(maxWidth: maxWidth)
+        }
+        .foregroundColor(outlineColor)
+    }
+}
+
 
 // MARK: - Path Smoothing Helper Function
 func createSmoothPath(points: [CGPoint], pathWithLabels: [(point: CGPoint, label: String)], unifiedGraph: [String: GraphNode]) -> Path {
