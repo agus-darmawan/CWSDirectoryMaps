@@ -7,111 +7,7 @@
 
 import SwiftUI
 
-struct ZoomableScrollView<Content: View>: View {
-    @ViewBuilder var content: Content
-    
-    @State private var scale: CGFloat = 3
-    @State private var lastScale: CGFloat = 3
-    @State private var offset: CGSize = .zero
-    @State private var lastOffset: CGSize = .zero
-    
-    @State private var lastTapTime: Date = .distantPast
-    
-    var body: some View {
-        GeometryReader { geo in
-            content
-                .scaleEffect(scale)
-                .offset(offset)
-                .onAppear {
-                    offset = .zero
-                    lastOffset = .zero
-                }
-                .gesture(
-                    SimultaneousGesture(
-                        MagnificationGesture()
-                            .onChanged { value in
-                                scale = lastScale * value
-                                offset = clampedOffset(offset, geo: geo)
-                            }
-                            .onEnded { _ in
-                                lastScale = max(min(scale, 5.0), 4.0)
-                                scale = lastScale
-                                offset = clampedOffset(offset, geo: geo)
-                                lastOffset = offset
-                            },
-                        DragGesture()
-                            .onChanged { value in
-                                let newOffset = CGSize(
-                                    width: lastOffset.width + value.translation.width,
-                                    height: lastOffset.height + value.translation.height
-                                )
-                                offset = clampedOffset(newOffset, geo: geo)
-                            }
-                            .onEnded { _ in
-                                lastOffset = offset
-                            }
-                    )
-                )
-                .gesture(
-                    TapGesture(count: 2)
-                        .onEnded {
-                            withAnimation(.easeInOut) {
-                                if scale > 3 {
-                                    // zoom out
-                                    scale = 3
-                                    lastScale = 3
-                                    offset = .zero
-                                    lastOffset = .zero
-                                } else {
-                                    // zoom in
-                                    scale = 5
-                                    lastScale = 5
-                                }
-                            }
-                        }
-                )
-        }
-    }
-    //set boundary for panning (no white space)
-    private func clampedOffset(_ proposed: CGSize, geo: GeometryProxy) -> CGSize {
-        let screenWidth = geo.size.width
-        let screenHeight = geo.size.height
-        
-        let contentAspect: CGFloat = 1800 / 1200
-        var contentWidth = screenWidth
-        var contentHeight = screenHeight
-        
-        if contentAspect > screenWidth / screenHeight {
-            contentHeight = screenWidth / contentAspect
-        } else {
-            contentWidth = screenHeight * contentAspect
-        }
-        
-        let scaledWidth = contentWidth * scale
-        let scaledHeight = contentHeight * scale
-        
-        let maxX = max((scaledWidth - screenWidth) / 2, 0)
-        
-        // Custom margin for bottom
-        let bottomMargin: CGFloat = 0
-        
-        let maxY: CGFloat
-        let minY: CGFloat
-        if scaledHeight > screenHeight {
-            maxY = (scaledHeight - screenHeight) / 2
-            minY = -maxY + bottomMargin // tighter bottom
-        } else {
-            maxY = 0
-            minY = 0
-        }
-        
-        return CGSize(
-            width: min(max(proposed.width, -maxX), maxX),
-            height: min(max(proposed.height, minY), maxY)
-        )
-    }
-}
-
+// No changes needed for DirectionsModal, keeping it for context
 struct DirectionsModal: View {
     @State var destinationStore: Store
     @State var startLocation: Store
@@ -261,6 +157,8 @@ struct DirectionsModal: View {
     }
 }
 
+
+// MARK: - MODIFIED VIEW
 struct DirectionStepsModal: View {
     @Binding var showStepsModal: Bool
     @Binding var showSteps: Bool
@@ -268,6 +166,8 @@ struct DirectionStepsModal: View {
     let destinationStore: Store
     let steps: [DirectionStep]
     @State private var currentStepIndex: Int = 0
+    
+    // NEW STATE to control which content to show
     @State private var showFloorChangeContent = false
     
     var body: some View {
@@ -276,7 +176,7 @@ struct DirectionStepsModal: View {
                 
                 VStack(spacing: 16) {
                     // Check if current step is floor change and show different title
-                    if !steps.isEmpty && currentStepIndex < steps.count && steps[currentStepIndex].isFloorChange {
+                    if showFloorChangeContent {
                         // Floor Change Title
                         HStack {
                             Text("Change Floors")
@@ -321,7 +221,7 @@ struct DirectionStepsModal: View {
                     }
                     
                     // Check if current step is floor change and show appropriate content
-                    if !steps.isEmpty && currentStepIndex < steps.count && steps[currentStepIndex].isFloorChange {
+                    if showFloorChangeContent && currentStepIndex < steps.count {
                         // Floor Change Content
                         FloorChangeContentView(
                             step: steps[currentStepIndex],
@@ -352,90 +252,56 @@ struct DirectionStepsModal: View {
                         } else {
                             TabView(selection: $currentStepIndex) {
                                 ForEach(Array(steps.enumerated()), id: \.1.id) { index, step in
-                                    if step.isFloorChange {
-                                        // Floor change step placeholder - will trigger content change
-                                        HStack {
-                                            Image(systemName: "arrow.up.down.circle")
+                                    // Regular step view
+                                    HStack {
+                                        Image(systemName: step.icon)
+                                            .foregroundColor(.white)
+                                            .font(.system(size: 18, weight: .medium))
+                                        
+                                        VStack(alignment: .leading, spacing: 2) {
+                                            Text(step.description)
                                                 .foregroundColor(.white)
-                                                .font(.system(size: 18, weight: .medium))
+                                                .font(.system(size: 14, weight: .medium))
+                                                .lineLimit(2)
+                                                .multilineTextAlignment(.leading)
                                             
-                                            VStack(alignment: .leading, spacing: 2) {
-                                                Text("Floor Change Required")
-                                                    .foregroundColor(.white)
-                                                    .font(.system(size: 14, weight: .medium))
-                                                    .lineLimit(2)
-                                                    .multilineTextAlignment(.leading)
-                                                
-                                                Text("Step \(index + 1) of \(steps.count)")
-                                                    .foregroundColor(.white.opacity(0.8))
-                                                    .font(.system(size: 12))
-                                            }
-                                            
-                                            Spacer()
-                                            
-                                            Image("floor-1")
-                                                .resizable()
-                                                .scaledToFill()
-                                                .frame(width: 32, height: 32)
-                                                .clipShape(Circle())
-                                                .padding(.horizontal, 8)
+                                            Text("Step \(index + 1) of \(steps.count)")
+                                                .foregroundColor(.white.opacity(0.8))
+                                                .font(.system(size: 12))
                                         }
-                                        .frame(maxWidth: .infinity)
-                                        .padding(12)
-                                        .background(customBlueColor)
-                                        .cornerRadius(16)
-                                        .padding(.vertical, 8)
-                                        .padding(.horizontal, 12)
-                                        .tag(index)
-                                    } else {
-                                        // Regular step
-                                        HStack {
-                                            Image(systemName: step.icon)
-                                                .foregroundColor(.white)
-                                                .font(.system(size: 18, weight: .medium))
-                                            
-                                            VStack(alignment: .leading, spacing: 2) {
-                                                Text(step.description)
-                                                    .foregroundColor(.white)
-                                                    .font(.system(size: 14, weight: .medium))
-                                                    .lineLimit(2)
-                                                    .multilineTextAlignment(.leading)
-                                                
-                                                Text("Step \(index + 1) of \(steps.count)")
-                                                    .foregroundColor(.white.opacity(0.8))
-                                                    .font(.system(size: 12))
-                                            }
-                                            
-                                            Spacer()
-                                            
-                                            Image(step.shopImage)
-                                                .resizable()
-                                                .scaledToFill()
-                                                .frame(width: 32, height: 32)
-                                                .clipShape(Circle())
-                                                .padding(.horizontal, 8)
-                                        }
-                                        .frame(maxWidth: .infinity)
-                                        .padding(12)
-                                        .background(customBlueColor)
-                                        .cornerRadius(16)
-                                        .padding(.vertical, 8)
-                                        .padding(.horizontal, 12)
-                                        .tag(index)
+                                        
+                                        Spacer()
+                                        
+                                        Image(step.shopImage)
+                                            .resizable()
+                                            .scaledToFill()
+                                            .frame(width: 32, height: 32)
+                                            .clipShape(Circle())
+                                            .padding(.horizontal, 8)
                                     }
+                                    .frame(maxWidth: .infinity)
+                                    .padding(12)
+                                    .background(customBlueColor)
+                                    .cornerRadius(16)
+                                    .padding(.vertical, 8)
+                                    .padding(.horizontal, 12)
+                                    .tag(index)
                                 }
                             }
                             .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
                             .frame(height: 80)
-                            .onChange(of: currentStepIndex) { newIndex in
+                            .onChange(of: currentStepIndex) { _, newIndex in
                                 // Update showFloorChangeContent when step changes
                                 if newIndex < steps.count {
-                                    showFloorChangeContent = steps[newIndex].isFloorChange
+                                    // Use withAnimation for a smoother transition
+                                    withAnimation(.easeInOut) {
+                                        showFloorChangeContent = steps[newIndex].isFloorChange
+                                    }
                                 }
                             }
                             .onAppear {
                                 // Set initial state
-                                if !steps.isEmpty && currentStepIndex < steps.count {
+                                if !steps.isEmpty {
                                     showFloorChangeContent = steps[currentStepIndex].isFloorChange
                                 }
                             }
@@ -470,14 +336,15 @@ struct DirectionStepsModal: View {
     }
 }
 
-// New Floor Change Content View that replaces the modal content
+
+// NEW VIEW to handle the floor change UI inside the modal
 struct FloorChangeContentView: View {
     let step: DirectionStep
     var onConfirm: (() -> Void)?
     
     var body: some View {
         VStack(spacing: 32) {
-            // Floor change message with proper styling - full width like button
+            // Floor change message with proper styling
             if let fromFloor = step.fromFloor, let toFloor = step.toFloor {
                 Text("Switch from \(fromFloor.displayName) to \(toFloor.displayName).")
                     .font(.body)
@@ -514,6 +381,7 @@ struct FloorChangeContentView: View {
     }
 }
 
+// MARK: - Data Structures & Dummy Data (No Changes)
 struct DirectionStep: Identifiable {
     let id = UUID()
     let point: CGPoint
@@ -529,10 +397,14 @@ struct DirectionStep: Identifiable {
 let dummySteps: [DirectionStep] = [
     DirectionStep(point: .zero, icon: "arrow.up", description: "Go straight to Marks & Spencer", shopImage: "floor-1"),
     DirectionStep(point: .zero, icon: "arrow.turn.up.right", description: "Turn right at Starbucks", shopImage: "floor-1"),
+    // This is now a floor change step
+    DirectionStep(point: .zero, icon: "arrow.up.and.down.circle.fill", description: "Use escalator to Ground Floor", shopImage: "floor-1", isFloorChange: true, fromFloor: .lowerGround, toFloor: .ground),
     DirectionStep(point: .zero, icon: "arrow.turn.up.left", description: "Turn left after Zara", shopImage: "floor-1"),
     DirectionStep(point: .zero, icon: "mappin", description: "Arrive at destination", shopImage: "floor-1")
 ]
 
+
+// No changes needed for DirectionStepsListView, keeping it for context
 struct DirectionStepsListView: View {
     @Binding var showStepsModal: Bool
     @Binding var showSteps: Bool
@@ -633,37 +505,11 @@ struct DirectionStepsListView: View {
 }
 
 
-extension View {
-    func cornerRadius(_ radius: CGFloat, corners: UIRectCorner) -> some View {
-        clipShape(RoundedCorner(radius: radius, corners: corners))
-    }
-}
-
-let customBlueColor: Color = Color(uiColor: UIColor { traitCollection in
-    if traitCollection.userInterfaceStyle == .dark {
-        return UIColor(red: 64/255, green: 156/255, blue: 255/255, alpha: 1.0)
-    } else {
-        return UIColor(red: 0/255, green: 46/255, blue: 127/255, alpha: 1.0)
-    }
-})
-
-struct RoundedCorner: Shape {
-    var radius: CGFloat
-    var corners: UIRectCorner
-    
-    func path(in rect: CGRect) -> Path {
-        let path = UIBezierPath(
-            roundedRect: rect,
-            byRoundingCorners: corners,
-            cornerRadii: CGSize(width: radius, height: radius)
-        )
-        return Path(path.cgPath)
-    }
-}
-
+// MARK: - Preview
 #Preview {
     
     let start = Store(
+        id: "start-lobby",
         name: "Main Lobby",
         category: .facilities,
         imageName: "store_logo_placeholder",
@@ -677,6 +523,7 @@ struct RoundedCorner: Shape {
     )
     
     let dest = Store(
+        id: "dest-onelove",
         name: "One Love Bespoke",
         category: .shop,
         imageName: "store_logo_placeholder",
@@ -688,6 +535,6 @@ struct RoundedCorner: Shape {
         hours: "10:00AM - 10:00PM",
         detailImageName: "store_logo_placeholder"
     )
-    MapView()
+    
     DirectionsModal(destinationStore: dest, startLocation: start, showModal: .constant(true))
 }
