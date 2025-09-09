@@ -1,11 +1,10 @@
 //
-//  IntegratedMapView.swift
+//  Enhanced IntegratedMapView.swift
 //  CWSDirectoryMaps
 //
-//  Created by Daniel Fernando Herawan on 01/09/25.
+//  Enhanced with floor transition support and current floor tracking
 //
 
-// swift
 import SwiftUI
 
 struct IntegratedMapView: View {
@@ -14,12 +13,16 @@ struct IntegratedMapView: View {
     @Binding var pathWithLabels: [(point: CGPoint, label: String)]
     @StateObject private var mapViewManager = MapViewManager()
     @StateObject var pathfindingManager: PathfindingManager
+    @Binding var currentFloor: Floor
     
+    // Enhanced navigation tracking
+    @State private var currentStepIndex: Int = 0
     @State private var showPath: Bool = false
     
-    // Selected floor for menu and image switching
-    @State private var selectedFloor: Floor = .ground
-    
+    //punya daniel
+    @StateObject private var viewModel = DirectoryViewModel()
+    @State private var selectedStore: Store? = nil
+
     // Multiplier to fine-tune graph-to-image fitting
     @State private var graphScaleMultiplier: CGFloat = 0.96
     
@@ -31,7 +34,7 @@ struct IntegratedMapView: View {
                 GeometryReader { geo in
                     ZoomableScrollView {
                         ZStack {
-                            Image(selectedFloor.imageName)
+                            Image(currentFloor.imageName)
                                 .resizable()
                                 .scaledToFit()
                                 .frame(width: geo.size.width, height: geo.size.height)
@@ -39,11 +42,18 @@ struct IntegratedMapView: View {
                                     GeometryReader { imageGeo in
                                         IntegratedMapOverlayView(
                                             graph: graph,
-                                            pathWithLabels: pathWithLabels,
+                                            pathWithLabels: getFilteredPathForCurrentFloor(),
                                             unifiedGraph: dataManager.unifiedGraph,
                                             imageGeo: imageGeo,
                                             mapViewManager: mapViewManager,
-                                            graphScaleMultiplier: graphScaleMultiplier
+                                            graphScaleMultiplier: graphScaleMultiplier,
+                                            currentStepIndex: $currentStepIndex,
+                                            pathfindingManager: pathfindingManager,
+                                            currentFloor: currentFloor,
+                                            dataManager: dataManager,
+                                            viewModel: viewModel,
+                                            selectedStore: $selectedStore
+
                                         )
                                     }
                                 )
@@ -61,7 +71,8 @@ struct IntegratedMapView: View {
                 selectInitialFloorIfAvailable()
             }
         }
-        .onChange(of: selectedFloor) { oldValue, newValue in
+        .onChange(of: currentFloor) { oldValue, newValue in
+            print("🏢 Floor changed from \(oldValue.displayName) to \(newValue.displayName)")
             mapViewManager.switchToFloor(newValue, floorData: dataManager.floorData)
         }
         .onChange(of: dataManager.isLoading) { oldValue, newValue in
@@ -69,78 +80,111 @@ struct IntegratedMapView: View {
                 selectInitialFloorIfAvailable()
             }
         }
-        // Floor menu (top-right)
+        .onChange(of: pathfindingManager.currentStepIndex) { _, newIndex in
+            currentStepIndex = newIndex
+        }
         .overlay(alignment: .topTrailing) {
-            Menu {
-                ForEach(Floor.allCases, id: \.self) { floor in
-                    Button {
-                        selectedFloor = floor
-                    } label: {
-                        HStack {
-                            Text(floor.displayName)
-                            if floor == selectedFloor {
-                                Image(systemName: "checkmark")
-                            }
+            FloorSelectorMenu(
+                currentFloor: $currentFloor,
+                availableFloors: getAvailableFloorsForPath()
+            )
+        }
+    }
+    
+    // MARK: - Private Methods
+    
+    private func selectInitialFloorIfAvailable() {
+        if let _ = dataManager.floorData[currentFloor] {
+            mapViewManager.switchToFloor(currentFloor, floorData: dataManager.floorData)
+        } else if let _ = dataManager.floorData[.ground] {
+            currentFloor = .ground
+            mapViewManager.switchToFloor(.ground, floorData: dataManager.floorData)
+        }
+    }
+    
+    private func getFilteredPathForCurrentFloor() -> [(point: CGPoint, label: String)] {
+        return pathWithLabels.filter { pathItem in
+            let pathFloor = extractFloorFromLabel(pathItem.label)
+            return pathFloor == currentFloor
+        }
+    }
+    
+    private func getAvailableFloorsForPath() -> [Floor] {
+        if pathWithLabels.isEmpty {
+            return Floor.allCases
+        }
+        
+        var floorsInPath = Set<Floor>()
+        for pathItem in pathWithLabels {
+            let floor = extractFloorFromLabel(pathItem.label)
+            floorsInPath.insert(floor)
+        }
+        
+        return Array(floorsInPath).sorted { floor1, floor2 in
+            Floor.allCases.firstIndex(of: floor1) ?? 0 < Floor.allCases.firstIndex(of: floor2) ?? 0
+        }
+    }
+    
+    private func extractFloorFromLabel(_ label: String) -> Floor {
+        if label.hasPrefix("ground_") { return .ground }
+        if label.hasPrefix("lowerground_") { return .lowerGround }
+        if label.hasPrefix("1st_") { return .first }
+        if label.hasPrefix("2nd_") { return .second }
+        if label.hasPrefix("3rd_") { return .third }
+        if label.hasPrefix("4th_") { return .fourth }
+        return .ground
+    }
+}
+
+// MARK: - Floor Selector Menu
+struct FloorSelectorMenu: View {
+    @Binding var currentFloor: Floor
+    let availableFloors: [Floor]
+    
+    var body: some View {
+        Menu {
+            ForEach(availableFloors, id: \.self) { floor in
+                Button {
+                    withAnimation(.easeInOut(duration: 0.3)) {
+                        currentFloor = floor
+                    }
+                } label: {
+                    HStack {
+                        Text(floor.displayName)
+                        if floor == currentFloor {
+                            Image(systemName: "checkmark")
+                        }
+                        // Show indicator if floor has path
+                        if availableFloors.contains(floor) {
+                            Image(systemName: "point.topleft.down.curvedto.point.bottomright.up")
+                                .font(.caption)
+                                .foregroundColor(.blue)
                         }
                     }
                 }
-            } label: {
-                HStack(spacing: 8) {
-                    Text(selectedFloor.displayName)
-                        .font(.headline)
-                    Image(systemName: "chevron.down")
-                }
-                .padding(.horizontal, 12)
-                .padding(.vertical, 8)
-                .background(Color(.systemBackground))
-                .cornerRadius(8)
-                .shadow(color: Color.black, radius: 3)
-                .foregroundColor(.primary)
             }
-            .padding()
+        } label: {
+            HStack(spacing: 8) {
+                Text(currentFloor.displayName)
+                    .font(.headline)
+                Image(systemName: "chevron.down")
+            }
+            .padding(.horizontal, 12)
+            .padding(.vertical, 8)
+            .background(Color(.systemBackground))
+            .cornerRadius(8)
+            .shadow(color: Color.black.opacity(0.3), radius: 3)
+            .foregroundColor(.primary)
+            .overlay(
+                // Indicator for current floor with path
+                RoundedRectangle(cornerRadius: 8)
+                    .stroke(availableFloors.contains(currentFloor) ? Color.blue : Color.clear, lineWidth: 2)
+            )
         }
+        .padding()
     }
-    
-    // ✅ Helper to always pick ground if available
-    private func selectInitialFloorIfAvailable() {
-        print("---- [Debug] selectInitialFloorIfAvailable ----")
-        print("Currently loading? \(dataManager.isLoading)")
-        
-        // FloorData details
-        if dataManager.floorData.isEmpty {
-            print("⚠️ floorData is EMPTY")
-        } else {
-            for (floor, data) in dataManager.floorData {
-                print("✅ Floor '\(floor.displayName)': \(data.graph.nodes.count) nodes, \(data.graph.edges.count) edges, \(data.locations.count) locations")
-            }
-        }
-        
-        // Unified graph details
-        print("UnifiedGraph has \(dataManager.unifiedGraph.count) nodes")
-        if !dataManager.unifiedGraph.isEmpty {
-            let sample = dataManager.unifiedGraph.prefix(5)
-            print("Sample unifiedGraph nodes:")
-            for (label, node) in sample {
-                print(" - \(label) @ floor \(node.floor) pos(\(node.x),\(node.y))")
-            }
-        }
-        
-        // Floor switching logic
-        if let _ = dataManager.floorData[selectedFloor] {
-            print("➡️ Switching to \(selectedFloor.displayName)")
-            mapViewManager.switchToFloor(selectedFloor, floorData: dataManager.floorData)
-        } else if let _ = dataManager.floorData[.ground] {
-            print("➡️ Fallback to .ground")
-            selectedFloor = .ground
-            mapViewManager.switchToFloor(.ground, floorData: dataManager.floorData)
-        } else {
-            print("⚠️ No floor data found, cannot switch")
-        }
-        print("---- [End Debug] ----")
-    }
-    
-    
 }
+
 struct IntegratedMapOverlayView: View {
     let graph: Graph
     let pathWithLabels: [(point: CGPoint, label: String)]
@@ -148,205 +192,637 @@ struct IntegratedMapOverlayView: View {
     let imageGeo: GeometryProxy
     let mapViewManager: MapViewManager
     let graphScaleMultiplier: CGFloat
+    @Binding var currentStepIndex: Int
+    let pathfindingManager: PathfindingManager
+    let currentFloor: Floor
+    let dataManager: DataManager
+    let viewModel: DirectoryViewModel
+    @Binding var selectedStore: Store?
+    @State private var showTenantDetail = false
     
     var body: some View {
         let bounds = mapViewManager.graphBounds(graph)
         let overlayScale = mapViewManager.fittingScale(bounds: bounds, in: imageGeo.size) * graphScaleMultiplier
         let overlayOffset = mapViewManager.fittingOffset(bounds: bounds, in: imageGeo.size, scale: overlayScale)
         
+        let hasValidPath = pathWithLabels.count > 1
+        let totalSteps = pathfindingManager.enhancedDirectionSteps.count
+        let safeCurrentStepIndex = max(0, min(currentStepIndex, totalSteps > 0 ? totalSteps - 1 : 0))
+        
+        // Calculate progress based on current floor path
+        let currentFloorSteps = getCurrentFloorSteps()
+        let progressRatio: Double = currentFloorSteps.count > 1 ?
+        Double(min(safeCurrentStepIndex, currentFloorSteps.count - 1)) / Double(currentFloorSteps.count - 1) : 0.0
+        
+        let currentPathIndex = Int(Double(pathWithLabels.count - 1) * progressRatio)
+        let safeCurrentPathIndex = max(0, min(currentPathIndex, pathWithLabels.count - 1))
+        
+        let baseIconSize: CGFloat = 8
+        let baseFontSize: CGFloat = 2
+        
+        let iconSize = baseIconSize / sqrt(overlayScale)
+        let fontSize = baseFontSize / sqrt(overlayScale)
+        
         ZStack {
-            // Hide edges and nodes for cleaner map view
-            // Only show pathfinding path when available
-            // Draw the navigation path with smooth curves
-            if pathWithLabels.count > 1 {
-                Path { path in
-                    let points = pathWithLabels.map { $0.point }
-                    let smoothedPath = createSmoothPath(points: points, pathWithLabels: pathWithLabels, unifiedGraph: unifiedGraph)
-                    path.addPath(smoothedPath)
-                }
-                .stroke(Color.yellow, style: StrokeStyle(lineWidth: 4, lineCap: .round, lineJoin: .round))
-                
-                // Show start point (green circle)
-                if let startPoint = pathWithLabels.first {
-                    Circle()
-                        .fill(Color.green)
-                        .frame(width: 16, height: 16)
-                        .position(startPoint.point)
-                        .overlay(
-                            Circle()
-                                .stroke(Color.white, lineWidth: 2)
-                                .frame(width: 16, height: 16)
-                                .position(startPoint.point)
-                        )
-                }
-                
-                // Show end point (red circle)
-                if let endPoint = pathWithLabels.last {
-                    Circle()
-                        .fill(Color.red)
-                        .frame(width: 16, height: 16)
-                        .position(endPoint.point)
-                        .overlay(
-                            Circle()
-                                .stroke(Color.white, lineWidth: 2)
-                                .frame(width: 16, height: 16)
-                                .position(endPoint.point)
-                        )
+            
+            ForEach(graph.nodes.filter {
+                let type = $0.type.lowercased()
+                let label = $0.label?.lowercased() ?? ""
+                return type.contains("center") &&
+                !label.contains("escalator") &&
+                !label.contains("lift")
+            }, id: \.id) { node in
+                if let store = findStoreByNode(node) {
+                    Button {
+                        handleNodeTap(node: node)
+                    } label: {
+                        VStack(spacing: 2) {
+                            if store.name.lowercased().contains("restroom")
+                                || store.name.lowercased().contains("babystroller")
+                                || store.name.lowercased().contains("wheelchair")
+                                || store.name.lowercased().contains("atrium") {
+                                
+                                Circle()
+                                    .fill(Color.blue.opacity(1.0))
+                                    .frame(width: iconSize, height: iconSize)
+                                    .overlay(
+                                        Circle()
+                                            .stroke(Color.white, lineWidth: 1)
+                                    )
+                                
+                            } else {
+                                Image(systemName: "handbag.circle.fill")
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: iconSize, height: iconSize)
+                                    .background(Circle().fill(Color.white))
+                            }
+                            StrokeText(
+                                text: store.name,
+                                fontSize: fontSize,
+                                textColor: Color(UIColor.systemBlue),
+                                outlineColor: .white,
+                                lineWidth: 0.5,
+                                maxWidth: iconSize * 3
+                            )
+                            
+                        }
+                    }
+                    .position(CGPoint(x: node.x, y: node.y))
                 }
             }
             
-            // Removed: Edges display
-            // Removed: All nodes display (red dots)
-        }
-        .scaleEffect(overlayScale, anchor: .topLeading)
-        .offset(overlayOffset)
-    }
-}
-
-// MARK: - Path Smoothing Helper Function
-func createSmoothPath(points: [CGPoint], pathWithLabels: [(point: CGPoint, label: String)], unifiedGraph: [String: GraphNode]) -> Path {
-    guard points.count > 1 else { return Path() }
-    
-    var path = Path()
-    
-    // Group consecutive points by floor to handle multi-floor paths properly
-    var floorSegments: [(floor: Floor, points: [CGPoint])] = []
-    var currentFloorPoints: [CGPoint] = []
-    var currentFloor: Floor? = nil
-    
-    for (index, pathItem) in pathWithLabels.enumerated() {
-        let floor = extractFloorFromLabel(pathItem.label)
-        
-        if currentFloor != floor {
-            if !currentFloorPoints.isEmpty {
-                floorSegments.append((floor: currentFloor!, points: currentFloorPoints))
-            }
-            currentFloorPoints = [pathItem.point]
-            currentFloor = floor
-        } else {
-            currentFloorPoints.append(pathItem.point)
-        }
-    }
-    
-    if !currentFloorPoints.isEmpty, let floor = currentFloor {
-        floorSegments.append((floor: floor, points: currentFloorPoints))
-    }
-    
-    // Draw smooth curves for each floor segment
-    for segment in floorSegments {
-        if segment.points.count < 2 { continue }
-        
-        let smoothedPoints = smoothPoints(segment.points)
-        
-        // Start the path segment
-        path.move(to: smoothedPoints[0])
-        
-        if smoothedPoints.count == 2 {
-            // Simple line for 2 points
-            path.addLine(to: smoothedPoints[1])
-        } else {
-            // Create smooth curves for multiple points
-            for i in 1..<smoothedPoints.count {
-                let currentPoint = smoothedPoints[i]
-                let previousPoint = smoothedPoints[i - 1]
+            
+            if hasValidPath {
+                // Path visualization for current floor
+                CurrentFloorPathView(
+                    pathWithLabels: pathWithLabels,
+                    currentPathIndex: safeCurrentPathIndex,
+                    currentFloor: currentFloor
+                )
                 
-                if i == 1 {
-                    // First curve - start with a line then curve
-                    path.addLine(to: currentPoint)
-                } else {
-                    // Calculate control points for smooth curve
-                    let nextPoint = i < smoothedPoints.count - 1 ? smoothedPoints[i + 1] : currentPoint
-                    let controlPoint1 = calculateControlPoint(
-                        previous: smoothedPoints[max(0, i - 2)],
-                        current: previousPoint,
-                        next: currentPoint
-                    )
-                    let controlPoint2 = calculateControlPoint(
-                        previous: previousPoint,
-                        current: currentPoint,
-                        next: nextPoint
-                    )
-                    
-                    path.addCurve(
-                        to: currentPoint,
-                        control1: controlPoint1,
-                        control2: controlPoint2
+                // Floor transition indicators
+                FloorTransitionIndicators(
+                    pathWithLabels: pathWithLabels,
+                    currentFloor: currentFloor,
+                    pathfindingManager: pathfindingManager
+                )
+                
+                // Current location indicator
+                if !pathWithLabels.isEmpty {
+                    CurrentLocationView(
+                        pathWithLabels: pathWithLabels,
+                        currentPathIndex: safeCurrentPathIndex,
+                        //                        pathfindingManager: pathfindingManager
                     )
                 }
             }
         }
+        .scaleEffect(overlayScale, anchor: .topLeading)
+        .offset(overlayOffset)
+        .sheet(item: $selectedStore) { store in
+            TenantDetailModalView(
+                store: store,
+                viewModel: viewModel,
+                isPresented: Binding(
+                    get: { selectedStore != nil },
+                    set: { if !$0 { selectedStore = nil } }
+                )
+            )
+        }
     }
     
-    return path
-}
-
-private func extractFloorFromLabel(_ label: String) -> Floor {
-    if label.hasPrefix("ground_") { return .ground }
-    if label.hasPrefix("lowerground_") { return .lowerGround }
-    if label.hasPrefix("1st_") { return .first }
-    if label.hasPrefix("2nd_") { return .second }
-    if label.hasPrefix("3rd_") { return .third }
-    if label.hasPrefix("4th_") { return .fourth }
-    return .ground
-}
-
-private func smoothPoints(_ points: [CGPoint]) -> [CGPoint] {
-    guard points.count > 2 else { return points }
-    
-    var smoothed: [CGPoint] = []
-    let smoothingFactor: CGFloat = 0.15
-    
-    smoothed.append(points[0]) // Keep first point unchanged
-    
-    for i in 1..<(points.count - 1) {
-        let prev = points[i - 1]
-        let current = points[i]
-        let next = points[i + 1]
+    private func findStoreByNode(_ node: Node) -> Store? {
+        guard let rawTenant = node.parentLabel ?? node.label else { return nil }
+        let tenantName = rawTenant.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
+        guard !tenantName.isEmpty else { return nil }
         
-        // Apply gentle smoothing
-        let smoothedX = current.x + smoothingFactor * (prev.x + next.x - 2 * current.x)
-        let smoothedY = current.y + smoothingFactor * (prev.y + next.y - 2 * current.y)
+        // Normalize function
+        func normalize(_ name: String) -> String {
+            var normalized = name.lowercased()
+            if let range = normalized.range(of: "-\\d+$", options: .regularExpression) {
+                normalized.removeSubrange(range)
+            }
+            normalized = normalized.replacingOccurrences(of: " ", with: "")
+            normalized = normalized.replacingOccurrences(of: "-", with: "")
+            normalized = normalized.replacingOccurrences(of: "_", with: "")
+            normalized = normalized.replacingOccurrences(of: "&", with: "")
+            return normalized
+        }
         
-        smoothed.append(CGPoint(x: smoothedX, y: smoothedY))
+        let normalizedTenant = normalize(tenantName)
+        
+        if let match = viewModel.allStores.first(where: { normalize($0.name) == normalizedTenant }) {
+            return match
+        }
+        
+        if let partial = viewModel.allStores.first(where: { normalize($0.name).contains(normalizedTenant) }) {
+            return partial
+        }
+        
+        return nil
     }
     
-    smoothed.append(points.last!) // Keep last point unchanged
-    
-    return smoothed
-}
-
-private func calculateControlPoint(previous: CGPoint, current: CGPoint, next: CGPoint) -> CGPoint {
-    let smoothness: CGFloat = 0.3
-    
-    let deltaX = next.x - previous.x
-    let deltaY = next.y - previous.y
-    
-    return CGPoint(
-        x: current.x + smoothness * deltaX * 0.25,
-        y: current.y + smoothness * deltaY * 0.25
-    )
-}
-
-// MARK: - Preview
-private func makePreviewDataManager() -> DataManager {
-    let previewManager = DataManager()
-    
-    if let url = Bundle.main.url(forResource: Floor.ground.fileName, withExtension: "json"),
-       let data = try? Data(contentsOf: url),
-       let graph = try? JSONDecoder().decode(Graph.self, from: data) {
-        
-        let processedGraph = previewManager.processGraph(graph)
-        let locations = previewManager.extractLocations(from: processedGraph)
-        
-        previewManager.floorData[.ground] = FloorData(graph: processedGraph, locations: locations)
-        previewManager.unifiedGraph = previewManager.buildUnifiedGraph(from: previewManager.floorData)
-        previewManager.isLoading = false
+    private func handleNodeTap(node: Node) {
+        if let store = findStoreByNode(node) {
+            selectedStore = store
+            print("✅ Store found: \(store.name)")
+        } else {
+            print("⚠️ Store not found for node: \(node.parentLabel ?? node.label ?? "No label")")
+        }
     }
     
-    return previewManager
+    private func getCurrentFloorSteps() -> [EnhancedDirectionStep] {
+        return pathfindingManager.enhancedDirectionSteps.filter { step in
+            // Find the floor for this step
+            if let pathItem = pathWithLabels.first(where: {
+                abs($0.point.x - step.point.x) < 1.0 && abs($0.point.y - step.point.y) < 1.0
+            }) {
+                return extractFloorFromLabel(pathItem.label) == currentFloor
+            }
+            return false
+        }
+    }
+    
+    private func extractFloorFromLabel(_ label: String) -> Floor {
+        if label.hasPrefix("ground_") { return .ground }
+        if label.hasPrefix("lowerground_") { return .lowerGround }
+        if label.hasPrefix("1st_") { return .first }
+        if label.hasPrefix("2nd_") { return .second }
+        if label.hasPrefix("3rd_") { return .third }
+        if label.hasPrefix("4th_") { return .fourth }
+        return .ground
+    }
 }
 
-//#Preview {
-//    IntegratedMapView(dataManager: makePreviewDataManager())
-//}
+//Text Outline
+struct StrokeText: View {
+    let text: String
+    let fontSize: CGFloat
+    let textColor: Color
+    let outlineColor: Color
+    let lineWidth: CGFloat
+    let maxWidth: CGFloat?
 
+    var body: some View {
+        ZStack {
+            Text(text)
+                .font(.system(size: fontSize, weight: .bold))
+                .offset(x: lineWidth, y: lineWidth)
+            Text(text)
+                .font(.system(size: fontSize, weight: .bold))
+                .offset(x: -lineWidth, y: -lineWidth)
+            Text(text)
+                .font(.system(size: fontSize, weight: .bold))
+                .offset(x: -lineWidth, y: lineWidth)
+            Text(text)
+                .font(.system(size: fontSize, weight: .bold))
+                .offset(x: lineWidth, y: -lineWidth)
+            // Isi utama
+            Text(text)
+                .font(.system(size: fontSize, weight: .bold))
+                .foregroundColor(textColor)
+                .lineLimit(1)
+                .frame(maxWidth: maxWidth)
+        }
+        .foregroundColor(outlineColor)
+    }
+}
+
+// MARK: - Current Floor Path View
+struct CurrentFloorPathView: View {
+    let pathWithLabels: [(point: CGPoint, label: String)]
+    let currentPathIndex: Int
+    let currentFloor: Floor
+    
+    var body: some View {
+        if pathWithLabels.count > 1 {
+            // Completed portion
+            if currentPathIndex > 0 {
+                let completedPoints = Array(pathWithLabels[0...min(currentPathIndex, pathWithLabels.count - 1)]).map { $0.point }
+                if completedPoints.count > 1 {
+                    Path { path in
+                        path.move(to: completedPoints[0])
+                        for i in 1..<completedPoints.count {
+                            path.addLine(to: completedPoints[i])
+                        }
+                    }
+                    .stroke(
+                        LinearGradient(
+                            gradient: Gradient(colors: [Color.green.opacity(0.8), Color.green]),
+                            startPoint: .leading,
+                            endPoint: .trailing
+                        ),
+                        style: StrokeStyle(lineWidth: 6, lineCap: .round, lineJoin: .round)
+                    )
+                }
+            }
+            
+            // Remaining portion
+            if currentPathIndex < pathWithLabels.count - 1 {
+                let remainingPoints = Array(pathWithLabels[currentPathIndex...]).map { $0.point }
+                if remainingPoints.count > 1 {
+                    Path { path in
+                        path.move(to: remainingPoints[0])
+                        for i in 1..<remainingPoints.count {
+                            path.addLine(to: remainingPoints[i])
+                        }
+                    }
+                    .stroke(
+                        Color.gray.opacity(0.7),
+                        style: StrokeStyle(lineWidth: 4, lineCap: .round, lineJoin: .round, dash: [10, 5])
+                    )
+                }
+            }
+            
+            // Start and end markers for current floor
+            if let firstPoint = pathWithLabels.first?.point {
+                StartMarker(point: firstPoint)
+            }
+            
+            if let lastPoint = pathWithLabels.last?.point {
+                EndMarker(point: lastPoint)
+            }
+        }
+    }
+}
+
+// MARK: - Floor Transition Indicators
+struct FloorTransitionIndicators: View {
+    let pathWithLabels: [(point: CGPoint, label: String)]
+    let currentFloor: Floor
+    let pathfindingManager: PathfindingManager
+    
+    var body: some View {
+        ForEach(getFloorTransitionPoints(), id: \.point) { transitionPoint in
+            FloorTransitionMarker(
+                point: transitionPoint.point,
+                transitionType: transitionPoint.transitionType,
+                targetFloor: transitionPoint.targetFloor
+            )
+        }
+    }
+    
+    private func getFloorTransitionPoints() -> [(point: CGPoint, transitionType: String, targetFloor: Floor)] {
+        var transitionPoints: [(point: CGPoint, transitionType: String, targetFloor: Floor)] = []
+        
+        for i in 1..<pathWithLabels.count {
+            let prevFloor = extractFloorFromLabel(pathWithLabels[i-1].label)
+            let currentFloorLabel = extractFloorFromLabel(pathWithLabels[i].label)
+            
+            if prevFloor != currentFloorLabel && currentFloorLabel == currentFloor {
+                let transitionType = getTransitionType(from: prevFloor, to: currentFloorLabel)
+                transitionPoints.append((
+                    point: pathWithLabels[i].point,
+                    transitionType: transitionType,
+                    targetFloor: currentFloorLabel
+                ))
+            }
+        }
+        
+        return transitionPoints
+    }
+    
+    private func getTransitionType(from: Floor, to: Floor) -> String {
+        let floorOrder: [Floor] = [.lowerGround, .ground, .first, .second, .third, .fourth]
+        
+        guard let fromIndex = floorOrder.firstIndex(of: from),
+              let toIndex = floorOrder.firstIndex(of: to) else {
+            return "elevator"
+        }
+        
+        let difference = abs(toIndex - fromIndex)
+        return difference > 1 ? "elevator" : "escalator"
+    }
+    
+    private func extractFloorFromLabel(_ label: String) -> Floor {
+        if label.hasPrefix("ground_") { return .ground }
+        if label.hasPrefix("lowerground_") { return .lowerGround }
+        if label.hasPrefix("1st_") { return .first }
+        if label.hasPrefix("2nd_") { return .second }
+        if label.hasPrefix("3rd_") { return .third }
+        if label.hasPrefix("4th_") { return .fourth }
+        return .ground
+    }
+}
+
+// MARK: - Individual Markers
+struct StartMarker: View {
+    let point: CGPoint
+    
+    var body: some View {
+        Circle()
+            .fill(Color.green)
+            .frame(width: 20, height: 20)
+            .overlay(
+                Circle()
+                    .stroke(Color.white, lineWidth: 3)
+                    .frame(width: 20, height: 20)
+            )
+            .overlay(
+                Image(systemName: "figure.walk")
+                    .font(.system(size: 10, weight: .bold))
+                    .foregroundColor(.white)
+            )
+            .position(point)
+    }
+}
+
+struct EndMarker: View {
+    let point: CGPoint
+    
+    var body: some View {
+        Circle()
+            .fill(Color.red)
+            .frame(width: 20, height: 20)
+            .overlay(
+                Circle()
+                    .stroke(Color.white, lineWidth: 3)
+                    .frame(width: 20, height: 20)
+            )
+            .overlay(
+                Image(systemName: "mappin.and.ellipse")
+                    .font(.system(size: 10, weight: .bold))
+                    .foregroundColor(.white)
+            )
+            .position(point)
+    }
+}
+
+
+struct CurrentLocationView: View {
+    let pathWithLabels: [(point: CGPoint, label: String)]
+    let currentPathIndex: Int
+    
+    // Calculate rotation angle with smooth direction handling for turns
+    private var rotationAngle: Angle {
+        guard currentPathIndex < pathWithLabels.count else {
+            return .zero
+        }
+        
+        // Jika di akhir path, gunakan arah dari titik sebelumnya
+        if currentPathIndex >= pathWithLabels.count - 1 {
+            guard currentPathIndex > 0 else { return .zero }
+            let prevPoint = pathWithLabels[currentPathIndex - 1].point
+            let currentPoint = pathWithLabels[currentPathIndex].point
+            
+            let dx = currentPoint.x - prevPoint.x
+            let dy = currentPoint.y - prevPoint.y
+            let angle = atan2(dy, dx) + .pi / 2
+            return Angle(radians: Double(angle))
+        }
+        
+        let currentPoint = pathWithLabels[currentPathIndex].point
+        
+        // Untuk smooth direction, gunakan beberapa titik ke depan jika tersedia
+        var targetPoint: CGPoint
+        
+        // Coba ambil titik yang cukup jauh untuk menghindari noise dari titik yang terlalu dekat
+        let lookAheadDistance = min(3, pathWithLabels.count - currentPathIndex - 1)
+        if lookAheadDistance > 0 {
+            targetPoint = pathWithLabels[currentPathIndex + lookAheadDistance].point
+        } else {
+            targetPoint = pathWithLabels[currentPathIndex + 1].point
+        }
+        
+        // Jika titik terlalu dekat (kemungkinan noise), gunakan rata-rata arah
+        let dx = targetPoint.x - currentPoint.x
+        let dy = targetPoint.y - currentPoint.y
+        let distance = sqrt(dx * dx + dy * dy)
+        
+        if distance < 10.0 && currentPathIndex + 1 < pathWithLabels.count - 1 {
+            // Gunakan arah rata-rata dari beberapa segmen
+            var avgDx: CGFloat = 0
+            var avgDy: CGFloat = 0
+            var segmentCount = 0
+            
+            let maxLookAhead = min(5, pathWithLabels.count - currentPathIndex - 1)
+            for i in 1...maxLookAhead {
+                let nextIdx = currentPathIndex + i
+                if nextIdx < pathWithLabels.count {
+                    let segDx = pathWithLabels[nextIdx].point.x - currentPoint.x
+                    let segDy = pathWithLabels[nextIdx].point.y - currentPoint.y
+                    avgDx += segDx
+                    avgDy += segDy
+                    segmentCount += 1
+                }
+            }
+            
+            if segmentCount > 0 {
+                avgDx /= CGFloat(segmentCount)
+                avgDy /= CGFloat(segmentCount)
+                let angle = atan2(avgDy, avgDx) + .pi / 2
+                return Angle(radians: Double(angle))
+            }
+        }
+        
+        // Gunakan arah normal
+        let angle = atan2(dy, dx) + .pi / 2
+        return Angle(radians: Double(angle))
+    }
+    
+    var body: some View {
+        if currentPathIndex < pathWithLabels.count {
+            let point = pathWithLabels[currentPathIndex].point
+            
+            Circle()
+                .fill(Color.blue)
+                .frame(width: 24, height: 24)
+                .overlay(
+                    Circle()
+                        .stroke(Color.white, lineWidth: 4)
+                        .frame(width: 24, height: 24)
+                )
+                .overlay(
+                    Image(systemName: "location.north.fill")
+                        .font(.system(size: 12, weight: .bold))
+                        .foregroundColor(.white)
+                        .rotationEffect(rotationAngle)
+                )
+                .position(point)
+        } else {
+            Color.clear.frame(width: 0, height: 0)
+        }
+    }
+}
+
+struct FloorTransitionMarker: View {
+    let point: CGPoint
+    let transitionType: String
+    let targetFloor: Floor
+    
+    var body: some View {
+        VStack(spacing: 4) {
+            Circle()
+                .fill(Color.orange)
+                .frame(width: 28, height: 28)
+                .overlay(
+                    Circle()
+                        .stroke(Color.white, lineWidth: 3)
+                        .frame(width: 28, height: 28)
+                )
+                .overlay(
+                    Image(systemName: transitionType == "elevator" ? "arrow.up.arrow.down.circle" : "arrow.up.right.circle")
+                        .font(.system(size: 14, weight: .bold))
+                        .foregroundColor(.white)
+                )
+            
+            Text(transitionType.capitalized)
+                .font(.caption2)
+                .fontWeight(.bold)
+                .foregroundColor(.orange)
+                .padding(.horizontal, 4)
+                .padding(.vertical, 2)
+                .background(Color.white.opacity(0.9))
+                .cornerRadius(4)
+        }
+        .position(point)
+    }
+}
+
+// MARK: - ZoomableScrollView (Enhanced)
+struct ZoomableScrollView<Content: View>: View {
+    let content: Content
+    
+    @State private var scale: CGFloat = 1.0
+    @State private var lastScale: CGFloat = 1.0
+    @State private var offset: CGSize = .zero
+    @State private var lastOffset: CGSize = .zero
+    
+    init(@ViewBuilder content: () -> Content) {
+        self.content = content()
+    }
+    
+    var body: some View {
+        GeometryReader { geo in
+            content
+                .scaleEffect(scale)
+                .offset(offset)
+                .onAppear {
+                    // Start with a comfortable zoom level
+                    scale = 2.0
+                    lastScale = 2.0
+                    offset = .zero
+                    lastOffset = .zero
+                }
+                .gesture(
+                    SimultaneousGesture(
+                        MagnificationGesture()
+                            .onChanged { value in
+                                scale = lastScale * value
+                                offset = clampedOffset(offset, geo: geo)
+                            }
+                            .onEnded { _ in
+                                lastScale = max(min(scale, 6.0), 2)
+                                scale = lastScale
+                                offset = clampedOffset(offset, geo: geo)
+                                lastOffset = offset
+                            },
+                        DragGesture()
+                            .onChanged { value in
+                                let newOffset = CGSize(
+                                    width: lastOffset.width + value.translation.width,
+                                    height: lastOffset.height + value.translation.height
+                                )
+                                offset = clampedOffset(newOffset, geo: geo)
+                            }
+                            .onEnded { _ in
+                                lastOffset = offset
+                            }
+                    )
+                )
+                .gesture(
+                    TapGesture(count: 2)
+                        .onEnded {
+                            withAnimation(.easeInOut(duration: 0.3)) {
+                                if scale > 2.5 {
+                                    scale = 2.0
+                                    lastScale = 2.0
+                                    offset = .zero
+                                    lastOffset = .zero
+                                } else {
+                                    scale = 4.0
+                                    lastScale = 4.0
+                                }
+                            }
+                        }
+                )
+        }
+    }
+    
+    private func clampedOffset(_ proposed: CGSize, geo: GeometryProxy) -> CGSize {
+        let screenWidth = geo.size.width
+        let screenHeight = geo.size.height
+        
+        let contentAspect: CGFloat = 1800 / 1200
+        var contentWidth = screenWidth
+        var contentHeight = screenHeight
+        
+        if contentAspect > screenWidth / screenHeight {
+            contentHeight = screenWidth / contentAspect
+        } else {
+            contentWidth = screenHeight * contentAspect
+        }
+        
+        let scaledWidth = contentWidth * scale
+        let scaledHeight = contentHeight * scale
+        
+        let maxX = max((scaledWidth - screenWidth) / 2, 0)
+        let maxY: CGFloat
+        let minY: CGFloat
+        
+        if scaledHeight > screenHeight {
+            maxY = (scaledHeight - screenHeight) / 2
+            minY = -maxY
+        } else {
+            maxY = 0
+            minY = 0
+        }
+        
+        return CGSize(
+            width: min(max(proposed.width, -maxX), maxX),
+            height: min(max(proposed.height, minY), maxY)
+        )
+    }
+}
+
+// MARK: - Corner Radius Extension
+extension View {
+    func cornerRadius(_ radius: CGFloat, corners: UIRectCorner) -> some View {
+        clipShape(RoundedCorner(radius: radius, corners: corners))
+    }
+}
+
+struct RoundedCorner: Shape {
+    var radius: CGFloat
+    var corners: UIRectCorner
+    
+    func path(in rect: CGRect) -> Path {
+        let path = UIBezierPath(
+            roundedRect: rect,
+            byRoundingCorners: corners,
+            cornerRadii: CGSize(width: radius, height: radius)
+        )
+        return Path(path.cgPath)
+    }
+}

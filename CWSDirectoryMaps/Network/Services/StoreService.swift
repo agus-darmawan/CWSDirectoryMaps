@@ -140,6 +140,8 @@ class StoreService: ObservableObject {
 //            print("Matched \(facilityDTO.name) to graph label: \(foundGraphLabel!)")
         }
         // --- End of New Logic ---
+        
+        print(foundGraphLabel ?? "–")
 
         return Store(
             id: String(facilityDTO.id),
