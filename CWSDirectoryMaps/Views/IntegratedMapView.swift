@@ -19,6 +19,10 @@ struct IntegratedMapView: View {
     @State private var currentStepIndex: Int = 0
     @State private var showPath: Bool = false
     
+    //punya daniel
+    @StateObject private var viewModel = DirectoryViewModel()
+    @State private var selectedStore: Store? = nil
+
     // Multiplier to fine-tune graph-to-image fitting
     @State private var graphScaleMultiplier: CGFloat = 0.96
     
@@ -45,7 +49,11 @@ struct IntegratedMapView: View {
                                             graphScaleMultiplier: graphScaleMultiplier,
                                             currentStepIndex: $currentStepIndex,
                                             pathfindingManager: pathfindingManager,
-                                            currentFloor: currentFloor
+                                            currentFloor: currentFloor,
+                                            dataManager: dataManager,
+                                            viewModel: viewModel,
+                                            selectedStore: $selectedStore
+
                                         )
                                     }
                                 )
@@ -187,6 +195,10 @@ struct IntegratedMapOverlayView: View {
     @Binding var currentStepIndex: Int
     let pathfindingManager: PathfindingManager
     let currentFloor: Floor
+    let dataManager: DataManager
+    let viewModel: DirectoryViewModel
+    @Binding var selectedStore: Store?
+    @State private var showTenantDetail = false
     
     var body: some View {
         let bounds = mapViewManager.graphBounds(graph)
@@ -200,12 +212,67 @@ struct IntegratedMapOverlayView: View {
         // Calculate progress based on current floor path
         let currentFloorSteps = getCurrentFloorSteps()
         let progressRatio: Double = currentFloorSteps.count > 1 ?
-            Double(min(safeCurrentStepIndex, currentFloorSteps.count - 1)) / Double(currentFloorSteps.count - 1) : 0.0
+        Double(min(safeCurrentStepIndex, currentFloorSteps.count - 1)) / Double(currentFloorSteps.count - 1) : 0.0
         
         let currentPathIndex = Int(Double(pathWithLabels.count - 1) * progressRatio)
         let safeCurrentPathIndex = max(0, min(currentPathIndex, pathWithLabels.count - 1))
         
+        let baseIconSize: CGFloat = 8
+        let baseFontSize: CGFloat = 2
+        
+        let iconSize = baseIconSize / sqrt(overlayScale)
+        let fontSize = baseFontSize / sqrt(overlayScale)
+        
         ZStack {
+            
+            ForEach(graph.nodes.filter {
+                let type = $0.type.lowercased()
+                let label = $0.label?.lowercased() ?? ""
+                return type.contains("center") &&
+                !label.contains("escalator") &&
+                !label.contains("lift")
+            }, id: \.id) { node in
+                if let store = findStoreByNode(node) {
+                    Button {
+                        handleNodeTap(node: node)
+                    } label: {
+                        VStack(spacing: 2) {
+                            if store.name.lowercased().contains("restroom")
+                                || store.name.lowercased().contains("babystroller")
+                                || store.name.lowercased().contains("wheelchair")
+                                || store.name.lowercased().contains("atrium") {
+                                
+                                Circle()
+                                    .fill(Color.blue.opacity(1.0))
+                                    .frame(width: iconSize, height: iconSize)
+                                    .overlay(
+                                        Circle()
+                                            .stroke(Color.white, lineWidth: 1)
+                                    )
+                                
+                            } else {
+                                Image(systemName: "handbag.circle.fill")
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: iconSize, height: iconSize)
+                                    .background(Circle().fill(Color.white))
+                            }
+                            StrokeText(
+                                text: store.name,
+                                fontSize: fontSize,
+                                textColor: Color(UIColor.systemBlue),
+                                outlineColor: .white,
+                                lineWidth: 0.5,
+                                maxWidth: iconSize * 3
+                            )
+                            
+                        }
+                    }
+                    .position(CGPoint(x: node.x, y: node.y))
+                }
+            }
+            
+            
             if hasValidPath {
                 // Path visualization for current floor
                 CurrentFloorPathView(
@@ -226,13 +293,63 @@ struct IntegratedMapOverlayView: View {
                     CurrentLocationView(
                         pathWithLabels: pathWithLabels,
                         currentPathIndex: safeCurrentPathIndex,
-//                        pathfindingManager: pathfindingManager
+                        //                        pathfindingManager: pathfindingManager
                     )
                 }
             }
         }
         .scaleEffect(overlayScale, anchor: .topLeading)
         .offset(overlayOffset)
+        .sheet(item: $selectedStore) { store in
+            TenantDetailModalView(
+                store: store,
+                viewModel: viewModel,
+                isPresented: Binding(
+                    get: { selectedStore != nil },
+                    set: { if !$0 { selectedStore = nil } }
+                )
+            )
+        }
+    }
+    
+    private func findStoreByNode(_ node: Node) -> Store? {
+        guard let rawTenant = node.parentLabel ?? node.label else { return nil }
+        let tenantName = rawTenant.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
+        guard !tenantName.isEmpty else { return nil }
+        
+        // Normalize function
+        func normalize(_ name: String) -> String {
+            var normalized = name.lowercased()
+            if let range = normalized.range(of: "-\\d+$", options: .regularExpression) {
+                normalized.removeSubrange(range)
+            }
+            normalized = normalized.replacingOccurrences(of: " ", with: "")
+            normalized = normalized.replacingOccurrences(of: "-", with: "")
+            normalized = normalized.replacingOccurrences(of: "_", with: "")
+            normalized = normalized.replacingOccurrences(of: "&", with: "")
+            return normalized
+        }
+        
+        let normalizedTenant = normalize(tenantName)
+        
+        if let match = viewModel.allStores.first(where: { normalize($0.name) == normalizedTenant }) {
+            return match
+        }
+        
+        if let partial = viewModel.allStores.first(where: { normalize($0.name).contains(normalizedTenant) }) {
+            return partial
+        }
+        
+        return nil
+    }
+    
+    private func handleNodeTap(node: Node) {
+        if let store = findStoreByNode(node) {
+            selectedStore = store
+            print("✅ Store found: \(store.name)")
+        } else {
+            print("⚠️ Store not found for node: \(node.parentLabel ?? node.label ?? "No label")")
+        }
     }
     
     private func getCurrentFloorSteps() -> [EnhancedDirectionStep] {
@@ -255,6 +372,40 @@ struct IntegratedMapOverlayView: View {
         if label.hasPrefix("3rd_") { return .third }
         if label.hasPrefix("4th_") { return .fourth }
         return .ground
+    }
+}
+
+//Text Outline
+struct StrokeText: View {
+    let text: String
+    let fontSize: CGFloat
+    let textColor: Color
+    let outlineColor: Color
+    let lineWidth: CGFloat
+    let maxWidth: CGFloat?
+
+    var body: some View {
+        ZStack {
+            Text(text)
+                .font(.system(size: fontSize, weight: .bold))
+                .offset(x: lineWidth, y: lineWidth)
+            Text(text)
+                .font(.system(size: fontSize, weight: .bold))
+                .offset(x: -lineWidth, y: -lineWidth)
+            Text(text)
+                .font(.system(size: fontSize, weight: .bold))
+                .offset(x: -lineWidth, y: lineWidth)
+            Text(text)
+                .font(.system(size: fontSize, weight: .bold))
+                .offset(x: lineWidth, y: -lineWidth)
+            // Isi utama
+            Text(text)
+                .font(.system(size: fontSize, weight: .bold))
+                .foregroundColor(textColor)
+                .lineLimit(1)
+                .frame(maxWidth: maxWidth)
+        }
+        .foregroundColor(outlineColor)
     }
 }
 
