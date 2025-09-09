@@ -3,15 +3,6 @@
 import Foundation
 import CoreGraphics
 
-// MARK: - Direction Step Model
-//struct DirectionStep: Identifiable {
-//    let id = UUID()
-//    let point: CGPoint
-//    var instruction: String = ""
-//    var iconName: String = "arrow.up"
-//}
-
-
 // MARK: - Directions Generator
 class DirectionsGenerator {
     
@@ -31,12 +22,16 @@ class DirectionsGenerator {
     
     // MARK: - Main Generation Function
     
-    func generate(from pathWithLabels: [(point: CGPoint, label: String)], graph: Graph?, unifiedGraph: [String: GraphNode]) -> [DirectionStep] {
+    func generate(
+        from pathWithLabels: [(point: CGPoint, label: String)],
+        graph: Graph?,
+        unifiedGraph: [String: GraphNode]
+    ) -> [DirectionStep] {
         guard pathWithLabels.count >= 2 else { return [] }
         
         let path = pathWithLabels.map { $0.point }
         
-        // Group path segments by floor to handle multi-floor navigation
+        // Group path segments by floor
         var floorSegments: [(floor: Floor, pathData: [(point: CGPoint, label: String)])] = []
         var currentFloorPath: [(point: CGPoint, label: String)] = []
         var currentFloor = extractFloor(from: pathWithLabels[0].label)
@@ -56,19 +51,16 @@ class DirectionsGenerator {
             floorSegments.append((floor: currentFloor, pathData: currentFloorPath))
         }
         
+        // Generate steps
         var allSteps: [DirectionStep] = []
         
-        // Generate steps for each floor segment
         for (segmentIndex, segment) in floorSegments.enumerated() {
             let steps = generateStepsForFloor(
                 pathData: segment.pathData,
                 floor: segment.floor,
-                unifiedGraph: unifiedGraph,
-                isFirstSegment: segmentIndex == 0,
-                isLastSegment: segmentIndex == floorSegments.count - 1
+                unifiedGraph: unifiedGraph
             )
             
-            // Add floor transition steps if needed
             if segmentIndex > 0 {
                 let transitionStep = DirectionStep(
                     point: segment.pathData.first?.point ?? .zero,
@@ -82,8 +74,36 @@ class DirectionsGenerator {
             allSteps.append(contentsOf: steps)
         }
         
-        // Remove duplicate consecutive steps with same description
+        // Remove duplicate consecutive steps
         allSteps = removeDuplicateSteps(allSteps)
+        
+        // Handle escalator/lift replacement
+        var i = 0
+        while i < allSteps.count {
+            if allSteps[i].description.localizedCaseInsensitiveContains("Continue to") {
+                if i >= 2 {
+                    let prevStep = allSteps[i - 2]
+                    var directionWord = "straight"
+                    if prevStep.description.localizedCaseInsensitiveContains("left") {
+                        directionWord = "left"
+                    } else if prevStep.description.localizedCaseInsensitiveContains("right") {
+                        directionWord = "right"
+                    }
+                    
+                    allSteps[i].description = "Take the escalator/lift to your \(directionWord)"
+                    allSteps[i+1].description.replace("store", with: "escalator/lift")
+                    
+                    // Remove two steps before
+                    allSteps.remove(at: i - 1)
+                    allSteps.remove(at: i - 2)
+                    i = max(i - 2, 0)
+                } else {
+                    i += 1
+                }
+            } else {
+                i += 1
+            }
+        }
         
         print("--- Generated \(allSteps.count) Enhanced Directional Steps ---")
         for step in allSteps {
@@ -93,121 +113,282 @@ class DirectionsGenerator {
         return allSteps
     }
     
+    // MARK: - Step Generation per Floor
+    
     private func generateStepsForFloor(
         pathData: [(point: CGPoint, label: String)],
         floor: Floor,
-        unifiedGraph: [String: GraphNode],
-        isFirstSegment: Bool,
-        isLastSegment: Bool
+        unifiedGraph: [String: GraphNode]
     ) -> [DirectionStep] {
         guard pathData.count >= 2 else { return [] }
         
-        let path = pathData.map { $0.point }
         var steps: [DirectionStep] = []
         
-        // Starting step only for first segment
-        if isFirstSegment {
-            let startPoint = path[0]
-            let startLandmarks = findNearbyLandmarks(
-                around: startPoint,
-                unifiedGraph: unifiedGraph,
-                currentFloor: floor
-            )
+        var pathNodes = pathData.compactMap { unifiedGraph[$0.label] }
+            .filter { !$0.label.contains("_split") }
+        
+        // Variables grouped up front
+        var lastParentLabel = pathNodes.first?.parentLabel
+        var usedLandmarks: [String] = []
+        var storepathCount = 0
+        var angleAccumulator: CGFloat = 0
+        var i = 1
+        
+        // --- Helper functions ---
+        
+        func findMinDistance(
+            between nodesA: [GraphNode],
+            and nodesB: [GraphNode]
+        ) -> (dist: CGFloat, pair: (GraphNode, GraphNode))? {
+            var minDistance: CGFloat = .infinity
+            var minPair: (GraphNode, GraphNode)?
             
-            var startDescription = "Begin your journey"
-            if !startLandmarks.isEmpty {
-                startDescription = "Start from near \(startLandmarks.first!)"
+            for a in nodesA {
+                for b in nodesB {
+                    if a.id == b.id { continue }
+                    let d = distance(CGPoint(x: a.x, y: a.y), CGPoint(x: b.x, y: b.y))
+                    if d < minDistance {
+                        minDistance = d
+                        minPair = (a, b)
+                    }
+                }
             }
-            
-            steps.append(DirectionStep(
-                point: startPoint,
-                icon: "figure.walk",
-                description: startDescription,
-                shopImage: "floor-1"
-            ))
+            return minPair != nil ? (minDistance, minPair!) : nil
         }
         
-        // Generate intermediate steps with improved logic
-        let significantPoints = findSignificantTurningPoints(pathData: pathData, unifiedGraph: unifiedGraph, floor: floor)
-        
-        for point in significantPoints {
-            let landmarks = findNearbyLandmarks(
-                around: point.point,
-                unifiedGraph: unifiedGraph,
-                currentFloor: floor,
-                maxDistance: 80.0
-            )
-            
-            let landmarkReference = landmarks.isEmpty ? "" : " near \(landmarks.first!)"
-            let description = "Continue straight\(landmarkReference)"
-            
-            steps.append(DirectionStep(
-                point: point.point,
-                icon: "arrow.up",
-                description: description,
-                shopImage: "floor-1"
-            ))
+        func endpoints(for parentLabel: String?) -> [GraphNode] {
+            guard let parentLabel = parentLabel else { return [] }
+            return unifiedGraph.values.filter {
+                $0.parentLabel == parentLabel || $0.label.hasPrefix(parentLabel + "_point_")
+            }
         }
         
-        // Final destination step only for last segment
-        if isLastSegment {
-            let finalPoint = path.last!
-            let finalLandmarks = findNearbyLandmarks(
-                around: finalPoint,
+        func findClosestLandmark(around point: CGPoint) -> String? {
+            let nearbyStores = findNearbyLandmarks(
+                around: point,
                 unifiedGraph: unifiedGraph,
                 currentFloor: floor,
-                maxDistance: 50.0
+                maxDistance: 120
             )
+            let filteredStores = nearbyStores.filter { !$0.lowercased().hasPrefix("atrium") }
             
-            var finalDescription = "You have arrived at your destination"
-            if !finalLandmarks.isEmpty {
-                finalDescription = "Arrive at your destination near \(finalLandmarks.first!)"
+            if let closestStore = filteredStores.min(by: { lhs, rhs in
+                guard let lhsNode = unifiedGraph[lhs],
+                      let rhsNode = unifiedGraph[rhs] else { return false }
+                let lhsDist = hypot(lhsNode.x - point.x, lhsNode.y - point.y)
+                let rhsDist = hypot(rhsNode.x - point.x, rhsNode.y - point.y)
+                return lhsDist < rhsDist
+            }) {
+                return closestStore
+            }
+            return nil
+        }
+        
+        // --- Main processing loop ---
+        
+        while i < pathNodes.count - 1 {
+            var shouldSkipIncrement = false
+            
+            // Intersection detection
+            if i + 2 < pathNodes.count {
+                let nodeA = pathNodes[i]
+                let nodeB = pathNodes[i+1]
+                let nodeC = pathNodes[i+2]
+                
+                let nodesAAll = endpoints(for: nodeA.parentLabel)
+                let nodesBAll = endpoints(for: nodeB.parentLabel)
+                let nodesCAll = endpoints(for: nodeC.parentLabel)
+                
+                if let ab = findMinDistance(between: nodesAAll, and: nodesBAll),
+                   let bc = findMinDistance(between: nodesBAll, and: nodesCAll),
+                   let ac = findMinDistance(between: nodesAAll, and: nodesCAll),
+                   (ab.dist + bc.dist + ac.dist) < 8 {
+                    
+                    pathNodes.remove(at: i + 1)
+                    shouldSkipIncrement = true
+                }
             }
             
-            steps.append(DirectionStep(
-                point: finalPoint,
-                icon: "mappin.circle.fill",
-                description: finalDescription,
-                shopImage: "floor-1"
-            ))
+            // Path processing
+            guard let currentParentLabel = pathNodes[i].parentLabel else {
+                if !shouldSkipIncrement { i += 1 }
+                continue
+            }
+            
+            if currentParentLabel != lastParentLabel {
+                let nextNodeOnPath = pathNodes[i+1]
+                var p1: CGPoint?, p2: CGPoint?, p3: CGPoint?
+                
+                // Junction point calculation
+                if let lastLabel = lastParentLabel {
+                    let prevNodes = unifiedGraph.values.filter { $0.parentLabel == lastLabel }
+                    let nextNodes = unifiedGraph.values.filter { $0.parentLabel == currentParentLabel }
+
+                    // --- START: NEW & IMPROVED LOGIC ---
+                    var minDistance: CGFloat = .infinity
+                    var junctionPair: (prev: GraphNode, next: GraphNode)? = nil
+
+                    // 1. Find the true junction by finding the closest pair of nodes between the two segments.
+                    for pNode in prevNodes {
+                        for nNode in nextNodes {
+                            let d = distance(CGPoint(x: pNode.x, y: pNode.y), CGPoint(x: nNode.x, y: nNode.y))
+                            if d < minDistance {
+                                minDistance = d
+                                junctionPair = (pNode, nNode)
+                            }
+                        }
+                    }
+
+                    // 2. Use the junction pair to correctly identify the start, junction, and end points.
+                    if let pair = junctionPair,
+                       let startNode = prevNodes.first(where: { $0.id != pair.prev.id }),
+                       let endNode = nextNodes.first(where: { $0.id != pair.next.id }) {
+                        
+                        // 3. Assign points and normalize Y-coordinates to prevent data issues.
+                        p1 = CGPoint(x: startNode.x, y: abs(startNode.y))
+                        p2 = CGPoint(x: pair.prev.x, y: abs(pair.prev.y)) // Use the junction point from the previous segment
+                        p3 = CGPoint(x: endNode.x, y: abs(endNode.y))
+                    }
+                    // --- END: NEW & IMPROVED LOGIC ---
+                }
+                // Generate step if valid
+                if let point1 = p1, let point2 = p2, let point3 = p3 {
+                    let angle1 = angle(from: point1, to: point2)
+                    let angle2 = angle(from: point2, to: point3)
+                    
+                    var angleDifference = (angle2 - angle1) * 180 / .pi
+                    if angleDifference > 180 { angleDifference -= 360 }
+                    if angleDifference < -180 { angleDifference += 360 }
+                    
+                    angleAccumulator += abs(angleDifference)
+                    
+                    let pathName = currentParentLabel.replacingOccurrences(of: "_", with: " ").capitalized
+                    let isFirstStep = (i == 2)
+                    let isLastStep = (i == pathNodes.count - 2)
+                    
+                    var iconName = "arrow.up"
+                    var description = ""
+                    
+                    // --- NEW, UPDATED LOGIC ---
+                    // --- START: NEW & IMPROVED LOGIC ---
+
+                    // Get the final destination's unique identifier (its label or parentLabel).
+                    let destinationIdentifier = pathNodes.last?.parentLabel ?? pathNodes.last?.label
+
+                    // The next node in the path sequence.
+                    let nextNodeOnPath = pathNodes[i+1]
+
+                    // Determine if we are on the final approach.
+                    let isNextNodeTheDestination = (nextNodeOnPath.parentLabel ?? nextNodeOnPath.label) == destinationIdentifier
+                    let isApproachingOnStorepath = currentParentLabel.contains("storepath")
+                    let isApproachingDestination = isNextNodeTheDestination || isApproachingOnStorepath
+
+
+                    if isApproachingDestination || isLastStep {
+                        // This is the final turn towards the destination.
+                        if let destinationNode = pathNodes.last {
+                            let destinationLabel = destinationNode.parentLabel ?? destinationNode.label
+                            let destinationName = formatLandmarkName(destinationLabel)
+                            
+                            var directionPrefix = ""
+                            
+                            // This logic correctly determines the final turn's direction
+                            if angleDifference >= 45 {
+                                directionPrefix = "On your right should be"
+                                iconName = "arrow.turn.up.right"
+                            } else if angleDifference >= 30 {
+                                directionPrefix = "Slightly to your right should be"
+                                iconName = "arrow.up.right"
+                            } else if angleDifference <= -45 {
+                                directionPrefix = "On your left should be"
+                                iconName = "arrow.turn.up.left"
+                            } else if angleDifference <= -30 {
+                                directionPrefix = "Slightly to your left should be"
+                                iconName = "arrow.up.left"
+                            } else {
+                                directionPrefix = "Ahead should be"
+                                iconName = "arrow.up"
+                            }
+                            
+                            // Combine them into the final description
+                            description = "\(directionPrefix) \(destinationName)"
+                        }
+                    } else if isFirstStep {
+                        // Logic for the first step remains the same.
+                        if angleDifference >= 45 {
+                            description = "Exit from the store and turn right"
+                            iconName = "arrow.turn.up.right"
+                        } else if angleDifference >= 30 {
+                            description = "Exit from the store and bear right"
+                            iconName = "arrow.up.right"
+                        } else if angleDifference <= -45 {
+                            description = "Exit from the store and turn left"
+                            iconName = "arrow.turn.up.left"
+                        } else if angleDifference <= -30 {
+                            description = "Exit from the store and bear left"
+                            iconName = "arrow.up.left"
+                        } else {
+                            description = "Exit from the store and continue straight"
+                            iconName = "arrow.up"
+                        }
+                    } else {
+                        // Logic for all intermediate steps remains the same.
+                        if angleDifference >= 45 {
+                            description = "Turn right onto \(pathName)"
+                            iconName = "arrow.turn.up.right"
+                        } else if angleDifference >= 30 {
+                            description = "Bear right onto \(pathName)"
+                            iconName = "arrow.up.right"
+                        } else if angleDifference <= -45 {
+                            description = "Turn left onto \(pathName)"
+                            iconName = "arrow.turn.up.left"
+                        } else if angleDifference <= -30 {
+                            description = "Bear left onto \(pathName)"
+                            iconName = "arrow.up.left"
+                        } else {
+                            description = "Continue straight onto \(pathName)"
+                            iconName = "arrow.up"
+                        }
+                        
+                    }
+                    // --- END: NEW & IMPROVED LOGIC ---
+
+                    // Landmarks
+                    if !isFirstStep && !isApproachingDestination && !isLastStep {
+                        if angleAccumulator >= 10 {
+                            if let landmark = findClosestLandmark(around: point2), !usedLandmarks.contains(landmark) {
+                                description += " until you pass \(landmark)"
+                                usedLandmarks.append(landmark)
+                            }
+                            angleAccumulator = 0
+                        }
+                    }
+                    
+                    if description.contains("Exit from") ||
+                       description.contains("until you pass") ||
+                       description.contains(" should ") {
+
+                        steps.append(DirectionStep(
+                            point: point2,
+                            icon: iconName,
+                            description: description,
+                            shopImage: floor.imageName
+                        ))
+                    }
+                }
+                
+                lastParentLabel = currentParentLabel
+            }
+
+            if !shouldSkipIncrement {
+                i += 1
+            }
         }
         
         return steps
     }
     
-    private func findSignificantTurningPoints(
-        pathData: [(point: CGPoint, label: String)],
-        unifiedGraph: [String: GraphNode],
-        floor: Floor
-    ) -> [(point: CGPoint, label: String)] {
-        guard pathData.count > 2 else { return [] }
-        
-        var significantPoints: [(point: CGPoint, label: String)] = []
-        let minDistanceBetweenPoints: CGFloat = 100.0 // Minimum distance to avoid redundant steps
-        
-        for i in 1..<(pathData.count - 1) {
-            let currentPoint = pathData[i]
-            let prevPoint = pathData[i - 1]
-            let nextPoint = pathData[i + 1]
-            
-            // Check if this is a significant turning point
-            let angle1 = angle(from: prevPoint.point, to: currentPoint.point)
-            let angle2 = angle(from: currentPoint.point, to: nextPoint.point)
-            var angleDiff = abs((angle2 - angle1) * 180 / .pi)
-            
-            if angleDiff > 180 { angleDiff = 360 - angleDiff }
-            
-            // Only add if it's a significant turn (> 45 degrees) and far enough from last point
-            if angleDiff > 45 {
-                if significantPoints.isEmpty ||
-                    distance(currentPoint.point, significantPoints.last!.point) > minDistanceBetweenPoints {
-                    significantPoints.append(currentPoint)
-                }
-            }
-        }
-        
-        return significantPoints
-    }
+    // MARK: - Utils
     
     private func removeDuplicateSteps(_ steps: [DirectionStep]) -> [DirectionStep] {
         var uniqueSteps: [DirectionStep] = []
@@ -234,16 +415,14 @@ class DirectionsGenerator {
         }
     }
     
-    /// Find nearby landmarks/stores around a given point
     private func findNearbyLandmarks(
         around point: CGPoint,
         unifiedGraph: [String: GraphNode],
         currentFloor: Floor,
-        maxDistance: CGFloat = 100.0
+        maxDistance: CGFloat = 50.0
     ) -> [String] {
         var landmarks: [String] = []
         
-        // Find store/landmark nodes near this point
         for (label, node) in unifiedGraph {
             guard node.floor == currentFloor else { continue }
             
@@ -251,8 +430,7 @@ class DirectionsGenerator {
             let dist = distance(point, nodePoint)
             
             if dist <= maxDistance {
-                // Look for store/landmark indicators
-                if node.type == "ellipse-point" || node.type == "circle-point" || node.type == "rect-corner" {
+                if node.type == "ellipse-point" || node.type == "circle-point" {
                     if let parentLabel = node.parentLabel {
                         let cleanName = formatLandmarkName(parentLabel)
                         if !cleanName.isEmpty && !landmarks.contains(cleanName) {
@@ -266,9 +444,7 @@ class DirectionsGenerator {
         return landmarks.sorted()
     }
     
-    /// Format landmark name to be more readable
     private func formatLandmarkName(_ rawName: String) -> String {
-        // Remove prefixes and clean up the name
         var cleanName = rawName
             .replacingOccurrences(of: "ground_path_", with: "")
             .replacingOccurrences(of: "lowerground_path_", with: "")
@@ -277,15 +453,12 @@ class DirectionsGenerator {
             .replacingOccurrences(of: "3rd_path_", with: "")
             .replacingOccurrences(of: "4th_path_", with: "")
         
-        // Remove technical suffixes
         if cleanName.contains("storepath") {
-            return "" // Skip technical path names
+            return ""
         }
         
-        // Clean up underscores and format
         cleanName = cleanName.replacingOccurrences(of: "_", with: " ")
         
-        // Capitalize words
         let words = cleanName.split(separator: " ")
         let capitalizedWords = words.map { word in
             String(word.prefix(1).uppercased() + word.dropFirst())
@@ -294,7 +467,6 @@ class DirectionsGenerator {
         return capitalizedWords.joined(separator: " ")
     }
     
-    /// Extract floor from unified graph label
     private func extractFloor(from label: String) -> Floor {
         if label.hasPrefix("ground_") { return .ground }
         if label.hasPrefix("lowerground_") { return .lowerGround }
@@ -302,43 +474,6 @@ class DirectionsGenerator {
         if label.hasPrefix("2nd_") { return .second }
         if label.hasPrefix("3rd_") { return .third }
         if label.hasPrefix("4th_") { return .fourth }
-        return .ground // default
-    }
-    
-    /// Snaps `nextPoint` if it's very close to `currPoint`, then uses a counterpart point if available
-    private func correctedAngle(prev: CGPoint, curr: CGPoint, pathNodes: [Node], index: Int) -> (CGFloat, CGPoint) {
-        let currPoint = curr
-        var nextPoint = CGPoint(x: pathNodes[index+1].x, y: pathNodes[index+1].y)
-        
-        // Snap tolerance (adjustable)
-        if distance(currPoint, nextPoint) < 5.5 {
-            // If next point is basically the same, skip ahead
-            if index + 2 < pathNodes.count {
-                nextPoint = CGPoint(x: pathNodes[index+2].x, y: pathNodes[index+2].y)
-            }
-        }
-        
-        let angle1 = angle(from: prev, to: currPoint)
-        let angle2 = angle(from: currPoint, to: nextPoint)
-        var angleDiff = (angle2 - angle1) * 180 / .pi
-        
-        // Normalize to [-180, 180]
-        if angleDiff > 180 { angleDiff -= 360 }
-        if angleDiff < -180 { angleDiff += 360 }
-        
-        // Treat ~180° as straight
-        if abs(abs(angleDiff) - 180) < 15 {
-            angleDiff = 0
-        }
-        
-        // Suppress fake U-turns if still progressing forward
-        let distPrevCurr = distance(prev, currPoint)
-        let distPrevNext = distance(prev, nextPoint)
-        if abs(angleDiff) > 150 && distPrevNext > distPrevCurr {
-            angleDiff = 0
-        }
-        
-        return (angleDiff, nextPoint)
+        return .ground
     }
 }
-

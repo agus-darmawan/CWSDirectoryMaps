@@ -5780,8 +5780,8 @@
     },
     {
       "id": "n589",
-      "x": 6170.0169000000005,
-      "y": 11192.997000000001,
+      "x": 6170.6324,
+      "y": 11192.458,
       "type": "path-point",
       "label": "storepath317-5_point_1",
       "parentLabel": "storepath317-5"
@@ -5796,8 +5796,8 @@
     },
     {
       "id": "n591",
-      "x": 6194.449,
-      "y": 11240.407,
+      "x": 6193.2501,
+      "y": 11240.912,
       "type": "path-point",
       "label": "storepath318-9-8_point_1",
       "parentLabel": "storepath318-9-8"
@@ -5812,8 +5812,8 @@
     },
     {
       "id": "n593",
-      "x": 6220.3688,
-      "y": 11280.948,
+      "x": 6219.169800000001,
+      "y": 11281.516000000001,
       "type": "path-point",
       "label": "storepath320-4-8_point_1",
       "parentLabel": "storepath320-4-8"
@@ -6116,8 +6116,8 @@
     },
     {
       "id": "n631",
-      "x": 5568.3859999999995,
-      "y": 11082.562,
+      "x": 5566.8688999999995,
+      "y": 11083.231,
       "type": "path-point",
       "label": "storepath350-6_point_1",
       "parentLabel": "storepath350-6"
@@ -6996,24 +6996,24 @@
     },
     {
       "id": "n741",
-      "x": 6166.2947,
-      "y": 11184.210000000001,
+      "x": 6166.1793,
+      "y": 11182.671,
       "type": "path-point",
       "label": "path431-6_point_1",
       "parentLabel": "path431-6"
     },
     {
       "id": "n742",
-      "x": 6165.7322,
-      "y": 11181.696,
+      "x": 6166.0399,
+      "y": 11182.311,
       "type": "path-point",
       "label": "path432-6_point_0",
       "parentLabel": "path432-6"
     },
     {
       "id": "n743",
-      "x": 6170.004900000001,
-      "y": 11193.375,
+      "x": 6170.0049,
+      "y": 11193.067,
       "type": "path-point",
       "label": "path432-6_point_1",
       "parentLabel": "path432-6"
@@ -7044,23 +7044,23 @@
     },
     {
       "id": "n747",
-      "x": 6194.4423,
-      "y": 11241.545,
+      "x": 6193.9375,
+      "y": 11240.63,
       "type": "path-point",
       "label": "path435-4_point_1",
       "parentLabel": "path435-4"
     },
     {
       "id": "n748",
-      "x": 6193.9723,
-      "y": 11240.605,
+      "x": 6193.8461,
+      "y": 11240.447,
       "type": "path-point",
       "label": "path436-8_point_0",
       "parentLabel": "path436-8"
     },
     {
       "id": "n749",
-      "x": 6203.371300000001,
+      "x": 6203.3713,
       "y": 11260.578,
       "type": "path-point",
       "label": "path436-8_point_1",
@@ -7076,24 +7076,24 @@
     },
     {
       "id": "n751",
-      "x": 6220.5245,
-      "y": 11281.491,
+      "x": 6220.2405,
+      "y": 11281.144,
       "type": "path-point",
       "label": "path437-1_point_1",
       "parentLabel": "path437-1"
     },
     {
       "id": "n752",
-      "x": 6219.8196,
-      "y": 11280.786,
+      "x": 6219.8512,
+      "y": 11280.754,
       "type": "path-point",
       "label": "path438-7_point_0",
       "parentLabel": "path438-7"
     },
     {
       "id": "n753",
-      "x": 6252.7162,
-      "y": 11300.054,
+      "x": 6252.7478,
+      "y": 11300.022,
       "type": "path-point",
       "label": "path438-7_point_1",
       "parentLabel": "path438-7"
@@ -7612,8 +7612,8 @@
     },
     {
       "id": "n818",
-      "x": 5567.4109,
-      "y": 11082.937,
+      "x": 5568.6602,
+      "y": 11082.982,
       "type": "path-point",
       "label": "path473-0_point_0",
       "parentLabel": "path473-0"
@@ -8372,8 +8372,8 @@
     },
     {
       "id": "n913",
-      "x": 6169.6524,
-      "y": 11192.2,
+      "x": 6169.9986,
+      "y": 11192.892,
       "type": "path-point",
       "label": "path524-6_point_0",
       "parentLabel": "path524-6"
@@ -8381,7 +8381,7 @@
     {
       "id": "n914",
       "x": 6180.2263,
-      "y": 11216.168000000001,
+      "y": 11216.168,
       "type": "path-point",
       "label": "path524-6_point_1",
       "parentLabel": "path524-6"
@@ -8717,7 +8717,7 @@
     {
       "id": "n956",
       "x": 5567.7214,
-      "y": 11083.227,
+      "y": 11083.004,
       "type": "path-point",
       "label": "path550-7_point_0",
       "parentLabel": "path550-7"
@@ -8733,7 +8733,7 @@
     {
       "id": "n958",
       "x": 5567.7214,
-      "y": 11082.562,
+      "y": 11082.874,
       "type": "path-point",
       "label": "path551-9_point_0",
       "parentLabel": "path551-9"
