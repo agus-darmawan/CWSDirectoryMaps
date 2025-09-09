@@ -1,11 +1,10 @@
-//
+
 //  IntegratedMapView.swift
 //  CWSDirectoryMaps
 //
 //  Created by Daniel Fernando Herawan on 01/09/25.
 //
 
-// swift
 import SwiftUI
 
 struct IntegratedMapView: View {
@@ -15,6 +14,8 @@ struct IntegratedMapView: View {
     @StateObject private var mapViewManager = MapViewManager()
     @StateObject var pathfindingManager: PathfindingManager
     
+    // Enhanced navigation tracking
+    @State private var currentStepIndex: Int = 0
     @State private var showPath: Bool = false
     
     // Selected floor for menu and image switching
@@ -43,7 +44,9 @@ struct IntegratedMapView: View {
                                             unifiedGraph: dataManager.unifiedGraph,
                                             imageGeo: imageGeo,
                                             mapViewManager: mapViewManager,
-                                            graphScaleMultiplier: graphScaleMultiplier
+                                            graphScaleMultiplier: graphScaleMultiplier,
+                                            currentStepIndex: $currentStepIndex,
+                                            pathfindingManager: pathfindingManager
                                         )
                                     }
                                 )
@@ -69,7 +72,9 @@ struct IntegratedMapView: View {
                 selectInitialFloorIfAvailable()
             }
         }
-        // Floor menu (top-right)
+        .onChange(of: pathfindingManager.currentStepIndex) { _, newIndex in
+            currentStepIndex = newIndex
+        }
         .overlay(alignment: .topTrailing) {
             Menu {
                 ForEach(Floor.allCases, id: \.self) { floor in
@@ -101,46 +106,16 @@ struct IntegratedMapView: View {
         }
     }
     
-    // ✅ Helper to always pick ground if available
     private func selectInitialFloorIfAvailable() {
-        print("---- [Debug] selectInitialFloorIfAvailable ----")
-        print("Currently loading? \(dataManager.isLoading)")
-        
-        // FloorData details
-        if dataManager.floorData.isEmpty {
-            print("⚠️ floorData is EMPTY")
-        } else {
-            for (floor, data) in dataManager.floorData {
-                print("✅ Floor '\(floor.displayName)': \(data.graph.nodes.count) nodes, \(data.graph.edges.count) edges, \(data.locations.count) locations")
-            }
-        }
-        
-        // Unified graph details
-        print("UnifiedGraph has \(dataManager.unifiedGraph.count) nodes")
-        if !dataManager.unifiedGraph.isEmpty {
-            let sample = dataManager.unifiedGraph.prefix(5)
-            print("Sample unifiedGraph nodes:")
-            for (label, node) in sample {
-                print(" - \(label) @ floor \(node.floor) pos(\(node.x),\(node.y))")
-            }
-        }
-        
-        // Floor switching logic
         if let _ = dataManager.floorData[selectedFloor] {
-            print("➡️ Switching to \(selectedFloor.displayName)")
             mapViewManager.switchToFloor(selectedFloor, floorData: dataManager.floorData)
         } else if let _ = dataManager.floorData[.ground] {
-            print("➡️ Fallback to .ground")
             selectedFloor = .ground
             mapViewManager.switchToFloor(.ground, floorData: dataManager.floorData)
-        } else {
-            print("⚠️ No floor data found, cannot switch")
         }
-        print("---- [End Debug] ----")
     }
-    
-    
 }
+
 struct IntegratedMapOverlayView: View {
     let graph: Graph
     let pathWithLabels: [(point: CGPoint, label: String)]
@@ -148,205 +123,367 @@ struct IntegratedMapOverlayView: View {
     let imageGeo: GeometryProxy
     let mapViewManager: MapViewManager
     let graphScaleMultiplier: CGFloat
+    @Binding var currentStepIndex: Int
+    let pathfindingManager: PathfindingManager
     
     var body: some View {
         let bounds = mapViewManager.graphBounds(graph)
         let overlayScale = mapViewManager.fittingScale(bounds: bounds, in: imageGeo.size) * graphScaleMultiplier
         let overlayOffset = mapViewManager.fittingOffset(bounds: bounds, in: imageGeo.size, scale: overlayScale)
         
+        let hasValidPath = pathWithLabels.count > 1
+        let totalSteps = pathfindingManager.enhancedDirectionSteps.count
+        let safeCurrentStepIndex = max(0, min(currentStepIndex, totalSteps > 0 ? totalSteps - 1 : 0))
+        let progressRatio: Double = totalSteps > 1 ? Double(safeCurrentStepIndex) / Double(totalSteps - 1) : 0.0
+        let currentPathIndex = Int(Double(pathWithLabels.count - 1) * progressRatio)
+        let safeCurrentPathIndex = max(0, min(currentPathIndex, pathWithLabels.count - 1))
+        
         ZStack {
-            // Hide edges and nodes for cleaner map view
-            // Only show pathfinding path when available
-            // Draw the navigation path with smooth curves
-            if pathWithLabels.count > 1 {
-                Path { path in
-                    let points = pathWithLabels.map { $0.point }
-                    let smoothedPath = createSmoothPath(points: points, pathWithLabels: pathWithLabels, unifiedGraph: unifiedGraph)
-                    path.addPath(smoothedPath)
-                }
-                .stroke(Color.yellow, style: StrokeStyle(lineWidth: 4, lineCap: .round, lineJoin: .round))
+            if hasValidPath {
+                // Completed path
+                CompletedPathView(pathWithLabels: pathWithLabels, endIndex: safeCurrentPathIndex)
                 
-                // Show start point (green circle)
-                if let startPoint = pathWithLabels.first {
-                    Circle()
-                        .fill(Color.green)
-                        .frame(width: 16, height: 16)
-                        .position(startPoint.point)
-                        .overlay(
-                            Circle()
-                                .stroke(Color.white, lineWidth: 2)
-                                .frame(width: 16, height: 16)
-                                .position(startPoint.point)
-                        )
-                }
+                // Remaining path
+                RemainingPathView(pathWithLabels: pathWithLabels, startIndex: safeCurrentPathIndex)
                 
-                // Show end point (red circle)
-                if let endPoint = pathWithLabels.last {
-                    Circle()
-                        .fill(Color.red)
-                        .frame(width: 16, height: 16)
-                        .position(endPoint.point)
-                        .overlay(
-                            Circle()
-                                .stroke(Color.white, lineWidth: 2)
-                                .frame(width: 16, height: 16)
-                                .position(endPoint.point)
-                        )
-                }
+                // Start marker
+                StartPointView(startPoint: pathWithLabels.first?.point)
+                
+                // Current location
+                CurrentLocationView(
+                    pathWithLabels: pathWithLabels,
+                    currentPathIndex: safeCurrentPathIndex
+                )
+                
+                // End marker
+                EndPointView(endPoint: pathWithLabels.last?.point)
+                
             }
-            
-            // Removed: Edges display
-            // Removed: All nodes display (red dots)
         }
         .scaleEffect(overlayScale, anchor: .topLeading)
         .offset(overlayOffset)
     }
 }
 
-// MARK: - Path Smoothing Helper Function
-func createSmoothPath(points: [CGPoint], pathWithLabels: [(point: CGPoint, label: String)], unifiedGraph: [String: GraphNode]) -> Path {
-    guard points.count > 1 else { return Path() }
+struct CompletedPathView: View {
+    let pathWithLabels: [(point: CGPoint, label: String)]
+    let endIndex: Int
     
-    var path = Path()
-    
-    // Group consecutive points by floor to handle multi-floor paths properly
-    var floorSegments: [(floor: Floor, points: [CGPoint])] = []
-    var currentFloorPoints: [CGPoint] = []
-    var currentFloor: Floor? = nil
-    
-    for (index, pathItem) in pathWithLabels.enumerated() {
-        let floor = extractFloorFromLabel(pathItem.label)
-        
-        if currentFloor != floor {
-            if !currentFloorPoints.isEmpty {
-                floorSegments.append((floor: currentFloor!, points: currentFloorPoints))
+    var body: some View {
+        if endIndex > 0 && endIndex < pathWithLabels.count {
+            let points = Array(pathWithLabels[0...endIndex]).map { $0.point }
+            if points.count > 1 {
+                Path { path in
+                    path.move(to: points[0])
+                    for i in 1..<points.count {
+                        path.addLine(to: points[i])
+                    }
+                }
+                .stroke(Color.green, style: StrokeStyle(lineWidth: 6, lineCap: .round, lineJoin: .round))
+            } else {
+                Color.clear.frame(width: 0, height: 0)
             }
-            currentFloorPoints = [pathItem.point]
-            currentFloor = floor
         } else {
-            currentFloorPoints.append(pathItem.point)
+            Color.clear.frame(width: 0, height: 0)
         }
     }
+}
+
+struct RemainingPathView: View {
+    let pathWithLabels: [(point: CGPoint, label: String)]
+    let startIndex: Int
     
-    if !currentFloorPoints.isEmpty, let floor = currentFloor {
-        floorSegments.append((floor: floor, points: currentFloorPoints))
-    }
-    
-    // Draw smooth curves for each floor segment
-    for segment in floorSegments {
-        if segment.points.count < 2 { continue }
-        
-        let smoothedPoints = smoothPoints(segment.points)
-        
-        // Start the path segment
-        path.move(to: smoothedPoints[0])
-        
-        if smoothedPoints.count == 2 {
-            // Simple line for 2 points
-            path.addLine(to: smoothedPoints[1])
+    var body: some View {
+        if startIndex < pathWithLabels.count - 1 {
+            let points = Array(pathWithLabels[startIndex...]).map { $0.point }
+            if points.count > 1 {
+                Path { path in
+                    path.move(to: points[0])
+                    for i in 1..<points.count {
+                        path.addLine(to: points[i])
+                    }
+                }
+                .stroke(Color.gray.opacity(0.6), style: StrokeStyle(lineWidth: 4, lineCap: .round, lineJoin: .round, dash: [10, 5]))
+            } else {
+                Color.clear.frame(width: 0, height: 0)
+            }
         } else {
-            // Create smooth curves for multiple points
-            for i in 1..<smoothedPoints.count {
-                let currentPoint = smoothedPoints[i]
-                let previousPoint = smoothedPoints[i - 1]
-                
-                if i == 1 {
-                    // First curve - start with a line then curve
-                    path.addLine(to: currentPoint)
-                } else {
-                    // Calculate control points for smooth curve
-                    let nextPoint = i < smoothedPoints.count - 1 ? smoothedPoints[i + 1] : currentPoint
-                    let controlPoint1 = calculateControlPoint(
-                        previous: smoothedPoints[max(0, i - 2)],
-                        current: previousPoint,
-                        next: currentPoint
-                    )
-                    let controlPoint2 = calculateControlPoint(
-                        previous: previousPoint,
-                        current: currentPoint,
-                        next: nextPoint
-                    )
-                    
-                    path.addCurve(
-                        to: currentPoint,
-                        control1: controlPoint1,
-                        control2: controlPoint2
-                    )
+            Color.clear.frame(width: 0, height: 0)
+        }
+    }
+}
+
+struct StartPointView: View {
+    let startPoint: CGPoint?
+    
+    var body: some View {
+        if let point = startPoint {
+            Circle()
+                .fill(Color.green)
+                .frame(width: 20, height: 20)
+                .position(point)
+                .overlay(
+                    Circle()
+                        .stroke(Color.white, lineWidth: 3)
+                        .frame(width: 20, height: 20)
+                        .position(point)
+                )
+                .overlay(
+                    Image(systemName: "figure.walk")
+                        .font(.system(size: 10, weight: .bold))
+                        .foregroundColor(.white)
+                        .position(point)
+                )
+        } else {
+            Color.clear.frame(width: 0, height: 0)
+        }
+    }
+}
+
+struct CurrentLocationView: View {
+    let pathWithLabels: [(point: CGPoint, label: String)]
+    let currentPathIndex: Int
+    
+    // Calculate rotation angle with smooth direction handling for turns
+    private var rotationAngle: Angle {
+        guard currentPathIndex < pathWithLabels.count else {
+            return .zero
+        }
+        
+        // Jika di akhir path, gunakan arah dari titik sebelumnya
+        if currentPathIndex >= pathWithLabels.count - 1 {
+            guard currentPathIndex > 0 else { return .zero }
+            let prevPoint = pathWithLabels[currentPathIndex - 1].point
+            let currentPoint = pathWithLabels[currentPathIndex].point
+            
+            let dx = currentPoint.x - prevPoint.x
+            let dy = currentPoint.y - prevPoint.y
+            let angle = atan2(dy, dx) + .pi / 2
+            return Angle(radians: Double(angle))
+        }
+        
+        let currentPoint = pathWithLabels[currentPathIndex].point
+        
+        // Untuk smooth direction, gunakan beberapa titik ke depan jika tersedia
+        var targetPoint: CGPoint
+        
+        // Coba ambil titik yang cukup jauh untuk menghindari noise dari titik yang terlalu dekat
+        let lookAheadDistance = min(3, pathWithLabels.count - currentPathIndex - 1)
+        if lookAheadDistance > 0 {
+            targetPoint = pathWithLabels[currentPathIndex + lookAheadDistance].point
+        } else {
+            targetPoint = pathWithLabels[currentPathIndex + 1].point
+        }
+        
+        // Jika titik terlalu dekat (kemungkinan noise), gunakan rata-rata arah
+        let dx = targetPoint.x - currentPoint.x
+        let dy = targetPoint.y - currentPoint.y
+        let distance = sqrt(dx * dx + dy * dy)
+        
+        if distance < 10.0 && currentPathIndex + 1 < pathWithLabels.count - 1 {
+            // Gunakan arah rata-rata dari beberapa segmen
+            var avgDx: CGFloat = 0
+            var avgDy: CGFloat = 0
+            var segmentCount = 0
+            
+            let maxLookAhead = min(5, pathWithLabels.count - currentPathIndex - 1)
+            for i in 1...maxLookAhead {
+                let nextIdx = currentPathIndex + i
+                if nextIdx < pathWithLabels.count {
+                    let segDx = pathWithLabels[nextIdx].point.x - currentPoint.x
+                    let segDy = pathWithLabels[nextIdx].point.y - currentPoint.y
+                    avgDx += segDx
+                    avgDy += segDy
+                    segmentCount += 1
                 }
             }
+            
+            if segmentCount > 0 {
+                avgDx /= CGFloat(segmentCount)
+                avgDy /= CGFloat(segmentCount)
+                let angle = atan2(avgDy, avgDx) + .pi / 2
+                return Angle(radians: Double(angle))
+            }
+        }
+        
+        // Gunakan arah normal
+        let angle = atan2(dy, dx) + .pi / 2
+        return Angle(radians: Double(angle))
+    }
+    
+    var body: some View {
+        if currentPathIndex < pathWithLabels.count {
+            let point = pathWithLabels[currentPathIndex].point
+            
+            Circle()
+                .fill(Color.blue)
+                .frame(width: 24, height: 24)
+                .overlay(
+                    Circle()
+                        .stroke(Color.white, lineWidth: 4)
+                        .frame(width: 24, height: 24)
+                )
+                .overlay(
+                    Image(systemName: "location.north.fill")
+                        .font(.system(size: 12, weight: .bold))
+                        .foregroundColor(.white)
+                        .rotationEffect(rotationAngle)
+                )
+                .position(point)
+        } else {
+            Color.clear.frame(width: 0, height: 0)
+        }
+    }
+}
+
+struct EndPointView: View {
+    let endPoint: CGPoint?
+    
+    var body: some View {
+        if let point = endPoint {
+            Circle()
+                .fill(Color.red)
+                .frame(width: 20, height: 20)
+                .position(point)
+                .overlay(
+                    Circle()
+                        .stroke(Color.white, lineWidth: 3)
+                        .frame(width: 20, height: 20)
+                        .position(point)
+                )
+                .overlay(
+                    Image(systemName: "mappin.and.ellipse")
+                        .font(.system(size: 10, weight: .bold))
+                        .foregroundColor(.white)
+                        .position(point)
+                )
+        } else {
+            Color.clear.frame(width: 0, height: 0)
+        }
+    }
+}
+
+
+// MARK: - ZoomableScrollView
+struct ZoomableScrollView<Content: View>: View {
+    let content: Content
+    
+    @State private var scale: CGFloat = 3
+    @State private var lastScale: CGFloat = 3
+    @State private var offset: CGSize = .zero
+    @State private var lastOffset: CGSize = .zero
+    
+    init(@ViewBuilder content: () -> Content) {
+        self.content = content()
+    }
+    
+    var body: some View {
+        GeometryReader { geo in
+            content
+                .scaleEffect(scale)
+                .offset(offset)
+                .onAppear {
+                    offset = .zero
+                    lastOffset = .zero
+                }
+                .gesture(
+                    SimultaneousGesture(
+                        MagnificationGesture()
+                            .onChanged { value in
+                                scale = lastScale * value
+                                offset = clampedOffset(offset, geo: geo)
+                            }
+                            .onEnded { _ in
+                                lastScale = max(min(scale, 5.0), 1.0)
+                                scale = lastScale
+                                offset = clampedOffset(offset, geo: geo)
+                                lastOffset = offset
+                            },
+                        DragGesture()
+                            .onChanged { value in
+                                let newOffset = CGSize(
+                                    width: lastOffset.width + value.translation.width,
+                                    height: lastOffset.height + value.translation.height
+                                )
+                                offset = clampedOffset(newOffset, geo: geo)
+                            }
+                            .onEnded { _ in
+                                lastOffset = offset
+                            }
+                    )
+                )
+                .gesture(
+                    TapGesture(count: 2)
+                        .onEnded {
+                            withAnimation(.easeInOut) {
+                                if scale > 3 {
+                                    scale = 3
+                                    lastScale = 3
+                                    offset = .zero
+                                    lastOffset = .zero
+                                } else {
+                                    scale = 5
+                                    lastScale = 5
+                                }
+                            }
+                        }
+                )
         }
     }
     
-    return path
-}
-
-private func extractFloorFromLabel(_ label: String) -> Floor {
-    if label.hasPrefix("ground_") { return .ground }
-    if label.hasPrefix("lowerground_") { return .lowerGround }
-    if label.hasPrefix("1st_") { return .first }
-    if label.hasPrefix("2nd_") { return .second }
-    if label.hasPrefix("3rd_") { return .third }
-    if label.hasPrefix("4th_") { return .fourth }
-    return .ground
-}
-
-private func smoothPoints(_ points: [CGPoint]) -> [CGPoint] {
-    guard points.count > 2 else { return points }
-    
-    var smoothed: [CGPoint] = []
-    let smoothingFactor: CGFloat = 0.15
-    
-    smoothed.append(points[0]) // Keep first point unchanged
-    
-    for i in 1..<(points.count - 1) {
-        let prev = points[i - 1]
-        let current = points[i]
-        let next = points[i + 1]
+    private func clampedOffset(_ proposed: CGSize, geo: GeometryProxy) -> CGSize {
+        let screenWidth = geo.size.width
+        let screenHeight = geo.size.height
         
-        // Apply gentle smoothing
-        let smoothedX = current.x + smoothingFactor * (prev.x + next.x - 2 * current.x)
-        let smoothedY = current.y + smoothingFactor * (prev.y + next.y - 2 * current.y)
+        let contentAspect: CGFloat = 1800 / 1200
+        var contentWidth = screenWidth
+        var contentHeight = screenHeight
         
-        smoothed.append(CGPoint(x: smoothedX, y: smoothedY))
+        if contentAspect > screenWidth / screenHeight {
+            contentHeight = screenWidth / contentAspect
+        } else {
+            contentWidth = screenHeight * contentAspect
+        }
+        
+        let scaledWidth = contentWidth * scale
+        let scaledHeight = contentHeight * scale
+        
+        let maxX = max((scaledWidth - screenWidth) / 2, 0)
+        let maxY: CGFloat
+        let minY: CGFloat
+        
+        if scaledHeight > screenHeight {
+            maxY = (scaledHeight - screenHeight) / 2
+            minY = -maxY
+        } else {
+            maxY = 0
+            minY = 0
+        }
+        
+        return CGSize(
+            width: min(max(proposed.width, -maxX), maxX),
+            height: min(max(proposed.height, minY), maxY)
+        )
     }
-    
-    smoothed.append(points.last!) // Keep last point unchanged
-    
-    return smoothed
 }
 
-private func calculateControlPoint(previous: CGPoint, current: CGPoint, next: CGPoint) -> CGPoint {
-    let smoothness: CGFloat = 0.3
-    
-    let deltaX = next.x - previous.x
-    let deltaY = next.y - previous.y
-    
-    return CGPoint(
-        x: current.x + smoothness * deltaX * 0.25,
-        y: current.y + smoothness * deltaY * 0.25
-    )
-}
-
-// MARK: - Preview
-private func makePreviewDataManager() -> DataManager {
-    let previewManager = DataManager()
-    
-    if let url = Bundle.main.url(forResource: Floor.ground.fileName, withExtension: "json"),
-       let data = try? Data(contentsOf: url),
-       let graph = try? JSONDecoder().decode(Graph.self, from: data) {
-        
-        let processedGraph = previewManager.processGraph(graph)
-        let locations = previewManager.extractLocations(from: processedGraph)
-        
-        previewManager.floorData[.ground] = FloorData(graph: processedGraph, locations: locations)
-        previewManager.unifiedGraph = previewManager.buildUnifiedGraph(from: previewManager.floorData)
-        previewManager.isLoading = false
+// MARK: - Corner Radius Extension
+extension View {
+    func cornerRadius(_ radius: CGFloat, corners: UIRectCorner) -> some View {
+        clipShape(RoundedCorner(radius: radius, corners: corners))
     }
-    
-    return previewManager
 }
 
-//#Preview {
-//    IntegratedMapView(dataManager: makePreviewDataManager())
-//}
-
+struct RoundedCorner: Shape {
+    var radius: CGFloat
+    var corners: UIRectCorner
+    
+    func path(in rect: CGRect) -> Path {
+        let path = UIBezierPath(
+            roundedRect: rect,
+            byRoundingCorners: corners,
+            cornerRadii: CGSize(width: radius, height: radius)
+        )
+        return Path(path.cgPath)
+    }
+}

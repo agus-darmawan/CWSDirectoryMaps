@@ -7,116 +7,131 @@
 
 import SwiftUI
 
-struct ZoomableScrollView<Content: View>: View {
-    @ViewBuilder var content: Content
-    
-    @State private var scale: CGFloat = 3
-    @State private var lastScale: CGFloat = 3
-    @State private var offset: CGSize = .zero
-    @State private var lastOffset: CGSize = .zero
-    
-    @State private var lastTapTime: Date = .distantPast
-    
-    var body: some View {
-        GeometryReader { geo in
-            content
-                .scaleEffect(scale)
-                .offset(offset)
-                .onAppear {
-                    offset = .zero
-                    lastOffset = .zero
-                }
-                .gesture(
-                    SimultaneousGesture(
-                        MagnificationGesture()
-                            .onChanged { value in
-                                scale = lastScale * value
-                                offset = clampedOffset(offset, geo: geo)
-                            }
-                            .onEnded { _ in
-                                lastScale = max(min(scale, 5.0), 4.0)
-                                scale = lastScale
-                                offset = clampedOffset(offset, geo: geo)
-                                lastOffset = offset
-                            },
-                        DragGesture()
-                            .onChanged { value in
-                                let newOffset = CGSize(
-                                    width: lastOffset.width + value.translation.width,
-                                    height: lastOffset.height + value.translation.height
-                                )
-                                offset = clampedOffset(newOffset, geo: geo)
-                            }
-                            .onEnded { _ in
-                                lastOffset = offset
-                            }
-                    )
-                )
-                .gesture(
-                    TapGesture(count: 2)
-                        .onEnded {
-                            withAnimation(.easeInOut) {
-                                if scale > 3 {
-                                    // zoom out
-                                    scale = 3
-                                    lastScale = 3
-                                    offset = .zero
-                                    lastOffset = .zero
-                                } else {
-                                    // zoom in
-                                    scale = 5
-                                    lastScale = 5
-                                }
-                            }
-                        }
-                )
-        }
-    }
-    //set boundary for panning (no white space)
-    private func clampedOffset(_ proposed: CGSize, geo: GeometryProxy) -> CGSize {
-        let screenWidth = geo.size.width
-        let screenHeight = geo.size.height
-        
-        let contentAspect: CGFloat = 1800 / 1200
-        var contentWidth = screenWidth
-        var contentHeight = screenHeight
-        
-        if contentAspect > screenWidth / screenHeight {
-            contentHeight = screenWidth / contentAspect
-        } else {
-            contentWidth = screenHeight * contentAspect
-        }
-        
-        let scaledWidth = contentWidth * scale
-        let scaledHeight = contentHeight * scale
-        
-        let maxX = max((scaledWidth - screenWidth) / 2, 0)
-        
-        // Custom margin for bottom
-        let bottomMargin: CGFloat = 0
-        
-        let maxY: CGFloat
-        let minY: CGFloat
-        if scaledHeight > screenHeight {
-            maxY = (scaledHeight - screenHeight) / 2
-            minY = -maxY + bottomMargin // tighter bottom
-        } else {
-            maxY = 0
-            minY = 0
-        }
-        
-        return CGSize(
-            width: min(max(proposed.width, -maxX), maxX),
-            height: min(max(proposed.height, minY), maxY)
-        )
-    }
-}
+//struct ZoomableScrollView<Content: View>: View {
+//    @ViewBuilder var content: Content
+//    
+//    @State private var scale: CGFloat = 3
+//    @State private var lastScale: CGFloat = 3
+//    @State private var offset: CGSize = .zero
+//    @State private var lastOffset: CGSize = .zero
+//    
+//    @State private var lastTapTime: Date = .distantPast
+//    
+//    var body: some View {
+//        GeometryReader { geo in
+//            content
+//                .scaleEffect(scale)
+//                .offset(offset)
+//                .onAppear {
+//                    offset = .zero
+//                    lastOffset = .zero
+//                }
+//                .gesture(
+//                    SimultaneousGesture(
+//                        MagnificationGesture()
+//                            .onChanged { value in
+//                                scale = lastScale * value
+//                                offset = clampedOffset(offset, geo: geo)
+//                            }
+//                            .onEnded { _ in
+//                                lastScale = max(min(scale, 5.0), 4.0)
+//                                scale = lastScale
+//                                offset = clampedOffset(offset, geo: geo)
+//                                lastOffset = offset
+//                            },
+//                        DragGesture()
+//                            .onChanged { value in
+//                                let newOffset = CGSize(
+//                                    width: lastOffset.width + value.translation.width,
+//                                    height: lastOffset.height + value.translation.height
+//                                )
+//                                offset = clampedOffset(newOffset, geo: geo)
+//                            }
+//                            .onEnded { _ in
+//                                lastOffset = offset
+//                            }
+//                    )
+//                )
+//                .gesture(
+//                    TapGesture(count: 2)
+//                        .onEnded {
+//                            withAnimation(.easeInOut) {
+//                                if scale > 3 {
+//                                    // zoom out
+//                                    scale = 3
+//                                    lastScale = 3
+//                                    offset = .zero
+//                                    lastOffset = .zero
+//                                } else {
+//                                    // zoom in
+//                                    scale = 5
+//                                    lastScale = 5
+//                                }
+//                            }
+//                        }
+//                )
+//        }
+//    }
+//    //set boundary for panning (no white space)
+//    private func clampedOffset(_ proposed: CGSize, geo: GeometryProxy) -> CGSize {
+//        let screenWidth = geo.size.width
+//        let screenHeight = geo.size.height
+//        
+//        let contentAspect: CGFloat = 1800 / 1200
+//        var contentWidth = screenWidth
+//        var contentHeight = screenHeight
+//        
+//        if contentAspect > screenWidth / screenHeight {
+//            contentHeight = screenWidth / contentAspect
+//        } else {
+//            contentWidth = screenHeight * contentAspect
+//        }
+//        
+//        let scaledWidth = contentWidth * scale
+//        let scaledHeight = contentHeight * scale
+//        
+//        let maxX = max((scaledWidth - screenWidth) / 2, 0)
+//        
+//        // Custom margin for bottom
+//        let bottomMargin: CGFloat = 0
+//        
+//        let maxY: CGFloat
+//        let minY: CGFloat
+//        if scaledHeight > screenHeight {
+//            maxY = (scaledHeight - screenHeight) / 2
+//            minY = -maxY + bottomMargin // tighter bottom
+//        } else {
+//            maxY = 0
+//            minY = 0
+//        }
+//        
+//        return CGSize(
+//            width: min(max(proposed.width, -maxX), maxX),
+//            height: min(max(proposed.height, minY), maxY)
+//        )
+//    }
+//}
+//
+//private var customBlueColor: Color {
+//    Color(uiColor: UIColor { traitCollection in
+//        if traitCollection.userInterfaceStyle == .dark {
+//            return UIColor(red: 64/255, green: 156/255, blue: 255/255, alpha: 1.0)
+//        } else {
+//            return UIColor(red: 0/255, green: 46/255, blue: 127/255, alpha: 1.0)
+//        }
+//    })
+//}
 
 struct DirectionsModal: View {
     @State var destinationStore: Store
     @State var startLocation: Store
     @Binding var showModal: Bool
     @State private var selectedMode: String = "walk"
+    
+    // Enhanced properties for navigation tracking
+    @State private var totalDistance: Double = 0.0
+    @State private var estimatedTime: Double = 0.0
+    
     var onGoTapped: (() -> Void)?
     
     private var modeImageName: String {
@@ -124,6 +139,41 @@ struct DirectionsModal: View {
         case "walk": return "figure.walk"
         case "wheelchair": return "figure.roll"
         default: return "figure.walk"
+        }
+    }
+    
+    // Calculate distance and time based on mode
+    private func calculateNavigationMetrics() {
+        // Default distance calculation (you can replace with actual path calculation)
+        let defaultDistance: Double = 200.0
+        totalDistance = defaultDistance
+        
+        // Calculate estimated time based on mode
+        switch selectedMode {
+        case "walk":
+            // Average walking speed: 5 km/h = 1.39 m/s
+            estimatedTime = totalDistance / 1.39
+        case "wheelchair":
+            // Average wheelchair speed: 3 km/h = 0.83 m/s
+            estimatedTime = totalDistance / 0.83
+        default:
+            estimatedTime = totalDistance / 1.39
+        }
+    }
+    
+    private func formatTime(_ seconds: Double) -> String {
+        let minutes = Int(seconds / 60)
+        if minutes < 1 {
+            return "< 1 min"
+        }
+        return "\(minutes) min\(minutes > 1 ? "s" : "")"
+    }
+    
+    private func formatDistance(_ meters: Double) -> String {
+        if meters < 1000 {
+            return "\(Int(meters))m"
+        } else {
+            return String(format: "%.1fkm", meters / 1000)
         }
     }
     
@@ -140,7 +190,7 @@ struct DirectionsModal: View {
                                     .bold()
                                 Image(systemName: modeImageName)
                             }
-                            Text("200m – 4 mins")
+                            Text("\(formatDistance(totalDistance)) – \(formatTime(estimatedTime))")
                                 .font(.subheadline)
                                 .foregroundColor(.secondary)
                         }
@@ -158,6 +208,7 @@ struct DirectionsModal: View {
                     HStack {
                         Button {
                             selectedMode = "walk"
+                            calculateNavigationMetrics()
                         } label: {
                             Image(systemName: "figure.walk")
                                 .frame(width: 55, height: 37)
@@ -172,6 +223,7 @@ struct DirectionsModal: View {
                         
                         Button {
                             selectedMode = "wheelchair"
+                            calculateNavigationMetrics()
                         } label: {
                             Image(systemName: "figure.roll")
                                 .frame(width: 55, height: 37)
@@ -225,6 +277,7 @@ struct DirectionsModal: View {
                                     Spacer()
                                     Button(action: {
                                         swap(&startLocation, &destinationStore)
+                                        calculateNavigationMetrics()
                                     }) {
                                         Image(systemName: "arrow.up.arrow.down")
                                             .foregroundColor(.blue)
@@ -257,6 +310,9 @@ struct DirectionsModal: View {
             .ignoresSafeArea(edges: .bottom)
             .transition(.move(edge: .bottom))
             .animation(.spring(), value: showModal)
+            .onAppear {
+                calculateNavigationMetrics()
+            }
         }
     }
 }
@@ -268,6 +324,37 @@ struct DirectionStepsModal: View {
     let destinationStore: Store
     let steps: [DirectionStep]
     @State private var currentStepIndex: Int = 0
+    
+    // Enhanced navigation tracking
+    @State private var totalDistance: Double = 200.0
+    @State private var estimatedTime: Double = 240.0 // 4 minutes in seconds
+    @State private var currentDistance: Double = 0.0
+    @State private var remainingTime: Double = 240.0
+    
+    private func updateNavigationProgress() {
+        guard !steps.isEmpty else { return }
+        
+        // Calculate progress based on current step
+        let progress = Double(currentStepIndex) / Double(steps.count)
+        currentDistance = totalDistance * progress
+        remainingTime = estimatedTime * (1.0 - progress)
+    }
+    
+    private func formatTime(_ seconds: Double) -> String {
+        let minutes = Int(seconds / 60)
+        if minutes < 1 {
+            return "< 1 min"
+        }
+        return "\(minutes) min\(minutes > 1 ? "s" : "")"
+    }
+    
+    private func formatDistance(_ meters: Double) -> String {
+        if meters < 1000 {
+            return "\(Int(meters))m"
+        } else {
+            return String(format: "%.1fkm", meters / 1000)
+        }
+    }
     
     var body: some View {
         if showStepsModal{
@@ -282,7 +369,7 @@ struct DirectionStepsModal: View {
                                     .font(.title3)
                                     .bold()
                             }
-                            Text("200m – 4 mins")
+                            Text("\(formatDistance(totalDistance - currentDistance)) remaining – \(formatTime(remainingTime))")
                                 .font(.subheadline)
                                 .foregroundColor(.secondary)
                         }
@@ -352,21 +439,37 @@ struct DirectionStepsModal: View {
                         }
                         .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
                         .frame(height: 80)
+                        .onChange(of: currentStepIndex) { _, _ in
+                            updateNavigationProgress()
+                        }
                         
-                        //indicator card without navigation buttons
-                        HStack {
-                            Spacer()
-                            
+                        //indicator card with navigation progress
+                        VStack(spacing: 8) {
                             HStack(spacing: 6) {
                                 ForEach(0..<steps.count, id: \.self) { index in
                                     Circle()
-                                        .fill(index == currentStepIndex ? Color.primary : Color.secondary.opacity(0.4))
+                                        .fill(index <= currentStepIndex ? Color.primary : Color.secondary.opacity(0.4))
                                         .frame(width: 8, height: 8)
                                         .animation(.easeInOut(duration: 0.2), value: currentStepIndex)
                                 }
                             }
                             
-                            Spacer()
+                            // Progress bar
+                            GeometryReader { geometry in
+                                ZStack(alignment: .leading) {
+                                    Rectangle()
+                                        .fill(Color.secondary.opacity(0.3))
+                                        .frame(height: 4)
+                                        .cornerRadius(2)
+                                    
+                                    Rectangle()
+                                        .fill(Color.blue)
+                                        .frame(width: geometry.size.width * (Double(currentStepIndex) / Double(max(1, steps.count - 1))), height: 4)
+                                        .cornerRadius(2)
+                                        .animation(.easeInOut(duration: 0.3), value: currentStepIndex)
+                                }
+                            }
+                            .frame(height: 4)
                         }
                         .padding(.horizontal, 16)
                         .padding(.bottom, 8)
@@ -378,6 +481,9 @@ struct DirectionStepsModal: View {
             }
             .ignoresSafeArea(edges: .bottom)
             .transition(.move(edge: .bottom))
+            .onAppear {
+                updateNavigationProgress()
+            }
         }
     }
 }
@@ -405,6 +511,37 @@ struct DirectionStepsListView: View {
     let destinationStore: Store
     let steps: [DirectionStep]
     
+    // Enhanced navigation tracking
+    @State private var currentStepIndex: Int = 0
+    @State private var totalDistance: Double = 200.0
+    @State private var estimatedTime: Double = 240.0
+    @State private var currentDistance: Double = 0.0
+    @State private var remainingTime: Double = 240.0
+    
+    private func updateNavigationProgress() {
+        guard !steps.isEmpty else { return }
+        
+        let progress = Double(currentStepIndex) / Double(steps.count)
+        currentDistance = totalDistance * progress
+        remainingTime = estimatedTime * (1.0 - progress)
+    }
+    
+    private func formatTime(_ seconds: Double) -> String {
+        let minutes = Int(seconds / 60)
+        if minutes < 1 {
+            return "< 1 min"
+        }
+        return "\(minutes) min\(minutes > 1 ? "s" : "")"
+    }
+    
+    private func formatDistance(_ meters: Double) -> String {
+        if meters < 1000 {
+            return "\(Int(meters))m"
+        } else {
+            return String(format: "%.1fkm", meters / 1000)
+        }
+    }
+    
     var body: some View {
         VStack(spacing: 0) {
             HStack {
@@ -412,7 +549,7 @@ struct DirectionStepsListView: View {
                     Text("To \(destinationStore.name)")
                         .font(.title3)
                         .bold()
-                    Text("200m – 4 mins")
+                    Text("\(formatDistance(totalDistance - currentDistance)) remaining – \(formatTime(remainingTime))")
                         .font(.subheadline)
                         .foregroundColor(.secondary)
                 }
@@ -430,7 +567,7 @@ struct DirectionStepsListView: View {
             .padding()
             .background(Color(.systemBackground))
             
-            // List steps
+            // List steps with enhanced navigation
             if steps.isEmpty {
                 // Show loading state when no steps available
                 VStack(spacing: 16) {
@@ -447,29 +584,99 @@ struct DirectionStepsListView: View {
             } else {
                 ScrollView {
                     VStack(spacing: 12) {
-                        ForEach(steps) { step in
+                        ForEach(Array(steps.enumerated()), id: \.1.id) { index, step in
                             HStack {
-                                Image(systemName: step.icon)
-                                    .foregroundColor(.white)
-                                    .frame(width: 28, height: 28)
+                                // Enhanced step indicator
+                                ZStack {
+                                    Circle()
+                                        .fill(index <= currentStepIndex ? customBlueColor : Color.secondary.opacity(0.3))
+                                        .frame(width: 40, height: 40)
+                                    
+                                    if index < currentStepIndex {
+                                        // Completed step
+                                        Image(systemName: "checkmark")
+                                            .foregroundColor(.white)
+                                            .font(.system(size: 16, weight: .bold))
+                                    } else if index == currentStepIndex {
+                                        // Current step
+                                        Image(systemName: "location.fill")
+                                            .foregroundColor(.white)
+                                            .font(.system(size: 16, weight: .bold))
+                                    } else {
+                                        // Future step
+                                        Image(systemName: step.icon)
+                                            .foregroundColor(.secondary)
+                                            .font(.system(size: 16, weight: .medium))
+                                    }
+                                }
                                 
-                                Text(step.description)
-                                    .foregroundColor(.white)
-                                    .lineLimit(nil)
-                                    .multilineTextAlignment(.leading)
-                                    .padding(.leading, 4)
+                                VStack(alignment: .leading, spacing: 4) {
+                                    Text(step.description)
+                                        .foregroundColor(index <= currentStepIndex ? .primary : .secondary)
+                                        .font(.system(size: 16, weight: index == currentStepIndex ? .semibold : .regular))
+                                        .lineLimit(nil)
+                                        .multilineTextAlignment(.leading)
+                                    
+                                    if index == currentStepIndex {
+                                        Text("Current step")
+                                            .font(.caption)
+                                            .foregroundColor(.blue)
+                                            .fontWeight(.medium)
+                                    } else if index < currentStepIndex {
+                                        Text("Completed")
+                                            .font(.caption)
+                                            .foregroundColor(.green)
+                                    }
+                                }
+                                .padding(.leading, 8)
                                 
                                 Spacer()
                                 
-                                Image(step.shopImage)
-                                    .resizable()
-                                    .scaledToFill()
-                                    .frame(width: 40, height: 40)
-                                    .clipShape(Circle())
+                                // Step navigation buttons
+                                if index == currentStepIndex {
+                                    HStack(spacing: 8) {
+                                        if currentStepIndex > 0 {
+                                            Button(action: {
+                                                currentStepIndex -= 1
+                                                updateNavigationProgress()
+                                            }) {
+                                                Image(systemName: "chevron.left")
+                                                    .foregroundColor(.blue)
+                                                    .frame(width: 30, height: 30)
+                                                    .background(Color.blue.opacity(0.1))
+                                                    .clipShape(Circle())
+                                            }
+                                        }
+                                        
+                                        if currentStepIndex < steps.count - 1 {
+                                            Button(action: {
+                                                currentStepIndex += 1
+                                                updateNavigationProgress()
+                                            }) {
+                                                Image(systemName: "chevron.right")
+                                                    .foregroundColor(.blue)
+                                                    .frame(width: 30, height: 30)
+                                                    .background(Color.blue.opacity(0.1))
+                                                    .clipShape(Circle())
+                                            }
+                                        }
+                                    }
+                                }
                             }
                             .padding()
-                            .background(customBlueColor)
-                            .cornerRadius(12)
+                            .background(
+                                RoundedRectangle(cornerRadius: 12)
+                                    .fill(index == currentStepIndex ? Color.blue.opacity(0.1) : Color(.systemBackground))
+                                    .shadow(color: Color.black.opacity(0.1), radius: 2, x: 0, y: 1)
+                            )
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 12)
+                                    .stroke(index == currentStepIndex ? Color.blue.opacity(0.3) : Color.clear, lineWidth: 1)
+                            )
+                            .onTapGesture {
+                                currentStepIndex = index
+                                updateNavigationProgress()
+                            }
                         }
                     }
                     .padding()
@@ -494,65 +701,69 @@ struct DirectionStepsListView: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color(.systemBackground))
+        .onAppear {
+            updateNavigationProgress()
+        }
     }
 }
 
+//
+//extension View {
+//    func cornerRadius(_ radius: CGFloat, corners: UIRectCorner) -> some View {
+//        clipShape(RoundedCorner(radius: radius, corners: corners))
+//    }
+//}
+//
+//let customBlueColor: Color = Color(uiColor: UIColor { traitCollection in
+//    if traitCollection.userInterfaceStyle == .dark {
+//        return UIColor(red: 64/255, green: 156/255, blue: 255/255, alpha: 1.0)
+//    } else {
+//        return UIColor(red: 0/255, green: 46/255, blue: 127/255, alpha: 1.0)
+//    }
+//})
 
-extension View {
-    func cornerRadius(_ radius: CGFloat, corners: UIRectCorner) -> some View {
-        clipShape(RoundedCorner(radius: radius, corners: corners))
-    }
-}
+//struct RoundedCorner: Shape {
+//    var radius: CGFloat
+//    var corners: UIRectCorner
+//    
+//    func path(in rect: CGRect) -> Path {
+//        let path = UIBezierPath(
+//            roundedRect: rect,
+//            byRoundingCorners: corners,
+//            cornerRadii: CGSize(width: radius, height: radius)
+//        )
+//        return Path(path.cgPath)
+//    }
+//}
 
-let customBlueColor: Color = Color(uiColor: UIColor { traitCollection in
-    if traitCollection.userInterfaceStyle == .dark {
-        return UIColor(red: 64/255, green: 156/255, blue: 255/255, alpha: 1.0)
-    } else {
-        return UIColor(red: 0/255, green: 46/255, blue: 127/255, alpha: 1.0)
-    }
-})
-
-struct RoundedCorner: Shape {
-    var radius: CGFloat
-    var corners: UIRectCorner
-    
-    func path(in rect: CGRect) -> Path {
-        let path = UIBezierPath(
-            roundedRect: rect,
-            byRoundingCorners: corners,
-            cornerRadii: CGSize(width: radius, height: radius)
-        )
-        return Path(path.cgPath)
-    }
-}
-
-#Preview {
-    
-    let start = Store(
-        name: "Main Lobby",
-        category: .facilities,
-        imageName: "store_logo_placeholder",
-        subcategory: "Information Center",
-        description: "",
-        location: "Ground Floor, Central",
-        website: nil,
-        phone: nil,
-        hours: "06:00AM - 12:00AM",
-        detailImageName: "store_logo_placeholder"
-    )
-    
-    let dest = Store(
-        name: "One Love Bespoke",
-        category: .shop,
-        imageName: "store_logo_placeholder",
-        subcategory: "Fashion, Watches & Jewelry",
-        description: "",
-        location: "Level 1, Unit 116",
-        website: nil,
-        phone: nil,
-        hours: "10:00AM - 10:00PM",
-        detailImageName: "store_logo_placeholder"
-    )
-    MapView()
-    DirectionsModal(destinationStore: dest, startLocation: start, showModal: .constant(true))
-}
+//#Preview {
+//    
+//    let start = Store(
+//        name: "Main Lobby",
+//        category: .facilities,
+//        imageName: "store_logo_placeholder",
+//        subcategory: "Information Center",
+//        description: "",
+//        location: "Ground Floor, Central",
+//        website: nil,
+//        phone: nil,
+//        hours: "06:00AM - 12:00AM",
+//        detailImageName: "store_logo_placeholder"
+//    )
+//    
+//    let dest = Store(
+//        name: "One Love Bespoke",
+//        category: .shop,
+//        imageName: "store_logo_placeholder",
+//        subcategory: "Fashion, Watches & Jewelry",
+//        description: "",
+//        location: "Level 1, Unit 116",
+//        website: nil,
+//        phone: nil,
+//        hours: "10:00AM - 10:00PM",
+//        detailImageName: "store_logo_placeholder"
+//    )
+//    
+//    MapView()
+//    DirectionsModal(destinationStore: dest, startLocation: start, showModal: .constant(true))
+//}
