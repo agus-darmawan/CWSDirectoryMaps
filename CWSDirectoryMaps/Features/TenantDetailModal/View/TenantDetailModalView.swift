@@ -101,10 +101,14 @@ struct TenantDetailModalView: View {
                 }) {
                     Text("From Here")
                         .font(.system(size: 16, weight: .medium))
-                        .foregroundColor(.white)
+                        .foregroundColor(customBlueColor)
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 14)
-                        .background(Color(.systemGray))
+                        .background(Color.white)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 8)
+                                .stroke(customBlueColor, lineWidth: 2)
+                        )
                         .cornerRadius(8)
                 }
                 
