@@ -530,7 +530,7 @@ struct EnhancedDirectionStepsListView: View {
                 .cornerRadius(12)
                 .shadow(color: Color.red.opacity(0.3), radius: 4, x: 0, y: 2)
                 .padding(.horizontal)
-                .padding(.bottom, 20)
+                .padding(.bottom, 58)
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -662,7 +662,7 @@ struct EnhancedDirectionsModal: View {
                         onGoTapped?()
                     }) {
                         HStack {
-                            Text("START NAVIGATION")
+                            Text("Start Navigation")
                                 .font(.headline)
                                 .fontWeight(.semibold)
                             Image(systemName: "arrow.right.circle.fill")
@@ -679,6 +679,7 @@ struct EnhancedDirectionsModal: View {
                         )
                         .foregroundColor(.white)
                         .cornerRadius(12)
+                        .padding(.bottom, 58)
                         .shadow(color: Color.green.opacity(0.3), radius: 4, x: 0, y: 2)
                     }
                 }
