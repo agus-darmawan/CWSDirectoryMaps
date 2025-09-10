@@ -129,7 +129,7 @@
       "x": 5702.1396,
       "y": 10912.763,
       "type": "circle-center",
-      "label": "restroom_frederique",
+      "label": "restrooms_sky_lobby",
       "radius": 7
     },
     {
@@ -140,7 +140,7 @@
       "label": "circle-point_n12",
       "angle": 0,
       "radius": 7,
-      "parentLabel": "restroom_frederique"
+      "parentLabel": "restrooms_sky_lobby"
     },
     {
       "id": "n13",
@@ -150,7 +150,7 @@
       "label": "circle-point_n13",
       "angle": 0.7853981633974483,
       "radius": 7,
-      "parentLabel": "restroom_frederique"
+      "parentLabel": "restrooms_sky_lobby"
     },
     {
       "id": "n14",
@@ -160,7 +160,7 @@
       "label": "circle-point_n14",
       "angle": 1.5707963267948966,
       "radius": 7,
-      "parentLabel": "restroom_frederique"
+      "parentLabel": "restrooms_sky_lobby"
     },
     {
       "id": "n15",
@@ -170,7 +170,7 @@
       "label": "circle-point_n15",
       "angle": 2.356194490192345,
       "radius": 7,
-      "parentLabel": "restroom_frederique"
+      "parentLabel": "restrooms_sky_lobby"
     },
     {
       "id": "n16",
@@ -180,7 +180,7 @@
       "label": "circle-point_n16",
       "angle": 3.141592653589793,
       "radius": 7,
-      "parentLabel": "restroom_frederique"
+      "parentLabel": "restrooms_sky_lobby"
     },
     {
       "id": "n17",
@@ -190,7 +190,7 @@
       "label": "circle-point_n17",
       "angle": 3.9269908169872414,
       "radius": 7,
-      "parentLabel": "restroom_frederique"
+      "parentLabel": "restrooms_sky_lobby"
     },
     {
       "id": "n18",
@@ -200,7 +200,7 @@
       "label": "circle-point_n18",
       "angle": 4.71238898038469,
       "radius": 7,
-      "parentLabel": "restroom_frederique"
+      "parentLabel": "restrooms_sky_lobby"
     },
     {
       "id": "n19",
@@ -210,14 +210,14 @@
       "label": "circle-point_n19",
       "angle": 5.497787143782138,
       "radius": 7,
-      "parentLabel": "restroom_frederique"
+      "parentLabel": "restrooms_sky_lobby"
     },
     {
       "id": "n20",
       "x": 6119.6577,
       "y": 10838.644,
       "type": "circle-center",
-      "label": "restroom_south_lobby",
+      "label": "restrooms_south_lobby",
       "radius": 7
     },
     {
@@ -228,7 +228,7 @@
       "label": "circle-point_n21",
       "angle": 0,
       "radius": 7,
-      "parentLabel": "restroom_south_lobby"
+      "parentLabel": "restrooms_south_lobby"
     },
     {
       "id": "n22",
@@ -238,7 +238,7 @@
       "label": "circle-point_n22",
       "angle": 0.7853981633974483,
       "radius": 7,
-      "parentLabel": "restroom_south_lobby"
+      "parentLabel": "restrooms_south_lobby"
     },
     {
       "id": "n23",
@@ -248,7 +248,7 @@
       "label": "circle-point_n23",
       "angle": 1.5707963267948966,
       "radius": 7,
-      "parentLabel": "restroom_south_lobby"
+      "parentLabel": "restrooms_south_lobby"
     },
     {
       "id": "n24",
@@ -258,7 +258,7 @@
       "label": "circle-point_n24",
       "angle": 2.356194490192345,
       "radius": 7,
-      "parentLabel": "restroom_south_lobby"
+      "parentLabel": "restrooms_south_lobby"
     },
     {
       "id": "n25",
@@ -268,7 +268,7 @@
       "label": "circle-point_n25",
       "angle": 3.141592653589793,
       "radius": 7,
-      "parentLabel": "restroom_south_lobby"
+      "parentLabel": "restrooms_south_lobby"
     },
     {
       "id": "n26",
@@ -278,7 +278,7 @@
       "label": "circle-point_n26",
       "angle": 3.9269908169872414,
       "radius": 7,
-      "parentLabel": "restroom_south_lobby"
+      "parentLabel": "restrooms_south_lobby"
     },
     {
       "id": "n27",
@@ -288,7 +288,7 @@
       "label": "circle-point_n27",
       "angle": 4.71238898038469,
       "radius": 7,
-      "parentLabel": "restroom_south_lobby"
+      "parentLabel": "restrooms_south_lobby"
     },
     {
       "id": "n28",
@@ -298,14 +298,14 @@
       "label": "circle-point_n28",
       "angle": 5.497787143782138,
       "radius": 7,
-      "parentLabel": "restroom_south_lobby"
+      "parentLabel": "restrooms_south_lobby"
     },
     {
       "id": "n29",
       "x": 6436.4429,
       "y": 11252.146,
       "type": "circle-center",
-      "label": "restroom_braun_buffel",
+      "label": "restrooms_north_lobby",
       "radius": 7
     },
     {
@@ -316,7 +316,7 @@
       "label": "circle-point_n30",
       "angle": 0,
       "radius": 7,
-      "parentLabel": "restroom_braun_buffel"
+      "parentLabel": "restrooms_north_lobby"
     },
     {
       "id": "n31",
@@ -326,7 +326,7 @@
       "label": "circle-point_n31",
       "angle": 0.7853981633974483,
       "radius": 7,
-      "parentLabel": "restroom_braun_buffel"
+      "parentLabel": "restrooms_north_lobby"
     },
     {
       "id": "n32",
@@ -336,7 +336,7 @@
       "label": "circle-point_n32",
       "angle": 1.5707963267948966,
       "radius": 7,
-      "parentLabel": "restroom_braun_buffel"
+      "parentLabel": "restrooms_north_lobby"
     },
     {
       "id": "n33",
@@ -346,7 +346,7 @@
       "label": "circle-point_n33",
       "angle": 2.356194490192345,
       "radius": 7,
-      "parentLabel": "restroom_braun_buffel"
+      "parentLabel": "restrooms_north_lobby"
     },
     {
       "id": "n34",
@@ -356,7 +356,7 @@
       "label": "circle-point_n34",
       "angle": 3.141592653589793,
       "radius": 7,
-      "parentLabel": "restroom_braun_buffel"
+      "parentLabel": "restrooms_north_lobby"
     },
     {
       "id": "n35",
@@ -366,7 +366,7 @@
       "label": "circle-point_n35",
       "angle": 3.9269908169872414,
       "radius": 7,
-      "parentLabel": "restroom_braun_buffel"
+      "parentLabel": "restrooms_north_lobby"
     },
     {
       "id": "n36",
@@ -376,7 +376,7 @@
       "label": "circle-point_n36",
       "angle": 4.71238898038469,
       "radius": 7,
-      "parentLabel": "restroom_braun_buffel"
+      "parentLabel": "restrooms_north_lobby"
     },
     {
       "id": "n37",
@@ -386,7 +386,7 @@
       "label": "circle-point_n37",
       "angle": 5.497787143782138,
       "radius": 7,
-      "parentLabel": "restroom_braun_buffel"
+      "parentLabel": "restrooms_north_lobby"
     },
     {
       "id": "n38",
@@ -2505,7 +2505,7 @@
       "x": 6209.0552,
       "y": -11115.263,
       "type": "circle-center",
-      "label": "frank_n_co",
+      "label": "frankco",
       "radius": 5
     },
     {
@@ -2516,7 +2516,7 @@
       "label": "circle-point_n255",
       "angle": 0,
       "radius": 5,
-      "parentLabel": "frank_n_co"
+      "parentLabel": "frankco"
     },
     {
       "id": "n256",
@@ -2526,7 +2526,7 @@
       "label": "circle-point_n256",
       "angle": 0.7853981633974483,
       "radius": 5,
-      "parentLabel": "frank_n_co"
+      "parentLabel": "frankco"
     },
     {
       "id": "n257",
@@ -2536,7 +2536,7 @@
       "label": "circle-point_n257",
       "angle": 1.5707963267948966,
       "radius": 5,
-      "parentLabel": "frank_n_co"
+      "parentLabel": "frankco"
     },
     {
       "id": "n258",
@@ -2546,7 +2546,7 @@
       "label": "circle-point_n258",
       "angle": 2.356194490192345,
       "radius": 5,
-      "parentLabel": "frank_n_co"
+      "parentLabel": "frankco"
     },
     {
       "id": "n259",
@@ -2556,7 +2556,7 @@
       "label": "circle-point_n259",
       "angle": 3.141592653589793,
       "radius": 5,
-      "parentLabel": "frank_n_co"
+      "parentLabel": "frankco"
     },
     {
       "id": "n260",
@@ -2566,7 +2566,7 @@
       "label": "circle-point_n260",
       "angle": 3.9269908169872414,
       "radius": 5,
-      "parentLabel": "frank_n_co"
+      "parentLabel": "frankco"
     },
     {
       "id": "n261",
@@ -2576,7 +2576,7 @@
       "label": "circle-point_n261",
       "angle": 4.71238898038469,
       "radius": 5,
-      "parentLabel": "frank_n_co"
+      "parentLabel": "frankco"
     },
     {
       "id": "n262",
@@ -2586,7 +2586,7 @@
       "label": "circle-point_n262",
       "angle": 5.497787143782138,
       "radius": 5,
-      "parentLabel": "frank_n_co"
+      "parentLabel": "frankco"
     },
     {
       "id": "n263",
@@ -2681,7 +2681,7 @@
       "x": 6045.8037,
       "y": -10870.326,
       "type": "circle-center",
-      "label": "marketing_gallery",
+      "label": "marketinggalleryapartment_soho_officetower",
       "radius": 5
     },
     {
@@ -2692,7 +2692,7 @@
       "label": "circle-point_n273",
       "angle": 0,
       "radius": 5,
-      "parentLabel": "marketing_gallery"
+      "parentLabel": "marketinggalleryapartment_soho_officetower"
     },
     {
       "id": "n274",
@@ -2702,7 +2702,7 @@
       "label": "circle-point_n274",
       "angle": 0.7853981633974483,
       "radius": 5,
-      "parentLabel": "marketing_gallery"
+      "parentLabel": "marketinggalleryapartment_soho_officetower"
     },
     {
       "id": "n275",
@@ -2712,7 +2712,7 @@
       "label": "circle-point_n275",
       "angle": 1.5707963267948966,
       "radius": 5,
-      "parentLabel": "marketing_gallery"
+      "parentLabel": "marketinggalleryapartment_soho_officetower"
     },
     {
       "id": "n276",
@@ -2722,7 +2722,7 @@
       "label": "circle-point_n276",
       "angle": 2.356194490192345,
       "radius": 5,
-      "parentLabel": "marketing_gallery"
+      "parentLabel": "marketinggalleryapartment_soho_officetower"
     },
     {
       "id": "n277",
@@ -2732,7 +2732,7 @@
       "label": "circle-point_n277",
       "angle": 3.141592653589793,
       "radius": 5,
-      "parentLabel": "marketing_gallery"
+      "parentLabel": "marketinggalleryapartment_soho_officetower"
     },
     {
       "id": "n278",
@@ -2742,7 +2742,7 @@
       "label": "circle-point_n278",
       "angle": 3.9269908169872414,
       "radius": 5,
-      "parentLabel": "marketing_gallery"
+      "parentLabel": "marketinggalleryapartment_soho_officetower"
     },
     {
       "id": "n279",
@@ -2752,7 +2752,7 @@
       "label": "circle-point_n279",
       "angle": 4.71238898038469,
       "radius": 5,
-      "parentLabel": "marketing_gallery"
+      "parentLabel": "marketinggalleryapartment_soho_officetower"
     },
     {
       "id": "n280",
@@ -2762,7 +2762,7 @@
       "label": "circle-point_n280",
       "angle": 5.497787143782138,
       "radius": 5,
-      "parentLabel": "marketing_gallery"
+      "parentLabel": "marketinggalleryapartment_soho_officetower"
     },
     {
       "id": "n281",
@@ -4265,7 +4265,7 @@
       "x": 5726.2036,
       "y": -11209.742,
       "type": "circle-center",
-      "label": "h_n_m",
+      "label": "hm",
       "radius": 5
     },
     {
@@ -4276,7 +4276,7 @@
       "label": "circle-point_n435",
       "angle": 0,
       "radius": 5,
-      "parentLabel": "h_n_m"
+      "parentLabel": "hm"
     },
     {
       "id": "n436",
@@ -4286,7 +4286,7 @@
       "label": "circle-point_n436",
       "angle": 0.7853981633974483,
       "radius": 5,
-      "parentLabel": "h_n_m"
+      "parentLabel": "hm"
     },
     {
       "id": "n437",
@@ -4296,7 +4296,7 @@
       "label": "circle-point_n437",
       "angle": 1.5707963267948966,
       "radius": 5,
-      "parentLabel": "h_n_m"
+      "parentLabel": "hm"
     },
     {
       "id": "n438",
@@ -4306,7 +4306,7 @@
       "label": "circle-point_n438",
       "angle": 2.356194490192345,
       "radius": 5,
-      "parentLabel": "h_n_m"
+      "parentLabel": "hm"
     },
     {
       "id": "n439",
@@ -4316,7 +4316,7 @@
       "label": "circle-point_n439",
       "angle": 3.141592653589793,
       "radius": 5,
-      "parentLabel": "h_n_m"
+      "parentLabel": "hm"
     },
     {
       "id": "n440",
@@ -4326,7 +4326,7 @@
       "label": "circle-point_n440",
       "angle": 3.9269908169872414,
       "radius": 5,
-      "parentLabel": "h_n_m"
+      "parentLabel": "hm"
     },
     {
       "id": "n441",
@@ -4336,7 +4336,7 @@
       "label": "circle-point_n441",
       "angle": 4.71238898038469,
       "radius": 5,
-      "parentLabel": "h_n_m"
+      "parentLabel": "hm"
     },
     {
       "id": "n442",
@@ -4346,7 +4346,7 @@
       "label": "circle-point_n442",
       "angle": 5.497787143782138,
       "radius": 5,
-      "parentLabel": "h_n_m"
+      "parentLabel": "hm"
     },
     {
       "id": "n443",
@@ -5357,7 +5357,7 @@
       "x": 5888.1748,
       "y": 10911.264,
       "type": "ellipse-center",
-      "label": "vertue_lobby",
+      "label": "vertu_sky_lobby",
       "rx": 5,
       "ry": 4.75
     },
@@ -5370,7 +5370,7 @@
       "angle": 0,
       "rx": 5,
       "ry": 4.75,
-      "parentLabel": "vertue_lobby"
+      "parentLabel": "vertu_sky_lobby"
     },
     {
       "id": "n544",
@@ -5381,7 +5381,7 @@
       "angle": 0.7853981633974483,
       "rx": 5,
       "ry": 4.75,
-      "parentLabel": "vertue_lobby"
+      "parentLabel": "vertu_sky_lobby"
     },
     {
       "id": "n545",
@@ -5392,7 +5392,7 @@
       "angle": 1.5707963267948966,
       "rx": 5,
       "ry": 4.75,
-      "parentLabel": "vertue_lobby"
+      "parentLabel": "vertu_sky_lobby"
     },
     {
       "id": "n546",
@@ -5403,7 +5403,7 @@
       "angle": 2.356194490192345,
       "rx": 5,
       "ry": 4.75,
-      "parentLabel": "vertue_lobby"
+      "parentLabel": "vertu_sky_lobby"
     },
     {
       "id": "n547",
@@ -5414,7 +5414,7 @@
       "angle": 3.141592653589793,
       "rx": 5,
       "ry": 4.75,
-      "parentLabel": "vertue_lobby"
+      "parentLabel": "vertu_sky_lobby"
     },
     {
       "id": "n548",
@@ -5425,7 +5425,7 @@
       "angle": 3.9269908169872414,
       "rx": 5,
       "ry": 4.75,
-      "parentLabel": "vertue_lobby"
+      "parentLabel": "vertu_sky_lobby"
     },
     {
       "id": "n549",
@@ -5436,7 +5436,7 @@
       "angle": 4.71238898038469,
       "rx": 5,
       "ry": 4.75,
-      "parentLabel": "vertue_lobby"
+      "parentLabel": "vertu_sky_lobby"
     },
     {
       "id": "n550",
@@ -5447,14 +5447,14 @@
       "angle": 5.497787143782138,
       "rx": 5,
       "ry": 4.75,
-      "parentLabel": "vertue_lobby"
+      "parentLabel": "vertu_sky_lobby"
     },
     {
       "id": "n551",
       "x": 5789.5303,
       "y": 10810.716,
       "type": "ellipse-center",
-      "label": "skyloft_hotel",
+      "label": "skyloft_hotel_lobby",
       "rx": 5,
       "ry": 4.75
     },
@@ -5467,7 +5467,7 @@
       "angle": 0,
       "rx": 5,
       "ry": 4.75,
-      "parentLabel": "skyloft_hotel"
+      "parentLabel": "skyloft_hotel_lobby"
     },
     {
       "id": "n553",
@@ -5478,7 +5478,7 @@
       "angle": 0.7853981633974483,
       "rx": 5,
       "ry": 4.75,
-      "parentLabel": "skyloft_hotel"
+      "parentLabel": "skyloft_hotel_lobby"
     },
     {
       "id": "n554",
@@ -5489,7 +5489,7 @@
       "angle": 1.5707963267948966,
       "rx": 5,
       "ry": 4.75,
-      "parentLabel": "skyloft_hotel"
+      "parentLabel": "skyloft_hotel_lobby"
     },
     {
       "id": "n555",
@@ -5500,7 +5500,7 @@
       "angle": 2.356194490192345,
       "rx": 5,
       "ry": 4.75,
-      "parentLabel": "skyloft_hotel"
+      "parentLabel": "skyloft_hotel_lobby"
     },
     {
       "id": "n556",
@@ -5511,7 +5511,7 @@
       "angle": 3.141592653589793,
       "rx": 5,
       "ry": 4.75,
-      "parentLabel": "skyloft_hotel"
+      "parentLabel": "skyloft_hotel_lobby"
     },
     {
       "id": "n557",
@@ -5522,7 +5522,7 @@
       "angle": 3.9269908169872414,
       "rx": 5,
       "ry": 4.75,
-      "parentLabel": "skyloft_hotel"
+      "parentLabel": "skyloft_hotel_lobby"
     },
     {
       "id": "n558",
@@ -5533,7 +5533,7 @@
       "angle": 4.71238898038469,
       "rx": 5,
       "ry": 4.75,
-      "parentLabel": "skyloft_hotel"
+      "parentLabel": "skyloft_hotel_lobby"
     },
     {
       "id": "n559",
@@ -5544,7 +5544,7 @@
       "angle": 5.497787143782138,
       "rx": 5,
       "ry": 4.75,
-      "parentLabel": "skyloft_hotel"
+      "parentLabel": "skyloft_hotel_lobby"
     },
     {
       "id": "n560",
