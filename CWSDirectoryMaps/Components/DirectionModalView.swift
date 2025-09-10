@@ -391,51 +391,6 @@ struct DirectionStepsModal: View {
     }
 }
 
-
-// NEW VIEW to handle the floor change UI inside the modal
-struct FloorChangeContentView: View {
-    let step: DirectionStep
-    var onConfirm: (() -> Void)?
-    
-    var body: some View {
-        VStack(spacing: 32) {
-            // Floor change message with proper styling
-            if let fromFloor = step.fromFloor, let toFloor = step.toFloor {
-                Text("Switch from \(fromFloor.displayName) to \(toFloor.displayName).")
-                    .font(.body)
-                    .foregroundColor(.primary)
-                    .multilineTextAlignment(.center)
-                    .lineLimit(nil)
-                    .frame(maxWidth: .infinity)
-                    .padding(.horizontal, 12)
-                    .padding(.vertical, 16)
-                    .background(
-                        RoundedRectangle(cornerRadius: 12)
-                            .fill(Color(.secondarySystemBackground))
-                    )
-            }
-            
-            // Confirm button
-            Button(action: {
-                onConfirm?()
-            }) {
-                Text("Confirm")
-                    .font(.headline)
-                    .fontWeight(.semibold)
-                    .foregroundColor(.white)
-                    .frame(maxWidth: .infinity)
-                    .frame(height: 50)
-                    .background(
-                        RoundedRectangle(cornerRadius: 12)
-                            .fill(Color.blue)
-                    )
-            }
-        }
-        .padding(.horizontal, 0)
-        .padding(.vertical, 20)
-    }
-}
-
 // MARK: - Data Structures & Dummy Data (No Changes)
 struct DirectionStep: Identifiable {
     let id = UUID()
