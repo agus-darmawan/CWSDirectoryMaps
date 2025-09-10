@@ -267,7 +267,7 @@
       "x": 372.79556,
       "y": 428.99567,
       "type": "circle-center",
-      "label": "restroom_braun_buffel",
+      "label": "restroom_lg",
       "radius": 11.440577
     },
     {
@@ -278,7 +278,7 @@
       "label": "circle-point_n25",
       "angle": 0,
       "radius": 11.440577,
-      "parentLabel": "restroom_braun_buffel"
+      "parentLabel": "restroom_lg"
     },
     {
       "id": "n26",
@@ -288,7 +288,7 @@
       "label": "circle-point_n26",
       "angle": 0.7853981633974483,
       "radius": 11.440577,
-      "parentLabel": "restroom_braun_buffel"
+      "parentLabel": "restroom_lg"
     },
     {
       "id": "n27",
@@ -298,7 +298,7 @@
       "label": "circle-point_n27",
       "angle": 1.5707963267948966,
       "radius": 11.440577,
-      "parentLabel": "restroom_braun_buffel"
+      "parentLabel": "restroom_lg"
     },
     {
       "id": "n28",
@@ -308,7 +308,7 @@
       "label": "circle-point_n28",
       "angle": 2.356194490192345,
       "radius": 11.440577,
-      "parentLabel": "restroom_braun_buffel"
+      "parentLabel": "restroom_lg"
     },
     {
       "id": "n29",
@@ -318,7 +318,7 @@
       "label": "circle-point_n29",
       "angle": 3.141592653589793,
       "radius": 11.440577,
-      "parentLabel": "restroom_braun_buffel"
+      "parentLabel": "restroom_lg"
     },
     {
       "id": "n30",
@@ -328,7 +328,7 @@
       "label": "circle-point_n30",
       "angle": 3.9269908169872414,
       "radius": 11.440577,
-      "parentLabel": "restroom_braun_buffel"
+      "parentLabel": "restroom_lg"
     },
     {
       "id": "n31",
@@ -338,7 +338,7 @@
       "label": "circle-point_n31",
       "angle": 4.71238898038469,
       "radius": 11.440577,
-      "parentLabel": "restroom_braun_buffel"
+      "parentLabel": "restroom_lg"
     },
     {
       "id": "n32",
@@ -348,7 +348,7 @@
       "label": "circle-point_n32",
       "angle": 5.497787143782138,
       "radius": 11.440577,
-      "parentLabel": "restroom_braun_buffel"
+      "parentLabel": "restroom_lg"
     },
     {
       "id": "n33",
@@ -1693,7 +1693,7 @@
       "x": 827.91357,
       "y": 356.40958,
       "type": "ellipse-center",
-      "label": "shake_shake_in_a_tub",
+      "label": "shake_shake_in_a_tub_lg",
       "rx": 6.3382692,
       "ry": 6.0213556
     },
@@ -1706,7 +1706,7 @@
       "angle": 0,
       "rx": 6.3382692,
       "ry": 6.0213556,
-      "parentLabel": "shake_shake_in_a_tub"
+      "parentLabel": "shake_shake_in_a_tub_lg"
     },
     {
       "id": "n163",
@@ -1717,7 +1717,7 @@
       "angle": 0.7853981633974483,
       "rx": 6.3382692,
       "ry": 6.0213556,
-      "parentLabel": "shake_shake_in_a_tub"
+      "parentLabel": "shake_shake_in_a_tub_lg"
     },
     {
       "id": "n164",
@@ -1728,7 +1728,7 @@
       "angle": 1.5707963267948966,
       "rx": 6.3382692,
       "ry": 6.0213556,
-      "parentLabel": "shake_shake_in_a_tub"
+      "parentLabel": "shake_shake_in_a_tub_lg"
     },
     {
       "id": "n165",
@@ -1739,7 +1739,7 @@
       "angle": 2.356194490192345,
       "rx": 6.3382692,
       "ry": 6.0213556,
-      "parentLabel": "shake_shake_in_a_tub"
+      "parentLabel": "shake_shake_in_a_tub_lg"
     },
     {
       "id": "n166",
@@ -1750,7 +1750,7 @@
       "angle": 3.141592653589793,
       "rx": 6.3382692,
       "ry": 6.0213556,
-      "parentLabel": "shake_shake_in_a_tub"
+      "parentLabel": "shake_shake_in_a_tub_lg"
     },
     {
       "id": "n167",
@@ -1761,7 +1761,7 @@
       "angle": 3.9269908169872414,
       "rx": 6.3382692,
       "ry": 6.0213556,
-      "parentLabel": "shake_shake_in_a_tub"
+      "parentLabel": "shake_shake_in_a_tub_lg"
     },
     {
       "id": "n168",
@@ -1772,7 +1772,7 @@
       "angle": 4.71238898038469,
       "rx": 6.3382692,
       "ry": 6.0213556,
-      "parentLabel": "shake_shake_in_a_tub"
+      "parentLabel": "shake_shake_in_a_tub_lg"
     },
     {
       "id": "n169",
@@ -1783,7 +1783,7 @@
       "angle": 5.497787143782138,
       "rx": 6.3382692,
       "ry": 6.0213556,
-      "parentLabel": "shake_shake_in_a_tub"
+      "parentLabel": "shake_shake_in_a_tub_lg"
     },
     {
       "id": "n170",

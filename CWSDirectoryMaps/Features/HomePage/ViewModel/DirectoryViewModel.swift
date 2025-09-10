@@ -165,6 +165,7 @@ class DirectoryViewModel: ObservableObject {
         normalized = normalized.replacingOccurrences(of: "-", with: "")
         normalized = normalized.replacingOccurrences(of: "_", with: "")
         normalized = normalized.replacingOccurrences(of: "&", with: "")
+        normalized = normalized.replacingOccurrences(of: ",", with: "")
         
         return normalized
     }
