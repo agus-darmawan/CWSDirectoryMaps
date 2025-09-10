@@ -17,6 +17,7 @@ struct NavigationModalView: View {
     @State private var showingSameLocationAlert: Bool = false
     @State private var activeField: ActiveField? = nil
     @State private var showDirectionView: Bool = false
+    @State private var showFloorChangeContent: Bool = false
     
     private let selectedStore: Store
     
@@ -156,6 +157,7 @@ struct NavigationModalView: View {
                 DirectionView(
                     startLocation: navigationState.startLocation!,
                     destinationStore: navigationState.endLocation!,
+                    showFloorChangeContent: $showFloorChangeContent
                 )
             }
         }
