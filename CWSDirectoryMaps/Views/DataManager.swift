@@ -61,7 +61,6 @@ class DataManager: ObservableObject {
             print("✅ All floor data preloaded. \(self.allLocations.count) total locations available.")
         }
     }
-
     
     func getFloorData(for floor: Floor) -> FloorData? {
         return floorData[floor]
@@ -123,12 +122,14 @@ class DataManager: ObservableObject {
 
         // Define connections in code
         let connectionMap: [String: String] = [
-            "escalator_bw_basement_1-0": "escalator_basement",
-            "escalator_bw_basement_1": "escalator_basement",
-            "escalator_west-4": "escalator_west",
-            "lift_west-0": "lift_west",
-            "lift_west": "lift_west"
+            "escalator_mid_bw_to_g": "escalator_mid_bw",
+            "escalator_mid_bw_to_lg": "escalator_mid_bw",
+            "escalator_west_bw_to_g": "escalator_west_bw",
+            "escalator_west_bw_to_lg": "escalator_west_bw",
+            "lift_west_to_g": "lift_west",
+            "lift_west_to_lg": "lift_west"
         ]
+
 
         for (floor, data) in floorData {
             let floorPrefix = floor.fileName
@@ -145,28 +146,59 @@ class DataManager: ObservableObject {
 
                 if let connectionId = connectionMap[label] {
                     node.connectionId = connectionId
-                    connectionNodes[connectionId, default: []].append(node)
+                        // store a copy with the prefixed label
+                        var prefixedNode = node
+                        prefixedNode.label = uniqueLabel
+                        connectionNodes[connectionId, default: []].append(prefixedNode)
+                    print("✅ Connected: \(uniqueLabel) → connectionId=\(connectionId)")
+                } else if label.lowercased().contains("escalator") || label.lowercased().contains("lift") {
+                    print("⚠️ Potential connector not in map: \(uniqueLabel) (raw label: \(label))")
                 }
-                
+
                 combinedGraph[uniqueLabel] = node
             }
         }
 
-        for (_, nodes) in connectionNodes {
-            guard nodes.count > 1 else { continue }
+
+        // Build cross-floor links with debugging
+        for (connectionId, nodes) in connectionNodes {
+            guard nodes.count > 1 else {
+                print("ℹ️ connectionId=\(connectionId) has only one node → no cross-floor link made.")
+                continue
+            }
+
+            print("🔗 Building cross-floor links for connectionId=\(connectionId) with \(nodes.count) node(s):")
+            for n in nodes {
+                print("   • \(n.label) (\(n.floor?.rawValue))")
+            }
 
             for i in 0..<nodes.count {
                 for j in (i + 1)..<nodes.count {
                     let nodeA = nodes[i]
                     let nodeB = nodes[j]
-                    let costOfChangingFloors = 50.0 // Aribtrary high cost for floor changes
-                    
+                    let costOfChangingFloors = 50.0 // Arbitrary high cost for floor changes
+
                     combinedGraph[nodeA.label]?.neighbors.append((node: nodeB.label, cost: costOfChangingFloors))
                     combinedGraph[nodeB.label]?.neighbors.append((node: nodeA.label, cost: costOfChangingFloors))
+
+                    print("   ✅ Linked \(nodeA.label) ↔ \(nodeB.label) (cost=\(costOfChangingFloors))")
                 }
             }
         }
-        
+
+        // Post-check: list neighbors for all connection nodes
+        print("🔍 Verifying neighbors for connection nodes:")
+        for (connectionId, nodes) in connectionNodes {
+            for node in nodes {
+                if let gNode = combinedGraph[node.label] {
+                    let neighborLabels = gNode.neighbors.map { $0.node }
+                    print("   • \(node.label) neighbors: \(neighborLabels)")
+                } else {
+                    print("   • ⚠️ \(node.label) not found in combinedGraph")
+                }
+            }
+        }
+
         // Instead of setting a class property, we return the completed graph.
         return combinedGraph
     }

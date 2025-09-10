@@ -1,7 +1,7 @@
 {
   "metadata": {
-    "totalNodes": 261,
-    "totalEdges": 344,
+    "totalNodes": 265,
+    "totalEdges": 348,
     "nodeTypes": [
       "ellipse-center",
       "ellipse-point",
@@ -248,8 +248,8 @@
     },
     {
       "id": "n22",
-      "x": 669.15623,
-      "y": 406.58153,
+      "x": 668.79156,
+      "y": 388.085,
       "type": "path-point",
       "label": "storepath266-7-0_point_0",
       "parentLabel": "storepath266-7-0"
@@ -267,7 +267,7 @@
       "x": 372.79556,
       "y": 428.99567,
       "type": "circle-center",
-      "label": "restroom_braun_buffel",
+      "label": "restroom_lg",
       "radius": 11.440577
     },
     {
@@ -278,7 +278,7 @@
       "label": "circle-point_n25",
       "angle": 0,
       "radius": 11.440577,
-      "parentLabel": "restroom_braun_buffel"
+      "parentLabel": "restroom_lg"
     },
     {
       "id": "n26",
@@ -288,7 +288,7 @@
       "label": "circle-point_n26",
       "angle": 0.7853981633974483,
       "radius": 11.440577,
-      "parentLabel": "restroom_braun_buffel"
+      "parentLabel": "restroom_lg"
     },
     {
       "id": "n27",
@@ -298,7 +298,7 @@
       "label": "circle-point_n27",
       "angle": 1.5707963267948966,
       "radius": 11.440577,
-      "parentLabel": "restroom_braun_buffel"
+      "parentLabel": "restroom_lg"
     },
     {
       "id": "n28",
@@ -308,7 +308,7 @@
       "label": "circle-point_n28",
       "angle": 2.356194490192345,
       "radius": 11.440577,
-      "parentLabel": "restroom_braun_buffel"
+      "parentLabel": "restroom_lg"
     },
     {
       "id": "n29",
@@ -318,7 +318,7 @@
       "label": "circle-point_n29",
       "angle": 3.141592653589793,
       "radius": 11.440577,
-      "parentLabel": "restroom_braun_buffel"
+      "parentLabel": "restroom_lg"
     },
     {
       "id": "n30",
@@ -328,7 +328,7 @@
       "label": "circle-point_n30",
       "angle": 3.9269908169872414,
       "radius": 11.440577,
-      "parentLabel": "restroom_braun_buffel"
+      "parentLabel": "restroom_lg"
     },
     {
       "id": "n31",
@@ -338,7 +338,7 @@
       "label": "circle-point_n31",
       "angle": 4.71238898038469,
       "radius": 11.440577,
-      "parentLabel": "restroom_braun_buffel"
+      "parentLabel": "restroom_lg"
     },
     {
       "id": "n32",
@@ -348,14 +348,14 @@
       "label": "circle-point_n32",
       "angle": 5.497787143782138,
       "radius": 11.440577,
-      "parentLabel": "restroom_braun_buffel"
+      "parentLabel": "restroom_lg"
     },
     {
       "id": "n33",
       "x": 898.79138,
       "y": 407.63168,
       "type": "circle-center",
-      "label": "lift_west",
+      "label": "lift_west_to_g",
       "radius": 11.440577
     },
     {
@@ -366,7 +366,7 @@
       "label": "circle-point_n34",
       "angle": 0,
       "radius": 11.440577,
-      "parentLabel": "lift_west"
+      "parentLabel": "lift_west_to_g"
     },
     {
       "id": "n35",
@@ -376,7 +376,7 @@
       "label": "circle-point_n35",
       "angle": 0.7853981633974483,
       "radius": 11.440577,
-      "parentLabel": "lift_west"
+      "parentLabel": "lift_west_to_g"
     },
     {
       "id": "n36",
@@ -386,7 +386,7 @@
       "label": "circle-point_n36",
       "angle": 1.5707963267948966,
       "radius": 11.440577,
-      "parentLabel": "lift_west"
+      "parentLabel": "lift_west_to_g"
     },
     {
       "id": "n37",
@@ -396,7 +396,7 @@
       "label": "circle-point_n37",
       "angle": 2.356194490192345,
       "radius": 11.440577,
-      "parentLabel": "lift_west"
+      "parentLabel": "lift_west_to_g"
     },
     {
       "id": "n38",
@@ -406,7 +406,7 @@
       "label": "circle-point_n38",
       "angle": 3.141592653589793,
       "radius": 11.440577,
-      "parentLabel": "lift_west"
+      "parentLabel": "lift_west_to_g"
     },
     {
       "id": "n39",
@@ -416,7 +416,7 @@
       "label": "circle-point_n39",
       "angle": 3.9269908169872414,
       "radius": 11.440577,
-      "parentLabel": "lift_west"
+      "parentLabel": "lift_west_to_g"
     },
     {
       "id": "n40",
@@ -426,7 +426,7 @@
       "label": "circle-point_n40",
       "angle": 4.71238898038469,
       "radius": 11.440577,
-      "parentLabel": "lift_west"
+      "parentLabel": "lift_west_to_g"
     },
     {
       "id": "n41",
@@ -436,7 +436,7 @@
       "label": "circle-point_n41",
       "angle": 5.497787143782138,
       "radius": 11.440577,
-      "parentLabel": "lift_west"
+      "parentLabel": "lift_west_to_g"
     },
     {
       "id": "n42",
@@ -531,7 +531,7 @@
       "x": 474.61533,
       "y": 427.36722,
       "type": "circle-center",
-      "label": "escalator_bw_basement_1",
+      "label": "escalator_mid_bw_to_g",
       "radius": 11.440577
     },
     {
@@ -542,7 +542,7 @@
       "label": "circle-point_n52",
       "angle": 0,
       "radius": 11.440577,
-      "parentLabel": "escalator_bw_basement_1"
+      "parentLabel": "escalator_mid_bw_to_g"
     },
     {
       "id": "n53",
@@ -552,7 +552,7 @@
       "label": "circle-point_n53",
       "angle": 0.7853981633974483,
       "radius": 11.440577,
-      "parentLabel": "escalator_bw_basement_1"
+      "parentLabel": "escalator_mid_bw_to_g"
     },
     {
       "id": "n54",
@@ -562,7 +562,7 @@
       "label": "circle-point_n54",
       "angle": 1.5707963267948966,
       "radius": 11.440577,
-      "parentLabel": "escalator_bw_basement_1"
+      "parentLabel": "escalator_mid_bw_to_g"
     },
     {
       "id": "n55",
@@ -572,7 +572,7 @@
       "label": "circle-point_n55",
       "angle": 2.356194490192345,
       "radius": 11.440577,
-      "parentLabel": "escalator_bw_basement_1"
+      "parentLabel": "escalator_mid_bw_to_g"
     },
     {
       "id": "n56",
@@ -582,7 +582,7 @@
       "label": "circle-point_n56",
       "angle": 3.141592653589793,
       "radius": 11.440577,
-      "parentLabel": "escalator_bw_basement_1"
+      "parentLabel": "escalator_mid_bw_to_g"
     },
     {
       "id": "n57",
@@ -592,7 +592,7 @@
       "label": "circle-point_n57",
       "angle": 3.9269908169872414,
       "radius": 11.440577,
-      "parentLabel": "escalator_bw_basement_1"
+      "parentLabel": "escalator_mid_bw_to_g"
     },
     {
       "id": "n58",
@@ -602,7 +602,7 @@
       "label": "circle-point_n58",
       "angle": 4.71238898038469,
       "radius": 11.440577,
-      "parentLabel": "escalator_bw_basement_1"
+      "parentLabel": "escalator_mid_bw_to_g"
     },
     {
       "id": "n59",
@@ -612,14 +612,14 @@
       "label": "circle-point_n59",
       "angle": 5.497787143782138,
       "radius": 11.440577,
-      "parentLabel": "escalator_bw_basement_1"
+      "parentLabel": "escalator_mid_bw_to_g"
     },
     {
       "id": "n60",
       "x": 808.77203,
       "y": 407.58377,
       "type": "circle-center",
-      "label": "escalator_west",
+      "label": "escalator_west_bw_to_g",
       "radius": 11.440577
     },
     {
@@ -630,7 +630,7 @@
       "label": "circle-point_n61",
       "angle": 0,
       "radius": 11.440577,
-      "parentLabel": "escalator_west"
+      "parentLabel": "escalator_west_bw_to_g"
     },
     {
       "id": "n62",
@@ -640,7 +640,7 @@
       "label": "circle-point_n62",
       "angle": 0.7853981633974483,
       "radius": 11.440577,
-      "parentLabel": "escalator_west"
+      "parentLabel": "escalator_west_bw_to_g"
     },
     {
       "id": "n63",
@@ -650,7 +650,7 @@
       "label": "circle-point_n63",
       "angle": 1.5707963267948966,
       "radius": 11.440577,
-      "parentLabel": "escalator_west"
+      "parentLabel": "escalator_west_bw_to_g"
     },
     {
       "id": "n64",
@@ -660,7 +660,7 @@
       "label": "circle-point_n64",
       "angle": 2.356194490192345,
       "radius": 11.440577,
-      "parentLabel": "escalator_west"
+      "parentLabel": "escalator_west_bw_to_g"
     },
     {
       "id": "n65",
@@ -670,7 +670,7 @@
       "label": "circle-point_n65",
       "angle": 3.141592653589793,
       "radius": 11.440577,
-      "parentLabel": "escalator_west"
+      "parentLabel": "escalator_west_bw_to_g"
     },
     {
       "id": "n66",
@@ -680,7 +680,7 @@
       "label": "circle-point_n66",
       "angle": 3.9269908169872414,
       "radius": 11.440577,
-      "parentLabel": "escalator_west"
+      "parentLabel": "escalator_west_bw_to_g"
     },
     {
       "id": "n67",
@@ -690,7 +690,7 @@
       "label": "circle-point_n67",
       "angle": 4.71238898038469,
       "radius": 11.440577,
-      "parentLabel": "escalator_west"
+      "parentLabel": "escalator_west_bw_to_g"
     },
     {
       "id": "n68",
@@ -700,7 +700,7 @@
       "label": "circle-point_n68",
       "angle": 5.497787143782138,
       "radius": 11.440577,
-      "parentLabel": "escalator_west"
+      "parentLabel": "escalator_west_bw_to_g"
     },
     {
       "id": "n69",
@@ -1287,7 +1287,7 @@
     {
       "id": "n123",
       "x": 508.51404,
-      "y": 390.257,
+      "y": 389.21507,
       "type": "path-point",
       "label": "storepath266-7_point_0",
       "parentLabel": "storepath266-7"
@@ -1693,7 +1693,7 @@
       "x": 827.91357,
       "y": 356.40958,
       "type": "ellipse-center",
-      "label": "shake_shake_in_a_tub",
+      "label": "shake_shake_in_a_tub_lg",
       "rx": 6.3382692,
       "ry": 6.0213556
     },
@@ -1706,7 +1706,7 @@
       "angle": 0,
       "rx": 6.3382692,
       "ry": 6.0213556,
-      "parentLabel": "shake_shake_in_a_tub"
+      "parentLabel": "shake_shake_in_a_tub_lg"
     },
     {
       "id": "n163",
@@ -1717,7 +1717,7 @@
       "angle": 0.7853981633974483,
       "rx": 6.3382692,
       "ry": 6.0213556,
-      "parentLabel": "shake_shake_in_a_tub"
+      "parentLabel": "shake_shake_in_a_tub_lg"
     },
     {
       "id": "n164",
@@ -1728,7 +1728,7 @@
       "angle": 1.5707963267948966,
       "rx": 6.3382692,
       "ry": 6.0213556,
-      "parentLabel": "shake_shake_in_a_tub"
+      "parentLabel": "shake_shake_in_a_tub_lg"
     },
     {
       "id": "n165",
@@ -1739,7 +1739,7 @@
       "angle": 2.356194490192345,
       "rx": 6.3382692,
       "ry": 6.0213556,
-      "parentLabel": "shake_shake_in_a_tub"
+      "parentLabel": "shake_shake_in_a_tub_lg"
     },
     {
       "id": "n166",
@@ -1750,7 +1750,7 @@
       "angle": 3.141592653589793,
       "rx": 6.3382692,
       "ry": 6.0213556,
-      "parentLabel": "shake_shake_in_a_tub"
+      "parentLabel": "shake_shake_in_a_tub_lg"
     },
     {
       "id": "n167",
@@ -1761,7 +1761,7 @@
       "angle": 3.9269908169872414,
       "rx": 6.3382692,
       "ry": 6.0213556,
-      "parentLabel": "shake_shake_in_a_tub"
+      "parentLabel": "shake_shake_in_a_tub_lg"
     },
     {
       "id": "n168",
@@ -1772,7 +1772,7 @@
       "angle": 4.71238898038469,
       "rx": 6.3382692,
       "ry": 6.0213556,
-      "parentLabel": "shake_shake_in_a_tub"
+      "parentLabel": "shake_shake_in_a_tub_lg"
     },
     {
       "id": "n169",
@@ -1783,12 +1783,12 @@
       "angle": 5.497787143782138,
       "rx": 6.3382692,
       "ry": 6.0213556,
-      "parentLabel": "shake_shake_in_a_tub"
+      "parentLabel": "shake_shake_in_a_tub_lg"
     },
     {
       "id": "n170",
       "x": 473.98806,
-      "y": 389.80117,
+      "y": 387.9257,
       "type": "path-point",
       "label": "storepath266-7-6_point_0",
       "parentLabel": "storepath266-7-6"
@@ -1803,8 +1803,8 @@
     },
     {
       "id": "n172",
-      "x": 805.66656,
-      "y": 390.90953,
+      "x": 805.81391,
+      "y": 389.14132,
       "type": "path-point",
       "label": "storepath266-7-6-0_point_0",
       "parentLabel": "storepath266-7-6-0"
@@ -1820,7 +1820,7 @@
     {
       "id": "n174",
       "x": 828.07042,
-      "y": 391.22475,
+      "y": 388.71979,
       "type": "path-point",
       "label": "storepath266-7-6-0-8_point_0",
       "parentLabel": "storepath266-7-6-0-8"
@@ -1828,15 +1828,15 @@
     {
       "id": "n175",
       "x": 828.02172,
-      "y": 355.34175999999997,
+      "y": 352.8368,
       "type": "path-point",
       "label": "storepath266-7-6-0-8_point_1",
       "parentLabel": "storepath266-7-6-0-8"
     },
     {
       "id": "n176",
-      "x": 848.07264,
-      "y": 391.35314,
+      "x": 848.14632,
+      "y": 388.92185,
       "type": "path-point",
       "label": "storepath266-7-6-0-8-8_point_0",
       "parentLabel": "storepath266-7-6-0-8-8"
@@ -1915,8 +1915,8 @@
     },
     {
       "id": "n186",
-      "x": 410.51275,
-      "y": 388.76733,
+      "x": 410.72114,
+      "y": 389.1841,
       "type": "path-point",
       "label": "path59_point_0",
       "parentLabel": "path59"
@@ -1931,8 +1931,8 @@
     },
     {
       "id": "n188",
-      "x": 474.54517,
-      "y": 427.68575,
+      "x": 476.04148,
+      "y": 427.57065,
       "type": "path-point",
       "label": "path60_point_0",
       "parentLabel": "path60"
@@ -1963,7 +1963,7 @@
     },
     {
       "id": "n192",
-      "x": 442.27949,
+      "x": 443.753,
       "y": 388.43469,
       "type": "path-point",
       "label": "path62_point_0",
@@ -1971,7 +1971,7 @@
     },
     {
       "id": "n193",
-      "x": 475.21052000000003,
+      "x": 476.68403,
       "y": 388.26838,
       "type": "path-point",
       "label": "path62_point_1",
@@ -1987,158 +1987,94 @@
     },
     {
       "id": "n195",
-      "x": 667.93232,
-      "y": 407.97598,
+      "x": 667.77603,
+      "y": 433.341,
       "type": "path-point",
       "label": "storepath266-7-0-3_point_1",
       "parentLabel": "storepath266-7-0-3"
     },
     {
       "id": "n196",
-      "x": 668.2217,
-      "y": 407.63176,
-      "type": "path-point",
-      "label": "path64_point_0",
-      "parentLabel": "path64"
-    },
-    {
-      "id": "n197",
-      "x": 781.6925900000001,
-      "y": 407.20108999999997,
-      "type": "path-point",
-      "label": "path64_point_1",
-      "parentLabel": "path64"
-    },
-    {
-      "id": "n198",
       "x": 849.97502,
-      "y": 389.50747,
+      "y": 387.9734,
       "type": "path-point",
       "label": "path65_point_0",
       "parentLabel": "path65"
     },
     {
-      "id": "n199",
+      "id": "n197",
       "x": 827.1858199999999,
-      "y": 389.52157,
+      "y": 387.9875,
       "type": "path-point",
       "label": "path65_point_1",
       "parentLabel": "path65"
     },
     {
-      "id": "n200",
+      "id": "n198",
       "x": 829.21956,
-      "y": 389.50747,
+      "y": 387.97339,
       "type": "path-point",
       "label": "path66_point_0",
       "parentLabel": "path66"
     },
     {
-      "id": "n201",
+      "id": "n199",
       "x": 804.70317,
-      "y": 389.60487,
+      "y": 388.07079,
       "type": "path-point",
       "label": "path66_point_1",
       "parentLabel": "path66"
     },
     {
-      "id": "n202",
+      "id": "n200",
       "x": 806.47315,
-      "y": 389.57636,
+      "y": 387.97339,
       "type": "path-point",
       "label": "path67_point_0",
       "parentLabel": "path67"
     },
     {
-      "id": "n203",
-      "x": 780.9445800000001,
-      "y": 389.6881,
+      "id": "n201",
+      "x": 780.94458,
+      "y": 388.085,
       "type": "path-point",
       "label": "path67_point_1",
       "parentLabel": "path67"
     },
     {
-      "id": "n204",
-      "x": 782.64938,
-      "y": 387.85259,
-      "type": "path-point",
-      "label": "path68_point_0",
-      "parentLabel": "path68"
-    },
-    {
-      "id": "n205",
-      "x": 782.35489,
-      "y": 407.40887000000004,
-      "type": "path-point",
-      "label": "path68_point_1",
-      "parentLabel": "path68"
-    },
-    {
-      "id": "n206",
-      "x": 782.28621,
-      "y": 407.18523,
-      "type": "path-point",
-      "label": "path69_point_0",
-      "parentLabel": "path69"
-    },
-    {
-      "id": "n207",
-      "x": 782.63076,
-      "y": 434.59754,
-      "type": "path-point",
-      "label": "path69_point_1",
-      "parentLabel": "path69"
-    },
-    {
-      "id": "n208",
-      "x": 872.37965,
-      "y": 433.41781,
+      "id": "n202",
+      "x": 857.3759,
+      "y": 424.66562,
       "type": "path-point",
       "label": "path71_point_0",
       "parentLabel": "path71"
     },
     {
-      "id": "n209",
-      "x": 898.98885,
-      "y": 424.85834,
+      "id": "n203",
+      "x": 900.44755,
+      "y": 425.06672,
       "type": "path-point",
       "label": "path71_point_1",
       "parentLabel": "path71"
     },
     {
-      "id": "n210",
-      "x": 872.37792,
-      "y": 433.34057,
-      "type": "path-point",
-      "label": "path72_point_0",
-      "parentLabel": "path72"
-    },
-    {
-      "id": "n211",
-      "x": 900.14467,
-      "y": 434.06464,
-      "type": "path-point",
-      "label": "path72_point_1",
-      "parentLabel": "path72"
-    },
-    {
-      "id": "n212",
-      "x": 898.37224,
-      "y": 432.48879,
+      "id": "n204",
+      "x": 898.78901,
+      "y": 423.47612,
       "type": "path-point",
       "label": "path73_point_0",
       "parentLabel": "path73"
     },
     {
-      "id": "n213",
-      "x": 897.8246,
-      "y": 501.032,
+      "id": "n205",
+      "x": 898.70871,
+      "y": 500.29525,
       "type": "path-point",
       "label": "path73_point_1",
       "parentLabel": "path73"
     },
     {
-      "id": "n214",
+      "id": "n206",
       "x": 957.36645,
       "y": 500.69937,
       "type": "path-point",
@@ -2146,31 +2082,31 @@
       "parentLabel": "path74"
     },
     {
-      "id": "n215",
-      "x": 897.1593399999999,
-      "y": 499.70148,
+      "id": "n207",
+      "x": 899.81165,
+      "y": 500.14353,
       "type": "path-point",
       "label": "path74_point_1",
       "parentLabel": "path74"
     },
     {
-      "id": "n216",
-      "x": 897.94936,
-      "y": 498.71343,
+      "id": "n208",
+      "x": 898.68611,
+      "y": 499.74489,
       "type": "path-point",
       "label": "path75_point_0",
       "parentLabel": "path75"
     },
     {
-      "id": "n217",
-      "x": 895.95008,
-      "y": 675.35554,
+      "id": "n209",
+      "x": 898.45504,
+      "y": 676.387,
       "type": "path-point",
       "label": "path75_point_1",
       "parentLabel": "path75"
     },
     {
-      "id": "n218",
+      "id": "n210",
       "x": 897.07618,
       "y": 674.66803,
       "type": "path-point",
@@ -2178,7 +2114,7 @@
       "parentLabel": "path76"
     },
     {
-      "id": "n219",
+      "id": "n211",
       "x": 851.33871,
       "y": 675.33329,
       "type": "path-point",
@@ -2186,7 +2122,7 @@
       "parentLabel": "path76"
     },
     {
-      "id": "n220",
+      "id": "n212",
       "x": 885.76656,
       "y": 695.29149,
       "type": "path-point",
@@ -2194,7 +2130,7 @@
       "parentLabel": "path77"
     },
     {
-      "id": "n221",
+      "id": "n213",
       "x": 851.83766,
       "y": 695.29149,
       "type": "path-point",
@@ -2202,7 +2138,7 @@
       "parentLabel": "path77"
     },
     {
-      "id": "n222",
+      "id": "n214",
       "x": 853.00191,
       "y": 674.3354,
       "type": "path-point",
@@ -2210,7 +2146,7 @@
       "parentLabel": "path78"
     },
     {
-      "id": "n223",
+      "id": "n215",
       "x": 852.8353199999999,
       "y": 696.12302,
       "type": "path-point",
@@ -2218,7 +2154,7 @@
       "parentLabel": "path78"
     },
     {
-      "id": "n224",
+      "id": "n216",
       "x": 782.84541,
       "y": 407.13498,
       "type": "path-point",
@@ -2226,7 +2162,7 @@
       "parentLabel": "path79"
     },
     {
-      "id": "n225",
+      "id": "n217",
       "x": 809.3931200000001,
       "y": 407.39346,
       "type": "path-point",
@@ -2234,7 +2170,7 @@
       "parentLabel": "path79"
     },
     {
-      "id": "n226",
+      "id": "n218",
       "x": 325.45014,
       "y": 103.91476,
       "type": "path-point",
@@ -2242,7 +2178,7 @@
       "parentLabel": "path80"
     },
     {
-      "id": "n227",
+      "id": "n219",
       "x": 326.86141999999995,
       "y": 389.92917,
       "type": "path-point",
@@ -2250,7 +2186,7 @@
       "parentLabel": "path80"
     },
     {
-      "id": "n228",
+      "id": "n220",
       "x": 372.96236,
       "y": 389.45876,
       "type": "path-point",
@@ -2258,7 +2194,7 @@
       "parentLabel": "path81"
     },
     {
-      "id": "n229",
+      "id": "n221",
       "x": 325.68532999999996,
       "y": 389.22355,
       "type": "path-point",
@@ -2266,7 +2202,7 @@
       "parentLabel": "path81"
     },
     {
-      "id": "n230",
+      "id": "n222",
       "x": 496.33284,
       "y": 720.73808,
       "type": "path-point",
@@ -2274,7 +2210,7 @@
       "parentLabel": "path82"
     },
     {
-      "id": "n231",
+      "id": "n223",
       "x": 853.58401,
       "y": 722.06869,
       "type": "path-point",
@@ -2282,7 +2218,7 @@
       "parentLabel": "path82"
     },
     {
-      "id": "n232",
+      "id": "n224",
       "x": 852.7304,
       "y": 694.11345,
       "type": "path-point",
@@ -2290,7 +2226,7 @@
       "parentLabel": "path83"
     },
     {
-      "id": "n233",
+      "id": "n225",
       "x": 852.7304,
       "y": 723.16184,
       "type": "path-point",
@@ -2298,7 +2234,7 @@
       "parentLabel": "path83"
     },
     {
-      "id": "n234",
+      "id": "n226",
       "x": 898.65617,
       "y": 407.39494,
       "type": "path-point",
@@ -2306,7 +2242,7 @@
       "parentLabel": "path84"
     },
     {
-      "id": "n235",
+      "id": "n227",
       "x": 855.74614,
       "y": 407.72757,
       "type": "path-point",
@@ -2314,7 +2250,7 @@
       "parentLabel": "path84"
     },
     {
-      "id": "n236",
+      "id": "n228",
       "x": 857.5756,
       "y": 406.56336,
       "type": "path-point",
@@ -2322,47 +2258,31 @@
       "parentLabel": "path85"
     },
     {
-      "id": "n237",
+      "id": "n229",
       "x": 857.4928,
-      "y": 435.00374,
+      "y": 423.75093,
       "type": "path-point",
       "label": "path85_point_1",
       "parentLabel": "path85"
     },
     {
-      "id": "n238",
+      "id": "n230",
       "x": 781.40197,
-      "y": 433.34057,
+      "y": 433.341,
       "type": "path-point",
       "label": "path86_point_0",
       "parentLabel": "path86"
     },
     {
-      "id": "n239",
-      "x": 858.73985,
+      "id": "n231",
+      "x": 857.56104,
       "y": 433.17426,
       "type": "path-point",
       "label": "path86_point_1",
       "parentLabel": "path86"
     },
     {
-      "id": "n240",
-      "x": 856.66087,
-      "y": 433.17425,
-      "type": "path-point",
-      "label": "path87_point_0",
-      "parentLabel": "path87"
-    },
-    {
-      "id": "n241",
-      "x": 873.1507300000001,
-      "y": 433.43800999999996,
-      "type": "path-point",
-      "label": "path87_point_1",
-      "parentLabel": "path87"
-    },
-    {
-      "id": "n242",
+      "id": "n232",
       "x": 497.74087,
       "y": 720.80977,
       "type": "path-point",
@@ -2370,7 +2290,7 @@
       "parentLabel": "path88"
     },
     {
-      "id": "n243",
+      "id": "n233",
       "x": 27.200094,
       "y": 722.59112,
       "type": "path-point",
@@ -2378,7 +2298,7 @@
       "parentLabel": "path88"
     },
     {
-      "id": "n244",
+      "id": "n234",
       "x": 28.937616,
       "y": 724.35549,
       "type": "path-point",
@@ -2386,7 +2306,7 @@
       "parentLabel": "path89"
     },
     {
-      "id": "n245",
+      "id": "n235",
       "x": 31.614952,
       "y": 374.99339000000003,
       "type": "path-point",
@@ -2394,136 +2314,248 @@
       "parentLabel": "path89"
     },
     {
+      "id": "n236",
+      "x": 966.04822,
+      "y": 0.14933932,
+      "type": "rect-corner",
+      "label": "rect-corner_n236",
+      "corner": "top-left",
+      "parentLabel": "rect90"
+    },
+    {
+      "id": "n237",
+      "x": 999.918349,
+      "y": 0.14933932,
+      "type": "rect-corner",
+      "label": "rect-corner_n237",
+      "corner": "top-right",
+      "parentLabel": "rect90"
+    },
+    {
+      "id": "n238",
+      "x": 966.04822,
+      "y": 38.25323232,
+      "type": "rect-corner",
+      "label": "rect-corner_n238",
+      "corner": "bottom-left",
+      "parentLabel": "rect90"
+    },
+    {
+      "id": "n239",
+      "x": 999.918349,
+      "y": 38.25323232,
+      "type": "rect-corner",
+      "label": "rect-corner_n239",
+      "corner": "bottom-right",
+      "parentLabel": "rect90"
+    },
+    {
+      "id": "n240",
+      "x": 966.12988,
+      "y": 717.92224,
+      "type": "rect-corner",
+      "label": "rect-corner_n240",
+      "corner": "top-left",
+      "parentLabel": "rect90-4"
+    },
+    {
+      "id": "n241",
+      "x": 1000.000009,
+      "y": 717.92224,
+      "type": "rect-corner",
+      "label": "rect-corner_n241",
+      "corner": "top-right",
+      "parentLabel": "rect90-4"
+    },
+    {
+      "id": "n242",
+      "x": 966.12988,
+      "y": 756.026133,
+      "type": "rect-corner",
+      "label": "rect-corner_n242",
+      "corner": "bottom-left",
+      "parentLabel": "rect90-4"
+    },
+    {
+      "id": "n243",
+      "x": 1000.000009,
+      "y": 756.026133,
+      "type": "rect-corner",
+      "label": "rect-corner_n243",
+      "corner": "bottom-right",
+      "parentLabel": "rect90-4"
+    },
+    {
+      "id": "n244",
+      "x": 0.0000049993923,
+      "y": -1.625174e-7,
+      "type": "rect-corner",
+      "label": "rect-corner_n244",
+      "corner": "top-left",
+      "parentLabel": "rect90-4-6-5"
+    },
+    {
+      "id": "n245",
+      "x": 33.8701339993923,
+      "y": -1.625174e-7,
+      "type": "rect-corner",
+      "label": "rect-corner_n245",
+      "corner": "top-right",
+      "parentLabel": "rect90-4-6-5"
+    },
+    {
       "id": "n246",
-      "x": 472.88207,
-      "y": 388.10206,
-      "type": "path-point",
-      "label": "path63_point_0",
-      "parentLabel": "path63"
+      "x": 0.0000049993923,
+      "y": 38.1038928374826,
+      "type": "rect-corner",
+      "label": "rect-corner_n246",
+      "corner": "bottom-left",
+      "parentLabel": "rect90-4-6-5"
     },
     {
       "id": "n247",
-      "x": 509.63837,
-      "y": 388.60102,
-      "type": "path-point",
-      "label": "path63_point_1",
-      "parentLabel": "path63"
+      "x": 33.8701339993923,
+      "y": 38.1038928374826,
+      "type": "rect-corner",
+      "label": "rect-corner_n247",
+      "corner": "bottom-right",
+      "parentLabel": "rect90-4-6-5"
     },
     {
       "id": "n248",
-      "x": 668.87795,
-      "y": 407.66399,
+      "x": 473.69048,
+      "y": 388.34838,
       "type": "path-point",
-      "label": "path63_point_2",
-      "parentLabel": "path63"
+      "label": "path3_point_0",
+      "parentLabel": "path3"
     },
     {
       "id": "n249",
-      "x": 966.04822,
-      "y": 0.14933932,
-      "type": "rect-corner",
-      "label": "rect-corner_n249",
-      "corner": "top-left",
-      "parentLabel": "rect90"
+      "x": 510.37244999999996,
+      "y": 387.97368,
+      "type": "path-point",
+      "label": "path3_point_1",
+      "parentLabel": "path3"
     },
     {
       "id": "n250",
-      "x": 999.918349,
-      "y": 0.14933932,
-      "type": "rect-corner",
-      "label": "rect-corner_n250",
-      "corner": "top-right",
-      "parentLabel": "rect90"
+      "x": 859.2346,
+      "y": 387.9875,
+      "type": "path-point",
+      "label": "path5_point_0",
+      "parentLabel": "path5"
     },
     {
       "id": "n251",
-      "x": 966.04822,
-      "y": 38.25323232,
-      "type": "rect-corner",
-      "label": "rect-corner_n251",
-      "corner": "bottom-left",
-      "parentLabel": "rect90"
+      "x": 857.6401,
+      "y": 387.8515,
+      "type": "path-point",
+      "label": "path6_point_0",
+      "parentLabel": "path6"
     },
     {
       "id": "n252",
-      "x": 999.918349,
-      "y": 38.25323232,
-      "type": "rect-corner",
-      "label": "rect-corner_n252",
-      "corner": "bottom-right",
-      "parentLabel": "rect90"
+      "x": 857.53244,
+      "y": 434.85037,
+      "type": "path-point",
+      "label": "path7_point_0",
+      "parentLabel": "path7"
     },
     {
       "id": "n253",
-      "x": 966.12988,
-      "y": 717.92224,
-      "type": "rect-corner",
-      "label": "rect-corner_n253",
-      "corner": "top-left",
-      "parentLabel": "rect90-4"
+      "x": 857.4927399999999,
+      "y": 423.75093,
+      "type": "path-point",
+      "label": "path7_point_1",
+      "parentLabel": "path7"
     },
     {
       "id": "n254",
-      "x": 1000.000009,
-      "y": 717.92224,
-      "type": "rect-corner",
-      "label": "rect-corner_n254",
-      "corner": "top-right",
-      "parentLabel": "rect90-4"
+      "x": 670.40632,
+      "y": 388.085,
+      "type": "path-point",
+      "label": "path8_point_0",
+      "parentLabel": "path8"
     },
     {
       "id": "n255",
-      "x": 966.12988,
-      "y": 756.026133,
-      "type": "rect-corner",
-      "label": "rect-corner_n255",
-      "corner": "bottom-left",
-      "parentLabel": "rect90-4"
+      "x": 510.37245,
+      "y": 387.97368,
+      "type": "path-point",
+      "label": "path8_point_1",
+      "parentLabel": "path8"
     },
     {
       "id": "n256",
-      "x": 1000.000009,
-      "y": 756.026133,
-      "type": "rect-corner",
-      "label": "rect-corner_n256",
-      "corner": "bottom-right",
-      "parentLabel": "rect90-4"
+      "x": 781.5429300000001,
+      "y": 388.0705,
+      "type": "path-point",
+      "label": "path9_point_0",
+      "parentLabel": "path9"
     },
     {
       "id": "n257",
-      "x": 0.0000049993923,
-      "y": -1.625174e-7,
-      "type": "rect-corner",
-      "label": "rect-corner_n257",
-      "corner": "top-left",
-      "parentLabel": "rect90-4-6-5"
+      "x": 666.57512,
+      "y": 433.33625,
+      "type": "path-point",
+      "label": "path10_point_0",
+      "parentLabel": "path10"
     },
     {
       "id": "n258",
-      "x": 33.8701339993923,
-      "y": -1.625174e-7,
-      "type": "rect-corner",
-      "label": "rect-corner_n258",
-      "corner": "top-right",
-      "parentLabel": "rect90-4-6-5"
+      "x": 781.5428499999999,
+      "y": 433.32175,
+      "type": "path-point",
+      "label": "path10_point_1",
+      "parentLabel": "path10"
     },
     {
       "id": "n259",
-      "x": 0.0000049993923,
-      "y": 38.1038928374826,
-      "type": "rect-corner",
-      "label": "rect-corner_n259",
-      "corner": "bottom-left",
-      "parentLabel": "rect90-4-6-5"
+      "x": 507.35819,
+      "y": 433.27115000000003,
+      "type": "path-point",
+      "label": "path11_point_0",
+      "parentLabel": "path11"
     },
     {
       "id": "n260",
-      "x": 33.8701339993923,
-      "y": 38.1038928374826,
-      "type": "rect-corner",
-      "label": "rect-corner_n260",
-      "corner": "bottom-right",
-      "parentLabel": "rect90-4-6-5"
+      "x": 509.20452,
+      "y": 387.36282,
+      "type": "path-point",
+      "label": "path12_point_0",
+      "parentLabel": "path12"
+    },
+    {
+      "id": "n261",
+      "x": 509.12642,
+      "y": 434.00794,
+      "type": "path-point",
+      "label": "path12_point_1",
+      "parentLabel": "path12"
+    },
+    {
+      "id": "n262",
+      "x": 782.14007,
+      "y": 406.98013,
+      "type": "path-point",
+      "label": "path13_point_0",
+      "parentLabel": "path13"
+    },
+    {
+      "id": "n263",
+      "x": 782.10037,
+      "y": 388.58083999999997,
+      "type": "path-point",
+      "label": "path13_point_1",
+      "parentLabel": "path13"
+    },
+    {
+      "id": "n264",
+      "x": 782.10037,
+      "y": 432.23758999999995,
+      "type": "path-point",
+      "label": "path14_point_0",
+      "parentLabel": "path14"
     }
   ],
   "edges": [
@@ -4155,109 +4187,129 @@
     {
       "source": "n236",
       "target": "n237",
-      "type": "path-segment"
+      "type": "rect-edge",
+      "side": "top"
+    },
+    {
+      "source": "n237",
+      "target": "n239",
+      "type": "rect-edge",
+      "side": "right"
+    },
+    {
+      "source": "n239",
+      "target": "n238",
+      "type": "rect-edge",
+      "side": "bottom"
     },
     {
       "source": "n238",
-      "target": "n239",
-      "type": "path-segment"
+      "target": "n236",
+      "type": "rect-edge",
+      "side": "left"
     },
     {
       "source": "n240",
       "target": "n241",
-      "type": "path-segment"
+      "type": "rect-edge",
+      "side": "top"
+    },
+    {
+      "source": "n241",
+      "target": "n243",
+      "type": "rect-edge",
+      "side": "right"
+    },
+    {
+      "source": "n243",
+      "target": "n242",
+      "type": "rect-edge",
+      "side": "bottom"
     },
     {
       "source": "n242",
-      "target": "n243",
-      "type": "path-segment"
+      "target": "n240",
+      "type": "rect-edge",
+      "side": "left"
     },
     {
       "source": "n244",
       "target": "n245",
-      "type": "path-segment"
-    },
-    {
-      "source": "n246",
-      "target": "n247",
-      "type": "path-segment"
-    },
-    {
-      "source": "n247",
-      "target": "n248",
-      "type": "path-segment"
-    },
-    {
-      "source": "n249",
-      "target": "n250",
       "type": "rect-edge",
       "side": "top"
     },
     {
-      "source": "n250",
-      "target": "n252",
+      "source": "n245",
+      "target": "n247",
       "type": "rect-edge",
       "side": "right"
     },
     {
-      "source": "n252",
-      "target": "n251",
+      "source": "n247",
+      "target": "n246",
       "type": "rect-edge",
       "side": "bottom"
     },
     {
-      "source": "n251",
-      "target": "n249",
+      "source": "n246",
+      "target": "n244",
       "type": "rect-edge",
       "side": "left"
     },
     {
-      "source": "n253",
-      "target": "n254",
-      "type": "rect-edge",
-      "side": "top"
+      "source": "n248",
+      "target": "n249",
+      "type": "path-segment"
+    },
+    {
+      "source": "n196",
+      "target": "n250",
+      "type": "path-segment"
+    },
+    {
+      "source": "n228",
+      "target": "n251",
+      "type": "path-segment"
+    },
+    {
+      "source": "n252",
+      "target": "n253",
+      "type": "path-segment"
+    },
+    {
+      "source": "n254",
+      "target": "n255",
+      "type": "path-segment"
     },
     {
       "source": "n254",
       "target": "n256",
-      "type": "rect-edge",
-      "side": "right"
-    },
-    {
-      "source": "n256",
-      "target": "n255",
-      "type": "rect-edge",
-      "side": "bottom"
-    },
-    {
-      "source": "n255",
-      "target": "n253",
-      "type": "rect-edge",
-      "side": "left"
+      "type": "path-segment"
     },
     {
       "source": "n257",
       "target": "n258",
-      "type": "rect-edge",
-      "side": "top"
+      "type": "path-segment"
     },
     {
-      "source": "n258",
-      "target": "n260",
-      "type": "rect-edge",
-      "side": "right"
+      "source": "n257",
+      "target": "n259",
+      "type": "path-segment"
     },
     {
       "source": "n260",
-      "target": "n259",
-      "type": "rect-edge",
-      "side": "bottom"
+      "target": "n261",
+      "type": "path-segment"
     },
     {
-      "source": "n259",
-      "target": "n257",
-      "type": "rect-edge",
-      "side": "left"
+      "source": "n262",
+      "target": "n263",
+      "type": "path-segment"
+    },
+    {
+      "source": "n262",
+      "target": "n264",
+      "type": "path-segment"
     }
   ]
 }

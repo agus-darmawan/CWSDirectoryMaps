@@ -62,11 +62,17 @@ class DirectionsGenerator {
             )
             
             if segmentIndex > 0 {
+                let previousFloor = floorSegments[segmentIndex - 1].floor
+                let currentFloor = segment.floor
+                
                 let transitionStep = DirectionStep(
                     point: segment.pathData.first?.point ?? .zero,
                     icon: "arrow.up.down.circle",
-                    description: "Continue to \(floorDisplayName(for: segment.floor))",
-                    shopImage: "floor-1"
+                    description: "Change floors from \(floorDisplayName(for: previousFloor)) to \(floorDisplayName(for: currentFloor))",
+                    shopImage: "floor-1",
+                    isFloorChange: true,
+                    fromFloor: previousFloor,
+                    toFloor: currentFloor
                 )
                 allSteps.append(transitionStep)
             }
