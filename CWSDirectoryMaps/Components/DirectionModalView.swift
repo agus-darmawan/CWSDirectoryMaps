@@ -492,7 +492,7 @@ struct DirectionStep: Identifiable {
     let id = UUID()
     let point: CGPoint
     let icon: String
-    let description: String
+    var description: String
     let shopImage: String
 }
 
