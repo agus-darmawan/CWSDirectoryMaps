@@ -534,4 +534,11 @@ class PathfindingManager: ObservableObject {
     func isAtDestination() -> Bool {
         return currentStepIndex >= enhancedDirectionSteps.count - 1 && !enhancedDirectionSteps.isEmpty
     }
+    
+    func getCurrentDirectionStep() -> DirectionStep? {
+        if !directionSteps.isEmpty && currentStepIndex < directionSteps.count {
+            return directionSteps[currentStepIndex]
+        }
+        return nil
+    }
 }
