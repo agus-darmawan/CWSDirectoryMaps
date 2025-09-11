@@ -54,11 +54,11 @@ func validateStorepathConnection(storepathBase: String, startNode: GraphNode, go
         }
     }
     
-    if !hasValidConnection {
-        print("❌ Storepath \(storepathBase) rejected: no endpoints connected to start or goal")
-    } else {
-        print("✅ Storepath \(storepathBase) validated: at least one endpoint connected to start or goal")
-    }
+//    if !hasValidConnection {
+//        print("❌ Storepath \(storepathBase) rejected: no endpoints connected to start or goal")
+//    } else {
+//        print("✅ Storepath \(storepathBase) validated: at least one endpoint connected to start or goal")
+//    }
     
     return hasValidConnection
 }

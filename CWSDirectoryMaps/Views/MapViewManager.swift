@@ -30,7 +30,7 @@ class MapViewManager: ObservableObject {
             return
         }
         
-        print("Switching to \(floor.rawValue)")
+//        print("Switching to \(floor.rawValue)")
         
         // Reset view state for new floor
         resetViewState()
@@ -42,6 +42,7 @@ class MapViewManager: ObservableObject {
         
         print("Successfully switched to \(floor.rawValue)")
         print("Available locations: \(currentLocations.count)")
+        
     }
     
     func resetViewState() {

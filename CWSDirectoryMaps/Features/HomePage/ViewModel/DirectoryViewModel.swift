@@ -36,27 +36,30 @@ class DirectoryViewModel: ObservableObject {
     
     private var hasVerifiedOnce = false
     
-    var dataManager: DataManager
+    var dataManager: DataManager?
     
     private let useAPI = APIConfiguration.shared.useAPI
     
     init() {
-        self.dataManager = DataManager()
-        if useAPI {
-            loadStoresFromAPI()
-        } else {
-            loadMockData()
-        }
         setupFiltering()
     }
     
     func setup(dataManager: DataManager) {
         self.dataManager = dataManager
-        // Optionally refresh data after setting up with the shared dataManager
-        refreshData()
+        // Guard against re-loading if the view re-appears
+        if allStores.isEmpty {
+            refreshData()
+        }
     }
     
     private func loadStoresFromAPI() {
+        // Ensure dataManager is available before proceeding
+        guard let dataManager = self.dataManager else {
+            print("❌ Error: DataManager not available.")
+            self.errorMessage = "DataManager not available."
+            return
+        }
+        
         isLoading = true
         errorMessage = nil
         
@@ -68,26 +71,26 @@ class DirectoryViewModel: ObservableObject {
                     if case .failure(let error) = completion {
                         self?.errorMessage = error.localizedDescription
                         print("❌ API Error: \(error)")
-                        self?.loadMockData()
+                        self?.loadMockData() // Fallback to mock data on error
                     }
                 },
                 receiveValue: { [weak self] facilitiesWithDetails in
                     guard let self = self else { return }
                     
-                    var allStores: [Store] = []
+                    var loadedStores: [Store] = []
                     
-                    // Pass the dataManager.allLocations to the conversion function.
+                    // Now we are sure dataManager.allLocations is ready
                     let mapLocations = dataManager.allLocations
                     
                     for facilityWithDetails in facilitiesWithDetails {
                         let store = self.storeService.convertFacilityWithDetailsToStore(facilityWithDetails, mapLocations: mapLocations)
-                        allStores.append(store)
+                        loadedStores.append(store)
                     }
                     
-                    self.allStores = allStores
+                    self.allStores = loadedStores
                     self.debug_checkStoresAgainstMap()
-                    print("✅ Loaded and processed \(allStores.count) stores from API.")
-                    
+                    print("✅ Loaded and processed \(loadedStores.count) stores from API.")
+                    print(Date())
                 }
             )
             .store(in: &cancellables)
@@ -102,22 +105,18 @@ class DirectoryViewModel: ObservableObject {
     }
     
     private func debug_checkStoresAgainstMap() {
-        guard !hasVerifiedOnce else { return }   // <--- prevents second run
+        guard !hasVerifiedOnce else { return }
         hasVerifiedOnce = true
         
-        if dataManager.allLocations.isEmpty {
+        guard let dataManager = self.dataManager, !dataManager.allLocations.isEmpty else {
             print("[Debug Check] DataManager has no locations. Skipping check.")
             return
-            
         }
-        
-        print("\n--- [Debug] Normalizing all locations from DataManager ---")
         
         var normalizedMapLocations: [String: String] = [:]
         for location in dataManager.allLocations {
             let normalizedName = normalize(name: location.name)
             normalizedMapLocations[normalizedName] = location.name
-            //            print("  - Original: '\(location.name)' -> Normalized: '\(normalizedName)'")
         }
         
         print("\n--- [Debug] Comparing API/mock store list against normalized map data ---")

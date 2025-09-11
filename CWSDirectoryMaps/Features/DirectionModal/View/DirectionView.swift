@@ -29,6 +29,8 @@ struct DirectionView: View {
     
     @Environment(\.dismiss) private var dismiss
     
+    @ObservedObject var viewModel: DirectoryViewModel
+    
     @State var pathWithLabels: [(point: CGPoint, label: String)] = []
     
     var body: some View {
@@ -43,7 +45,8 @@ struct DirectionView: View {
                         dataManager: dataManager,
                         pathWithLabels: $pathWithLabels,
                         pathfindingManager: pathfindingManager,
-                        currentFloor: $currentFloor
+                        currentFloor: $currentFloor,
+                        viewModel: viewModel 
                     )
                     .transition(.opacity)
                 }
@@ -342,7 +345,7 @@ struct EnhancedDirectionsModal: View {
                     
                     // Enhanced GO button
                     Button(action: {
-                        print("Go tapped - Starting navigation")
+//                        print("Go tapped - Starting navigation")
                         showModal = false
                         onGoTapped?()
                     }) {

@@ -127,7 +127,7 @@ struct DirectionsModal: View {
 
                     // Enhanced GO button
                     Button(action: {
-                        print("Go tapped - Starting navigation")
+//                        print("Go tapped - Starting navigation")
                         showModal = false
                         onGoTapped?()
                     }) {
