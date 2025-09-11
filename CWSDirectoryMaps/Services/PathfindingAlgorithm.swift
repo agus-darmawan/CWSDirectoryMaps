@@ -101,7 +101,7 @@ func aStarByLabel(graph: [String: GraphNode], startLabel: String, goalLabel: Str
                 
                 // Track usage of this storepath base
                 usedStorepaths.insert(storepathBase)
-                print("✅ Using storepath \(storepathBase). Total used: \(usedStorepaths)")
+//                print("✅ Using storepath \(storepathBase). Total used: \(usedStorepaths)")
             }
             // Handle rect-corner nodes
             else if neighborNode.type == "rect-corner" {

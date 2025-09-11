@@ -141,7 +141,7 @@ class StoreService: ObservableObject {
         }
         // --- End of New Logic ---
         
-        print(foundGraphLabel ?? "–")
+//        print(foundGraphLabel ?? "–")
 
         return Store(
             id: String(facilityDTO.id),

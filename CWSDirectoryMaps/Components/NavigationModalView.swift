@@ -155,7 +155,8 @@ struct NavigationModalView: View {
                let end = navigationState.endLocation {
                 DirectionView(
                     startLocation: navigationState.startLocation!,
-                    destinationStore: navigationState.endLocation!
+                    destinationStore: navigationState.endLocation!,
+                    viewModel: viewModel,
                 )
             }
         }
