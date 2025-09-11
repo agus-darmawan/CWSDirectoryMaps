@@ -7,141 +7,30 @@
 
 import SwiftUI
 
-struct ZoomableScrollView<Content: View>: View {
-    @ViewBuilder var content: Content
-    
-    @State private var scale: CGFloat = 3
-    @State private var lastScale: CGFloat = 3
-    @State private var offset: CGSize = .zero
-    @State private var lastOffset: CGSize = .zero
-    
-    @State private var lastTapTime: Date = .distantPast
-    
-    var body: some View {
-        GeometryReader { geo in
-            content
-                .scaleEffect(scale)
-                .offset(offset)
-                .onAppear {
-                    offset = .zero
-                    lastOffset = .zero
-                }
-                .gesture(
-                    SimultaneousGesture(
-                        MagnificationGesture()
-                            .onChanged { value in
-                                scale = lastScale * value
-                                offset = clampedOffset(offset, geo: geo)
-                            }
-                            .onEnded { _ in
-                                lastScale = max(min(scale, 5.0), 4.0)
-                                scale = lastScale
-                                offset = clampedOffset(offset, geo: geo)
-                                lastOffset = offset
-                            },
-                        DragGesture()
-                            .onChanged { value in
-                                let newOffset = CGSize(
-                                    width: lastOffset.width + value.translation.width,
-                                    height: lastOffset.height + value.translation.height
-                                )
-                                offset = clampedOffset(newOffset, geo: geo)
-                            }
-                            .onEnded { _ in
-                                lastOffset = offset
-                            }
-                    )
-                )
-                .gesture(
-                    TapGesture(count: 2)
-                        .onEnded {
-                            withAnimation(.easeInOut) {
-                                if scale > 3 {
-                                    // zoom out
-                                    scale = 3
-                                    lastScale = 3
-                                    offset = .zero
-                                    lastOffset = .zero
-                                } else {
-                                    // zoom in
-                                    scale = 5
-                                    lastScale = 5
-                                }
-                            }
-                        }
-                )
-        }
-    }
-    //set boundary for panning (no white space)
-    private func clampedOffset(_ proposed: CGSize, geo: GeometryProxy) -> CGSize {
-        let screenWidth = geo.size.width
-        let screenHeight = geo.size.height
-        
-        let contentAspect: CGFloat = 1800 / 1200
-        var contentWidth = screenWidth
-        var contentHeight = screenHeight
-        
-        if contentAspect > screenWidth / screenHeight {
-            contentHeight = screenWidth / contentAspect
-        } else {
-            contentWidth = screenHeight * contentAspect
-        }
-        
-        let scaledWidth = contentWidth * scale
-        let scaledHeight = contentHeight * scale
-        
-        let maxX = max((scaledWidth - screenWidth) / 2, 0)
-        
-        // Custom margin for bottom
-        let bottomMargin: CGFloat = 0
-        
-        let maxY: CGFloat
-        let minY: CGFloat
-        if scaledHeight > screenHeight {
-            maxY = (scaledHeight - screenHeight) / 2
-            minY = -maxY + bottomMargin // tighter bottom
-        } else {
-            maxY = 0
-            minY = 0
-        }
-        
-        return CGSize(
-            width: min(max(proposed.width, -maxX), maxX),
-            height: min(max(proposed.height, minY), maxY)
-        )
-    }
-}
-
+// No changes needed for DirectionsModal, keeping it for context
 struct DirectionsModal: View {
     @State var destinationStore: Store
     @State var startLocation: Store
     @Binding var showModal: Bool
-    @Binding var showNavigationModal: Bool
-    @State private var selectedMode: String = "walk"
-    var onGoTapped: (() -> Void)?
+    @ObservedObject var pathfindingManager: PathfindingManager
+    @Binding var selectedMode: TravelMode
     
-    private var modeImageName: String {
-        switch selectedMode {
-        case "walk": return "figure.walk"
-        case "wheelchair": return "figure.roll"
-        default: return "figure.walk"
-        }
-    }
+    var onGoTapped: (() -> Void)?
     
     var body: some View {
         if showModal {
-            VStack (alignment: .trailing){
+            VStack(alignment: .trailing) {
                 VStack(spacing: 16) {
-                    //title
+                    // Title with real-time metrics
                     HStack {
                         VStack(alignment: .leading, spacing: 2) {
                             HStack {
                                 Text("Directions")
                                     .font(.title3)
                                     .bold()
-                                Image(systemName: modeImageName)
+                                Image(systemName: selectedMode.icon)
                             }
-                            Text("200m – 4 mins")
+                            Text("\(pathfindingManager.formatDistance(pathfindingManager.totalDistance)) – \(pathfindingManager.formatTime(pathfindingManager.totalEstimatedTime))")
                                 .font(.subheadline)
                                 .foregroundColor(.secondary)
                         }
@@ -149,7 +38,6 @@ struct DirectionsModal: View {
                         
                         Button(action: {
                             showModal = false
-                            showNavigationModal = true
                         }) {
                             Image(systemName: "xmark.circle.fill")
                                 .font(.title2)
@@ -158,41 +46,34 @@ struct DirectionsModal: View {
                         .padding(.bottom, 12)
                     }
                     
-                    //mode
+                    // Enhanced mode selection
                     HStack {
-                        Button {
-                            selectedMode = "walk"
-                        } label: {
-                            Image(systemName: "figure.walk")
-                                .frame(width: 55, height: 37)
+                        ForEach(TravelMode.allCases, id: \.self) { mode in
+                            Button {
+                                selectedMode = mode
+                                pathfindingManager.updateTravelMode(mode)
+                            } label: {
+                                VStack(spacing: 4) {
+                                    Image(systemName: mode.icon)
+                                        .font(.system(size: 18))
+                                    Text(mode.rawValue.capitalized)
+                                        .font(.caption)
+                                }
+                                .frame(width: 70, height: 50)
                                 .background(
-                                    selectedMode == "walk" ? Color.blue : Color.gray.opacity(0.2)
+                                    selectedMode == mode ? Color.blue : Color.gray.opacity(0.2)
                                 )
                                 .foregroundColor(
-                                    selectedMode == "walk" ? .white : .primary
+                                    selectedMode == mode ? .white : .primary
                                 )
                                 .clipShape(RoundedRectangle(cornerRadius: 8))
+                            }
                         }
-                        
-                        Button {
-                            selectedMode = "wheelchair"
-                        } label: {
-                            Image(systemName: "figure.roll")
-                                .frame(width: 55, height: 37)
-                                .background(
-                                    selectedMode == "wheelchair" ? Color.blue : Color.gray.opacity(0.2)
-                                )
-                                .foregroundColor(
-                                    selectedMode == "wheelchair" ? .white : .primary
-                                )
-                                .clipShape(RoundedRectangle(cornerRadius: 8))
-                        }
-                        
                         Spacer()
                     }
                     .frame(maxWidth: .infinity)
                     
-                    // from-to
+                    // Enhanced from-to section
                     ZStack {
                         VStack(spacing: 0) {
                             // from
@@ -219,7 +100,7 @@ struct DirectionsModal: View {
                         }
                         .clipShape(RoundedRectangle(cornerRadius: 12))
                         
-                        //divider
+                        // Divider with swap button
                         Divider()
                             .frame(height: 1)
                             .padding(.leading, 36)
@@ -229,6 +110,14 @@ struct DirectionsModal: View {
                                     Spacer()
                                     Button(action: {
                                         swap(&startLocation, &destinationStore)
+                                        // Re-run pathfinding with swapped locations
+                                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                                            pathfindingManager.runPathfinding(
+                                                startStore: startLocation,
+                                                endStore: destinationStore,
+                                                unifiedGraph: [:]
+                                            )
+                                        }
                                     }) {
                                         Image(systemName: "arrow.up.arrow.down")
                                             .foregroundColor(.blue)
@@ -238,25 +127,37 @@ struct DirectionsModal: View {
                             )
                     }
                     
-                    //go button
+                    // Enhanced GO button
                     Button(action: {
-                        print("Go tapped")
+                        print("Go tapped - Starting navigation")
                         showModal = false
                         onGoTapped?()
                     }) {
-                        Text("GO")
-                            .font(.headline)
-                            .frame(maxWidth: .infinity)
-                            .padding()
-                            .background(Color.green)
-                            .foregroundColor(.primary)
-                            .cornerRadius(12)
+                        HStack {
+                            Text("START NAVIGATION")
+                                .font(.headline)
+                                .fontWeight(.semibold)
+                            Image(systemName: "arrow.right.circle.fill")
+                                .font(.title3)
+                        }
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(
+                            LinearGradient(
+                                gradient: Gradient(colors: [Color.green, Color.green.opacity(0.8)]),
+                                startPoint: .leading,
+                                endPoint: .trailing
+                            )
+                        )
+                        .foregroundColor(.white)
+                        .cornerRadius(12)
+                        .shadow(color: Color.green.opacity(0.3), radius: 4, x: 0, y: 2)
                     }
                 }
                 .padding()
                 .background(Color(.systemBackground))
                 .cornerRadius(16, corners: [.topLeft, .topRight])
-                .frame(height: 300)
+                .frame(height: 320)
             }
             .ignoresSafeArea(edges: .bottom)
             .transition(.move(edge: .bottom))
@@ -265,116 +166,202 @@ struct DirectionsModal: View {
     }
 }
 
+
+// MARK: - MODIFIED VIEW
 struct DirectionStepsModal: View {
     @Binding var showStepsModal: Bool
     @Binding var showSteps: Bool
-    
-    let destinationStore: Store
-    let steps: [DirectionStep]
-    @State private var currentStepIndex: Int = 0
+    @State var destinationStore: Store
+    @ObservedObject var pathfindingManager: PathfindingManager
+    @Binding var showFloorChangeContent: Bool
+    var onEndRoute: () -> Void
     
     var body: some View {
-        if showStepsModal{
-            VStack (alignment: .trailing) {
-                
+        if showStepsModal {
+            VStack(alignment: .trailing) {
                 VStack(spacing: 16) {
-                    //title
-                    HStack {
-                        VStack(alignment: .leading, spacing: 2) {
-                            HStack {
-                                Text("To  \(destinationStore.name)")
-                                    .font(.title3)
-                                    .bold()
-                            }
-                            Text("200m – 4 mins")
-                                .font(.subheadline)
-                                .foregroundColor(.secondary)
-                        }
-                        Spacer()
+                    // --- FLOOR CHANGE HEADER ---
+                    if let step = pathfindingManager.getCurrentDirectionStep(),
+                       step.fromFloor != nil && step.toFloor != nil, showFloorChangeContent {
                         
-                        Button(action: { showSteps = true }) {
-                            Image(systemName: "chevron.up.circle.fill")
+                        HStack {
+                            Text("Change Floors")
                                 .font(.title2)
-                                .foregroundColor(.secondary)
-                        }
-                        .padding(.bottom, 12)
-                    }
-                    
-                    //steps card
-                    if steps.isEmpty {
-                        // Show loading state when no steps available
-                        HStack {
-                            ProgressView()
-                                .progressViewStyle(CircularProgressViewStyle(tint: .white))
-                                .scaleEffect(0.8)
-                            Text("Generating directions...")
-                                .foregroundColor(.white)
-                                .font(.subheadline)
-                        }
-                        .frame(maxWidth: .infinity)
-                        .padding(16)
-                        .background(customBlueColor)
-                        .cornerRadius(16)
-                        .padding(.horizontal, 12)
-                    } else {
-                        TabView(selection: $currentStepIndex) {
-                            ForEach(Array(steps.enumerated()), id: \.1.id) { index, step in
-                                HStack {
-                                    Image(systemName: step.icon)
-                                        .foregroundColor(.white)
-                                        .font(.system(size: 18, weight: .medium))
-                                    
-                                    VStack(alignment: .leading, spacing: 2) {
-                                        Text(step.description)
-                                            .foregroundColor(.white)
-                                            .font(.system(size: 14, weight: .medium))
-                                            .lineLimit(2)
-                                            .multilineTextAlignment(.leading)
-                                        
-                                        Text("Step \(index + 1) of \(steps.count)")
-                                            .foregroundColor(.white.opacity(0.8))
-                                            .font(.system(size: 12))
-                                    }
-                                    
-                                    Spacer()
-                                    
-                                    Image(step.shopImage)
-                                        .resizable()
-                                        .scaledToFill()
-                                        .frame(width: 32, height: 32)
-                                        .clipShape(Circle())
-                                        .padding(.horizontal, 8)
+                                .fontWeight(.bold)
+                                .foregroundColor(.primary)
+                            
+                            Spacer()
+                            
+                            Button(action: {
+                                // Close the modal when in floor change mode
+                                withAnimation {
+                                    showFloorChangeContent = false
+                                    pathfindingManager.moveToPreviousStep()
                                 }
-                                .frame(maxWidth: .infinity)
-                                .padding(12)
-                                .background(customBlueColor)
-                                .cornerRadius(16)
-                                .padding(.vertical, 8)
-                                .padding(.horizontal, 12)
-                                .tag(index)
+                            }) {
+                                Image(systemName: "xmark")
+                                    .font(.title2)
+                                    .foregroundColor(.secondary)
                             }
                         }
-                        .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
-                        .frame(height: 80)
+                        .padding(.horizontal, 4)
                         
-                        //indicator card without navigation buttons
-                        HStack {
-                            Spacer()
-                            
-                            HStack(spacing: 6) {
-                                ForEach(0..<steps.count, id: \.self) { index in
-                                    Circle()
-                                        .fill(index == currentStepIndex ? Color.primary : Color.secondary.opacity(0.4))
-                                        .frame(width: 8, height: 8)
-                                        .animation(.easeInOut(duration: 0.2), value: currentStepIndex)
-                                }
+                        // Floor change content
+                        FloorChangeContentView(step: step) {
+                            // After confirming floor change, advance to next step
+                            withAnimation {
+                                showFloorChangeContent = false
                             }
-                            
-                            Spacer()
+                            pathfindingManager.moveToNextStep()
                         }
                         .padding(.horizontal, 16)
-                        .padding(.bottom, 8)
+                        
                     }
+                    // --- NORMAL TITLE + PROGRESS + STEPS ---
+                    else {
+                        HStack {
+                            VStack(alignment: .leading, spacing: 2) {
+                                HStack {
+                                    Text("To \(destinationStore.name)")
+                                        .font(.title3)
+                                        .bold()
+                                }
+                                
+                                Text("\(pathfindingManager.formatDistance(pathfindingManager.getRemainingDistance())) remaining – \(pathfindingManager.formatTime(pathfindingManager.getRemainingTime()))")
+                                    .font(.subheadline)
+                                    .foregroundColor(.secondary)
+                            }
+                            
+                            Spacer()
+                            
+                            HStack(spacing: 12) {
+                                Button(action: { showSteps = true }) {
+                                    Image(systemName: "chevron.up.circle.fill")
+                                        .font(.title2)
+                                        .foregroundColor(.secondary)
+                                }
+                            }
+                        }
+                        
+                        // If enhancedDirectionSteps empty -> loading card
+                        if pathfindingManager.enhancedDirectionSteps.isEmpty {
+                            HStack {
+                                ProgressView()
+                                    .progressViewStyle(CircularProgressViewStyle(tint: .white))
+                                    .scaleEffect(0.8)
+                                Text("Generating directions...")
+                                    .foregroundColor(.white)
+                                    .font(.subheadline)
+                            }
+                            .frame(maxWidth: .infinity)
+                            .padding(16)
+                            .background(Color.blue) // replace with your customBlueColor constant
+                            .cornerRadius(16)
+                            .padding(.horizontal, 12)
+                        } else {
+                            // TabView needs a Binding<Int> for selection — create it manually
+                            let selectionBinding = Binding<Int>(
+                                get: { pathfindingManager.currentStepIndex },
+                                set: { newIndex in
+                                    pathfindingManager.moveToStep(newIndex)
+                                }
+                            )
+                            
+                            TabView(selection: selectionBinding) {
+                                ForEach(Array(pathfindingManager.enhancedDirectionSteps.enumerated()), id: \.offset) { index, step in
+                                    VStack(spacing: 8) {
+                                        HStack {
+                                            Image(systemName: step.icon)
+                                                .foregroundColor(.white)
+                                                .font(.system(size: 18, weight: .medium))
+                                            
+                                            VStack(alignment: .leading, spacing: 2) {
+                                                Text(step.description)
+                                                    .foregroundColor(.white)
+                                                    .font(.system(size: 14, weight: .medium))
+                                                    .lineLimit(2)
+                                                    .multilineTextAlignment(.leading)
+                                                
+                                                HStack {
+                                                    Text("Step \(index + 1) of \(pathfindingManager.enhancedDirectionSteps.count)")
+                                                        .foregroundColor(.white.opacity(0.8))
+                                                        .font(.system(size: 12))
+                                                    
+                                                    Spacer()
+                                                    
+                                                    Text(pathfindingManager.formatDistance(step.distanceFromStart))
+                                                        .foregroundColor(.white.opacity(0.9))
+                                                        .font(.system(size: 11, weight: .medium))
+                                                }
+                                            }
+                                            
+                                            Spacer()
+                                            
+                                            if let tenantImage = getTenantImageForStep(step) {
+                                                AsyncImage(url: tenantImage) { image in
+                                                    image
+                                                        .resizable()
+                                                        .scaledToFill()
+                                                } placeholder: {
+                                                    Image(systemName: "building.2")
+                                                        .foregroundColor(.white.opacity(0.7))
+                                                }
+                                                .frame(width: 32, height: 32)
+                                                .clipShape(Circle())
+                                                .padding(.horizontal, 8)
+                                            } else {
+                                                Image(systemName: "arrow.forward.circle")
+                                                    .foregroundColor(.white.opacity(0.7))
+                                                    .frame(width: 32, height: 32)
+                                                    .padding(.horizontal, 8)
+                                            }
+                                        }
+                                    }
+                                    .frame(maxWidth: .infinity)
+                                    .padding(12)
+                                    .background(Color.blue) // replace with your customBlueColor
+                                    .cornerRadius(16)
+                                    .padding(.vertical, 8)
+                                    .padding(.horizontal, 12)
+                                    .tag(index) // important for TabView selection binding
+                                }
+                            }
+                            .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
+                            .frame(height: 90)
+                            
+                            // Navigation controls (no bindings required here)
+                            HStack(spacing: 12) {
+                                Button(action: {
+                                    pathfindingManager.moveToPreviousStep()
+                                }) {
+                                    Image(systemName: "chevron.left")
+                                        .font(.system(size: 14, weight: .medium))
+                                        .foregroundColor(pathfindingManager.currentStepIndex > 0 ? .blue : .gray)
+                                }
+                                .disabled(pathfindingManager.currentStepIndex <= 0)
+                                
+                                HStack(spacing: 6) {
+                                    ForEach(0..<pathfindingManager.enhancedDirectionSteps.count, id: \.self) { idx in
+                                        Circle()
+                                            .fill(idx <= pathfindingManager.currentStepIndex ? Color.primary : Color.secondary.opacity(0.4))
+                                            .frame(width: 8, height: 8)
+                                            .animation(.easeInOut(duration: 0.2), value: pathfindingManager.currentStepIndex)
+                                    }
+                                }
+                                
+                                Button(action: {
+                                    pathfindingManager.moveToNextStep()
+                                }) {
+                                    Image(systemName: "chevron.right")
+                                        .font(.system(size: 14, weight: .medium))
+                                        .foregroundColor(pathfindingManager.currentStepIndex < pathfindingManager.enhancedDirectionSteps.count - 1 ? .blue : .gray)
+                                }
+                                .disabled(pathfindingManager.currentStepIndex >= pathfindingManager.enhancedDirectionSteps.count - 1)
+                            }
+                            .padding(.horizontal, 16)
+                            .padding(.bottom, 8)
+                        }
+                    } // end else normal
                 }
                 .padding()
                 .background(Color(.systemBackground))
@@ -384,30 +371,58 @@ struct DirectionStepsModal: View {
             .transition(.move(edge: .bottom))
         }
     }
+    
+    private func getTenantImageForStep(_ step: EnhancedDirectionStep) -> URL? {
+        // Extract tenant name from step description
+        let description = step.description.lowercased()
+        
+        // Look for common patterns like "near [tenant]", "at [tenant]", etc.
+        let words = description.components(separatedBy: " ")
+        for (index, word) in words.enumerated() {
+            if word == "near" || word == "at" {
+                if index + 1 < words.count {
+                    let tenantName = words[index + 1]
+                    // Try to construct image URL
+                    let config = APIConfiguration.shared
+                    return URL(string: "\(config.baseURL)/images/\(tenantName).jpg")
+                }
+            }
+        }
+        
+        return nil
+    }
 }
 
+// MARK: - Data Structures & Dummy Data (No Changes)
 struct DirectionStep: Identifiable {
     let id = UUID()
     let point: CGPoint
     let icon: String
-    let description: String
+    var description: String
     let shopImage: String
+    var isFloorChange: Bool = false
+    var fromFloor: Floor?
+    var toFloor: Floor?
 }
 
 //dummy data
 let dummySteps: [DirectionStep] = [
     DirectionStep(point: .zero, icon: "arrow.up", description: "Go straight to Marks & Spencer", shopImage: "floor-1"),
     DirectionStep(point: .zero, icon: "arrow.turn.up.right", description: "Turn right at Starbucks", shopImage: "floor-1"),
+    // This is now a floor change step
+    DirectionStep(point: .zero, icon: "arrow.up.and.down.circle.fill", description: "Use escalator to Ground Floor", shopImage: "floor-1", isFloorChange: true, fromFloor: .lowerGround, toFloor: .ground),
     DirectionStep(point: .zero, icon: "arrow.turn.up.left", description: "Turn left after Zara", shopImage: "floor-1"),
     DirectionStep(point: .zero, icon: "mappin", description: "Arrive at destination", shopImage: "floor-1")
 ]
 
+
+// No changes needed for DirectionStepsListView, keeping it for context
 struct DirectionStepsListView: View {
     @Binding var showStepsModal: Bool
     @Binding var showSteps: Bool
-    
-    let destinationStore: Store
-    let steps: [DirectionStep]
+    @State var destinationStore: Store
+    @ObservedObject var pathfindingManager: PathfindingManager
+    var onEndRoute: () -> Void
     
     var body: some View {
         VStack(spacing: 0) {
@@ -416,13 +431,12 @@ struct DirectionStepsListView: View {
                     Text("To \(destinationStore.name)")
                         .font(.title3)
                         .bold()
-                    Text("200m – 4 mins")
+                    Text("\(pathfindingManager.formatDistance(pathfindingManager.getRemainingDistance())) remaining – \(pathfindingManager.formatTime(pathfindingManager.getRemainingTime()))")
                         .font(.subheadline)
                         .foregroundColor(.secondary)
                 }
                 Spacer()
                 
-                //navigate DirectionStepsModal
                 Button(action: {
                     showSteps = false
                 }) {
@@ -434,9 +448,8 @@ struct DirectionStepsListView: View {
             .padding()
             .background(Color(.systemBackground))
             
-            // List steps
-            if steps.isEmpty {
-                // Show loading state when no steps available
+            // Enhanced list with real-time tracking
+            if pathfindingManager.enhancedDirectionSteps.isEmpty {
                 VStack(spacing: 16) {
                     ProgressView()
                         .progressViewStyle(CircularProgressViewStyle(tint: customBlueColor))
@@ -451,29 +464,79 @@ struct DirectionStepsListView: View {
             } else {
                 ScrollView {
                     VStack(spacing: 12) {
-                        ForEach(steps) { step in
+                        ForEach(Array(pathfindingManager.enhancedDirectionSteps.enumerated()), id: \.offset) { index, step in
                             HStack {
-                                Image(systemName: step.icon)
-                                    .foregroundColor(.white)
-                                    .frame(width: 28, height: 28)
+                                // Enhanced step indicator
+                                ZStack {
+                                    Circle()
+                                        .fill(index <= pathfindingManager.currentStepIndex ? customBlueColor : Color.secondary.opacity(0.3))
+                                        .frame(width: 40, height: 40)
+                                    
+                                    if index < pathfindingManager.currentStepIndex {
+                                        Image(systemName: "checkmark")
+                                            .foregroundColor(.white)
+                                            .font(.system(size: 16, weight: .bold))
+                                    } else if index == pathfindingManager.currentStepIndex {
+                                        Image(systemName: "location.fill")
+                                            .foregroundColor(.white)
+                                            .font(.system(size: 16, weight: .bold))
+                                            .scaleEffect(1.2)
+                                            .animation(.easeInOut(duration: 1.0).repeatForever(autoreverses: true), value: pathfindingManager.currentStepIndex)
+                                    } else {
+                                        Image(systemName: step.icon)
+                                            .foregroundColor(.secondary)
+                                            .font(.system(size: 16, weight: .medium))
+                                    }
+                                }
                                 
-                                Text(step.description)
-                                    .foregroundColor(.white)
-                                    .lineLimit(nil)
-                                    .multilineTextAlignment(.leading)
-                                    .padding(.leading, 4)
+                                VStack(alignment: .leading, spacing: 4) {
+                                    Text(step.description)
+                                        .foregroundColor(index <= pathfindingManager.currentStepIndex ? .primary : .secondary)
+                                        .font(.system(size: 16, weight: index == pathfindingManager.currentStepIndex ? .semibold : .regular))
+                                        .lineLimit(nil)
+                                        .multilineTextAlignment(.leading)
+                                    
+                                    HStack {
+                                        if index == pathfindingManager.currentStepIndex {
+                                            Text("Current step")
+                                                .font(.caption)
+                                                .foregroundColor(.blue)
+                                                .fontWeight(.medium)
+                                        } else if index < pathfindingManager.currentStepIndex {
+                                            Text("Completed")
+                                                .font(.caption)
+                                                .foregroundColor(.green)
+                                        }
+                                        
+                                        Spacer()
+                                        
+                                        VStack(alignment: .trailing, spacing: 2) {
+                                            Text(pathfindingManager.formatDistance(step.distanceFromStart))
+                                                .font(.caption)
+                                                .foregroundColor(.secondary)
+                                            Text(pathfindingManager.formatTime(step.estimatedTimeFromStart))
+                                                .font(.caption)
+                                                .foregroundColor(.secondary)
+                                        }
+                                    }
+                                }
+                                .padding(.leading, 8)
                                 
                                 Spacer()
-                                
-                                Image(step.shopImage)
-                                    .resizable()
-                                    .scaledToFill()
-                                    .frame(width: 40, height: 40)
-                                    .clipShape(Circle())
                             }
                             .padding()
-                            .background(customBlueColor)
-                            .cornerRadius(12)
+                            .background(
+                                RoundedRectangle(cornerRadius: 12)
+                                    .fill(index == pathfindingManager.currentStepIndex ? Color.blue.opacity(0.1) : Color(.systemBackground))
+                                    .shadow(color: Color.black.opacity(0.1), radius: 2, x: 0, y: 1)
+                            )
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 12)
+                                    .stroke(index == pathfindingManager.currentStepIndex ? Color.blue.opacity(0.3) : Color.clear, lineWidth: 1)
+                            )
+                            .onTapGesture {
+                                pathfindingManager.moveToStep(index)
+                            }
                         }
                     }
                     .padding()
@@ -481,19 +544,29 @@ struct DirectionStepsListView: View {
                 .background(Color(.systemGray6))
             }
             
-            // End button
-            Button(action: {
-                showStepsModal = false
-            }) {
-                Text("End Route")
-                    .font(.headline)
-                    .foregroundColor(.white)
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .background(Color.red)
-                    .cornerRadius(12)
-                    .padding(.horizontal)
-                    .padding(.bottom, 20)
+            // Enhanced end button
+            Button(action: onEndRoute) {
+                HStack {
+                    Image(systemName: "stop.circle.fill")
+                        .font(.title3)
+                    Text("End Navigation")
+                        .font(.headline)
+                        .fontWeight(.semibold)
+                }
+                .foregroundColor(.white)
+                .frame(maxWidth: .infinity)
+                .padding()
+                .background(
+                    LinearGradient(
+                        gradient: Gradient(colors: [Color.red, Color.red.opacity(0.8)]),
+                        startPoint: .leading,
+                        endPoint: .trailing
+                    )
+                )
+                .cornerRadius(12)
+                .shadow(color: Color.red.opacity(0.3), radius: 4, x: 0, y: 2)
+                .padding(.horizontal)
+                .padding(.bottom, 20)
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -501,62 +574,3 @@ struct DirectionStepsListView: View {
     }
 }
 
-
-extension View {
-    func cornerRadius(_ radius: CGFloat, corners: UIRectCorner) -> some View {
-        clipShape(RoundedCorner(radius: radius, corners: corners))
-    }
-}
-
-let customBlueColor: Color = Color(uiColor: UIColor { traitCollection in
-    if traitCollection.userInterfaceStyle == .dark {
-        return UIColor(red: 64/255, green: 156/255, blue: 255/255, alpha: 1.0)
-    } else {
-        return UIColor(red: 0/255, green: 46/255, blue: 127/255, alpha: 1.0)
-    }
-})
-
-struct RoundedCorner: Shape {
-    var radius: CGFloat
-    var corners: UIRectCorner
-    
-    func path(in rect: CGRect) -> Path {
-        let path = UIBezierPath(
-            roundedRect: rect,
-            byRoundingCorners: corners,
-            cornerRadii: CGSize(width: radius, height: radius)
-        )
-        return Path(path.cgPath)
-    }
-}
-
-//#Preview {
-//    
-//    let start = Store(
-//        name: "Main Lobby",
-//        category: .facilities,
-//        imageName: "store_logo_placeholder",
-//        subcategory: "Information Center",
-//        description: "",
-//        location: "Ground Floor, Central",
-//        website: nil,
-//        phone: nil,
-//        hours: "06:00AM - 12:00AM",
-//        detailImageName: "store_logo_placeholder"
-//    )
-//    
-//    let dest = Store(
-//        name: "One Love Bespoke",
-//        category: .shop,
-//        imageName: "store_logo_placeholder",
-//        subcategory: "Fashion, Watches & Jewelry",
-//        description: "",
-//        location: "Level 1, Unit 116",
-//        website: nil,
-//        phone: nil,
-//        hours: "10:00AM - 10:00PM",
-//        detailImageName: "store_logo_placeholder"
-//    )
-//    MapView()
-//    DirectionsModal(destinationStore: dest, startLocation: start, showModal: .constant(true))
-//}
