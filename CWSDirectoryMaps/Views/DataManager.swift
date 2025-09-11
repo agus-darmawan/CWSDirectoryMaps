@@ -16,11 +16,7 @@ class DataManager: ObservableObject {
     @Published var isLoading = true
     
     // MARK: - Public Methods
-    // In DataManager.swift
-
     func preloadAllFloorData() async {
-        print("Starting to preload all floor data...")
-        
         // Step 1: Load JSONs (raw data per floor)
         var loadedData: [Floor: FloorData] = [:]
         for floor in Floor.allCases {
@@ -28,9 +24,10 @@ class DataManager: ObservableObject {
                 loadedData[floor] = data
                 print("📥 Loaded data for \(floor.rawValue) with \(data.graph.nodes.count) nodes and \(data.locations.count) locations.")
             } else {
-                print("⚠️ Failed to load data for \(floor.rawValue)")
+//                print("⚠️ Failed to load data for \(floor.rawValue)")
             }
         }
+        print("")
         
         // Step 2: Process into unifiedGraph + combinedLocations
         let processedResult = await Task.detached(priority: .userInitiated) {
@@ -88,7 +85,7 @@ class DataManager: ObservableObject {
         let foldedNodes = graph.nodes.map { node -> Node in
             return Node(id: node.id, x: node.x, y: abs(node.y), type: node.type,
                         rx: node.rx, ry: node.ry, angle: node.angle,
-                        label: node.label ?? node.id, parentLabel: node.parentLabel, 
+                        label: node.label ?? node.id, parentLabel: node.parentLabel,
                         connectionId: node.connectionId)
         }
         
@@ -98,7 +95,7 @@ class DataManager: ObservableObject {
                         y: node.y,
                         type: node.type,
                         rx: node.rx, ry: node.ry, angle: node.angle,
-                        label: node.label ?? node.id, parentLabel: node.parentLabel, 
+                        label: node.label ?? node.id, parentLabel: node.parentLabel,
                         connectionId: node.connectionId)
         }
         
@@ -112,15 +109,12 @@ class DataManager: ObservableObject {
         ).sorted()
     }
     
-    // In DataManager.swift
-
-    // This function now takes data as an argument and returns the result.
     func buildUnifiedGraph(from floorData: [Floor: FloorData]) -> [String: GraphNode] {
         print("Building unified graph...")
         var combinedGraph: [String: GraphNode] = [:]
         var connectionNodes: [String: [GraphNode]] = [:]
 
-        // Define connections in code
+        // Define cross-floor connections
         let connectionMap: [String: String] = [
             "escalator_mid_bw_to_g": "escalator_mid_bw",
             "escalator_mid_bw_to_lg": "escalator_mid_bw",
@@ -129,7 +123,6 @@ class DataManager: ObservableObject {
             "lift_west_to_g": "lift_west",
             "lift_west_to_lg": "lift_west"
         ]
-
 
         for (floor, data) in floorData {
             let floorPrefix = floor.fileName
@@ -146,27 +139,26 @@ class DataManager: ObservableObject {
 
                 if let connectionId = connectionMap[label] {
                     node.connectionId = connectionId
-                        // store a copy with the prefixed label
-                        var prefixedNode = node
-                        prefixedNode.label = uniqueLabel
-                        connectionNodes[connectionId, default: []].append(prefixedNode)
+                    var prefixedNode = node
+                    prefixedNode.label = uniqueLabel
+                    connectionNodes[connectionId, default: []].append(prefixedNode)
                     print("✅ Connected: \(uniqueLabel) → connectionId=\(connectionId)")
                 } else if label.lowercased().contains("escalator") || label.lowercased().contains("lift") {
-                    print("⚠️ Potential connector not in map: \(uniqueLabel) (raw label: \(label))")
+//                    print("⚠️ Potential connector not in map: \(uniqueLabel) (raw label: \(label))")
                 }
 
                 combinedGraph[uniqueLabel] = node
             }
         }
 
-
-        // Build cross-floor links with debugging
+        // Build cross-floor links
         for (connectionId, nodes) in connectionNodes {
             guard nodes.count > 1 else {
                 print("ℹ️ connectionId=\(connectionId) has only one node → no cross-floor link made.")
                 continue
             }
 
+            print("------------------------------------------------------------------------------------------------------------------------------------------------------")
             print("🔗 Building cross-floor links for connectionId=\(connectionId) with \(nodes.count) node(s):")
             for n in nodes {
                 print("   • \(n.label) (\(n.floor?.rawValue))")
@@ -176,7 +168,7 @@ class DataManager: ObservableObject {
                 for j in (i + 1)..<nodes.count {
                     let nodeA = nodes[i]
                     let nodeB = nodes[j]
-                    let costOfChangingFloors = 50.0 // Arbitrary high cost for floor changes
+                    let costOfChangingFloors = 50.0
 
                     combinedGraph[nodeA.label]?.neighbors.append((node: nodeB.label, cost: costOfChangingFloors))
                     combinedGraph[nodeB.label]?.neighbors.append((node: nodeA.label, cost: costOfChangingFloors))
@@ -185,21 +177,21 @@ class DataManager: ObservableObject {
                 }
             }
         }
+        print("------------------------------------------------------------------------------------------------------------------------------------------------------")
 
-        // Post-check: list neighbors for all connection nodes
-        print("🔍 Verifying neighbors for connection nodes:")
-        for (connectionId, nodes) in connectionNodes {
-            for node in nodes {
-                if let gNode = combinedGraph[node.label] {
-                    let neighborLabels = gNode.neighbors.map { $0.node }
-                    print("   • \(node.label) neighbors: \(neighborLabels)")
-                } else {
-                    print("   • ⚠️ \(node.label) not found in combinedGraph")
-                }
-            }
-        }
+        // Verify neighbors for connection nodes
+//        print("🔍 Verifying neighbors for connection nodes:")
+//        for (connectionId, nodes) in connectionNodes {
+//            for node in nodes {
+//                if let gNode = combinedGraph[node.label] {
+//                    let neighborLabels = gNode.neighbors.map { $0.node }
+//                    print("   • \(node.label) neighbors: \(neighborLabels)")
+//                } else {
+//                    print("   • ⚠️ \(node.label) not found in combinedGraph")
+//                }
+//            }
+//        }
 
-        // Instead of setting a class property, we return the completed graph.
         return combinedGraph
     }
 }

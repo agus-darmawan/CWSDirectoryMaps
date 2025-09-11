@@ -16,7 +16,7 @@ struct HomePageView: View {
     @StateObject var pathfindingManager = PathfindingManager()
     @State var pathWithLabels: [(point: CGPoint, label: String)] = []
     @State private var currentFloor: Floor = Floor.ground
-
+    
     
     var body: some View {
         NavigationView {
@@ -54,12 +54,19 @@ struct HomePageView: View {
                     )
                 }
             }
-            .onAppear {
-                viewModel.setup(dataManager: dataManager)
-            }
+            //            .onAppear {
+            //                viewModel.setup(dataManager: dataManager)
+            //            }
             .overlay(loadingOverlay)
         }
         .navigationViewStyle(StackNavigationViewStyle())
+        .onChange(of: dataManager.isLoading) { oldState, newState in
+            // When the DataManager finishes loading (i.e., isLoading goes from true to false)...
+            if oldState == true && newState == false {
+                // ...tell the ViewModel to set up and load its API data.
+                viewModel.setup(dataManager: dataManager)
+            }
+        }
     }
 }
 
@@ -111,7 +118,8 @@ private extension HomePageView {
                 dataManager: dataManager,
                 pathWithLabels: $pathWithLabels,
                 pathfindingManager: pathfindingManager,
-                currentFloor: $currentFloor
+                currentFloor: $currentFloor,
+                viewModel: viewModel
             )
             .accessibilityLabel("Interactive mall map")
             .accessibilityHint("Shows the mall layout with different floors. Use the floor selector to switch between levels.")
@@ -182,9 +190,9 @@ private extension HomePageView {
                             .foregroundColor(.white)
                             .accessibilityHidden(true)
                     }
-                    .padding(24)
-                    .background(Color.black.opacity(0.7))
-                    .cornerRadius(12)
+                        .padding(24)
+                        .background(Color.black.opacity(0.7))
+                        .cornerRadius(12)
                 )
                 .zIndex(2000)
         }

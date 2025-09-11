@@ -156,6 +156,7 @@ struct NavigationModalView: View {
                 DirectionView(
                     startLocation: navigationState.startLocation!,
                     destinationStore: navigationState.endLocation!,
+                    viewModel: viewModel,
                 )
             }
         }

@@ -289,7 +289,7 @@ struct DirectionsModal: View {
                     
                     //go button
                     Button(action: {
-                        print("Go tapped")
+//                        print("Go tapped - Starting navigation")
                         showModal = false
                         onGoTapped?()
                     }) {

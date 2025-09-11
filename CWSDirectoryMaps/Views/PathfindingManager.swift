@@ -160,7 +160,7 @@ class PathfindingManager: ObservableObject {
         }
         
         self.enhancedDirectionSteps = enhancedSteps
-        print("✅ Generated \(enhancedSteps.count) enhanced direction steps with improved metrics")
+//        print("✅ Generated \(enhancedSteps.count) enhanced direction steps with improved metrics")
         
         // Debug information
         for (index, step) in enhancedSteps.enumerated() {
@@ -292,7 +292,7 @@ class PathfindingManager: ObservableObject {
         totalEstimatedTime = totalDistance / currentTravelMode.speed
         
         print("🚶‍♂️ Travel mode updated to \(mode.rawValue)")
-        print("📊 New estimated time: \(formatTime(totalEstimatedTime))")
+//        print("📊 New estimated time: \(formatTime(totalEstimatedTime))")
     }
     
     // MARK: - Public Methods

@@ -20,7 +20,7 @@ struct IntegratedMapView: View {
     @State private var showPath: Bool = false
     
     //punya daniel
-    @StateObject private var viewModel = DirectoryViewModel()
+    @ObservedObject var viewModel: DirectoryViewModel
     @State private var selectedStore: Store? = nil
 
     // Multiplier to fine-tune graph-to-image fitting
@@ -66,8 +66,7 @@ struct IntegratedMapView: View {
             }
         }
         .task {
-            await dataManager.preloadAllFloorData()
-            await MainActor.run {
+            if !dataManager.isLoading {
                 selectInitialFloorIfAvailable()
             }
         }
@@ -826,3 +825,4 @@ struct RoundedCorner: Shape {
         return Path(path.cgPath)
     }
 }
+
