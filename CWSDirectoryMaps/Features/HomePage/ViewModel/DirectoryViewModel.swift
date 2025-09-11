@@ -93,26 +93,6 @@ class DirectoryViewModel: ObservableObject {
             .store(in: &cancellables)
     }
     
-    func searchStoresFromAPI(query: String) {
-        guard useAPI, !query.isEmpty else {
-            return
-        }
-        
-        isLoading = true
-        errorMessage = nil
-        
-        
-        let filtered = allStores.filter { store in
-            store.name.lowercased().contains(query.lowercased())
-        }
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { [weak self] in
-            self?.isLoading = false
-            self?.filteredStores = filtered
-            print("✅ Found \(filtered.count) stores from local search")
-        }
-    }
-    
     func refreshData() {
         if useAPI {
             loadStoresFromAPI()
@@ -268,7 +248,7 @@ class DirectoryViewModel: ObservableObject {
                 hours: "24 Hours",
                 detailImageName: "store_logo_placeholder"
             ),
-            // New Facility entries
+            // Lobbies
             Store(
                 name: "Main Lobby",
                 category: .lobbies,
@@ -306,11 +286,23 @@ class DirectoryViewModel: ObservableObject {
                 detailImageName: "store_logo_placeholder"
             ),
             Store(
-                name: "Restroom - Level 1",
+                name: "Restroom - Level 1 North",
                 category: .facilities,
                 imageName: "store_logo_placeholder",
                 subcategory: "Public Facilities",
-                description: "",
+                description: "Public restroom facilities with baby changing room available",
+                location: "Level 1, North Wing",
+                website: nil,
+                phone: nil,
+                hours: "06:00AM - 12:00AM",
+                detailImageName: "store_logo_placeholder"
+            ),
+            Store(
+                name: "Restroom - Level 1 South",
+                category: .facilities,
+                imageName: "store_logo_placeholder",
+                subcategory: "Public Facilities",
+                description: "Public restroom facilities with baby changing room available",
                 location: "Level 1, Near Food Court",
                 website: nil,
                 phone: nil,
@@ -318,17 +310,103 @@ class DirectoryViewModel: ObservableObject {
                 detailImageName: "store_logo_placeholder"
             ),
             Store(
-                name: "Restroom - Level 2",
+                name: "Restroom - Level 2 East",
                 category: .facilities,
                 imageName: "store_logo_placeholder",
                 subcategory: "Public Facilities",
-                description: "",
+                description: "Public restroom facilities with baby changing room available",
+                location: "Level 2, East Wing",
+                website: nil,
+                phone: nil,
+                hours: "06:00AM - 12:00AM",
+                detailImageName: "store_logo_placeholder"
+            ),
+            Store(
+                name: "Restroom - Level 2 West",
+                category: .facilities,
+                imageName: "store_logo_placeholder",
+                subcategory: "Public Facilities",
+                description: "Public restroom facilities with baby changing room available",
                 location: "Level 2, Near Cinema",
                 website: nil,
                 phone: nil,
                 hours: "06:00AM - 12:00AM",
                 detailImageName: "store_logo_placeholder"
             ),
+            Store(
+                name: "Restroom - Level 3",
+                category: .facilities,
+                imageName: "store_logo_placeholder",
+                subcategory: "Public Facilities",
+                description: "Public restroom facilities with baby changing room available",
+                location: "Level 3, Central Area",
+                website: nil,
+                phone: nil,
+                hours: "06:00AM - 12:00AM",
+                detailImageName: "store_logo_placeholder"
+            ),
+            Store(
+                name: "Restroom - Ground Floor",
+                category: .facilities,
+                imageName: "store_logo_placeholder",
+                subcategory: "Public Facilities",
+                description: "Public restroom facilities with baby changing room available",
+                location: "Ground Floor, Main Lobby",
+                website: nil,
+                phone: nil,
+                hours: "06:00AM - 12:00AM",
+                detailImageName: "store_logo_placeholder"
+            ),
+            // Information Desks (Wheelchair, Charging Station, Baby Stroller available) - Category: facilities
+            Store(
+                name: "Information Desk - Main Lobby",
+                category: .facilities,
+                imageName: "store_logo_placeholder",
+                subcategory: "Customer Service",
+                description: "Main information desk providing wheelchair rental, charging stations, and baby stroller rental services",
+                location: "Ground Floor, Main Lobby",
+                website: nil,
+                phone: "+62 21 5555 0001",
+                hours: "09:00AM - 10:00PM",
+                detailImageName: "store_logo_placeholder"
+            ),
+            Store(
+                name: "Information Desk - Level 1",
+                category: .facilities,
+                imageName: "store_logo_placeholder",
+                subcategory: "Customer Service",
+                description: "Information desk providing wheelchair rental, charging stations, and baby stroller rental services",
+                location: "Level 1, Central Area",
+                website: nil,
+                phone: "+62 21 5555 0002",
+                hours: "09:00AM - 10:00PM",
+                detailImageName: "store_logo_placeholder"
+            ),
+            Store(
+                name: "Information Desk - Level 2",
+                category: .facilities,
+                imageName: "store_logo_placeholder",
+                subcategory: "Customer Service",
+                description: "Information desk providing wheelchair rental, charging stations, and baby stroller rental services",
+                location: "Level 2, Food Court Area",
+                website: nil,
+                phone: "+62 21 5555 0003",
+                hours: "09:00AM - 10:00PM",
+                detailImageName: "store_logo_placeholder"
+            ),
+            Store(
+                name: "Information Desk - Level 3",
+                category: .facilities,
+                imageName: "store_logo_placeholder",
+                subcategory: "Customer Service",
+                description: "Information desk providing wheelchair rental, charging stations, and baby stroller rental services",
+                location: "Level 3, Entertainment Area",
+                website: nil,
+                phone: "+62 21 5555 0004",
+                hours: "09:00AM - 10:00PM",
+                detailImageName: "store_logo_placeholder"
+            ),
+            // Other Facilities
             Store(
                 name: "Elevator Bank A",
                 category: .facilities,
@@ -361,10 +439,6 @@ class DirectoryViewModel: ObservableObject {
             .map { [weak self] (text, category, store) -> [Store] in
                 guard let self = self else { return [] }
                 
-                if let selected = store {
-                    return self.allStores
-                }
-                
                 var storesToFilter = self.allStores
                 if let selectedCat = category {
                     storesToFilter = self.allStores.filter { $0.category == selectedCat }
@@ -382,7 +456,81 @@ class DirectoryViewModel: ObservableObject {
                     return storesToFilter
                 }
                 
-                return storesToFilter.filter { $0.name.lowercased().contains(text.lowercased()) }
+                let searchQuery = text.lowercased().trimmingCharacters(in: .whitespacesAndNewlines)
+                
+                if (searchQuery.contains("baby") && (searchQuery.contains("room") || searchQuery.contains("changing"))) ||
+                    searchQuery.hasPrefix("babyroom") || searchQuery.hasPrefix("baby room") ||
+                    ("baby room".hasPrefix(searchQuery) && searchQuery.count >= 3) ||
+                    ("babyroom".hasPrefix(searchQuery) && searchQuery.count >= 3) {
+                    let restrooms = self.allStores.filter { store in
+                        store.category == .facilities && store.name.lowercased().contains("restroom")
+                    }
+                    print("🍼 Special search: Baby's room - Found \(restrooms.count) restrooms")
+                    return restrooms
+                }
+                
+                if searchQuery.contains("wheelchair") ||
+                    "wheelchair".hasPrefix(searchQuery) && searchQuery.count >= 3 {
+                    let informationDesks = self.allStores.filter { store in
+                        store.category == .facilities && store.name.lowercased().contains("information")
+                    }
+                    print("♿ Special search: Wheelchair - Found \(informationDesks.count) information")
+                    return informationDesks
+                }
+                
+                if (searchQuery.contains("charging") && searchQuery.contains("station")) ||
+                    ("charging station".hasPrefix(searchQuery) && searchQuery.count >= 3) ||
+                    ("chargingstation".hasPrefix(searchQuery) && searchQuery.count >= 3) {
+                    let informationDesks = self.allStores.filter { store in
+                        store.category == .facilities && store.name.lowercased().contains("information")
+                    }
+                    print("🔌 Special search: Charging station - Found \(informationDesks.count) information")
+                    return informationDesks
+                }
+                
+                if (searchQuery.contains("baby") && searchQuery.contains("stroller")) ||
+                    ("baby stroller".hasPrefix(searchQuery) && searchQuery.count >= 3) ||
+                    ("babystroller".hasPrefix(searchQuery) && searchQuery.count >= 3) {
+                    let informationDesks = self.allStores.filter { store in
+                        store.category == .facilities && store.name.lowercased().contains("information")
+                    }
+                    print("🍼🛒 Special search: Baby stroller - Found \(informationDesks.count) information")
+                    return informationDesks
+                }
+                
+                if searchQuery.contains("informant") || searchQuery.contains("information") {
+                    let informationDesks = self.allStores.filter { store in
+                        store.category == .facilities && store.name.lowercased().contains("information")
+                    }
+                    print("ℹ️ Special search: Information - Found \(informationDesks.count) information")
+                    return informationDesks
+                }
+                
+                if searchQuery.contains("restroom") {
+                    let restrooms = self.allStores.filter { store in
+                        store.category == .facilities && store.name.lowercased().contains("restroom")
+                    }
+                    print("🚻 Special search: Restroom - Found \(restrooms.count) restrooms")
+                    return restrooms
+                }
+                
+                let filteredResults = storesToFilter.filter { store in
+                    let storeName = store.name.lowercased()
+                    let storeContainsQuery = storeName.contains(searchQuery)
+                    
+                    let isSpecialSearchTerm = storeName.contains("wheelchair") ||
+                    storeName.contains("charging station") ||
+                    storeName.contains("baby stroller") ||
+                    storeName.contains("baby room") ||
+                    storeName.contains("babyroom") ||
+                    storeName.contains("babys room") ||
+                    storeName.contains("baby") ||
+                    storeName.contains("babys")
+                    
+                    return storeContainsQuery && !isSpecialSearchTerm
+                }
+                
+                return filteredResults
             }
             .assign(to: \.filteredStores, on: self)
             .store(in: &cancellables)
