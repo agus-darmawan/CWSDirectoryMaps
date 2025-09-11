@@ -127,6 +127,9 @@ struct NavigationModalView: View {
                             navigationState.endLocation = nil
                             
                             showDirectionView = false
+                            
+                            // Clear the selected store to dismiss TenantDetailModalView
+                            viewModel.selectedStore = nil
                         }) {
                             Image(systemName: "xmark.circle.fill")
                                 .font(.title2)
@@ -151,17 +154,29 @@ struct NavigationModalView: View {
             Text("Starting location and destination cannot be the same. Please select a different location.")
         }
         .fullScreenCover(isPresented: $showDirectionView) {
-            if let start = navigationState.startLocation,
-               let end = navigationState.endLocation {
-                DirectionView(
-                    startLocation: navigationState.startLocation!,
-                    destinationStore: navigationState.endLocation!,
-                    viewModel: viewModel,
-                )
-            }
+        if let start = navigationState.startLocation,
+           let end = navigationState.endLocation {
+            DirectionView(
+                startLocation: start,
+                destinationStore: end,
+                viewModel: viewModel,
+                onDismiss: {
+                    // Clear the selected store when dismissing DirectionView
+                    viewModel.selectedStore = nil
+                    viewModel.exitSearch() // This closes the search view
+                },
+                onDismissNavigationModal: {
+                    showDirectionView = false
+                },
+                onDismissTenantModal: {
+                    // Clear the selected store to dismiss TenantDetailModalView
+                    viewModel.selectedStore = nil
+                }
+            )
         }
     }
-    
+
+  
     private func checkAndNavigateToDirection() {
         if navigationState.startLocation != nil && navigationState.endLocation != nil {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {

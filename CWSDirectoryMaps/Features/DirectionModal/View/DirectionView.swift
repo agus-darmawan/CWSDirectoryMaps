@@ -14,6 +14,9 @@ struct DirectionView: View {
     
     let startLocation: Store
     @State var destinationStore: Store
+    var onDismiss: (() -> Void)? = nil
+    var onDismissNavigationModal: (() -> Void)? = nil
+    var onDismissTenantModal: (() -> Void)? = nil
     
     @State private var showDirectionsModal = true
     @State private var showStepsModal = false
@@ -55,7 +58,13 @@ struct DirectionView: View {
                         startLocation: startLocation,
                         showModal: $showDirectionsModal,
                         pathfindingManager: pathfindingManager,
-                        selectedMode: $selectedTravelMode
+                        selectedMode: $selectedTravelMode,
+                        onDismissAllModals: {
+                            onDismiss?() // This triggers the closure that should close the search view.
+                            onDismissNavigationModal?()
+                            onDismissTenantModal?()
+                            dismiss()
+                        }
                     ) {
                         showDirectionsModal = false
                         showStepsModal = true
@@ -71,7 +80,12 @@ struct DirectionView: View {
                         onEndRoute: {
                             showEndRouteAlert = true
                         },
-                        currentFloor: $currentFloor
+                        currentFloor: $currentFloor,
+                        onDismissAllModals: {
+                            onDismissNavigationModal?()
+                            onDismissTenantModal?()
+                            dismiss()
+                        }
                     )
                 }
             }
@@ -201,6 +215,9 @@ struct DirectionView: View {
     }
     
     private func endRoute() {
+        onDismiss?()
+        onDismissNavigationModal?()
+        onDismissTenantModal?()
         dismiss()
     }
 }
@@ -211,6 +228,8 @@ struct EnhancedDirectionsModal: View {
     @Binding var showModal: Bool
     @ObservedObject var pathfindingManager: PathfindingManager
     @Binding var selectedMode: TravelMode
+    @Environment(\.dismiss) private var dismiss
+    var onDismissAllModals: (() -> Void)? = nil
     
     var onGoTapped: (() -> Void)?
     
@@ -233,7 +252,9 @@ struct EnhancedDirectionsModal: View {
                         }
                         Spacer()
                         
-                        Button(action: { showModal = false }) {
+                        Button(action: {
+                            onDismissAllModals?()
+                        }) {
                             Image(systemName: "xmark.circle.fill")
                                 .font(.title2)
                                 .foregroundColor(.secondary)
@@ -370,34 +391,55 @@ struct EnhancedDirectionStepsModal: View {
     @ObservedObject var pathfindingManager: PathfindingManager
     var onEndRoute: () -> Void
     @Binding var currentFloor: Floor
-
+    @Environment(\.dismiss) private var dismiss
+    var onDismissAllModals: (() -> Void)? = nil
+    
     var body: some View {
         if showStepsModal {
             VStack(alignment: .trailing) {
                 VStack(spacing: 16) {
-                    HStack {
-                        VStack(alignment: .leading, spacing: 2) {
-                            HStack {
-                                Text("To \(destinationStore.name)")
-                                    .font(.title3)
-                                    .bold()
+                    // --- MODIFICATION START ---
+                    // Draggable handle and tappable area
+                    VStack(spacing: 8) {
+                        RoundedRectangle(cornerRadius: 2.5)
+                            .fill(Color.secondary.opacity(0.6))
+                            .frame(width: 40, height: 5)
+                            .padding(.top, 8)
+                        
+                        // Title with real-time progress
+                        HStack {
+                            VStack(alignment: .leading, spacing: 2) {
+                                HStack {
+                                    Text("To \(destinationStore.name)")
+                                        .font(.title3)
+                                        .bold()
+                                }
+                                
+                                Text("\(pathfindingManager.formatDistance(pathfindingManager.getRemainingDistance())) remaining – \(pathfindingManager.formatTime(pathfindingManager.getRemainingTime()))")
+                                    .font(.subheadline)
+                                    .foregroundColor(.secondary)
                             }
                             
-                            Text("\(pathfindingManager.formatDistance(pathfindingManager.getRemainingDistance())) remaining – \(pathfindingManager.formatTime(pathfindingManager.getRemainingTime()))")
-                                .font(.subheadline)
-                                .foregroundColor(.secondary)
-                        }
-                        
-                        Spacer()
-                        
-                        HStack(spacing: 12) {
-                            Button(action: { showSteps = true }) {
-                                Image(systemName: "chevron.up.circle.fill")
+                            Spacer()
+                            
+                            // XMark button remains here to close everything
+                            Button(action: {
+                                onDismissAllModals?()
+                            }) {
+                                Image(systemName: "xmark.circle.fill")
                                     .font(.title2)
                                     .foregroundColor(.secondary)
                             }
                         }
                     }
+                    .frame(maxWidth: .infinity)
+                    .contentShape(Rectangle()) // Makes the whole area tappable
+                    .onTapGesture {
+                        withAnimation(.spring(response: 0.5, dampingFraction: 0.8)) {
+                            showSteps = true
+                        }
+                    }
+                    // --- MODIFICATION END ---
                     
                     // If enhancedDirectionSteps empty -> loading card
                     if pathfindingManager.enhancedDirectionSteps.isEmpty {
@@ -657,32 +699,9 @@ struct EnhancedDirectionStepsListView: View {
                     .padding()
                 }
                 .background(Color(.systemGray6))
+                .padding(.bottom, 32)
             }
             
-            // Enhanced end button
-            Button(action: onEndRoute) {
-                HStack {
-                    Image(systemName: "stop.circle.fill")
-                        .font(.title3)
-                    Text("End Navigation")
-                        .font(.headline)
-                        .fontWeight(.semibold)
-                }
-                .foregroundColor(.white)
-                .frame(maxWidth: .infinity)
-                .padding()
-                .background(
-                    LinearGradient(
-                        gradient: Gradient(colors: [Color.red, Color.red.opacity(0.8)]),
-                        startPoint: .leading,
-                        endPoint: .trailing
-                    )
-                )
-                .cornerRadius(12)
-                .shadow(color: Color.red.opacity(0.3), radius: 4, x: 0, y: 2)
-                .padding(.horizontal)
-                .padding(.vertical, 32)
-            }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color(.systemBackground))
