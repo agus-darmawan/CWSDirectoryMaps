@@ -14,6 +14,7 @@ struct TenantDetailModalView: View {
     @State private var showFullDescription = false
     @State private var showNavigationModal = false
     @State private var navigationMode: NavigationMode? = nil
+    @State private var navigateToNavigationModal = false
     
     private let config = APIConfiguration.shared
     
@@ -76,18 +77,14 @@ struct TenantDetailModalView: View {
                 
                 storeDetailContentView
             }
-            .navigationBarHidden(true)
-        }
-        .presentationDetents([.medium, .large])
-        .presentationDragIndicator(.hidden)
-        .sheet(isPresented: $showNavigationModal) {
-            if let mode = navigationMode {
-                NavigationModalView(
-                    viewModel: viewModel,
-                    isPresented: $showNavigationModal,
-                    selectedStore: store,
-                    mode: mode
-                )
+            .fullScreenCover(isPresented: $navigateToNavigationModal) {
+                if let mode = navigationMode {
+                    NavigationModalView(
+                        viewModel: viewModel,
+                        selectedStore: store,
+                        mode: mode
+                    )
+                }
             }
         }
     }
@@ -97,7 +94,7 @@ struct TenantDetailModalView: View {
             HStack(spacing: 12) {
                 Button(action: {
                     navigationMode = .fromHere
-                    showNavigationModal = true
+                    navigateToNavigationModal = true
                 }) {
                     Text("From Here")
                         .font(.system(size: 16, weight: .medium))
@@ -114,7 +111,7 @@ struct TenantDetailModalView: View {
                 
                 Button(action: {
                     navigationMode = .toHere
-                    showNavigationModal = true
+                    navigateToNavigationModal = true
                 }) {
                     Text("To Here")
                         .font(.system(size: 16, weight: .medium))

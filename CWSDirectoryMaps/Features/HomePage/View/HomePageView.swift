@@ -16,7 +16,7 @@ struct HomePageView: View {
     @StateObject var pathfindingManager = PathfindingManager()
     @State var pathWithLabels: [(point: CGPoint, label: String)] = []
     @State private var currentFloor: Floor = Floor.ground
-    
+    @State private var showNavigationModal = false    
     
     var body: some View {
         NavigationView {
@@ -125,6 +125,39 @@ private extension HomePageView {
             .accessibilityHint("Shows the mall layout with different floors. Use the floor selector to switch between levels.")
             .allowsHitTesting(!viewModel.isSearching)
             .clipped()
+            
+            VStack {
+                Spacer()
+                HStack {
+                    Spacer()
+                    Button(action: {
+                        showNavigationModal = true
+                    }) {
+                        Image(systemName: "arrow.trianglehead.turn.up.right.diamond.fill")
+                            .padding(10)
+                            .background(
+                                Circle()
+                                    .fill(Color(.systemBackground).opacity(1))
+                                    .shadow(radius: 3)
+                                    .overlay(
+                                        Circle()
+                                            .stroke(Color.blue, lineWidth: 2)
+                                    )
+                            )
+                            .foregroundColor(.primary)
+                            .accessibilityLabel("Get Directions")
+                            .accessibilityHint("Tap to open the navigation options")
+                    }
+                    .padding(.trailing)
+                    .padding(.bottom, 120)
+                }
+            }
+            .fullScreenCover(isPresented: $showNavigationModal) {
+                NavigationModalView(
+                    viewModel: viewModel,
+                    isPresented: $showNavigationModal
+                )
+            }
         }
         .zIndex(1)
     }
@@ -190,6 +223,9 @@ private extension HomePageView {
                             .foregroundColor(.white)
                             .accessibilityHidden(true)
                     }
+                        .padding(24)
+                        .background(Color.black.opacity(0.7))
+                        .cornerRadius(12)
                         .padding(24)
                         .background(Color.black.opacity(0.7))
                         .cornerRadius(12)

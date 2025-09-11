@@ -17,7 +17,7 @@ enum StoreCategory: String, CaseIterable, Identifiable, Codable {
     var id: String { self.rawValue }
 }
 
-struct Store: Identifiable, Codable {
+struct Store: Identifiable, Codable, Equatable {
     let id: String
     let name: String
     let category: StoreCategory

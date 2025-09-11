@@ -9,7 +9,6 @@ import SwiftUI
 
 struct NavigationModalView: View {
     @ObservedObject var viewModel: DirectoryViewModel
-    @Binding var isPresented: Bool
     @State private var navigationState: NavigationState
     @State private var startLocationText: String = ""
     @State private var destinationText: String = ""
@@ -19,6 +18,7 @@ struct NavigationModalView: View {
     @State private var showDirectionView: Bool = false
     
     private let selectedStore: Store
+    @Environment(\.dismiss) var dismiss
     
     @State private var path: [(CGPoint, String)] = []
     
@@ -37,9 +37,8 @@ struct NavigationModalView: View {
         })
     }
     
-    init(viewModel: DirectoryViewModel, isPresented: Binding<Bool>, selectedStore: Store, mode: NavigationMode) {
+    init(viewModel: DirectoryViewModel, selectedStore: Store, mode: NavigationMode) {
         self.viewModel = viewModel
-        self._isPresented = isPresented
         self.selectedStore = selectedStore
         self.path = []
         
@@ -103,76 +102,29 @@ struct NavigationModalView: View {
     }
     
     var body: some View {
-        NavigationView {
-            VStack(spacing: 0) {
-                VStack(spacing: 0) {
-                    Rectangle()
-                        .fill(Color(.systemGray4))
-                        .frame(width: 36, height: 5)
-                        .cornerRadius(3)
-                        .padding(.top, 8)
-                        .padding(.bottom, 16)
-                    
-                    HStack {
-                        Text("Navigation")
-                            .font(.title2)
-                            .fontWeight(.bold)
-                        
-                        Spacer()
-                        
-                        Button(action: {
-                            isPresented = false
-                            
-                            navigationState.startLocation = nil
-                            navigationState.endLocation = nil
-                            
-                            showDirectionView = false
-                            
-                            // Clear the selected store to dismiss TenantDetailModalView
-                            viewModel.selectedStore = nil
-                        }) {
-                            Image(systemName: "xmark.circle.fill")
-                                .font(.title2)
-                                .foregroundColor(.secondary)
-                        }
-                        
-                    }
-                    .padding(.horizontal)
-                    .padding(.bottom, 20)
-                }
-                .background(Color(.systemBackground))
-                
+        VStack(spacing: 0) {
+            // Header
+            HStack {
                 navigationContentView
             }
-            .navigationBarHidden(true)
+            .padding()
+            
+            Divider()
         }
-        .presentationDetents([.medium, .large])
-        .presentationDragIndicator(.hidden)
         .alert("Same Location Selected", isPresented: $showingSameLocationAlert) {
             Button("OK") { }
         } message: {
             Text("Starting location and destination cannot be the same. Please select a different location.")
         }
         .fullScreenCover(isPresented: $showDirectionView) {
-        if let start = navigationState.startLocation,
-           let end = navigationState.endLocation {
-            DirectionView(
-                startLocation: start,
-                destinationStore: end,
-                viewModel: viewModel,
-                onDismiss: {
-                    // Clear the selected store when dismissing DirectionView
-                    viewModel.selectedStore = nil
-                    viewModel.exitSearch() // This closes the search view
-                },
-                onDismissNavigationModal: {
-                    showDirectionView = false
-                },
-                onDismissTenantModal: {
-                    // Clear the selected store to dismiss TenantDetailModalView
-                    viewModel.selectedStore = nil
-                }
-            )
+            if let start = navigationState.startLocation,
+               let end = navigationState.endLocation {
+                DirectionView(
+                    startLocation: start,
+                    destinationStore: end,
+                    showFloorChangeContent: $showFloorChangeContent
+                )
+            }
         }
     }
 
@@ -188,7 +140,18 @@ struct NavigationModalView: View {
     private var navigationContentView: some View {
         VStack(spacing: 0) {
             HStack(spacing: 12) {
+                Button(action: {
+                    dismiss() // balik ke halaman sebelumnya
+                }) {
+                    HStack(spacing: 4) {
+                        Image(systemName: "chevron.left")
+                            .font(.title2)
+                    }
+                    .foregroundColor(.blue)
+                }
+                .padding(.bottom, 44)
                 VStack(spacing: 0) {
+                    
                     HStack {
                         Image(systemName: "location.circle.fill")
                             .foregroundColor(.blue)
@@ -312,32 +275,6 @@ struct NavigationModalView: View {
             .padding(.horizontal)
             .padding(.vertical, 20)
             
-            Button(action: {
-                if navigationState.startLocation != nil,
-                   navigationState.endLocation != nil {
-                    showDirectionView = true
-                }
-            }) {
-                HStack {
-                    Text("GO")
-                        .font(.system(size: 16, weight: .semibold))
-                    Image(systemName: "arrow.right.circle.fill")
-                        .font(.system(size: 18, weight: .medium))
-                }
-                .foregroundColor(.white)
-                .frame(maxWidth: .infinity)
-                .padding(.vertical, 14)
-                .background(
-                    (navigationState.startLocation != nil && navigationState.endLocation != nil)
-                    ? customBlueColor
-                    : Color(.systemGray3)
-                )
-                .cornerRadius(12)
-            }
-            .disabled(navigationState.startLocation == nil || navigationState.endLocation == nil)
-            .padding(.horizontal)
-            .padding(.bottom, 16)
-            
             CategoryFilterView(
                 categories: StoreCategory.allCases,
                 selectedCategory: $selectedCategory,
@@ -363,6 +300,12 @@ struct NavigationModalView: View {
             path = newPath
             print("Paths updated: \(path)")
         }
+        .onChange(of: navigationState.startLocation) { _, _ in
+            checkAndNavigateToDirection()
+        }
+        .onChange(of: navigationState.endLocation) { _, _ in
+            checkAndNavigateToDirection()
+        }
     }
     
     private func selectLocation(_ store: Store) {
@@ -383,5 +326,28 @@ struct NavigationModalView: View {
             destinationText = store.name
             activeField = .startLocation
         }
+    }
+}
+extension NavigationModalView {
+    init(viewModel: DirectoryViewModel, isPresented: Binding<Bool>) {
+        self.viewModel = viewModel
+        self.selectedStore = Store(
+            id: UUID().uuidString,
+            name: "",
+            category: .others, // pakai case yang valid
+            imageName: "",
+            subcategory: "",
+            description: "",
+            location: "",
+            website: nil,
+            phone: nil,
+            hours: "",
+            detailImageName: "",
+            graphLabel: nil
+        )
+        self.path = []
+        self._navigationState = State(
+            initialValue: NavigationState(startLocation: nil, endLocation: nil, mode: .toHere)
+        )
     }
 }
