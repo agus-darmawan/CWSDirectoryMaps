@@ -16,7 +16,6 @@ struct NavigationModalView: View {
     @State private var showingSameLocationAlert: Bool = false
     @State private var activeField: ActiveField? = nil
     @State private var showDirectionView: Bool = false
-    @State private var showFloorChangeContent: Bool = false
     
     private let selectedStore: Store
     @Environment(\.dismiss) var dismiss
@@ -128,7 +127,8 @@ struct NavigationModalView: View {
             }
         }
     }
-    
+
+  
     private func checkAndNavigateToDirection() {
         if navigationState.startLocation != nil && navigationState.endLocation != nil {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {

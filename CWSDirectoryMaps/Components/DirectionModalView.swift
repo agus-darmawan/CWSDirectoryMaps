@@ -14,9 +14,9 @@ struct DirectionsModal: View {
     @Binding var showModal: Bool
     @ObservedObject var pathfindingManager: PathfindingManager
     @Binding var selectedMode: TravelMode
-    
+
     var onGoTapped: (() -> Void)?
-    
+
     var body: some View {
         if showModal {
             VStack(alignment: .trailing) {
@@ -35,7 +35,7 @@ struct DirectionsModal: View {
                                 .foregroundColor(.secondary)
                         }
                         Spacer()
-                        
+
                         Button(action: { showModal = false }) {
                             Image(systemName: "xmark.circle.fill")
                                 .font(.title2)
@@ -43,7 +43,7 @@ struct DirectionsModal: View {
                         }
                         .padding(.bottom, 12)
                     }
-                    
+
                     // Enhanced mode selection
                     HStack {
                         ForEach(TravelMode.allCases, id: \.self) { mode in
@@ -70,7 +70,7 @@ struct DirectionsModal: View {
                         Spacer()
                     }
                     .frame(maxWidth: .infinity)
-                    
+
                     // Enhanced from-to section
                     ZStack {
                         VStack(spacing: 0) {
@@ -84,7 +84,7 @@ struct DirectionsModal: View {
                             }
                             .padding(8)
                             .background(Color(.secondarySystemBackground))
-                            
+
                             // to
                             HStack {
                                 Image(systemName: "mappin.circle.fill")
@@ -97,7 +97,7 @@ struct DirectionsModal: View {
                             .background(Color(.secondarySystemBackground))
                         }
                         .clipShape(RoundedRectangle(cornerRadius: 12))
-                        
+
                         // Divider with swap button
                         Divider()
                             .frame(height: 1)
@@ -124,10 +124,10 @@ struct DirectionsModal: View {
                                 }
                             )
                     }
-                    
+
                     // Enhanced GO button
                     Button(action: {
-                        print("Go tapped - Starting navigation")
+//                        print("Go tapped - Starting navigation")
                         showModal = false
                         onGoTapped?()
                     }) {
@@ -173,7 +173,7 @@ struct DirectionStepsModal: View {
     @ObservedObject var pathfindingManager: PathfindingManager
     @Binding var showFloorChangeContent: Bool
     var onEndRoute: () -> Void
-    
+
     var body: some View {
         if showStepsModal {
             VStack(alignment: .trailing) {
@@ -181,15 +181,15 @@ struct DirectionStepsModal: View {
                     // --- FLOOR CHANGE HEADER ---
                     if let step = pathfindingManager.getCurrentDirectionStep(),
                        step.fromFloor != nil && step.toFloor != nil, showFloorChangeContent {
-                        
+
                         HStack {
                             Text("Change Floors")
                                 .font(.title2)
                                 .fontWeight(.bold)
                                 .foregroundColor(.primary)
-                            
+
                             Spacer()
-                            
+
                             Button(action: {
                                 // Close the modal when in floor change mode
                                 withAnimation {
@@ -203,17 +203,22 @@ struct DirectionStepsModal: View {
                             }
                         }
                         .padding(.horizontal, 4)
-                        
+
                         // Floor change content
-                        FloorChangeContentView(step: step) {
-                            // After confirming floor change, advance to next step
-                            withAnimation {
-                                showFloorChangeContent = false
-                            }
-                            pathfindingManager.moveToNextStep()
-                        }
-                        .padding(.horizontal, 16)
-                        
+                        Text("Please use the stairs or elevator to change from \(step.fromFloor!.displayName) to \(step.toFloor!.displayName).")
+                            .font(.body)
+                            .foregroundColor(.primary)
+                            .multilineTextAlignment(.center)
+                            .lineLimit(nil)
+                            .frame(maxWidth: .infinity)
+                            .padding(.horizontal, 12)
+                            .padding(.vertical, 16)
+                            .background(
+                                RoundedRectangle(cornerRadius: 12)
+                                    .fill(Color(.secondarySystemBackground))
+                            )
+                            .padding(.horizontal, 16)
+
                     }
                     // --- NORMAL TITLE + PROGRESS + STEPS ---
                     else {
@@ -224,14 +229,14 @@ struct DirectionStepsModal: View {
                                         .font(.title3)
                                         .bold()
                                 }
-                                
+
                                 Text("\(pathfindingManager.formatDistance(pathfindingManager.getRemainingDistance())) remaining – \(pathfindingManager.formatTime(pathfindingManager.getRemainingTime()))")
                                     .font(.subheadline)
                                     .foregroundColor(.secondary)
                             }
-                            
+
                             Spacer()
-                            
+
                             HStack(spacing: 12) {
                                 Button(action: { showSteps = true }) {
                                     Image(systemName: "chevron.up.circle.fill")
@@ -240,7 +245,7 @@ struct DirectionStepsModal: View {
                                 }
                             }
                         }
-                        
+
                         // If enhancedDirectionSteps empty -> loading card
                         if pathfindingManager.enhancedDirectionSteps.isEmpty {
                             HStack {
@@ -264,7 +269,7 @@ struct DirectionStepsModal: View {
                                     pathfindingManager.moveToStep(newIndex)
                                 }
                             )
-                            
+
                             TabView(selection: selectionBinding) {
                                 ForEach(Array(pathfindingManager.enhancedDirectionSteps.enumerated()), id: \.offset) { index, step in
                                     VStack(spacing: 8) {
@@ -272,29 +277,29 @@ struct DirectionStepsModal: View {
                                             Image(systemName: step.icon)
                                                 .foregroundColor(.white)
                                                 .font(.system(size: 18, weight: .medium))
-                                            
+
                                             VStack(alignment: .leading, spacing: 2) {
                                                 Text(step.description)
                                                     .foregroundColor(.white)
                                                     .font(.system(size: 14, weight: .medium))
                                                     .lineLimit(2)
                                                     .multilineTextAlignment(.leading)
-                                                
+
                                                 HStack {
                                                     Text("Step \(index + 1) of \(pathfindingManager.enhancedDirectionSteps.count)")
                                                         .foregroundColor(.white.opacity(0.8))
                                                         .font(.system(size: 12))
-                                                    
+
                                                     Spacer()
-                                                    
+
                                                     Text(pathfindingManager.formatDistance(step.distanceFromStart))
                                                         .foregroundColor(.white.opacity(0.9))
                                                         .font(.system(size: 11, weight: .medium))
                                                 }
                                             }
-                                            
+
                                             Spacer()
-                                            
+
                                             if let tenantImage = getTenantImageForStep(step) {
                                                 AsyncImage(url: tenantImage) { image in
                                                     image
@@ -326,7 +331,7 @@ struct DirectionStepsModal: View {
                             }
                             .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
                             .frame(height: 90)
-                            
+
                             // Navigation controls (no bindings required here)
                             HStack(spacing: 12) {
                                 Button(action: {
@@ -337,7 +342,7 @@ struct DirectionStepsModal: View {
                                         .foregroundColor(pathfindingManager.currentStepIndex > 0 ? .blue : .gray)
                                 }
                                 .disabled(pathfindingManager.currentStepIndex <= 0)
-                                
+
                                 HStack(spacing: 6) {
                                     ForEach(0..<pathfindingManager.enhancedDirectionSteps.count, id: \.self) { idx in
                                         Circle()
@@ -346,7 +351,7 @@ struct DirectionStepsModal: View {
                                             .animation(.easeInOut(duration: 0.2), value: pathfindingManager.currentStepIndex)
                                     }
                                 }
-                                
+
                                 Button(action: {
                                     pathfindingManager.moveToNextStep()
                                 }) {
@@ -369,11 +374,11 @@ struct DirectionStepsModal: View {
             .transition(.move(edge: .bottom))
         }
     }
-    
+
     private func getTenantImageForStep(_ step: EnhancedDirectionStep) -> URL? {
         // Extract tenant name from step description
         let description = step.description.lowercased()
-        
+
         // Look for common patterns like "near [tenant]", "at [tenant]", etc.
         let words = description.components(separatedBy: " ")
         for (index, word) in words.enumerated() {
@@ -386,7 +391,7 @@ struct DirectionStepsModal: View {
                 }
             }
         }
-        
+
         return nil
     }
 }
@@ -421,7 +426,7 @@ struct DirectionStepsListView: View {
     @State var destinationStore: Store
     @ObservedObject var pathfindingManager: PathfindingManager
     var onEndRoute: () -> Void
-    
+
     var body: some View {
         VStack(spacing: 0) {
             HStack {
@@ -434,7 +439,7 @@ struct DirectionStepsListView: View {
                         .foregroundColor(.secondary)
                 }
                 Spacer()
-                
+
                 Button(action: {
                     showSteps = false
                 }) {
@@ -445,7 +450,7 @@ struct DirectionStepsListView: View {
             }
             .padding()
             .background(Color(.systemBackground))
-            
+
             // Enhanced list with real-time tracking
             if pathfindingManager.enhancedDirectionSteps.isEmpty {
                 VStack(spacing: 16) {
@@ -469,7 +474,7 @@ struct DirectionStepsListView: View {
                                     Circle()
                                         .fill(index <= pathfindingManager.currentStepIndex ? customBlueColor : Color.secondary.opacity(0.3))
                                         .frame(width: 40, height: 40)
-                                    
+
                                     if index < pathfindingManager.currentStepIndex {
                                         Image(systemName: "checkmark")
                                             .foregroundColor(.white)
@@ -486,14 +491,14 @@ struct DirectionStepsListView: View {
                                             .font(.system(size: 16, weight: .medium))
                                     }
                                 }
-                                
+
                                 VStack(alignment: .leading, spacing: 4) {
                                     Text(step.description)
                                         .foregroundColor(index <= pathfindingManager.currentStepIndex ? .primary : .secondary)
                                         .font(.system(size: 16, weight: index == pathfindingManager.currentStepIndex ? .semibold : .regular))
                                         .lineLimit(nil)
                                         .multilineTextAlignment(.leading)
-                                    
+
                                     HStack {
                                         if index == pathfindingManager.currentStepIndex {
                                             Text("Current step")
@@ -505,9 +510,9 @@ struct DirectionStepsListView: View {
                                                 .font(.caption)
                                                 .foregroundColor(.green)
                                         }
-                                        
+
                                         Spacer()
-                                        
+
                                         VStack(alignment: .trailing, spacing: 2) {
                                             Text(pathfindingManager.formatDistance(step.distanceFromStart))
                                                 .font(.caption)
@@ -519,7 +524,7 @@ struct DirectionStepsListView: View {
                                     }
                                 }
                                 .padding(.leading, 8)
-                                
+
                                 Spacer()
                             }
                             .padding()
@@ -541,7 +546,7 @@ struct DirectionStepsListView: View {
                 }
                 .background(Color(.systemGray6))
             }
-            
+
             // Enhanced end button
             Button(action: onEndRoute) {
                 HStack {
@@ -571,4 +576,3 @@ struct DirectionStepsListView: View {
         .background(Color(.systemBackground))
     }
 }
-

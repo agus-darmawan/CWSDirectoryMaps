@@ -181,6 +181,7 @@ struct TenantImageView: View {
                     image
                         .resizable()
                         .scaledToFill()
+                    
                 } placeholder: {
                     Image(systemName: "building.2")
                         .foregroundColor(.white.opacity(0.7))
