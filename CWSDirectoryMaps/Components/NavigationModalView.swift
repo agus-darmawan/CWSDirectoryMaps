@@ -127,6 +127,9 @@ struct NavigationModalView: View {
                             navigationState.endLocation = nil
                             
                             showDirectionView = false
+                            
+                            // Clear the selected store to dismiss TenantDetailModalView
+                            viewModel.selectedStore = nil
                         }) {
                             Image(systemName: "xmark.circle.fill")
                                 .font(.title2)
@@ -155,7 +158,19 @@ struct NavigationModalView: View {
                let end = navigationState.endLocation {
                 DirectionView(
                     startLocation: navigationState.startLocation!,
-                    destinationStore: navigationState.endLocation!
+                    destinationStore: navigationState.endLocation!,
+                    onDismiss: {
+                        // Clear the selected store when dismissing DirectionView
+                        viewModel.selectedStore = nil
+                        viewModel.exitSearch() // This closes the search view
+                    },
+                    onDismissNavigationModal: {
+                        isPresented = false
+                    },
+                    onDismissTenantModal: {
+                        // Clear the selected store to dismiss TenantDetailModalView
+                        viewModel.selectedStore = nil
+                    }
                 )
             }
         }
