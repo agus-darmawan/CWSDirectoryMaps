@@ -155,8 +155,8 @@ class TenantImageHelper {
     }
 }
 
-// MARK: - Enhanced Direction Steps Modal (Updated)
-extension EnhancedDirectionStepsModal {
+// MARK: - Direction Steps Modal (Updated)
+extension DirectionStepsModal {
     
     private func getTenantImageForStep(_ step: EnhancedDirectionStep) -> URL? {
         // Get the directory view model or stores data

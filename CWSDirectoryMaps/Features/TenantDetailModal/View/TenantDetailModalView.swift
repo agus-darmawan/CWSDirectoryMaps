@@ -17,6 +17,16 @@ struct TenantDetailModalView: View {
     
     private let config = APIConfiguration.shared
     
+    private func extractMainDomain(from urlString: String) -> String {
+        guard let url = URL(string: urlString),
+              let host = url.host else {
+            return urlString
+        }
+        
+        let cleanHost = host.hasPrefix("www.") ? String(host.dropFirst(4)) : host
+        return cleanHost
+    }
+    
     private var customBlueColor: Color {
         Color(uiColor: UIColor { traitCollection in
             if traitCollection.userInterfaceStyle == .dark {
@@ -91,10 +101,14 @@ struct TenantDetailModalView: View {
                 }) {
                     Text("From Here")
                         .font(.system(size: 16, weight: .medium))
-                        .foregroundColor(.white)
+                        .foregroundColor(customBlueColor)
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 14)
-                        .background(Color(.systemGray))
+                        .background(Color.white)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 8)
+                                .stroke(customBlueColor, lineWidth: 2)
+                        )
                         .cornerRadius(8)
                 }
                 
@@ -139,7 +153,31 @@ struct TenantDetailModalView: View {
                 .cornerRadius(12)
                 .padding(.horizontal)
                 
+                if !store.description.isEmpty {
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text(showFullDescription ? store.description : String(store.description.prefix(150)) + (store.description.count > 150 ? "..." : ""))
+                            .font(.body)
+                            .lineLimit(showFullDescription ? nil : 3)
+                        
+                        if store.description.count > 150 {
+                            Button(action: {
+                                withAnimation(.easeInOut(duration: 0.3)) {
+                                    showFullDescription.toggle()
+                                }
+                            }) {
+                                Text(showFullDescription ? "Show Less" : "Show More")
+                                    .font(.subheadline)
+                                    .fontWeight(.medium)
+                                    .foregroundColor(customBlueColor)
+                            }
+                        }
+                    }
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.horizontal)
+                }
+                
                 VStack(spacing: 16) {
+                    // Hours
                     if !store.hours.isEmpty {
                         HStack {
                             Image(systemName: "clock.fill")
@@ -222,7 +260,7 @@ struct TenantDetailModalView: View {
                                     UIApplication.shared.open(url)
                                 }
                             }) {
-                                Text("Click here")
+                                Text(extractMainDomain(from: website))
                                     .font(.body)
                                     .foregroundColor(customBlueColor)
                                     .underline()
@@ -269,5 +307,3 @@ struct TenantDetailModalView: View {
         }
     }
 }
-
-

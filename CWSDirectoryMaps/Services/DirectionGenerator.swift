@@ -62,11 +62,17 @@ class DirectionsGenerator {
             )
             
             if segmentIndex > 0 {
+                let previousFloor = floorSegments[segmentIndex - 1].floor
+                let currentFloor = segment.floor
+                
                 let transitionStep = DirectionStep(
                     point: segment.pathData.first?.point ?? .zero,
                     icon: "arrow.up.down.circle",
-                    description: "Continue to \(floorDisplayName(for: segment.floor))",
-                    shopImage: "floor-1"
+                    description: "Change floors from \(floorDisplayName(for: previousFloor)) to \(floorDisplayName(for: currentFloor))",
+                    shopImage: "floor-1",
+                    isFloorChange: true,
+                    fromFloor: previousFloor,
+                    toFloor: currentFloor
                 )
                 allSteps.append(transitionStep)
             }
@@ -334,22 +340,21 @@ class DirectionsGenerator {
                     } else {
                         // Logic for all intermediate steps remains the same.
                         if angleDifference >= 45 {
-                            description = "Turn right onto \(pathName)"
+                            description = "Turn right"
                             iconName = "arrow.turn.up.right"
                         } else if angleDifference >= 30 {
-                            description = "Bear right onto \(pathName)"
+                            description = "Bear right"
                             iconName = "arrow.up.right"
                         } else if angleDifference <= -45 {
-                            description = "Turn left onto \(pathName)"
+                            description = "Turn left"
                             iconName = "arrow.turn.up.left"
                         } else if angleDifference <= -30 {
-                            description = "Bear left onto \(pathName)"
+                            description = "Bear left"
                             iconName = "arrow.up.left"
                         } else {
-                            description = "Continue straight onto \(pathName)"
+                            description = "Continue straight"
                             iconName = "arrow.up"
                         }
-                        
                     }
                     // --- END: NEW & IMPROVED LOGIC ---
 

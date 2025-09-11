@@ -20,6 +20,17 @@ struct EnhancedDirectionStep: Identifiable {
     let segmentDistance: Double // distance for this specific segment
 }
 
+//struct DirectionStep: Identifiable {
+//    let id = UUID()
+//    let point: CGPoint
+//    let icon: String
+//    var description: String
+//    let shopImage: String
+//    var isFloorChange: Bool = false
+//    var fromFloor: Floor?
+//    var toFloor: Floor?
+//}
+
 // MARK: - Travel Mode
 enum TravelMode: String, CaseIterable {
     case walk = "walk"
@@ -55,6 +66,9 @@ class PathfindingManager: ObservableObject {
     
     private let directionsGenerator = DirectionsGenerator()
     private let pathCleaner = PathCleaner()
+    
+    // Store unifiedGraph for travel mode updates
+    private var cachedUnifiedGraph: [String: GraphNode] = [:]
     
     // MARK: - Improved Distance Calculation
     private func calculateDistance(from point1: CGPoint, to point2: CGPoint) -> Double {
@@ -200,7 +214,7 @@ class PathfindingManager: ObservableObject {
             switch i {
             case 0:
                 description = "Start your journey"
-                icon = "figure.walk"
+                icon = currentTravelMode.icon // Use current travel mode icon
             case stepCount - 1:
                 description = "Arrive at your destination"
                 icon = "mappin.circle.fill"
@@ -285,7 +299,7 @@ class PathfindingManager: ObservableObject {
         
         // Recalculate enhanced steps with new speed
         if !pathWithLabels.isEmpty {
-            generateEnhancedDirectionSteps(from: pathWithLabels, unifiedGraph: [:])
+            generateEnhancedDirectionSteps(from: pathWithLabels, unifiedGraph: cachedUnifiedGraph)
         }
         
         // Update total estimated time
@@ -339,6 +353,9 @@ class PathfindingManager: ObservableObject {
                     
                     // Reset current step index
                     self.currentStepIndex = 0
+                    
+                    // Cache the unified graph for travel mode updates
+                    self.cachedUnifiedGraph = unifiedGraph
                     
                     print("📍 Navigation calculated:")
                     print("   📏 Total distance: \(self.formatDistance(self.totalDistance))")
@@ -400,17 +417,12 @@ class PathfindingManager: ObservableObject {
         
         let simpleGraph = Graph(metadata: metadata, nodes: nodes, edges: [])
         
-        do {
-            self.directionSteps = directionsGenerator.generate(
-                from: pathData,
-                graph: simpleGraph,
-                unifiedGraph: unifiedGraph
-            )
-            print("📋 Generated \(self.directionSteps.count) direction steps")
-        } catch {
-            print("❌ Error generating direction steps: \(error)")
-            self.directionSteps = []
-        }
+        self.directionSteps = directionsGenerator.generate(
+            from: pathData,
+            graph: simpleGraph,
+            unifiedGraph: unifiedGraph
+        )
+        print("📋 Generated \(self.directionSteps.count) direction steps")
     }
     
     private func extractFloorFromLabel(_ label: String) -> Floor {
@@ -533,5 +545,12 @@ class PathfindingManager: ObservableObject {
     
     func isAtDestination() -> Bool {
         return currentStepIndex >= enhancedDirectionSteps.count - 1 && !enhancedDirectionSteps.isEmpty
+    }
+    
+    func getCurrentDirectionStep() -> DirectionStep? {
+        if !directionSteps.isEmpty && currentStepIndex < directionSteps.count {
+            return directionSteps[currentStepIndex]
+        }
+        return nil
     }
 }
