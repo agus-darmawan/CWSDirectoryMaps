@@ -35,8 +35,10 @@ struct DirectionsModal: View {
                                 .foregroundColor(.secondary)
                         }
                         Spacer()
+                        Button(action: {
+                            showModal = false
+                        }) {
 
-                        Button(action: { showModal = false }) {
                             Image(systemName: "xmark.circle.fill")
                                 .font(.title2)
                                 .foregroundColor(.secondary)
