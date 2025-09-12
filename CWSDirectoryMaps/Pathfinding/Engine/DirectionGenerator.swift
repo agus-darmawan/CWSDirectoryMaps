@@ -153,7 +153,7 @@ class DirectionsGenerator {
             
             // Generate step when transitioning between different path segments
             if currentParentLabel != lastParentLabel {
-                if let step = generateTransitionStep(
+                let newSteps = generateTransitionStep(
                     from: lastParentLabel,
                     to: currentParentLabel,
                     pathNodes: pathNodes,
@@ -163,9 +163,8 @@ class DirectionsGenerator {
                     isFirstSegment: isFirstSegment,
                     entryPointNoun: entryPointNoun,
                     usedLandmarks: &usedLandmarks
-                ) {
-                    steps.append(step)
-                }
+                )
+                steps.append(contentsOf: newSteps)
                 
                 lastParentLabel = currentParentLabel
             }
@@ -177,7 +176,7 @@ class DirectionsGenerator {
         
         return steps
     }
-    
+
     private func generateTransitionStep(
         from previousParentLabel: String?,
         to currentParentLabel: String,
@@ -188,16 +187,16 @@ class DirectionsGenerator {
         isFirstSegment: Bool,
         entryPointNoun: String,
         usedLandmarks: inout [String]
-    ) -> DirectionStep? {
+    ) -> [DirectionStep] { // ✅ RETURN TYPE CHANGED to [DirectionStep]
+
         let nextNodeOnPath = pathNodes[index+1]
         
-        // Calculate junction points for angle determination
         guard let (p1, p2, p3) = calculateJunctionPoints(
             previousParentLabel: previousParentLabel,
             currentParentLabel: currentParentLabel,
             unifiedGraph: unifiedGraph
         ) else {
-            return nil
+            return [] // ✅ RETURN EMPTY ARRAY instead of nil
         }
         
         let angle1 = angle(from: p1, to: p2)
@@ -207,28 +206,32 @@ class DirectionsGenerator {
         if angleDifference > 180 { angleDifference -= 360 }
         if angleDifference < -180 { angleDifference += 360 }
         
-        let isFirstStepInSegment = (index == 2)
-        let isLastStep = (index == pathNodes.count - 2)
+        let isFirstStepInSegment = (index == 1) // Adjusted to be more accurate
+        let isLastStep = (index >= pathNodes.count - 2)
         
         let destinationIdentifier = pathNodes.last?.parentLabel ?? pathNodes.last?.label
         let isNextNodeTheDestination = (nextNodeOnPath.parentLabel ?? nextNodeOnPath.label) == destinationIdentifier
         let isApproachingOnStorepath = currentParentLabel.contains("storepath")
         let isApproachingDestination = isNextNodeTheDestination || isApproachingOnStorepath
         
-        var description = ""
-        var iconName = "arrow.up"
-        
         if isFirstStepInSegment {
-            (description, iconName) = generateExitInstruction(angleDifference: angleDifference, entryPointNoun: entryPointNoun)
+            let (description, iconName) = generateExitInstruction(angleDifference: angleDifference, entryPointNoun: entryPointNoun)
+            // ✅ RETURN AS ARRAY
+            return [DirectionStep(point: p2, icon: iconName, description: description, shopImage: floor.imageName)]
+            
         } else if isApproachingDestination || isLastStep {
             if let destinationName = destinationIdentifier.map(formatLandmarkName),
                !usedLandmarks.contains(destinationName) {
-                (description, iconName) = generateDestinationInstruction(angleDifference: angleDifference, destinationName: destinationName)
+                let (description, iconName) = generateDestinationInstruction(angleDifference: angleDifference, destinationName: destinationName)
                 usedLandmarks.append(destinationName)
+                // ✅ RETURN AS ARRAY
+                return [DirectionStep(point: p2, icon: iconName, description: description, shopImage: floor.imageName)]
             } else {
-                return nil
+                return [] // ✅ RETURN EMPTY ARRAY instead of nil
             }
+            
         } else {
+            // This now returns [DirectionStep] directly
             return generateIntermediateStep(
                 angleDifference: angleDifference,
                 p2: p2,
@@ -238,10 +241,7 @@ class DirectionsGenerator {
                 usedLandmarks: &usedLandmarks
             )
         }
-        
-        return DirectionStep(point: p2, icon: iconName, description: description, shopImage: floor.imageName)
     }
-    
     private func generateExitInstruction(angleDifference: CGFloat, entryPointNoun: String) -> (String, String) {
         if angleDifference >= 45 {
             return ("Exit from \(entryPointNoun) and turn right", "arrow.turn.up.right")
@@ -270,6 +270,7 @@ class DirectionsGenerator {
         }
     }
     
+    // ✅ PASTE this new function in its place
     private func generateIntermediateStep(
         angleDifference: CGFloat,
         p2: CGPoint,
@@ -277,22 +278,34 @@ class DirectionsGenerator {
         unifiedGraph: [String: GraphNode],
         floor: Floor,
         usedLandmarks: inout [String]
-    ) -> DirectionStep? {
-        let midPointX = (p2.x + p3.x) / 2
-        let midPointY = (p2.y + p3.y) / 2
-        let searchPoint = CGPoint(x: midPointX, y: midPointY)
+    ) -> [DirectionStep] {
         
-        if let landmarkNode = findClosestLandmark(around: searchPoint, unifiedGraph: unifiedGraph, floor: floor),
-           let landmarkName = landmarkNode.parentLabel.map(formatLandmarkName),
-           !usedLandmarks.contains(landmarkName) {
+        var newSteps: [DirectionStep] = []
+        let turnThreshold: CGFloat = 35.0
+        let didTurn = abs(angleDifference) >= turnThreshold
+
+        if didTurn {
+            // --- Case 1: A turn was detected ---
+            // First, create the "Turn" instruction.
+            let turnDescription = angleDifference > 0 ? "Turn right" : "Turn left"
+            let turnIcon = angleDifference > 0 ? "arrow.turn.up.right" : "arrow.turn.up.left"
+            newSteps.append(DirectionStep(point: p2, icon: turnIcon, description: turnDescription, shopImage: floor.imageName))
             
-            let isFloorTransition = landmarkName.lowercased().contains("escalator") || landmarkName.lowercased().contains("elevator")
+            // Second, automatically add a "Continue straight" to confirm the new direction.
+            newSteps.append(DirectionStep(point: p2, icon: "arrow.up", description: "Continue straight", shopImage: floor.imageName))
+
+        } else {
+            // --- Case 2: No turn was detected ---
+            // Generate a single "Continue" instruction, enhanced with a landmark if possible.
+            let midPointX = (p2.x + p3.x) / 2
+            let midPointY = (p2.y + p3.y) / 2
+            let searchPoint = CGPoint(x: midPointX, y: midPointY)
+            
             var description = ""
-            var iconName = "arrow.up"
-            
-            if isFloorTransition {
-                (description, iconName) = generateDestinationInstruction(angleDifference: angleDifference, destinationName: landmarkName)
-            } else {
+            if let landmarkNode = findClosestLandmark(around: searchPoint, unifiedGraph: unifiedGraph, floor: floor),
+               let landmarkName = landmarkNode.parentLabel.map(formatLandmarkName),
+               !usedLandmarks.contains(landmarkName) {
+                
                 let landmarkPoint = CGPoint(x: landmarkNode.x, y: landmarkNode.y)
                 let distanceToTurn = distance(landmarkPoint, p3)
                 let proximityThreshold: CGFloat = 40.0
@@ -300,23 +313,14 @@ class DirectionsGenerator {
                 description = distanceToTurn < proximityThreshold
                     ? "Continue towards \(landmarkName)"
                     : "Continue straight until you pass \(landmarkName)"
-            }
-            
-            usedLandmarks.append(landmarkName)
-            return DirectionStep(point: p2, icon: iconName, description: description, shopImage: floor.imageName)
-            
-        } else {
-            // Generate turn instruction for sharp corners
-            let turnThreshold = 40.0
-            if abs(angleDifference) >= turnThreshold {
-                let description = angleDifference > 0 ? "Turn right" : "Turn left"
-                let iconName = angleDifference > 0 ? "arrow.turn.up.right" : "arrow.turn.up.left"
-                return DirectionStep(point: p2, icon: iconName, description: description, shopImage: floor.imageName)
+                usedLandmarks.append(landmarkName)
             } else {
-                // Generic continue instruction for gradual turns
-                return DirectionStep(point: p2, icon: "arrow.up", description: "Continue straight", shopImage: floor.imageName)
+                description = "Continue straight"
             }
+            newSteps.append(DirectionStep(point: p2, icon: "arrow.up", description: description, shopImage: floor.imageName))
         }
+        
+        return newSteps
     }
     
     // MARK: - Geometric Calculations
@@ -477,12 +481,9 @@ class DirectionsGenerator {
         }
         
         var cleanName = rawName
-            .replacingOccurrences(of: "ground_path_", with: "")
-            .replacingOccurrences(of: "lowerground_path_", with: "")
-            .replacingOccurrences(of: "1st_path_", with: "")
-            .replacingOccurrences(of: "2nd_path_", with: "")
-            .replacingOccurrences(of: "3rd_path_", with: "")
-            .replacingOccurrences(of: "4th_path_", with: "")
+        for floor in Floor.allCases {
+            cleanName = cleanName.replacingOccurrences(of: floor.pathPrefix + "path_", with: "")
+        }
         
         if cleanName.contains("storepath") {
             return ""
@@ -510,12 +511,11 @@ class DirectionsGenerator {
     }
     
     private func extractFloor(from label: String) -> Floor {
-        if label.hasPrefix("ground_") { return .ground }
-        if label.hasPrefix("lowerground_") { return .lowerGround }
-        if label.hasPrefix("1st_") { return .first }
-        if label.hasPrefix("2nd_") { return .second }
-        if label.hasPrefix("3rd_") { return .third }
-        if label.hasPrefix("4th_") { return .fourth }
-        return .ground
+        for floor in Floor.allCases {
+            if label.hasPrefix(floor.pathPrefix) {
+                return floor
+            }
+        }
+        return .ground // Default fallback
     }
 }

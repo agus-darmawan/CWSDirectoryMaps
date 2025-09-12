@@ -51,7 +51,7 @@ struct GraphNode {
     let parentLabel: String?
     var neighbors: [(node: String, cost: Double)]
     var floor: Floor?         // Add this
-    var connectionId: String? 
+    var connectionId: String?
 }
 
 // MARK: - Field Enum for Focus State
@@ -68,9 +68,9 @@ enum Floor: String, CaseIterable, Codable, Hashable, Identifiable {
     case first
     case ground
     case lowerGround
-
+    
     var id: Self { self }
-
+    
     // Display for menu
     var displayName: String {
         switch self {
@@ -82,7 +82,7 @@ enum Floor: String, CaseIterable, Codable, Hashable, Identifiable {
         case .lowerGround: return "Lower Ground"
         }
     }
-
+    
     // Asset names for map images
     var imageName: String {
         switch self {
@@ -94,7 +94,7 @@ enum Floor: String, CaseIterable, Codable, Hashable, Identifiable {
         case .lowerGround: return "floor-lower-ground"
         }
     }
-
+    
     // Data file names for graphs/paths per floor
     var fileName: String {
         switch self {
@@ -106,7 +106,18 @@ enum Floor: String, CaseIterable, Codable, Hashable, Identifiable {
         case .lowerGround: return "lowerground_path"
         }
     }
-
+    
+    var pathPrefix: String {
+        switch self {
+        case .lowerGround: return "lowerground_"
+        case .ground: return "ground_"
+        case .first: return "1st_"
+        case .second: return "2nd_"
+        case .third: return "3rd_"
+        case .fourth: return "4th_"
+        }
+    }
+    
     // Custom ordering for menus (top-down)
     static var allCases: [Floor] {
         [.fourth, .third, .second, .first, .ground, .lowerGround]

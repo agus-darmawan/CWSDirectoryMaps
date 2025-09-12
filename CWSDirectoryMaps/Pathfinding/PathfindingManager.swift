@@ -287,33 +287,23 @@ class PathfindingManager: ObservableObject {
     
     // MARK: - Update Travel Mode
     func updateTravelMode(_ mode: TravelMode) {
+        guard mode != currentTravelMode else { return }
+        
         currentTravelMode = mode
-        
-        // Recalculate enhanced steps with new speed
-        if !pathWithLabels.isEmpty {
-            generateEnhancedDirectionSteps(from: pathWithLabels, unifiedGraph: cachedUnifiedGraph)
-        }
-        
-        // Update total estimated time
-        totalEstimatedTime = totalDistance / currentTravelMode.speed
-        
-        print("🚶‍♂️ Travel mode updated to \(mode.rawValue)")
-        
+        print("🚶‍♂️ Travel mode updated to \(mode.rawValue). Recalculating route...")
+
         guard let start = cachedStartStore,
               let end = cachedEndStore,
               !cachedUnifiedGraph.isEmpty else {
-            // If there's no path to update, just update the time (or do nothing)
-            totalEstimatedTime = totalDistance / currentTravelMode.speed
             return
         }
-        
+
         runPathfinding(
             startStore: start,
             endStore: end,
             unifiedGraph: cachedUnifiedGraph
         )
     }
-    
     // MARK: - Public Methods
     func runPathfinding(
         startStore: Store,
