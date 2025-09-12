@@ -1,0 +1,84 @@
+//
+//  CategoryFilterView.swift
+//  CWSDirectoryMaps
+//
+//  Created by Louis Fernando on 28/08/25.
+//
+
+import SwiftUI
+
+struct CategoryFilterView: View {
+    let categories: [StoreCategory]
+    @Binding var selectedCategory: StoreCategory?
+    var onSelect: (StoreCategory) -> Void
+    
+    var body: some View {
+        if let selectedCat = selectedCategory {
+            HStack(spacing: 16) {
+                Button(action: {
+                    onSelect(selectedCat)
+                }) {
+                    HStack {
+                        Text(selectedCat.rawValue)
+                            .font(.system(size: 15, weight: .medium))
+                            .foregroundColor(.white)
+                            .padding(.horizontal, 12)
+                            .padding(.vertical, 12)
+                        
+                        Image(systemName: "xmark")
+                            .font(.system(size: 12, weight: .bold))
+                            .foregroundColor(.white)
+                            .padding(.trailing, 14)
+                    }
+                }
+                .background(Color.blue)
+                .cornerRadius(10)
+                .accessibilityLabel("Clear \(selectedCat.rawValue) filter")
+                .accessibilityHint("Tap to remove category filter")
+                .accessibilityAddTraits(.isButton)
+                
+                Spacer()
+            }
+            .padding(.horizontal)
+        } else {
+            VStack(spacing: 12) {
+                HStack(spacing: 12) {
+                    ForEach([StoreCategory.shop, .fnb, .others], id: \.self) { category in
+                        Button(action: {
+                            onSelect(category)
+                        }) {
+                            Text(category.rawValue)
+                                .font(.system(size: 15, weight: .medium))
+                                .foregroundColor(.white)
+                                .frame(maxWidth: .infinity)
+                                .padding(.vertical, 14)
+                                .background(Color(.systemGray))
+                                .cornerRadius(10)
+                        }
+                        .accessibilityLabel("Filter by \(category.rawValue)")
+                        .accessibilityHint("Tap to show only \(category.rawValue) stores")
+                    }
+                }
+                
+                HStack(spacing: 12) {
+                    ForEach([StoreCategory.facilities, .lobbies], id: \.self) { category in
+                        Button(action: {
+                            onSelect(category)
+                        }) {
+                            Text(category.rawValue)
+                                .font(.system(size: 15, weight: .medium))
+                                .foregroundColor(.white)
+                                .frame(maxWidth: .infinity)
+                                .padding(.vertical, 14)
+                                .background(Color(.systemGray))
+                                .cornerRadius(10)
+                        }
+                        .accessibilityLabel("Filter by \(category.rawValue)")
+                        .accessibilityHint("Tap to show only \(category.rawValue) locations")
+                    }
+                }
+            }
+            .padding(.horizontal)
+        }
+    }
+}
