@@ -230,7 +230,7 @@ struct IntegratedMapOverlayView: View {
                 let label = $0.label?.lowercased() ?? ""
                 return type.contains("center") &&
                 !label.contains("escalator") &&
-                !label.contains("lift")
+                !label.contains("elevator")
             }, id: \.id) { node in
                 if let store = findStoreByNode(node) {
                     Button {
@@ -293,7 +293,6 @@ struct IntegratedMapOverlayView: View {
                     CurrentLocationView(
                         pathWithLabels: pathWithLabels,
                         currentPathIndex: safeCurrentPathIndex,
-                        //                        pathfindingManager: pathfindingManager
                     )
                 }
             }

@@ -17,9 +17,7 @@ struct ContentView: View {
             .task {
                 print("")
                 print("--- Preloading all floor data on app launch ---")
-                
                 await dataManager.preloadAllFloorData()
-                
             }
     }
 }

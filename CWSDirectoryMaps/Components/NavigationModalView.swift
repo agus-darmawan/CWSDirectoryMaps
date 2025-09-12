@@ -120,7 +120,8 @@ struct NavigationModalView: View {
             if let start = navigationState.startLocation,
                let end = navigationState.endLocation {
                 DirectionView(
-                    destinationStore: end, startLocation: start,
+                    destinationStore: end,
+                    startLocation: start,
                     viewModel: DirectoryViewModel()
                 )
             }
