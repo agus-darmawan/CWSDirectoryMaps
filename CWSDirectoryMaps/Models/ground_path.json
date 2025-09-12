@@ -569,7 +569,7 @@
       "x": 5678.6616,
       "y": 10908.896,
       "type": "circle-center",
-      "label": "lift_frederique",
+      "label": "elevator_frederique",
       "radius": 7
     },
     {
@@ -580,7 +580,7 @@
       "label": "circle-point_n57",
       "angle": 0,
       "radius": 7,
-      "parentLabel": "lift_frederique"
+      "parentLabel": "elevator_frederique"
     },
     {
       "id": "n58",
@@ -590,7 +590,7 @@
       "label": "circle-point_n58",
       "angle": 0.7853981633974483,
       "radius": 7,
-      "parentLabel": "lift_frederique"
+      "parentLabel": "elevator_frederique"
     },
     {
       "id": "n59",
@@ -600,7 +600,7 @@
       "label": "circle-point_n59",
       "angle": 1.5707963267948966,
       "radius": 7,
-      "parentLabel": "lift_frederique"
+      "parentLabel": "elevator_frederique"
     },
     {
       "id": "n60",
@@ -610,7 +610,7 @@
       "label": "circle-point_n60",
       "angle": 2.356194490192345,
       "radius": 7,
-      "parentLabel": "lift_frederique"
+      "parentLabel": "elevator_frederique"
     },
     {
       "id": "n61",
@@ -620,7 +620,7 @@
       "label": "circle-point_n61",
       "angle": 3.141592653589793,
       "radius": 7,
-      "parentLabel": "lift_frederique"
+      "parentLabel": "elevator_frederique"
     },
     {
       "id": "n62",
@@ -630,7 +630,7 @@
       "label": "circle-point_n62",
       "angle": 3.9269908169872414,
       "radius": 7,
-      "parentLabel": "lift_frederique"
+      "parentLabel": "elevator_frederique"
     },
     {
       "id": "n63",
@@ -640,7 +640,7 @@
       "label": "circle-point_n63",
       "angle": 4.71238898038469,
       "radius": 7,
-      "parentLabel": "lift_frederique"
+      "parentLabel": "elevator_frederique"
     },
     {
       "id": "n64",
@@ -650,14 +650,14 @@
       "label": "circle-point_n64",
       "angle": 5.497787143782138,
       "radius": 7,
-      "parentLabel": "lift_frederique"
+      "parentLabel": "elevator_frederique"
     },
     {
       "id": "n65",
       "x": 6100.9473,
       "y": 10838.023,
       "type": "circle-center",
-      "label": "lift_south_lobby",
+      "label": "elevator_south_lobby",
       "radius": 7
     },
     {
@@ -668,7 +668,7 @@
       "label": "circle-point_n66",
       "angle": 0,
       "radius": 7,
-      "parentLabel": "lift_south_lobby"
+      "parentLabel": "elevator_south_lobby"
     },
     {
       "id": "n67",
@@ -678,7 +678,7 @@
       "label": "circle-point_n67",
       "angle": 0.7853981633974483,
       "radius": 7,
-      "parentLabel": "lift_south_lobby"
+      "parentLabel": "elevator_south_lobby"
     },
     {
       "id": "n68",
@@ -688,7 +688,7 @@
       "label": "circle-point_n68",
       "angle": 1.5707963267948966,
       "radius": 7,
-      "parentLabel": "lift_south_lobby"
+      "parentLabel": "elevator_south_lobby"
     },
     {
       "id": "n69",
@@ -698,7 +698,7 @@
       "label": "circle-point_n69",
       "angle": 2.356194490192345,
       "radius": 7,
-      "parentLabel": "lift_south_lobby"
+      "parentLabel": "elevator_south_lobby"
     },
     {
       "id": "n70",
@@ -708,7 +708,7 @@
       "label": "circle-point_n70",
       "angle": 3.141592653589793,
       "radius": 7,
-      "parentLabel": "lift_south_lobby"
+      "parentLabel": "elevator_south_lobby"
     },
     {
       "id": "n71",
@@ -718,7 +718,7 @@
       "label": "circle-point_n71",
       "angle": 3.9269908169872414,
       "radius": 7,
-      "parentLabel": "lift_south_lobby"
+      "parentLabel": "elevator_south_lobby"
     },
     {
       "id": "n72",
@@ -728,7 +728,7 @@
       "label": "circle-point_n72",
       "angle": 4.71238898038469,
       "radius": 7,
-      "parentLabel": "lift_south_lobby"
+      "parentLabel": "elevator_south_lobby"
     },
     {
       "id": "n73",
@@ -738,14 +738,14 @@
       "label": "circle-point_n73",
       "angle": 5.497787143782138,
       "radius": 7,
-      "parentLabel": "lift_south_lobby"
+      "parentLabel": "elevator_south_lobby"
     },
     {
       "id": "n74",
       "x": 6405.4233,
       "y": 11094.632,
       "type": "circle-center",
-      "label": "lift_west_to_lg",
+      "label": "elevator_west_to_lg",
       "radius": 7
     },
     {
@@ -756,7 +756,7 @@
       "label": "circle-point_n75",
       "angle": 0,
       "radius": 7,
-      "parentLabel": "lift_west_to_lg"
+      "parentLabel": "elevator_west_to_lg"
     },
     {
       "id": "n76",
@@ -766,7 +766,7 @@
       "label": "circle-point_n76",
       "angle": 0.7853981633974483,
       "radius": 7,
-      "parentLabel": "lift_west_to_lg"
+      "parentLabel": "elevator_west_to_lg"
     },
     {
       "id": "n77",
@@ -776,7 +776,7 @@
       "label": "circle-point_n77",
       "angle": 1.5707963267948966,
       "radius": 7,
-      "parentLabel": "lift_west_to_lg"
+      "parentLabel": "elevator_west_to_lg"
     },
     {
       "id": "n78",
@@ -786,7 +786,7 @@
       "label": "circle-point_n78",
       "angle": 2.356194490192345,
       "radius": 7,
-      "parentLabel": "lift_west_to_lg"
+      "parentLabel": "elevator_west_to_lg"
     },
     {
       "id": "n79",
@@ -796,7 +796,7 @@
       "label": "circle-point_n79",
       "angle": 3.141592653589793,
       "radius": 7,
-      "parentLabel": "lift_west_to_lg"
+      "parentLabel": "elevator_west_to_lg"
     },
     {
       "id": "n80",
@@ -806,7 +806,7 @@
       "label": "circle-point_n80",
       "angle": 3.9269908169872414,
       "radius": 7,
-      "parentLabel": "lift_west_to_lg"
+      "parentLabel": "elevator_west_to_lg"
     },
     {
       "id": "n81",
@@ -816,7 +816,7 @@
       "label": "circle-point_n81",
       "angle": 4.71238898038469,
       "radius": 7,
-      "parentLabel": "lift_west_to_lg"
+      "parentLabel": "elevator_west_to_lg"
     },
     {
       "id": "n82",
@@ -826,7 +826,7 @@
       "label": "circle-point_n82",
       "angle": 5.497787143782138,
       "radius": 7,
-      "parentLabel": "lift_west_to_lg"
+      "parentLabel": "elevator_west_to_lg"
     },
     {
       "id": "n83",
@@ -1009,7 +1009,7 @@
       "x": 5491.0786,
       "y": 11101.289,
       "type": "circle-center",
-      "label": "lift_mph",
+      "label": "elevator_mph",
       "radius": 7
     },
     {
@@ -1020,7 +1020,7 @@
       "label": "circle-point_n102",
       "angle": 0,
       "radius": 7,
-      "parentLabel": "lift_mph"
+      "parentLabel": "elevator_mph"
     },
     {
       "id": "n103",
@@ -1030,7 +1030,7 @@
       "label": "circle-point_n103",
       "angle": 0.7853981633974483,
       "radius": 7,
-      "parentLabel": "lift_mph"
+      "parentLabel": "elevator_mph"
     },
     {
       "id": "n104",
@@ -1040,7 +1040,7 @@
       "label": "circle-point_n104",
       "angle": 1.5707963267948966,
       "radius": 7,
-      "parentLabel": "lift_mph"
+      "parentLabel": "elevator_mph"
     },
     {
       "id": "n105",
@@ -1050,7 +1050,7 @@
       "label": "circle-point_n105",
       "angle": 2.356194490192345,
       "radius": 7,
-      "parentLabel": "lift_mph"
+      "parentLabel": "elevator_mph"
     },
     {
       "id": "n106",
@@ -1060,7 +1060,7 @@
       "label": "circle-point_n106",
       "angle": 3.141592653589793,
       "radius": 7,
-      "parentLabel": "lift_mph"
+      "parentLabel": "elevator_mph"
     },
     {
       "id": "n107",
@@ -1070,7 +1070,7 @@
       "label": "circle-point_n107",
       "angle": 3.9269908169872414,
       "radius": 7,
-      "parentLabel": "lift_mph"
+      "parentLabel": "elevator_mph"
     },
     {
       "id": "n108",
@@ -1080,7 +1080,7 @@
       "label": "circle-point_n108",
       "angle": 4.71238898038469,
       "radius": 7,
-      "parentLabel": "lift_mph"
+      "parentLabel": "elevator_mph"
     },
     {
       "id": "n109",
@@ -1090,14 +1090,14 @@
       "label": "circle-point_n109",
       "angle": 5.497787143782138,
       "radius": 7,
-      "parentLabel": "lift_mph"
+      "parentLabel": "elevator_mph"
     },
     {
       "id": "n110",
       "x": 5875.7329,
       "y": 11231.104,
       "type": "circle-center",
-      "label": "lift_2",
+      "label": "elevator_2",
       "radius": 7
     },
     {
@@ -1108,7 +1108,7 @@
       "label": "circle-point_n111",
       "angle": 0,
       "radius": 7,
-      "parentLabel": "lift_2"
+      "parentLabel": "elevator_2"
     },
     {
       "id": "n112",
@@ -1118,7 +1118,7 @@
       "label": "circle-point_n112",
       "angle": 0.7853981633974483,
       "radius": 7,
-      "parentLabel": "lift_2"
+      "parentLabel": "elevator_2"
     },
     {
       "id": "n113",
@@ -1128,7 +1128,7 @@
       "label": "circle-point_n113",
       "angle": 1.5707963267948966,
       "radius": 7,
-      "parentLabel": "lift_2"
+      "parentLabel": "elevator_2"
     },
     {
       "id": "n114",
@@ -1138,7 +1138,7 @@
       "label": "circle-point_n114",
       "angle": 2.356194490192345,
       "radius": 7,
-      "parentLabel": "lift_2"
+      "parentLabel": "elevator_2"
     },
     {
       "id": "n115",
@@ -1148,7 +1148,7 @@
       "label": "circle-point_n115",
       "angle": 3.141592653589793,
       "radius": 7,
-      "parentLabel": "lift_2"
+      "parentLabel": "elevator_2"
     },
     {
       "id": "n116",
@@ -1158,7 +1158,7 @@
       "label": "circle-point_n116",
       "angle": 3.9269908169872414,
       "radius": 7,
-      "parentLabel": "lift_2"
+      "parentLabel": "elevator_2"
     },
     {
       "id": "n117",
@@ -1168,7 +1168,7 @@
       "label": "circle-point_n117",
       "angle": 4.71238898038469,
       "radius": 7,
-      "parentLabel": "lift_2"
+      "parentLabel": "elevator_2"
     },
     {
       "id": "n118",
@@ -1178,7 +1178,7 @@
       "label": "circle-point_n118",
       "angle": 5.497787143782138,
       "radius": 7,
-      "parentLabel": "lift_2"
+      "parentLabel": "elevator_2"
     },
     {
       "id": "n119",

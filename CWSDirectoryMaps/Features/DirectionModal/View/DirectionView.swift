@@ -21,7 +21,7 @@ struct DirectionView: View {
     @State private var showDirectionsModal = true
     @State private var showStepsModal = false
     @State private var showSteps = false
-    @State private var selectedTravelMode: TravelMode = .walk
+    @State private var selectedTravelMode: TravelMode = .escalator
     @State private var showFloorTransitionAlert = false
     @State private var transitionMessage = ""
     @State private var showEndRouteAlert = false

@@ -207,7 +207,7 @@ struct TenantImageView: View {
     private func getDefaultIcon(for step: EnhancedDirectionStep) -> String {
         let description = step.description.lowercased()
         
-        if description.contains("elevator") || description.contains("lift") {
+        if description.contains("elevator") || description.contains("elevator") {
             return "arrow.up.arrow.down.square"
         } else if description.contains("escalator") {
             return "arrow.up.right.square"
