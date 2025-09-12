@@ -122,7 +122,7 @@ struct NavigationModalView: View {
                 DirectionView(
                     startLocation: start,
                     destinationStore: end,
-                    showFloorChangeContent: $showFloorChangeContent
+                    viewModel: viewModel
                 )
             }
         }

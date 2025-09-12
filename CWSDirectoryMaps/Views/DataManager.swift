@@ -24,7 +24,7 @@ class DataManager: ObservableObject {
                 loadedData[floor] = data
                 print("📥 Loaded data for \(floor.rawValue) with \(data.graph.nodes.count) nodes and \(data.locations.count) locations.")
             } else {
-//                print("⚠️ Failed to load data for \(floor.rawValue)")
+                //                print("⚠️ Failed to load data for \(floor.rawValue)")
             }
         }
         print("")
@@ -113,85 +113,85 @@ class DataManager: ObservableObject {
         print("Building unified graph...")
         var combinedGraph: [String: GraphNode] = [:]
         var connectionNodes: [String: [GraphNode]] = [:]
-
+        
         // Define cross-floor connections
         let connectionMap: [String: String] = [
             "escalator_mid_bw_to_g": "escalator_mid_bw",
             "escalator_mid_bw_to_lg": "escalator_mid_bw",
             "escalator_west_bw_to_g": "escalator_west_bw",
             "escalator_west_bw_to_lg": "escalator_west_bw",
-            "lift_west_to_g": "lift_west",
-            "lift_west_to_lg": "lift_west"
+            "elevator_west_to_g": "elevator_west",
+            "elevator_west_to_lg": "elevator_west"
         ]
-
+        
         for (floor, data) in floorData {
             let floorPrefix = floor.fileName
             let labelGraph = buildLabelGraph(from: data.graph)
-
+            
             for (label, var node) in labelGraph {
                 let uniqueLabel = "\(floorPrefix)_\(label)"
                 node.label = uniqueLabel
                 node.floor = floor
-
+                
                 node.neighbors = node.neighbors.map { neighbor in
                     return (node: "\(floorPrefix)_\(neighbor.node)", cost: neighbor.cost)
                 }
-
+                
                 if let connectionId = connectionMap[label] {
                     node.connectionId = connectionId
                     var prefixedNode = node
                     prefixedNode.label = uniqueLabel
                     connectionNodes[connectionId, default: []].append(prefixedNode)
                     print("✅ Connected: \(uniqueLabel) → connectionId=\(connectionId)")
-                } else if label.lowercased().contains("escalator") || label.lowercased().contains("lift") {
-//                    print("⚠️ Potential connector not in map: \(uniqueLabel) (raw label: \(label))")
+                } else if label.lowercased().contains("escalator") || label.lowercased().contains("elevator") {
+                    //                    print("⚠️ Potential connector not in map: \(uniqueLabel) (raw label: \(label))")
                 }
-
+                
                 combinedGraph[uniqueLabel] = node
             }
         }
-
+        
         // Build cross-floor links
         for (connectionId, nodes) in connectionNodes {
             guard nodes.count > 1 else {
                 print("ℹ️ connectionId=\(connectionId) has only one node → no cross-floor link made.")
                 continue
             }
-
+            
             print("------------------------------------------------------------------------------------------------------------------------------------------------------")
             print("🔗 Building cross-floor links for connectionId=\(connectionId) with \(nodes.count) node(s):")
             for n in nodes {
                 print("   • \(n.label) (\(n.floor?.rawValue))")
             }
-
+            
             for i in 0..<nodes.count {
                 for j in (i + 1)..<nodes.count {
                     let nodeA = nodes[i]
                     let nodeB = nodes[j]
-                    let costOfChangingFloors = 50.0
-
+                    let costOfChangingFloors = 0.0
+                    
                     combinedGraph[nodeA.label]?.neighbors.append((node: nodeB.label, cost: costOfChangingFloors))
                     combinedGraph[nodeB.label]?.neighbors.append((node: nodeA.label, cost: costOfChangingFloors))
-
+                    
                     print("   ✅ Linked \(nodeA.label) ↔ \(nodeB.label) (cost=\(costOfChangingFloors))")
                 }
             }
         }
         print("------------------------------------------------------------------------------------------------------------------------------------------------------")
-
+        
         // Verify neighbors for connection nodes
-//        print("🔍 Verifying neighbors for connection nodes:")
-//        for (connectionId, nodes) in connectionNodes {
-//            for node in nodes {
-//                if let gNode = combinedGraph[node.label] {
-//                    let neighborLabels = gNode.neighbors.map { $0.node }
-//                    print("   • \(node.label) neighbors: \(neighborLabels)")
-//                } else {
-//                    print("   • ⚠️ \(node.label) not found in combinedGraph")
-//                }
-//            }
-//        }
-
+        //        print("🔍 Verifying neighbors for connection nodes:")
+        //        for (connectionId, nodes) in connectionNodes {
+        //            for node in nodes {
+        //                if let gNode = combinedGraph[node.label] {
+        //                    let neighborLabels = gNode.neighbors.map { $0.node }
+        //                    print("   • \(node.label) neighbors: \(neighborLabels)")
+        //                } else {
+        //                    print("   • ⚠️ \(node.label) not found in combinedGraph")
+        //                }
+        //            }
+        //        }
+        
         return combinedGraph
     }
 }

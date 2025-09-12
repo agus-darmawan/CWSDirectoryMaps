@@ -8,7 +8,7 @@
 import Foundation
 import CoreGraphics
 
-func aStarByLabel(graph: [String: GraphNode], startLabel: String, goalLabel: String) -> [(point: CGPoint, label: String)]? {
+func aStarByLabel(graph: [String: GraphNode], startLabel: String, goalLabel: String, mode: TravelMode) -> [(point: CGPoint, label: String)]? {
     guard let startNode = graph[startLabel],
           let goalNode = graph[goalLabel] else {
         return nil
@@ -49,6 +49,19 @@ func aStarByLabel(graph: [String: GraphNode], startLabel: String, goalLabel: Str
         for neighbor in currentNode.neighbors {
             let neighborLabel = neighbor.node
             guard let neighborNode = graph[neighborLabel] else { continue }
+            
+            let labelLowercased = neighborNode.label.lowercased()
+            
+            switch mode {
+            case .escalator:
+                if labelLowercased.contains("elevator") {
+                    continue
+                }
+            case .elevator:
+                if labelLowercased.contains("escalator") {
+                    continue
+                }
+            }
             
             // BLOCK circle-point and ellipse-point nodes completely
             if neighborNode.type == "circle-point" || neighborNode.type == "ellipse-point" {
