@@ -12,8 +12,8 @@ struct DirectionView: View {
     @EnvironmentObject var dataManager: DataManager
     @StateObject var pathfindingManager = PathfindingManager()
     
-    let startLocation: Store
     @State var destinationStore: Store
+    @State var startLocation: Store
     var onDismiss: (() -> Void)? = nil
     var onDismissNavigationModal: (() -> Void)? = nil
     var onDismissTenantModal: (() -> Void)? = nil
@@ -27,31 +27,138 @@ struct DirectionView: View {
     @State private var showEndRouteAlert = false
     @State private var currentFloor: Floor = .ground
     
+    // New states for TextField UI
+    @State private var startLocationText = ""
+    @State private var destinationText = ""
+    
     @Environment(\.dismiss) private var dismiss
     
     @ObservedObject var viewModel: DirectoryViewModel
     
     @State var pathWithLabels: [(point: CGPoint, label: String)] = []
     
+    // Computed property for reverse button state
+    private var canReverse: Bool {
+        return true // Always allow reverse for simplicity
+    }
+    
     var body: some View {
         ZStack {
-            VStack {
-                if pathWithLabels.isEmpty {
-                    ProgressView("Calculating route...")
-                        .progressViewStyle(CircularProgressViewStyle(tint: .blue))
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
-                } else {
-                    IntegratedMapView(
-                        dataManager: dataManager,
-                        pathWithLabels: $pathWithLabels,
-                        pathfindingManager: pathfindingManager,
-                        currentFloor: $currentFloor,
-                        viewModel: viewModel 
-                    )
-                    .transition(.opacity)
+            // Map content as background
+            if pathWithLabels.isEmpty {
+                ProgressView("Calculating route...")
+                    .progressViewStyle(CircularProgressViewStyle(tint: .blue))
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+            } else {
+                IntegratedMapView(
+                    dataManager: dataManager,
+                    pathWithLabels: $pathWithLabels,
+                    pathfindingManager: pathfindingManager,
+                    currentFloor: $currentFloor,
+                    viewModel: viewModel
+                )
+                .padding(.vertical, 100)
+                .padding(.bottom, 140)
+                .transition(.opacity)
+            }
+            
+            VStack(spacing: 0) {
+                // Top navigation header as overlay
+                VStack(spacing: 0) {
+                    // Navigation title
+                    HStack {
+                        Text("Navigation")
+                            .font(.title2)
+                            .fontWeight(.semibold)
+                    }
+                    .padding(.horizontal, 16)
+                    .padding(.top, 8)
+                    .padding(.bottom, 12)
+                    
+                    // Enhanced from-to section with TextField UI
+                    HStack {
+                        VStack(spacing: 0) {
+                            // from
+                            HStack {
+                                Image(systemName: "location.circle.fill")
+                                    .foregroundColor(.blue)
+                                
+                                TextField("Search starting location", text: $startLocationText)
+                                    .font(.body)
+                                    .foregroundColor(.primary)
+                                    .disabled(true) // Disabled since we're using preset locations
+                                
+                                Spacer()
+                                
+                                // No clear button needed since we're using preset locations
+                            }
+                            .padding(8)
+                            .background(Color(.secondarySystemBackground))
+                            
+                            // to
+                            HStack {
+                                Image(systemName: "mappin.circle.fill")
+                                    .foregroundColor(.red)
+                                
+                                TextField("Search destination", text: $destinationText)
+                                    .font(.body)
+                                    .foregroundColor(.primary)
+                                    .disabled(true) // Disabled since we're using preset locations
+                                
+                                Spacer()
+                                
+                                // No clear button needed since we're using preset locations
+                            }
+                            .padding(8)
+                            .background(Color(.secondarySystemBackground))
+                        }
+                        .frame(maxWidth: .infinity)
+                        .clipShape(RoundedRectangle(cornerRadius: 12))
+                        .overlay(
+                            Divider()
+                                .frame(height: 1)
+                                .padding(.leading, 36)
+                                .padding(.trailing, 56)
+                        )
+                        // Swap button positioned on the right
+                        HStack {
+                            Button(action: {
+                                withAnimation(.easeInOut(duration: 0.2)) {
+                                    // Swap the stores and update text fields
+                                    swap(&startLocation, &destinationStore)
+                                    startLocationText = startLocation.name
+                                    destinationText = destinationStore.name
+                                    
+                                    // Re-run pathfinding with swapped locations
+                                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                                        pathfindingManager.runPathfinding(
+                                            startStore: startLocation,
+                                            endStore: destinationStore,
+                                            unifiedGraph: dataManager.unifiedGraph
+                                        )
+                                    }
+                                }
+                            }) {
+                                Image(systemName: "arrow.up.arrow.down")
+                                    .font(.system(size: 14, weight: .medium))
+                                    .foregroundColor(.white)
+                            }
+                            .frame(width: 32, height: 32)
+                            .background(canReverse ? customBlueColor : Color(.systemGray3))
+                            .clipShape(Circle())
+                            .disabled(!canReverse)
+                            //                            .padding(.trailing, 16)
+                        }
+                    }
+                    .padding(.horizontal, 16)
+                    .padding(.bottom, 12)
                 }
+                .background(Color(.systemBackground))
+                .shadow(color: Color.black.opacity(0.1), radius: 2, x: 0, y: 1)
+                
                 Spacer()
                 
+                // Bottom modals (only when needed)
                 if showDirectionsModal {
                     EnhancedDirectionsModal(
                         destinationStore: destinationStore,
@@ -60,7 +167,7 @@ struct DirectionView: View {
                         pathfindingManager: pathfindingManager,
                         selectedMode: $selectedTravelMode,
                         onDismissAllModals: {
-                            onDismiss?() // This triggers the closure that should close the search view.
+                            onDismiss?()
                             onDismissNavigationModal?()
                             onDismissTenantModal?()
                             dismiss()
@@ -75,7 +182,7 @@ struct DirectionView: View {
                     EnhancedDirectionStepsModal(
                         showStepsModal: $showStepsModal,
                         showSteps: $showSteps,
-                        destinationStore: destinationStore,
+                        destinationStore: $destinationStore,
                         pathfindingManager: pathfindingManager,
                         onEndRoute: {
                             showEndRouteAlert = true
@@ -94,7 +201,7 @@ struct DirectionView: View {
                 EnhancedDirectionStepsListView(
                     showStepsModal: $showStepsModal,
                     showSteps: $showSteps,
-                    destinationStore: destinationStore,
+                    destinationStore: $destinationStore,
                     pathfindingManager: pathfindingManager,
                     onEndRoute: {
                         showEndRouteAlert = true
@@ -108,6 +215,9 @@ struct DirectionView: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .ignoresSafeArea(.all, edges: .bottom)
         .onAppear {
+            // Initialize text fields with current store names
+            startLocationText = startLocation.name
+            destinationText = destinationStore.name
             runPathfinding()
             detectCurrentFloor()
         }
@@ -236,7 +346,7 @@ struct EnhancedDirectionsModal: View {
     var body: some View {
         if showModal {
             VStack(alignment: .trailing) {
-                VStack(spacing: 16) {
+                VStack(spacing: 24) {
                     // Title with real-time metrics
                     HStack {
                         VStack(alignment: .leading, spacing: 2) {
@@ -289,63 +399,9 @@ struct EnhancedDirectionsModal: View {
                     }
                     .frame(maxWidth: .infinity)
                     
-                    // Enhanced from-to section
-                    ZStack {
-                        VStack(spacing: 0) {
-                            // from
-                            HStack {
-                                Image(systemName: "location.circle.fill")
-                                    .foregroundColor(.blue)
-                                Text(startLocation.name)
-                                    .foregroundColor(.primary)
-                                Spacer()
-                            }
-                            .padding(8)
-                            .background(Color(.secondarySystemBackground))
-                            
-                            // to
-                            HStack {
-                                Image(systemName: "mappin.circle.fill")
-                                    .foregroundColor(.red)
-                                Text(destinationStore.name)
-                                    .foregroundColor(.primary)
-                                Spacer()
-                            }
-                            .padding(8)
-                            .background(Color(.secondarySystemBackground))
-                        }
-                        .clipShape(RoundedRectangle(cornerRadius: 12))
-                        
-                        // Divider with swap button
-                        Divider()
-                            .frame(height: 1)
-                            .padding(.leading, 36)
-                            .padding(.trailing, 56)
-                            .overlay(
-                                HStack {
-                                    Spacer()
-                                    Button(action: {
-                                        swap(&startLocation, &destinationStore)
-                                        // Re-run pathfinding with swapped locations
-                                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                                            pathfindingManager.runPathfinding(
-                                                startStore: startLocation,
-                                                endStore: destinationStore,
-                                                unifiedGraph: [:]
-                                            )
-                                        }
-                                    }) {
-                                        Image(systemName: "arrow.up.arrow.down")
-                                            .foregroundColor(.blue)
-                                    }
-                                    .padding(.trailing, 16)
-                                }
-                            )
-                    }
-                    
                     // Enhanced GO button
                     Button(action: {
-//                        print("Go tapped - Starting navigation")
+                        //                        print("Go tapped - Starting navigation")
                         showModal = false
                         onGoTapped?()
                     }) {
@@ -371,9 +427,9 @@ struct EnhancedDirectionsModal: View {
                     }
                 }
                 .padding()
+                .padding(.bottom, 32)
                 .background(Color(.systemBackground))
                 .cornerRadius(16, corners: [.topLeft, .topRight])
-                .frame(height: 320)
             }
             .ignoresSafeArea(edges: .bottom)
             .transition(.move(edge: .bottom))
@@ -387,7 +443,7 @@ struct EnhancedDirectionsModal: View {
 struct EnhancedDirectionStepsModal: View {
     @Binding var showStepsModal: Bool
     @Binding var showSteps: Bool
-    @State var destinationStore: Store
+    @Binding var destinationStore: Store
     @ObservedObject var pathfindingManager: PathfindingManager
     var onEndRoute: () -> Void
     @Binding var currentFloor: Floor
@@ -577,7 +633,7 @@ struct EnhancedDirectionStepsModal: View {
 struct EnhancedDirectionStepsListView: View {
     @Binding var showStepsModal: Bool
     @Binding var showSteps: Bool
-    @State var destinationStore: Store
+    @Binding var destinationStore: Store
     @ObservedObject var pathfindingManager: PathfindingManager
     var onEndRoute: () -> Void
     
