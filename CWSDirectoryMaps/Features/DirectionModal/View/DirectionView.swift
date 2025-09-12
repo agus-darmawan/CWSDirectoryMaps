@@ -166,12 +166,15 @@ struct DirectionView: View {
                         showModal: $showDirectionsModal,
                         pathfindingManager: pathfindingManager,
                         selectedMode: $selectedTravelMode,
-                        onDismissAllModals: {
-                            onDismiss?()
-                            onDismissNavigationModal?()
-                            onDismissTenantModal?()
-                            dismiss()
-                        }
+                        //                        onDismissAllModals: {
+                        //                            onDismiss?()
+                        //                            onDismissNavigationModal?()
+                        //                            onDismissTenantModal?()
+                        //                            dismiss()
+                        //                        }
+                        onEndRoute: {
+                            showEndRouteAlert = true
+                        },
                     ) {
                         showDirectionsModal = false
                         showStepsModal = true
@@ -339,7 +342,8 @@ struct EnhancedDirectionsModal: View {
     @ObservedObject var pathfindingManager: PathfindingManager
     @Binding var selectedMode: TravelMode
     @Environment(\.dismiss) private var dismiss
-    var onDismissAllModals: (() -> Void)? = nil
+    //    var onDismissAllModals: (() -> Void)? = nil
+    var onEndRoute: () -> Void
     
     var onGoTapped: (() -> Void)?
     
@@ -362,14 +366,19 @@ struct EnhancedDirectionsModal: View {
                         }
                         Spacer()
                         
+                        // Red End button
                         Button(action: {
-                            onDismissAllModals?()
+                            onEndRoute()
                         }) {
-                            Image(systemName: "xmark.circle.fill")
-                                .font(.title2)
-                                .foregroundColor(.secondary)
+                            Text("End")
+                                .font(.system(size: 14, weight: .semibold))
+                                .foregroundColor(.white)
+                                .padding(.horizontal, 16)
+                                .padding(.vertical, 8)
+                                .background(Color.red)
+                                .cornerRadius(16)
                         }
-                        .padding(.bottom, 12)
+                        .padding(.trailing, 8)
                     }
                     
                     // Enhanced mode selection
@@ -457,12 +466,12 @@ struct EnhancedDirectionStepsModal: View {
                     // --- MODIFICATION START ---
                     // Draggable handle and tappable area
                     VStack(spacing: 8) {
-                        RoundedRectangle(cornerRadius: 2.5)
-                            .fill(Color.secondary.opacity(0.6))
-                            .frame(width: 40, height: 5)
-                            .padding(.top, 8)
+                        //                        RoundedRectangle(cornerRadius: 2.5)
+                        //                            .fill(Color.secondary.opacity(0.6))
+                        //                            .frame(width: 40, height: 5)
+                        //                            .padding(.top, 8)
                         
-                        // Title with real-time progress
+                        // Title with real-time progress and buttons
                         HStack {
                             VStack(alignment: .leading, spacing: 2) {
                                 HStack {
@@ -478,23 +487,40 @@ struct EnhancedDirectionStepsModal: View {
                             
                             Spacer()
                             
-                            // XMark button remains here to close everything
+                            // Red End button
                             Button(action: {
-                                onDismissAllModals?()
+                                onEndRoute()
                             }) {
-                                Image(systemName: "xmark.circle.fill")
+                                Text("End")
+                                    .font(.system(size: 14, weight: .semibold))
+                                    .foregroundColor(.white)
+                                    .padding(.horizontal, 16)
+                                    .padding(.vertical, 8)
+                                    .background(Color.red)
+                                    .cornerRadius(16)
+                            }
+                            .padding(.trailing, 8)
+                            
+                            // Chevron up button to show full steps
+                            Button(action: {
+                                withAnimation(.spring(response: 0.5, dampingFraction: 0.8)) {
+                                    showSteps = true
+                                }
+                            }) {
+                                Image(systemName: "chevron.up")
                                     .font(.title2)
                                     .foregroundColor(.secondary)
                             }
+                            .padding(.horizontal, 8)
                         }
                     }
                     .frame(maxWidth: .infinity)
                     .contentShape(Rectangle()) // Makes the whole area tappable
-                    .onTapGesture {
-                        withAnimation(.spring(response: 0.5, dampingFraction: 0.8)) {
-                            showSteps = true
-                        }
-                    }
+                    //                    .onTapGesture {
+                    //                        withAnimation(.spring(response: 0.5, dampingFraction: 0.8)) {
+                    //                            showSteps = true
+                    //                        }
+                    //                    }
                     // --- MODIFICATION END ---
                     
                     // If enhancedDirectionSteps empty -> loading card
