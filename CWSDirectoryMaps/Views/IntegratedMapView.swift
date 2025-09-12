@@ -22,7 +22,7 @@ struct IntegratedMapView: View {
     //punya daniel
     @ObservedObject var viewModel: DirectoryViewModel
     @State private var selectedStore: Store? = nil
-
+    
     // Multiplier to fine-tune graph-to-image fitting
     @State private var graphScaleMultiplier: CGFloat = 0.96
     
@@ -53,7 +53,7 @@ struct IntegratedMapView: View {
                                             dataManager: dataManager,
                                             viewModel: viewModel,
                                             selectedStore: $selectedStore
-
+                                            
                                         )
                                     }
                                 )
@@ -87,6 +87,7 @@ struct IntegratedMapView: View {
                 currentFloor: $currentFloor,
                 availableFloors: getAvailableFloorsForPath()
             )
+            .padding(.top, 50)
         }
     }
     
@@ -381,7 +382,7 @@ struct StrokeText: View {
     let outlineColor: Color
     let lineWidth: CGFloat
     let maxWidth: CGFloat?
-
+    
     var body: some View {
         ZStack {
             Text(text)
@@ -718,8 +719,8 @@ struct ZoomableScrollView<Content: View>: View {
                 .offset(offset)
                 .onAppear {
                     // Start with a comfortable zoom level
-                    scale = 2.0
-                    lastScale = 2.0
+                    scale = 3.0
+                    lastScale = 3.0
                     offset = .zero
                     lastOffset = .zero
                 }
