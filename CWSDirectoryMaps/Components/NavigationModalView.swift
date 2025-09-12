@@ -16,6 +16,8 @@ struct NavigationModalView: View {
     @State private var showingSameLocationAlert: Bool = false
     @State private var activeField: ActiveField? = nil
     @State private var showDirectionView: Bool = false
+    var onDismiss: (() -> Void)? = nil
+
     
     private let selectedStore: Store
     @Environment(\.dismiss) var dismiss
@@ -122,13 +124,15 @@ struct NavigationModalView: View {
                 DirectionView(
                     startLocation: start,
                     destinationStore: end,
-                    showFloorChangeContent: $showFloorChangeContent
+                    onDismiss: {
+                        self.resetNavigationState()
+                    },
+                    viewModel: DirectoryViewModel()
                 )
             }
         }
     }
 
-  
     private func checkAndNavigateToDirection() {
         if navigationState.startLocation != nil && navigationState.endLocation != nil {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
@@ -163,7 +167,6 @@ struct NavigationModalView: View {
                                 activeField = .startLocation
                             }
                             .onChange(of: startLocationText) { _, newValue in
-                                activeField = .startLocation
                                 if let currentStore = navigationState.startLocation {
                                     if newValue != currentStore.name {
                                         navigationState.startLocation = nil
@@ -199,7 +202,6 @@ struct NavigationModalView: View {
                                 activeField = .destination
                             }
                             .onChange(of: destinationText) { _, newValue in
-                                activeField = .destination
                                 if let currentStore = navigationState.endLocation {
                                     if newValue != currentStore.name {
                                         navigationState.endLocation = nil
@@ -309,32 +311,48 @@ struct NavigationModalView: View {
     }
     
     private func selectLocation(_ store: Store) {
-        if activeField == .startLocation || (navigationState.startLocation == nil && navigationState.endLocation != nil) {
+        switch activeField {
+        case .startLocation:
             if navigationState.endLocation?.id == store.id {
                 showingSameLocationAlert = true
                 return
             }
             navigationState.startLocation = store
             startLocationText = store.name
-            activeField = .destination
-        } else {
+
+        case .destination:
             if navigationState.startLocation?.id == store.id {
                 showingSameLocationAlert = true
                 return
             }
             navigationState.endLocation = store
             destinationText = store.name
-            activeField = .startLocation
+
+        case .none:
+            if navigationState.startLocation == nil {
+                navigationState.startLocation = store
+                startLocationText = store.name
+                activeField = .destination
+            } else {
+                if navigationState.startLocation?.id == store.id {
+                    showingSameLocationAlert = true
+                    return
+                }
+                navigationState.endLocation = store
+                destinationText = store.name
+                activeField = .startLocation
+            }
         }
     }
 }
+
 extension NavigationModalView {
     init(viewModel: DirectoryViewModel, isPresented: Binding<Bool>) {
         self.viewModel = viewModel
         self.selectedStore = Store(
             id: UUID().uuidString,
             name: "",
-            category: .others, // pakai case yang valid
+            category: .others,
             imageName: "",
             subcategory: "",
             description: "",
@@ -347,7 +365,19 @@ extension NavigationModalView {
         )
         self.path = []
         self._navigationState = State(
-            initialValue: NavigationState(startLocation: nil, endLocation: nil, mode: .toHere)
+            initialValue: NavigationState(startLocation: nil, endLocation: nil, mode: nil)
         )
+        self._activeField = State(initialValue: nil)
     }
 }
+
+extension NavigationModalView {
+    func resetNavigationState() {
+        navigationState.startLocation = nil
+        navigationState.endLocation = nil
+        startLocationText = ""
+        destinationText = ""
+        activeField = nil
+    }
+}
+
