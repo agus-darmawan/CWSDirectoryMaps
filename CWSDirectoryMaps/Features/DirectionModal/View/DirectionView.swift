@@ -195,6 +195,7 @@ struct DirectionView: View {
                             onDismissNavigationModal?()
                             onDismissTenantModal?()
                             dismiss()
+                            onDismiss?()
                         }
                     )
                 }
@@ -207,6 +208,7 @@ struct DirectionView: View {
                     destinationStore: $destinationStore,
                     pathfindingManager: pathfindingManager,
                     onEndRoute: {
+                        onDismiss?()
                         showEndRouteAlert = true
                     }
                 )
