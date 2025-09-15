@@ -20,39 +20,31 @@ struct EnhancedDirectionStep: Identifiable {
     let segmentDistance: Double // distance for this specific segment
 }
 
-//struct DirectionStep: Identifiable {
-//    let id = UUID()
-//    let point: CGPoint
-//    let icon: String
-//    var description: String
-//    let shopImage: String
-//    var isFloorChange: Bool = false
-//    var fromFloor: Floor?
-//    var toFloor: Floor?
-//}
-
 // MARK: - Travel Mode
 enum TravelMode: String, CaseIterable {
-    case walk = "walk"
-    case wheelchair = "wheelchair"
+    case escalator = "escalator"   // Prioritizes Escalators
+    case elevator = "elevator"
     
     var speed: Double { // meters per second
         switch self {
-        case .walk: return 1.25 // 4.5 km/h (more realistic indoor walking speed)
-        case .wheelchair: return 0.9 // 3.2 km/h (realistic wheelchair speed)
+        case .escalator: return 1.25 // 4.5 km/h (more realistic indoor walking speed)
+        case .elevator: return 0.9 // 3.2 km/h (realistic wheelchair speed)
         }
     }
     
     var icon: String {
         switch self {
-        case .walk: return "figure.walk"
-        case .wheelchair: return "figure.roll"
+        case .escalator: return "figure.walk"
+        case .elevator: return "figure.roll"
         }
     }
 }
 
 // MARK: - Pathfinding Manager
 class PathfindingManager: ObservableObject {
+    private var cachedStartStore: Store?
+    private var cachedEndStore: Store?
+    
     @Published var pathWithLabels: [(point: CGPoint, label: String)] = []
     @Published var directionSteps: [DirectionStep] = []
     @Published var enhancedDirectionSteps: [EnhancedDirectionStep] = []
@@ -61,7 +53,7 @@ class PathfindingManager: ObservableObject {
     // Enhanced navigation metrics
     @Published var totalDistance: Double = 0.0 // in meters
     @Published var totalEstimatedTime: Double = 0.0 // in seconds
-    @Published var currentTravelMode: TravelMode = .walk
+    @Published var currentTravelMode: TravelMode = .escalator
     @Published var currentStepIndex: Int = 0
     
     private let directionsGenerator = DirectionsGenerator()
@@ -174,7 +166,7 @@ class PathfindingManager: ObservableObject {
         }
         
         self.enhancedDirectionSteps = enhancedSteps
-//        print("✅ Generated \(enhancedSteps.count) enhanced direction steps with improved metrics")
+        //        print("✅ Generated \(enhancedSteps.count) enhanced direction steps with improved metrics")
         
         // Debug information
         for (index, step) in enhancedSteps.enumerated() {
@@ -295,26 +287,32 @@ class PathfindingManager: ObservableObject {
     
     // MARK: - Update Travel Mode
     func updateTravelMode(_ mode: TravelMode) {
+        guard mode != currentTravelMode else { return }
+        
         currentTravelMode = mode
-        
-        // Recalculate enhanced steps with new speed
-        if !pathWithLabels.isEmpty {
-            generateEnhancedDirectionSteps(from: pathWithLabels, unifiedGraph: cachedUnifiedGraph)
+        print("🚶‍♂️ Travel mode updated to \(mode.rawValue). Recalculating route...")
+
+        guard let start = cachedStartStore,
+              let end = cachedEndStore,
+              !cachedUnifiedGraph.isEmpty else {
+            return
         }
-        
-        // Update total estimated time
-        totalEstimatedTime = totalDistance / currentTravelMode.speed
-        
-        print("🚶‍♂️ Travel mode updated to \(mode.rawValue)")
-//        print("📊 New estimated time: \(formatTime(totalEstimatedTime))")
+
+        runPathfinding(
+            startStore: start,
+            endStore: end,
+            unifiedGraph: cachedUnifiedGraph
+        )
     }
-    
     // MARK: - Public Methods
     func runPathfinding(
         startStore: Store,
         endStore: Store,
         unifiedGraph: [String: GraphNode]
     ) {
+        self.cachedStartStore = startStore
+        self.cachedEndStore = endStore
+        
         guard let startLabel = startStore.graphLabel,
               let endLabel = endStore.graphLabel else {
             print("Missing graph labels, cannot pathfind")
@@ -331,7 +329,8 @@ class PathfindingManager: ObservableObject {
             let foundPathData = aStarByLabel(
                 graph: unifiedGraph,
                 startLabel: uniqueStartLabel,
-                goalLabel: uniqueEndLabel
+                goalLabel: uniqueEndLabel,
+                mode: self.currentTravelMode
             )
             
             await MainActor.run {

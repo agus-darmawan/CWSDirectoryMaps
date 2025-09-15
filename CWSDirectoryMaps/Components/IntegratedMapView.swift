@@ -22,7 +22,7 @@ struct IntegratedMapView: View {
     //punya daniel
     @ObservedObject var viewModel: DirectoryViewModel
     @State private var selectedStore: Store? = nil
-
+    
     // Multiplier to fine-tune graph-to-image fitting
     @State private var graphScaleMultiplier: CGFloat = 0.96
     
@@ -53,7 +53,7 @@ struct IntegratedMapView: View {
                                             dataManager: dataManager,
                                             viewModel: viewModel,
                                             selectedStore: $selectedStore
-
+                                            
                                         )
                                     }
                                 )
@@ -87,6 +87,7 @@ struct IntegratedMapView: View {
                 currentFloor: $currentFloor,
                 availableFloors: getAvailableFloorsForPath()
             )
+            .padding(.top, 50)
         }
     }
     
@@ -229,7 +230,7 @@ struct IntegratedMapOverlayView: View {
                 let label = $0.label?.lowercased() ?? ""
                 return type.contains("center") &&
                 !label.contains("escalator") &&
-                !label.contains("lift")
+                !label.contains("elevator")
             }, id: \.id) { node in
                 if let store = findStoreByNode(node) {
                     Button {
@@ -292,7 +293,6 @@ struct IntegratedMapOverlayView: View {
                     CurrentLocationView(
                         pathWithLabels: pathWithLabels,
                         currentPathIndex: safeCurrentPathIndex,
-                        //                        pathfindingManager: pathfindingManager
                     )
                 }
             }
@@ -382,7 +382,7 @@ struct StrokeText: View {
     let outlineColor: Color
     let lineWidth: CGFloat
     let maxWidth: CGFloat?
-
+    
     var body: some View {
         ZStack {
             Text(text)

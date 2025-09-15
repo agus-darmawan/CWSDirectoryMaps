@@ -122,8 +122,8 @@ struct NavigationModalView: View {
             if let start = navigationState.startLocation,
                let end = navigationState.endLocation {
                 DirectionView(
-                    startLocation: start,
                     destinationStore: end,
+                    startLocation: start,
                     onDismiss: {
                         self.resetNavigationState()
                     },
@@ -132,7 +132,7 @@ struct NavigationModalView: View {
             }
         }
     }
-
+    
     private func checkAndNavigateToDirection() {
         if navigationState.startLocation != nil && navigationState.endLocation != nil {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {

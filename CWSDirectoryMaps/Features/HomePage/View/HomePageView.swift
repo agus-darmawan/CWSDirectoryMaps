@@ -134,6 +134,7 @@ private extension HomePageView {
                         showNavigationModal = true
                     }) {
                         Image(systemName: "arrow.trianglehead.turn.up.right.diamond.fill")
+                            .font(.system(size:32))
                             .padding(10)
                             .background(
                                 Circle()
