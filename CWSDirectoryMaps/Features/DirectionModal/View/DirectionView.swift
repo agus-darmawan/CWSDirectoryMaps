@@ -2,7 +2,7 @@
 //  Enhanced DirectionView.swift
 //  CWSDirectoryMaps
 //
-//  Enhanced with floor transition notifications and end route functionality
+//  Fixed version with proper state management and end route handling
 //
 
 import SwiftUI
@@ -121,34 +121,34 @@ struct DirectionView: View {
                                 .padding(.trailing, 56)
                         )
                         if showDirectionsModal {
-                                                    HStack {
-                                                        Button(action: {
-                                                            withAnimation(.easeInOut(duration: 0.2)) {
-                                                                // Swap the stores and update text fields
-                                                                swap(&startLocation, &destinationStore)
-                                                                startLocationText = startLocation.name
-                                                                destinationText = destinationStore.name
-                                                                
-                                                                // Re-run pathfinding with swapped locations
-                                                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                                                                    pathfindingManager.runPathfinding(
-                                                                        startStore: startLocation,
-                                                                        endStore: destinationStore,
-                                                                        unifiedGraph: dataManager.unifiedGraph
-                                                                    )
-                                                                }
-                                                            }
-                                                        }) {
-                                                            Image(systemName: "arrow.up.arrow.down")
-                                                                .font(.system(size: 14, weight: .medium))
-                                                                .foregroundColor(.white)
-                                                        }
-                                                        .frame(width: 32, height: 32)
-                                                        .background(canReverse ? customBlueColor : Color(.systemGray3))
-                                                        .clipShape(Circle())
-                                                        .disabled(!canReverse)
-                                                    }
-                                                }
+                            HStack {
+                                Button(action: {
+                                    withAnimation(.easeInOut(duration: 0.2)) {
+                                        // Swap the stores and update text fields
+                                        swap(&startLocation, &destinationStore)
+                                        startLocationText = startLocation.name
+                                        destinationText = destinationStore.name
+                                        
+                                        // Re-run pathfinding with swapped locations
+                                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                                            pathfindingManager.runPathfinding(
+                                                startStore: startLocation,
+                                                endStore: destinationStore,
+                                                unifiedGraph: dataManager.unifiedGraph
+                                            )
+                                        }
+                                    }
+                                }) {
+                                    Image(systemName: "arrow.up.arrow.down")
+                                        .font(.system(size: 14, weight: .medium))
+                                        .foregroundColor(.white)
+                                }
+                                .frame(width: 32, height: 32)
+                                .background(canReverse ? customBlueColor : Color(.systemGray3))
+                                .clipShape(Circle())
+                                .disabled(!canReverse)
+                            }
+                        }
                     }
                     .padding(.horizontal, 16)
                     .padding(.bottom, 12)
@@ -166,15 +166,9 @@ struct DirectionView: View {
                         showModal: $showDirectionsModal,
                         pathfindingManager: pathfindingManager,
                         selectedMode: $selectedTravelMode,
-                        //                        onDismissAllModals: {
-                        //                            onDismiss?()
-                        //                            onDismissNavigationModal?()
-                        //                            onDismissTenantModal?()
-                        //                            dismiss()
-                        //                        }
                         onEndRoute: {
                             showEndRouteAlert = true
-                        },
+                        }
                     ) {
                         showDirectionsModal = false
                         showStepsModal = true
@@ -192,10 +186,7 @@ struct DirectionView: View {
                         },
                         currentFloor: $currentFloor,
                         onDismissAllModals: {
-                            onDismissNavigationModal?()
-                            onDismissTenantModal?()
-                            dismiss()
-                            onDismiss?()
+                            handleEndRoute()
                         }
                     )
                 }
@@ -208,7 +199,6 @@ struct DirectionView: View {
                     destinationStore: $destinationStore,
                     pathfindingManager: pathfindingManager,
                     onEndRoute: {
-                        onDismiss?()
                         showEndRouteAlert = true
                     }
                 )
@@ -248,11 +238,27 @@ struct DirectionView: View {
         .alert("End Navigation", isPresented: $showEndRouteAlert) {
             Button("Cancel", role: .cancel) { }
             Button("End Route", role: .destructive) {
-                endRoute()
+                handleEndRoute()
             }
         } message: {
             Text("Are you sure you want to end this navigation? You will return to the main directory.")
         }
+    }
+    
+    // FIXED: Enhanced end route handling
+    private func handleEndRoute() {
+        // Call the viewModel's end route handler
+        viewModel.handleEndRoute()
+        
+        // Call all dismiss callbacks
+        onDismiss?()
+        onDismissNavigationModal?()
+        onDismissTenantModal?()
+        
+        // Dismiss the view
+        dismiss()
+        
+        print("🏁 Navigation ended and returned to main directory")
     }
     
     private func runPathfinding() {
@@ -328,13 +334,6 @@ struct DirectionView: View {
         if label.hasPrefix("4th_") { return .fourth }
         return .ground
     }
-    
-    private func endRoute() {
-        onDismiss?()
-        onDismissNavigationModal?()
-        onDismissTenantModal?()
-        dismiss()
-    }
 }
 
 struct EnhancedDirectionsModal: View {
@@ -344,7 +343,6 @@ struct EnhancedDirectionsModal: View {
     @ObservedObject var pathfindingManager: PathfindingManager
     @Binding var selectedMode: TravelMode
     @Environment(\.dismiss) private var dismiss
-    //    var onDismissAllModals: (() -> Void)? = nil
     var onEndRoute: () -> Void
     
     var onGoTapped: (() -> Void)?
@@ -412,7 +410,6 @@ struct EnhancedDirectionsModal: View {
                     
                     // Enhanced GO button
                     Button(action: {
-                        //                        print("Go tapped - Starting navigation")
                         showModal = false
                         onGoTapped?()
                     }) {
@@ -449,7 +446,6 @@ struct EnhancedDirectionsModal: View {
     }
 }
 
-
 // MARK: - MODIFIED VIEW
 struct EnhancedDirectionStepsModal: View {
     @Binding var showStepsModal: Bool
@@ -465,65 +461,49 @@ struct EnhancedDirectionStepsModal: View {
         if showStepsModal {
             VStack(alignment: .trailing) {
                 VStack(spacing: 16) {
-                    // --- MODIFICATION START ---
-                    // Draggable handle and tappable area
-                    VStack(spacing: 8) {
-                        //                        RoundedRectangle(cornerRadius: 2.5)
-                        //                            .fill(Color.secondary.opacity(0.6))
-                        //                            .frame(width: 40, height: 5)
-                        //                            .padding(.top, 8)
-                        
-                        // Title with real-time progress and buttons
-                        HStack {
-                            VStack(alignment: .leading, spacing: 2) {
-                                HStack {
-                                    Text("To \(destinationStore.name)")
-                                        .font(.title3)
-                                        .bold()
-                                }
-                                
-                                Text("\(pathfindingManager.formatDistance(pathfindingManager.getRemainingDistance())) remaining – \(pathfindingManager.formatTime(pathfindingManager.getRemainingTime()))")
-                                    .font(.subheadline)
-                                    .foregroundColor(.secondary)
+                    // Title with real-time progress and buttons
+                    HStack {
+                        VStack(alignment: .leading, spacing: 2) {
+                            HStack {
+                                Text("To \(destinationStore.name)")
+                                    .font(.title3)
+                                    .bold()
                             }
                             
-                            Spacer()
-                            
-                            // Red End button
-                            Button(action: {
-                                onEndRoute()
-                            }) {
-                                Text("End")
-                                    .font(.system(size: 14, weight: .semibold))
-                                    .foregroundColor(.white)
-                                    .padding(.horizontal, 16)
-                                    .padding(.vertical, 8)
-                                    .background(Color.red)
-                                    .cornerRadius(16)
-                            }
-                            .padding(.trailing, 8)
-                            
-                            // Chevron up button to show full steps
-                            Button(action: {
-                                withAnimation(.spring(response: 0.5, dampingFraction: 0.8)) {
-                                    showSteps = true
-                                }
-                            }) {
-                                Image(systemName: "chevron.up")
-                                    .font(.title2)
-                                    .foregroundColor(.secondary)
-                            }
-                            .padding(.horizontal, 8)
+                            Text("\(pathfindingManager.formatDistance(pathfindingManager.getRemainingDistance())) remaining – \(pathfindingManager.formatTime(pathfindingManager.getRemainingTime()))")
+                                .font(.subheadline)
+                                .foregroundColor(.secondary)
                         }
+                        
+                        Spacer()
+                        
+                        // Red End button
+                        Button(action: {
+                            onEndRoute()
+                        }) {
+                            Text("End")
+                                .font(.system(size: 14, weight: .semibold))
+                                .foregroundColor(.white)
+                                .padding(.horizontal, 16)
+                                .padding(.vertical, 8)
+                                .background(Color.red)
+                                .cornerRadius(16)
+                        }
+                        .padding(.trailing, 8)
+                        
+                        // Chevron up button to show full steps
+                        Button(action: {
+                            withAnimation(.spring(response: 0.5, dampingFraction: 0.8)) {
+                                showSteps = true
+                            }
+                        }) {
+                            Image(systemName: "chevron.up")
+                                .font(.title2)
+                                .foregroundColor(.secondary)
+                        }
+                        .padding(.horizontal, 8)
                     }
                     .frame(maxWidth: .infinity)
-                    .contentShape(Rectangle()) // Makes the whole area tappable
-                    //                    .onTapGesture {
-                    //                        withAnimation(.spring(response: 0.5, dampingFraction: 0.8)) {
-                    //                            showSteps = true
-                    //                        }
-                    //                    }
-                    // --- MODIFICATION END ---
                     
                     // If enhancedDirectionSteps empty -> loading card
                     if pathfindingManager.enhancedDirectionSteps.isEmpty {
@@ -785,9 +765,9 @@ struct EnhancedDirectionStepsListView: View {
                 .background(Color(.systemGray6))
                 .padding(.bottom, 32)
             }
-            
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color(.systemBackground))
     }
 }
+
