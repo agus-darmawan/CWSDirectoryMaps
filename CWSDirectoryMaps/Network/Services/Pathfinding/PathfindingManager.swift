@@ -27,8 +27,8 @@ enum TravelMode: String, CaseIterable {
     
     var speed: Double { // meters per second
         switch self {
-        case .escalator: return 1.25 // 4.5 km/h (more realistic indoor walking speed)
-        case .elevator: return 0.9 // 3.2 km/h (realistic wheelchair speed)
+        case .escalator: return 0.5
+        case .elevator: return 0.2
         }
     }
     
@@ -62,17 +62,43 @@ class PathfindingManager: ObservableObject {
     // Store unifiedGraph for travel mode updates
     private var cachedUnifiedGraph: [String: GraphNode] = [:]
     
-    // MARK: - Improved Distance Calculation
-    private func calculateDistance(from point1: CGPoint, to point2: CGPoint) -> Double {
+    // MARK: - Fixed Distance Calculation with Floor Awareness
+    private func calculateDistance(from point1: CGPoint, to point2: CGPoint, fromLabel: String? = nil, toLabel: String? = nil) -> Double {
+        // Check if this is a floor change
+        if let fromLabel = fromLabel, let toLabel = toLabel {
+            let fromFloor = extractFloorFromLabel(fromLabel)
+            let toFloor = extractFloorFromLabel(toLabel)
+            
+            if fromFloor != toFloor {
+                // Fixed: Add 2 meters per floor difference instead of calculating map distance
+                let floorDifference = abs(getFloorLevel(fromFloor) - getFloorLevel(toFloor))
+                let floorChangeDistance = Double(floorDifference) * 2.0 // 2 meters per floor
+                print("📏 Floor change from \(fromFloor.displayName) to \(toFloor.displayName): +\(floorChangeDistance)m")
+                return floorChangeDistance
+            }
+        }
+        
+        // Regular distance calculation for same floor
         let dx = Double(point2.x - point1.x)
         let dy = Double(point2.y - point1.y)
         
         // Improved conversion factor based on typical mall scale
-        // Assuming 1 graph unit = approximately 0.5 meters (adjust based on your mall's actual scale)
-        let graphToMeterConversionFactor: Double = 0.5
+        let graphToMeterConversionFactor: Double = 0.1
         
         let distanceInGraphUnits = sqrt(dx * dx + dy * dy)
         return distanceInGraphUnits * graphToMeterConversionFactor
+    }
+    
+    // Helper to get floor level for calculation
+    private func getFloorLevel(_ floor: Floor) -> Int {
+        switch floor {
+        case .lowerGround: return -1
+        case .ground: return 0
+        case .first: return 1
+        case .second: return 2
+        case .third: return 3
+        case .fourth: return 4
+        }
     }
     
     // MARK: - Enhanced Path Distance Calculation
@@ -82,7 +108,12 @@ class PathfindingManager: ObservableObject {
         var totalDistance: Double = 0.0
         
         for i in 1..<pathData.count {
-            let distance = calculateDistance(from: pathData[i-1].point, to: pathData[i].point)
+            let distance = calculateDistance(
+                from: pathData[i-1].point,
+                to: pathData[i].point,
+                fromLabel: pathData[i-1].label,
+                toLabel: pathData[i].label
+            )
             totalDistance += distance
         }
         
@@ -96,7 +127,12 @@ class PathfindingManager: ObservableObject {
         var segmentDistances: [Double] = []
         
         for i in 1..<pathData.count {
-            let distance = calculateDistance(from: pathData[i-1].point, to: pathData[i].point)
+            let distance = calculateDistance(
+                from: pathData[i-1].point,
+                to: pathData[i].point,
+                fromLabel: pathData[i-1].label,
+                toLabel: pathData[i].label
+            )
             segmentDistances.append(distance)
         }
         
@@ -126,25 +162,38 @@ class PathfindingManager: ObservableObject {
         // Then enhance them with distance and time information
         var enhancedSteps: [EnhancedDirectionStep] = []
         
-        // Map direction steps to path segments with safer bounds checking
+        // FIXED: Better mapping of steps to path segments
         let stepToPathMapping = mapStepsToPathSegments(steps: directionSteps, pathData: pathData)
         
         for (index, step) in directionSteps.enumerated() {
             var cumulativeDistance: Double = 0.0
             var segmentDistance: Double = 0.0
             
-            // Calculate cumulative distance up to this step
-            if let pathIndex = stepToPathMapping[index], pathIndex < pathData.count {
+            // FIXED: More accurate cumulative distance calculation
+            if let pathIndex = stepToPathMapping[index] {
                 let safeEndIndex = min(pathIndex, pathData.count - 1)
                 
-                // Sum up all segment distances up to this point
-                for i in 0..<min(safeEndIndex, segmentDistances.count) {
-                    cumulativeDistance += segmentDistances[i]
+                // Calculate cumulative distance using the fixed distance calculation
+                for i in 0..<safeEndIndex {
+                    if i < pathData.count - 1 {
+                        let dist = calculateDistance(
+                            from: pathData[i].point,
+                            to: pathData[i + 1].point,
+                            fromLabel: pathData[i].label,
+                            toLabel: pathData[i + 1].label
+                        )
+                        cumulativeDistance += dist
+                    }
                 }
                 
                 // Get segment distance for this specific step
-                if safeEndIndex > 0 && safeEndIndex <= segmentDistances.count {
-                    segmentDistance = segmentDistances[safeEndIndex - 1]
+                if pathIndex > 0 && pathIndex < pathData.count {
+                    segmentDistance = calculateDistance(
+                        from: pathData[pathIndex - 1].point,
+                        to: pathData[pathIndex].point,
+                        fromLabel: pathData[pathIndex - 1].label,
+                        toLabel: pathData[pathIndex].label
+                    )
                 }
             }
             
@@ -166,7 +215,6 @@ class PathfindingManager: ObservableObject {
         }
         
         self.enhancedDirectionSteps = enhancedSteps
-        //        print("✅ Generated \(enhancedSteps.count) enhanced direction steps with improved metrics")
         
         // Debug information
         for (index, step) in enhancedSteps.enumerated() {
@@ -193,11 +241,26 @@ class PathfindingManager: ObservableObject {
             
             // Calculate cumulative distance more accurately
             var cumulativeDistance: Double = 0.0
-            for j in 0..<min(safeIndex, segmentDistances.count) {
-                cumulativeDistance += segmentDistances[j]
+            for j in 0..<safeIndex {
+                if j < pathData.count - 1 {
+                    let dist = calculateDistance(
+                        from: pathData[j].point,
+                        to: pathData[j + 1].point,
+                        fromLabel: pathData[j].label,
+                        toLabel: pathData[j + 1].label
+                    )
+                    cumulativeDistance += dist
+                }
             }
             
-            let segmentDistance = safeIndex > 0 && safeIndex <= segmentDistances.count ? segmentDistances[safeIndex - 1] : 0.0
+            let segmentDistance = safeIndex > 0 && safeIndex < pathData.count ?
+                calculateDistance(
+                    from: pathData[safeIndex - 1].point,
+                    to: pathData[safeIndex].point,
+                    fromLabel: pathData[safeIndex - 1].label,
+                    toLabel: pathData[safeIndex].label
+                ) : 0.0
+            
             let estimatedTime = cumulativeDistance / currentTravelMode.speed
             
             let description: String
@@ -206,7 +269,7 @@ class PathfindingManager: ObservableObject {
             switch i {
             case 0:
                 description = "Start your journey"
-                icon = currentTravelMode.icon // Use current travel mode icon
+                icon = currentTravelMode.icon
             case stepCount - 1:
                 description = "Arrive at your destination"
                 icon = "mappin.circle.fill"
@@ -232,7 +295,7 @@ class PathfindingManager: ObservableObject {
         print("✅ Generated \(enhancedSteps.count) basic enhanced direction steps")
     }
     
-    // MARK: - Map Steps to Path Segments
+    // MARK: - FIXED: Map Steps to Path Segments
     private func mapStepsToPathSegments(steps: [DirectionStep], pathData: [(point: CGPoint, label: String)]) -> [Int: Int] {
         var mapping: [Int: Int] = [:]
         
@@ -245,19 +308,39 @@ class PathfindingManager: ObservableObject {
             var minDistance = Double.infinity
             
             for (pathIndex, pathPoint) in pathData.enumerated() {
-                let distance = calculateDistance(from: step.point, to: pathPoint.point)
-                if distance < minDistance {
-                    minDistance = distance
-                    closestPathIndex = pathIndex
+                // Only calculate distance on same floor to avoid cross-floor confusion
+                let stepFloor = extractFloorFromLabel(pathPoint.label)
+                let currentStepFloor = extractFloorFromNearestPathPoint(step.point, pathData: pathData)
+                
+                if stepFloor == currentStepFloor {
+                    let distance = calculateDistance(from: step.point, to: pathPoint.point)
+                    if distance < minDistance {
+                        minDistance = distance
+                        closestPathIndex = pathIndex
+                    }
                 }
             }
             
-            if closestPathIndex < pathData.count {
-                mapping[stepIndex] = closestPathIndex
-            }
+            mapping[stepIndex] = closestPathIndex
         }
         
         return mapping
+    }
+    
+    // Helper to extract floor from nearest path point
+    private func extractFloorFromNearestPathPoint(_ point: CGPoint, pathData: [(point: CGPoint, label: String)]) -> Floor {
+        var nearestLabel = pathData.first?.label ?? ""
+        var minDistance = Double.infinity
+        
+        for pathPoint in pathData {
+            let distance = calculateDistance(from: point, to: pathPoint.point)
+            if distance < minDistance {
+                minDistance = distance
+                nearestLabel = pathPoint.label
+            }
+        }
+        
+        return extractFloorFromLabel(nearestLabel)
     }
     
     // MARK: - Current Location Calculation
@@ -304,6 +387,7 @@ class PathfindingManager: ObservableObject {
             unifiedGraph: cachedUnifiedGraph
         )
     }
+    
     // MARK: - Public Methods
     func runPathfinding(
         startStore: Store,
