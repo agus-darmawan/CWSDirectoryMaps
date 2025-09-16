@@ -120,35 +120,37 @@ struct DirectionView: View {
                                 .padding(.leading, 36)
                                 .padding(.trailing, 56)
                         )
-                        // Swap button positioned on the right
-                        HStack {
-                            Button(action: {
-                                withAnimation(.easeInOut(duration: 0.2)) {
-                                    // Swap the stores and update text fields
-                                    swap(&startLocation, &destinationStore)
-                                    startLocationText = startLocation.name
-                                    destinationText = destinationStore.name
-                                    
-                                    // Re-run pathfinding with swapped locations
-                                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                                        pathfindingManager.runPathfinding(
-                                            startStore: startLocation,
-                                            endStore: destinationStore,
-                                            unifiedGraph: dataManager.unifiedGraph
-                                        )
-                                    }
-                                }
-                            }) {
-                                Image(systemName: "arrow.up.arrow.down")
-                                    .font(.system(size: 14, weight: .medium))
-                                    .foregroundColor(.white)
-                            }
-                            .frame(width: 32, height: 32)
-                            .background(canReverse ? customBlueColor : Color(.systemGray3))
-                            .clipShape(Circle())
-                            .disabled(!canReverse)
-                            //                            .padding(.trailing, 16)
-                        }
+                        if showDirectionsModal {
+                                                    // Swap button positioned on the right
+                                                    HStack {
+                                                        Button(action: {
+                                                            withAnimation(.easeInOut(duration: 0.2)) {
+                                                                // Swap the stores and update text fields
+                                                                swap(&startLocation, &destinationStore)
+                                                                startLocationText = startLocation.name
+                                                                destinationText = destinationStore.name
+                                                                
+                                                                // Re-run pathfinding with swapped locations
+                                                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                                                                    pathfindingManager.runPathfinding(
+                                                                        startStore: startLocation,
+                                                                        endStore: destinationStore,
+                                                                        unifiedGraph: dataManager.unifiedGraph
+                                                                    )
+                                                                }
+                                                            }
+                                                        }) {
+                                                            Image(systemName: "arrow.up.arrow.down")
+                                                                .font(.system(size: 14, weight: .medium))
+                                                                .foregroundColor(.white)
+                                                        }
+                                                        .frame(width: 32, height: 32)
+                                                        .background(canReverse ? customBlueColor : Color(.systemGray3))
+                                                        .clipShape(Circle())
+                                                        .disabled(!canReverse)
+                                                        //                            .padding(.trailing, 16)
+                                                    }
+                                                }
                     }
                     .padding(.horizontal, 16)
                     .padding(.bottom, 12)
