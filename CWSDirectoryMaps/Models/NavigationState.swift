@@ -31,4 +31,10 @@ struct NavigationState {
         startLocation = endLocation
         endLocation = temp
     }
+    
+    mutating func clear() {
+        startLocation = nil
+        endLocation = nil
+        mode = nil
+    }
 }

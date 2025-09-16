@@ -18,10 +18,8 @@ struct NavigationModalView: View {
     @State private var showDirectionView: Bool = false
     var onDismiss: (() -> Void)? = nil
 
-    
     private let selectedStore: Store
     @Environment(\.dismiss) var dismiss
-    
     @State private var path: [(CGPoint, String)] = []
     
     enum ActiveField {
@@ -59,50 +57,6 @@ struct NavigationModalView: View {
         }
     }
     
-    var filteredStores: [Store] {
-        var stores = viewModel.allStores
-        
-        if let selectedCat = selectedCategory {
-            stores = stores.filter { $0.category == selectedCat }
-            let currentSearchText = getCurrentSearchText()
-            if !currentSearchText.isEmpty {
-                stores = stores.filter { $0.name.lowercased().contains(currentSearchText.lowercased()) }
-            }
-        } else {
-            let currentSearchText = getCurrentSearchText()
-            if !currentSearchText.isEmpty {
-                stores = stores.filter { $0.name.lowercased().contains(currentSearchText.lowercased()) }
-            }
-        }
-        
-        return stores
-    }
-    
-    private func getCurrentSearchText() -> String {
-        switch activeField {
-        case .startLocation:
-            if navigationState.startLocation == nil {
-                return startLocationText
-            } else {
-                return ""
-            }
-        case .destination:
-            if navigationState.endLocation == nil {
-                return destinationText
-            } else {
-                return ""
-            }
-        case .none:
-            return ""
-        }
-    }
-    
-    var canReverse: Bool {
-        let hasStartLocation = navigationState.startLocation != nil
-        let hasEndLocation = navigationState.endLocation != nil
-        return hasStartLocation || hasEndLocation
-    }
-    
     var body: some View {
         VStack(spacing: 0) {
             // Header
@@ -126,8 +80,9 @@ struct NavigationModalView: View {
                     startLocation: start,
                     onDismiss: {
                         self.resetNavigationState()
+                        self.viewModel.searchText = "" // reset search bar agar bisa dipakai lagi
                     },
-                    viewModel: DirectoryViewModel()
+                    viewModel: viewModel
                 )
             }
         }
@@ -145,7 +100,7 @@ struct NavigationModalView: View {
         VStack(spacing: 0) {
             HStack(spacing: 12) {
                 Button(action: {
-                    dismiss() // balik ke halaman sebelumnya
+                    dismiss()
                 }) {
                     HStack(spacing: 4) {
                         Image(systemName: "chevron.left")
@@ -154,8 +109,9 @@ struct NavigationModalView: View {
                     .foregroundColor(.blue)
                 }
                 .padding(.bottom, 44)
+                
                 VStack(spacing: 0) {
-                    
+                    // START LOCATION
                     HStack {
                         Image(systemName: "location.circle.fill")
                             .foregroundColor(.blue)
@@ -167,6 +123,7 @@ struct NavigationModalView: View {
                                 activeField = .startLocation
                             }
                             .onChange(of: startLocationText) { _, newValue in
+                                viewModel.searchText = newValue // bind ke viewmodel
                                 if let currentStore = navigationState.startLocation {
                                     if newValue != currentStore.name {
                                         navigationState.startLocation = nil
@@ -180,6 +137,7 @@ struct NavigationModalView: View {
                             Button(action: {
                                 navigationState.startLocation = nil
                                 startLocationText = ""
+                                viewModel.searchText = ""
                                 activeField = .startLocation
                             }) {
                                 Image(systemName: "xmark.circle.fill")
@@ -191,6 +149,7 @@ struct NavigationModalView: View {
                     .padding(8)
                     .background(Color(.secondarySystemBackground))
                     
+                    // DESTINATION
                     HStack {
                         Image(systemName: "mappin.circle.fill")
                             .foregroundColor(.red)
@@ -202,6 +161,7 @@ struct NavigationModalView: View {
                                 activeField = .destination
                             }
                             .onChange(of: destinationText) { _, newValue in
+                                viewModel.searchText = newValue // bind ke viewmodel
                                 if let currentStore = navigationState.endLocation {
                                     if newValue != currentStore.name {
                                         navigationState.endLocation = nil
@@ -215,6 +175,7 @@ struct NavigationModalView: View {
                             Button(action: {
                                 navigationState.endLocation = nil
                                 destinationText = ""
+                                viewModel.searchText = ""
                                 activeField = .destination
                             }) {
                                 Image(systemName: "xmark.circle.fill")
@@ -234,25 +195,23 @@ struct NavigationModalView: View {
                         .padding(.trailing, 56)
                 )
                 
+                // SWAP BUTTON
                 Button(action: {
                     if canReverse {
                         withAnimation(.easeInOut(duration: 0.2)) {
                             if navigationState.startLocation != nil && navigationState.endLocation == nil {
-                                // Move start to destination
                                 navigationState.endLocation = navigationState.startLocation
                                 navigationState.startLocation = nil
                                 destinationText = startLocationText
                                 startLocationText = ""
                                 activeField = .startLocation
                             } else if navigationState.endLocation != nil && navigationState.startLocation == nil {
-                                // Move destination to start
                                 navigationState.startLocation = navigationState.endLocation
                                 navigationState.endLocation = nil
                                 startLocationText = destinationText
                                 destinationText = ""
                                 activeField = .destination
                             } else if navigationState.startLocation != nil && navigationState.endLocation != nil {
-                                // Both fields are filled - swap them
                                 let tempLocation = navigationState.startLocation
                                 let tempText = startLocationText
                                 
@@ -279,18 +238,18 @@ struct NavigationModalView: View {
             
             CategoryFilterView(
                 categories: StoreCategory.allCases,
-                selectedCategory: $selectedCategory,
+                selectedCategory: $viewModel.selectedCategory,
                 onSelect: { category in
-                    if selectedCategory == category {
-                        selectedCategory = nil
+                    if viewModel.selectedCategory == category {
+                        viewModel.selectedCategory = nil
                     } else {
-                        selectedCategory = category
+                        viewModel.selectedCategory = category
                     }
                 }
             )
             .padding(.vertical, 16)
-            
-            List(filteredStores) { store in
+
+            List(viewModel.filteredStores) { store in
                 StoreRowView(store: store)
                     .onTapGesture {
                         selectLocation(store)
@@ -308,6 +267,17 @@ struct NavigationModalView: View {
         .onChange(of: navigationState.endLocation) { _, _ in
             checkAndNavigateToDirection()
         }
+        .onAppear {
+            if viewModel.filteredStores.isEmpty {
+                viewModel.filteredStores = viewModel.allStores
+            }
+        }
+    }
+    
+    var canReverse: Bool {
+        let hasStartLocation = navigationState.startLocation != nil
+        let hasEndLocation = navigationState.endLocation != nil
+        return hasStartLocation || hasEndLocation
     }
     
     private func selectLocation(_ store: Store) {
@@ -319,7 +289,8 @@ struct NavigationModalView: View {
             }
             navigationState.startLocation = store
             startLocationText = store.name
-
+            viewModel.searchText = ""
+            
         case .destination:
             if navigationState.startLocation?.id == store.id {
                 showingSameLocationAlert = true
@@ -327,7 +298,8 @@ struct NavigationModalView: View {
             }
             navigationState.endLocation = store
             destinationText = store.name
-
+            viewModel.searchText = ""
+            
         case .none:
             if navigationState.startLocation == nil {
                 navigationState.startLocation = store
@@ -342,6 +314,7 @@ struct NavigationModalView: View {
                 destinationText = store.name
                 activeField = .startLocation
             }
+            viewModel.searchText = ""
         }
     }
 }
@@ -378,6 +351,6 @@ extension NavigationModalView {
         startLocationText = ""
         destinationText = ""
         activeField = nil
+        viewModel.searchText = "" // reset juga di sini
     }
 }
-

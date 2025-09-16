@@ -32,7 +32,10 @@ struct SearchBarView: View {
                     .accessibilityHint("Tap to search for stores, restaurants, or facilities")
                 
                 if !searchText.isEmpty {
-                    Button(action: onClear) {
+                    Button(action: {
+                        searchText = ""   // reset langsung di sini
+                        onClear()
+                    }) {
                         Image(systemName: "xmark.circle.fill")
                             .foregroundColor(.secondary)
                     }
@@ -48,6 +51,7 @@ struct SearchBarView: View {
             if isSearching {
                 Button(action: {
                     withAnimation(.easeInOut(duration: 0.3)) {
+                        searchText = ""   // reset kalau Cancel ditekan
                         onCloseSearch()
                     }
                 }) {

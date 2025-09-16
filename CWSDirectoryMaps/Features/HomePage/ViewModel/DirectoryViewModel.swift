@@ -87,6 +87,13 @@ class DirectoryViewModel: ObservableObject {
         shouldNavigateToDirection = false
     }
     
+    // PUBLIC helper to clear all search fields (callable from views)
+    func clearNavigationSearch() {
+        resetSearchState()
+        fromLocation = ""
+        toLocation = ""
+    }
+    
     private func loadStoresFromAPI() {
         // Ensure dataManager is available before proceeding
         guard let dataManager = self.dataManager else {
@@ -137,6 +144,11 @@ class DirectoryViewModel: ObservableObject {
         } else {
             loadMockData()
         }
+    }
+    
+    private func debug_checkStores_againstMap() {
+        // kept for backward compatibility if called externally with old name (no-op)
+        debug_checkStoresAgainstMap()
     }
     
     private func debug_checkStoresAgainstMap() {
@@ -468,103 +480,110 @@ class DirectoryViewModel: ObservableObject {
         ]
     }
     
+    // MARK: - Core reusable filtering logic
+    func filterStores(text: String, category: StoreCategory?, selectedStore: Store?) -> [Store] {
+        var storesToFilter = self.allStores
+        if let selectedCat = category {
+            storesToFilter = self.allStores.filter { $0.category == selectedCat }
+            
+            print("🔍 Filtering by category: \(selectedCat.rawValue)")
+            print("📊 Total stores: \(self.allStores.count)")
+            print("📊 Stores in category \(selectedCat.rawValue): \(storesToFilter.count)")
+        }
+        
+        if text.isEmpty {
+            return storesToFilter
+        }
+        
+        let searchQuery = text.lowercased().trimmingCharacters(in: .whitespacesAndNewlines)
+        
+        // Special-cases preserved exactly as original logic
+        if (searchQuery.contains("baby") && (searchQuery.contains("room") || searchQuery.contains("changing"))) ||
+            searchQuery.hasPrefix("babyroom") || searchQuery.hasPrefix("baby room") ||
+            ("baby room".hasPrefix(searchQuery) && searchQuery.count >= 3) ||
+            ("babyroom".hasPrefix(searchQuery) && searchQuery.count >= 3) {
+            let restrooms = self.allStores.filter { store in
+                store.category == .facilities && store.name.lowercased().contains("restroom")
+            }
+            print("🍼 Special search: Baby's room - Found \(restrooms.count) restrooms")
+            return restrooms
+        }
+        
+        if searchQuery.contains("wheelchair") ||
+            "wheelchair".hasPrefix(searchQuery) && searchQuery.count >= 3 {
+            let informationDesks = self.allStores.filter { store in
+                store.category == .facilities && store.name.lowercased().contains("information")
+            }
+            print("♿ Special search: Wheelchair - Found \(informationDesks.count) information")
+            return informationDesks
+        }
+        
+        if (searchQuery.contains("charging") && searchQuery.contains("station")) ||
+            ("charging station".hasPrefix(searchQuery) && searchQuery.count >= 3) ||
+            ("chargingstation".hasPrefix(searchQuery) && searchQuery.count >= 3) {
+            let informationDesks = self.allStores.filter { store in
+                store.category == .facilities && store.name.lowercased().contains("information")
+            }
+            print("🔌 Special search: Charging station - Found \(informationDesks.count) information")
+            return informationDesks
+        }
+        
+        if (searchQuery.contains("baby") && searchQuery.contains("stroller")) ||
+            ("baby stroller".hasPrefix(searchQuery) && searchQuery.count >= 3) ||
+            ("babystroller".hasPrefix(searchQuery) && searchQuery.count >= 3) {
+            let informationDesks = self.allStores.filter { store in
+                store.category == .facilities && store.name.lowercased().contains("information")
+            }
+            print("🍼🛒 Special search: Baby stroller - Found \(informationDesks.count) information")
+            return informationDesks
+        }
+        
+        if searchQuery.contains("informant") || searchQuery.contains("information") {
+            let informationDesks = self.allStores.filter { store in
+                store.category == .facilities && store.name.lowercased().contains("information")
+            }
+            print("ℹ️ Special search: Information - Found \(informationDesks.count) information")
+            return informationDesks
+        }
+        
+        if searchQuery.contains("restroom") {
+            let restrooms = self.allStores.filter { store in
+                store.category == .facilities && store.name.lowercased().contains("restroom")
+            }
+            print("🚻 Special search: Restroom - Found \(restrooms.count) restrooms")
+            return restrooms
+        }
+        
+        let filteredResults = storesToFilter.filter { store in
+            let storeName = store.name.lowercased()
+            let storeContainsQuery = storeName.contains(searchQuery)
+            
+            let isSpecialSearchTerm = storeName.contains("wheelchair") ||
+            storeName.contains("charging station") ||
+            storeName.contains("baby stroller") ||
+            storeName.contains("baby room") ||
+            storeName.contains("babyroom") ||
+            storeName.contains("babys room") ||
+            storeName.contains("baby") ||
+            storeName.contains("babys")
+            
+            return storeContainsQuery && !isSpecialSearchTerm
+        }
+        
+        return filteredResults
+    }
+    
+    // Provide a convenience method for NavigationModalView to call the same filtering
+    func filteredStoresForNavigation(query: String, category: StoreCategory?) -> [Store] {
+        return filterStores(text: query, category: category, selectedStore: nil)
+    }
+    
+    // MARK: - Setup Combine filtering (keeps original behavior but reuses logic)
     private func setupFiltering() {
         Publishers.CombineLatest3($searchText, $selectedCategory, $selectedStore)
             .map { [weak self] (text, category, store) -> [Store] in
                 guard let self = self else { return [] }
-                
-                var storesToFilter = self.allStores
-                if let selectedCat = category {
-                    storesToFilter = self.allStores.filter { $0.category == selectedCat }
-                    
-                    print("🔍 Filtering by category: \(selectedCat.rawValue)")
-                    print("📊 Total stores: \(self.allStores.count)")
-                    print("📊 Stores in category \(selectedCat.rawValue): \(storesToFilter.count)")
-                    
-                    for store in self.allStores {
-                        print("🏪 Store: \(store.name) - Category: \(store.category.rawValue)")
-                    }
-                }
-                
-                if text.isEmpty {
-                    return storesToFilter
-                }
-                
-                let searchQuery = text.lowercased().trimmingCharacters(in: .whitespacesAndNewlines)
-                
-                if (searchQuery.contains("baby") && (searchQuery.contains("room") || searchQuery.contains("changing"))) ||
-                    searchQuery.hasPrefix("babyroom") || searchQuery.hasPrefix("baby room") ||
-                    ("baby room".hasPrefix(searchQuery) && searchQuery.count >= 3) ||
-                    ("babyroom".hasPrefix(searchQuery) && searchQuery.count >= 3) {
-                    let restrooms = self.allStores.filter { store in
-                        store.category == .facilities && store.name.lowercased().contains("restroom")
-                    }
-                    print("🍼 Special search: Baby's room - Found \(restrooms.count) restrooms")
-                    return restrooms
-                }
-                
-                if searchQuery.contains("wheelchair") ||
-                    "wheelchair".hasPrefix(searchQuery) && searchQuery.count >= 3 {
-                    let informationDesks = self.allStores.filter { store in
-                        store.category == .facilities && store.name.lowercased().contains("information")
-                    }
-                    print("♿ Special search: Wheelchair - Found \(informationDesks.count) information")
-                    return informationDesks
-                }
-                
-                if (searchQuery.contains("charging") && searchQuery.contains("station")) ||
-                    ("charging station".hasPrefix(searchQuery) && searchQuery.count >= 3) ||
-                    ("chargingstation".hasPrefix(searchQuery) && searchQuery.count >= 3) {
-                    let informationDesks = self.allStores.filter { store in
-                        store.category == .facilities && store.name.lowercased().contains("information")
-                    }
-                    print("🔌 Special search: Charging station - Found \(informationDesks.count) information")
-                    return informationDesks
-                }
-                
-                if (searchQuery.contains("baby") && searchQuery.contains("stroller")) ||
-                    ("baby stroller".hasPrefix(searchQuery) && searchQuery.count >= 3) ||
-                    ("babystroller".hasPrefix(searchQuery) && searchQuery.count >= 3) {
-                    let informationDesks = self.allStores.filter { store in
-                        store.category == .facilities && store.name.lowercased().contains("information")
-                    }
-                    print("🍼🛒 Special search: Baby stroller - Found \(informationDesks.count) information")
-                    return informationDesks
-                }
-                
-                if searchQuery.contains("informant") || searchQuery.contains("information") {
-                    let informationDesks = self.allStores.filter { store in
-                        store.category == .facilities && store.name.lowercased().contains("information")
-                    }
-                    print("ℹ️ Special search: Information - Found \(informationDesks.count) information")
-                    return informationDesks
-                }
-                
-                if searchQuery.contains("restroom") {
-                    let restrooms = self.allStores.filter { store in
-                        store.category == .facilities && store.name.lowercased().contains("restroom")
-                    }
-                    print("🚻 Special search: Restroom - Found \(restrooms.count) restrooms")
-                    return restrooms
-                }
-                
-                let filteredResults = storesToFilter.filter { store in
-                    let storeName = store.name.lowercased()
-                    let storeContainsQuery = storeName.contains(searchQuery)
-                    
-                    let isSpecialSearchTerm = storeName.contains("wheelchair") ||
-                    storeName.contains("charging station") ||
-                    storeName.contains("baby stroller") ||
-                    storeName.contains("baby room") ||
-                    storeName.contains("babyroom") ||
-                    storeName.contains("babys room") ||
-                    storeName.contains("baby") ||
-                    storeName.contains("babys")
-                    
-                    return storeContainsQuery && !isSpecialSearchTerm
-                }
-                
-                return filteredResults
+                return self.filterStores(text: text, category: category, selectedStore: store)
             }
             .assign(to: \.filteredStores, on: self)
             .store(in: &cancellables)
@@ -597,6 +616,20 @@ class DirectoryViewModel: ObservableObject {
     func selectStore(_ store: Store) {
         selectedStore = store
         searchText = store.name
+    }
+    
+    /// Set up selection coming from NavigationModalView:
+    /// - If isStart == true, populate `fromLocation`, otherwise populate `toLocation`.
+    /// - Also clears the shared `searchText` so the search UI resets after selection.
+    func applyNavigationSelection(_ store: Store, isStart: Bool) {
+        selectedStore = store
+        if isStart {
+            fromLocation = store.name
+        } else {
+            toLocation = store.name
+        }
+        // Clear the search text (so textfield bound to searchText becomes empty)
+        searchText = ""
     }
     
     func showDirections(for store: Store) {
