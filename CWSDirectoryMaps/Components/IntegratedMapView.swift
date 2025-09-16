@@ -79,6 +79,7 @@ struct IntegratedMapView: View {
                 selectInitialFloorIfAvailable()
             }
         }
+        // FIXED: Sync currentStepIndex properly
         .onChange(of: pathfindingManager.currentStepIndex) { _, newIndex in
             currentStepIndex = newIndex
         }
@@ -209,13 +210,9 @@ struct IntegratedMapOverlayView: View {
         let totalSteps = pathfindingManager.enhancedDirectionSteps.count
         let safeCurrentStepIndex = max(0, min(currentStepIndex, totalSteps > 0 ? totalSteps - 1 : 0))
         
-        // Calculate progress based on current floor path
+        // FIXED: Calculate progress based on current floor path with better step mapping
         let currentFloorSteps = getCurrentFloorSteps()
-        let progressRatio: Double = currentFloorSteps.count > 1 ?
-        Double(min(safeCurrentStepIndex, currentFloorSteps.count - 1)) / Double(currentFloorSteps.count - 1) : 0.0
-        
-        let currentPathIndex = Int(Double(pathWithLabels.count - 1) * progressRatio)
-        let safeCurrentPathIndex = max(0, min(currentPathIndex, pathWithLabels.count - 1))
+        let currentFloorPathIndex = getCurrentFloorPathIndex()
         
         let baseIconSize: CGFloat = 8
         let baseFontSize: CGFloat = 2
@@ -277,7 +274,7 @@ struct IntegratedMapOverlayView: View {
                 // Path visualization for current floor
                 CurrentFloorPathView(
                     pathWithLabels: pathWithLabels,
-                    currentPathIndex: safeCurrentPathIndex,
+                    currentPathIndex: currentFloorPathIndex,
                     currentFloor: currentFloor
                 )
                 
@@ -288,11 +285,13 @@ struct IntegratedMapOverlayView: View {
                     pathfindingManager: pathfindingManager
                 )
                 
-                // Current location indicator
+                // FIXED: Current location indicator with better positioning
                 if !pathWithLabels.isEmpty {
                     CurrentLocationView(
                         pathWithLabels: pathWithLabels,
-                        currentPathIndex: safeCurrentPathIndex,
+                        currentPathIndex: currentFloorPathIndex,
+                        pathfindingManager: pathfindingManager,
+                        currentFloor: currentFloor
                     )
                 }
             }
@@ -309,6 +308,37 @@ struct IntegratedMapOverlayView: View {
                 )
             )
         }
+    }
+    
+    // FIXED: Get current floor path index based on step progress
+    private func getCurrentFloorPathIndex() -> Int {
+        guard !pathWithLabels.isEmpty && !pathfindingManager.enhancedDirectionSteps.isEmpty else {
+            return 0
+        }
+        
+        let currentStepIndex = pathfindingManager.currentStepIndex
+        
+        // If we have steps, find the corresponding path index for the current step
+        if currentStepIndex < pathfindingManager.enhancedDirectionSteps.count {
+            let currentStep = pathfindingManager.enhancedDirectionSteps[currentStepIndex]
+            
+            // Find the closest path point to this step on the current floor
+            var closestIndex = 0
+            var minDistance = Double.infinity
+            
+            for (index, pathPoint) in pathWithLabels.enumerated() {
+                let distance = sqrt(pow(Double(pathPoint.point.x - currentStep.point.x), 2) +
+                                  pow(Double(pathPoint.point.y - currentStep.point.y), 2))
+                if distance < minDistance {
+                    minDistance = distance
+                    closestIndex = index
+                }
+            }
+            
+            return closestIndex
+        }
+        
+        return 0
     }
     
     private func findStoreByNode(_ node: Node) -> Store? {
@@ -568,10 +598,12 @@ struct EndMarker: View {
     }
 }
 
-
+// MARK: - FIXED: Current Location View
 struct CurrentLocationView: View {
     let pathWithLabels: [(point: CGPoint, label: String)]
     let currentPathIndex: Int
+    let pathfindingManager: PathfindingManager
+    let currentFloor: Floor
     
     // Calculate rotation angle with smooth direction handling for turns
     private var rotationAngle: Angle {
@@ -579,7 +611,7 @@ struct CurrentLocationView: View {
             return .zero
         }
         
-        // Jika di akhir path, gunakan arah dari titik sebelumnya
+        // If at end of path, use direction from previous point
         if currentPathIndex >= pathWithLabels.count - 1 {
             guard currentPathIndex > 0 else { return .zero }
             let prevPoint = pathWithLabels[currentPathIndex - 1].point
@@ -593,10 +625,10 @@ struct CurrentLocationView: View {
         
         let currentPoint = pathWithLabels[currentPathIndex].point
         
-        // Untuk smooth direction, gunakan beberapa titik ke depan jika tersedia
+        // For smooth direction, use several points ahead if available
         var targetPoint: CGPoint
         
-        // Coba ambil titik yang cukup jauh untuk menghindari noise dari titik yang terlalu dekat
+        // Try to get a point that's far enough ahead to avoid noise
         let lookAheadDistance = min(3, pathWithLabels.count - currentPathIndex - 1)
         if lookAheadDistance > 0 {
             targetPoint = pathWithLabels[currentPathIndex + lookAheadDistance].point
@@ -604,13 +636,13 @@ struct CurrentLocationView: View {
             targetPoint = pathWithLabels[currentPathIndex + 1].point
         }
         
-        // Jika titik terlalu dekat (kemungkinan noise), gunakan rata-rata arah
+        // If points are too close (noise), use averaged direction
         let dx = targetPoint.x - currentPoint.x
         let dy = targetPoint.y - currentPoint.y
         let distance = sqrt(dx * dx + dy * dy)
         
         if distance < 10.0 && currentPathIndex + 1 < pathWithLabels.count - 1 {
-            // Gunakan arah rata-rata dari beberapa segmen
+            // Use averaged direction from multiple segments
             var avgDx: CGFloat = 0
             var avgDy: CGFloat = 0
             var segmentCount = 0
@@ -635,7 +667,7 @@ struct CurrentLocationView: View {
             }
         }
         
-        // Gunakan arah normal
+        // Use normal direction
         let angle = atan2(dy, dx) + .pi / 2
         return Angle(radians: Double(angle))
     }
@@ -825,4 +857,3 @@ struct RoundedCorner: Shape {
         return Path(path.cgPath)
     }
 }
-

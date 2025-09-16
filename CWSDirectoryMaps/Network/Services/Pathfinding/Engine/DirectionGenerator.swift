@@ -49,7 +49,14 @@ class DirectionsGenerator {
                 )
                 allSteps.append(transitionStep)
             }
-            
+            let finalStep = DirectionStep(
+                point: .last!.point,
+                icon: "arrow.up.down.circle",
+                description: "You have arrived at your destination",
+                shopImage: "",
+                isFloorChange: true
+            )
+            allSteps.append(finalStep)
             allSteps.append(contentsOf: steps)
         }
         

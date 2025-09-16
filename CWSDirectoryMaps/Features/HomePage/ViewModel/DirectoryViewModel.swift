@@ -31,6 +31,9 @@ class DirectoryViewModel: ObservableObject {
     
     @Published var calculatedPath: [(point: CGPoint, label: String)] = []
     
+    // FIXED: Add navigation state tracking
+    @Published var isNavigating: Bool = false
+    
     private let storeService = StoreService()
     private var cancellables = Set<AnyCancellable>()
     
@@ -50,6 +53,38 @@ class DirectoryViewModel: ObservableObject {
         if allStores.isEmpty {
             refreshData()
         }
+    }
+    
+    // FIXED: Add navigation management methods
+    func startNavigation() {
+        isNavigating = true
+        // Clear search when starting navigation
+        clearSearchForNavigation()
+    }
+    
+    func endNavigation() {
+        isNavigating = false
+        // Reset search state when ending navigation
+        resetSearchState()
+    }
+    
+    private func clearSearchForNavigation() {
+        // Only clear search UI, keep stores loaded
+        searchText = ""
+        isSearching = false
+        selectedCategory = nil
+        selectedStore = nil
+    }
+    
+    private func resetSearchState() {
+        // Full reset when ending navigation
+        searchText = ""
+        isSearching = false
+        selectedCategory = nil
+        selectedStore = nil
+        showDirectionModal = false
+        selectedStoreForDirection = nil
+        shouldNavigateToDirection = false
     }
     
     private func loadStoresFromAPI() {
@@ -550,10 +585,13 @@ class DirectoryViewModel: ObservableObject {
     }
     
     func exitSearch() {
-        isSearching = false
-        searchText = ""
-        selectedCategory = nil
-        selectedStore = nil
+        // FIXED: Only exit search if not navigating
+        if !isNavigating {
+            isSearching = false
+            searchText = ""
+            selectedCategory = nil
+            selectedStore = nil
+        }
     }
     
     func selectStore(_ store: Store) {
