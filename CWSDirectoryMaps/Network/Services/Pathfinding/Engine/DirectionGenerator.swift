@@ -49,15 +49,20 @@ class DirectionsGenerator {
                 )
                 allSteps.append(transitionStep)
             }
+            
+            allSteps.append(contentsOf: steps)
+        }
+        
+        // Add final destination step using the last point from the path
+        if let lastPoint = pathWithLabels.last?.point {
             let finalStep = DirectionStep(
-                point: .last!.point,
-                icon: "arrow.up.down.circle",
+                point: lastPoint,
+                icon: "location.fill",
                 description: "You have arrived at your destination",
                 shopImage: "",
-                isFloorChange: true
+                isFloorChange: false
             )
             allSteps.append(finalStep)
-            allSteps.append(contentsOf: steps)
         }
         
         allSteps = removeDuplicateSteps(allSteps)
