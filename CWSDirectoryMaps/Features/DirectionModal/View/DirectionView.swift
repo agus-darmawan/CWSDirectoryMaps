@@ -121,7 +121,6 @@ struct DirectionView: View {
                                 .padding(.trailing, 56)
                         )
                         if showDirectionsModal {
-                                                    // Swap button positioned on the right
                                                     HStack {
                                                         Button(action: {
                                                             withAnimation(.easeInOut(duration: 0.2)) {
@@ -148,7 +147,6 @@ struct DirectionView: View {
                                                         .background(canReverse ? customBlueColor : Color(.systemGray3))
                                                         .clipShape(Circle())
                                                         .disabled(!canReverse)
-                                                        //                            .padding(.trailing, 16)
                                                     }
                                                 }
                     }
