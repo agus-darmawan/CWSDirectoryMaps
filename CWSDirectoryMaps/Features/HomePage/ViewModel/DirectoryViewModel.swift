@@ -2,7 +2,7 @@
 //  DirectoryViewModel.swift
 //  CWSDirectoryMaps
 //
-//  Created by Louis Fernando on 28/08/25.
+//  Production-ready version with enhanced navigation search support and state management
 //
 
 import Foundation
@@ -31,6 +31,9 @@ class DirectoryViewModel: ObservableObject {
     
     @Published var calculatedPath: [(point: CGPoint, label: String)] = []
     
+    // FIXED: Add navigation state tracking
+    @Published var isNavigating: Bool = false
+    
     private let storeService = StoreService()
     private var cancellables = Set<AnyCancellable>()
     
@@ -52,6 +55,48 @@ class DirectoryViewModel: ObservableObject {
         }
     }
     
+    // MARK: - Navigation State Management
+    
+    func startNavigation() {
+        isNavigating = true
+        // Clear search when starting navigation
+        clearSearchForNavigation()
+    }
+    
+    func endNavigation() {
+        isNavigating = false
+        // Reset search state when ending navigation
+        resetSearchState()
+    }
+    
+    private func clearSearchForNavigation() {
+        // Only clear search UI, keep stores loaded
+        searchText = ""
+        isSearching = false
+        selectedCategory = nil
+        selectedStore = nil
+    }
+    
+    private func resetSearchState() {
+        // Full reset when ending navigation
+        searchText = ""
+        isSearching = false
+        selectedCategory = nil
+        selectedStore = nil
+        showDirectionModal = false
+        selectedStoreForDirection = nil
+        shouldNavigateToDirection = false
+    }
+    
+    // PUBLIC helper to clear all search fields (callable from views)
+    func clearNavigationSearch() {
+        resetSearchState()
+        fromLocation = ""
+        toLocation = ""
+    }
+    
+    // MARK: - Data Loading
+    
     private func loadStoresFromAPI() {
         // Ensure dataManager is available before proceeding
         guard let dataManager = self.dataManager else {
@@ -71,7 +116,7 @@ class DirectoryViewModel: ObservableObject {
                     if case .failure(let error) = completion {
                         self?.errorMessage = error.localizedDescription
                         print("❌ API Error: \(error)")
-                        self?.loadMockData() // Fallback to mock data on error
+                        // Note: Removed fallback to mock data - handle errors appropriately in production
                     }
                 },
                 receiveValue: { [weak self] facilitiesWithDetails in
@@ -100,9 +145,13 @@ class DirectoryViewModel: ObservableObject {
         if useAPI {
             loadStoresFromAPI()
         } else {
-            loadMockData()
+            // In production, you might want to handle offline scenarios
+            self.errorMessage = "API is disabled. Please enable API access."
+            print("⚠️ API access is disabled")
         }
     }
+    
+    // MARK: - Debug and Verification
     
     private func debug_checkStoresAgainstMap() {
         guard !hasVerifiedOnce else { return }
@@ -119,421 +168,210 @@ class DirectoryViewModel: ObservableObject {
             normalizedMapLocations[normalizedName] = location.name
         }
         
-        print("\n--- [Debug] Comparing API/mock store list against normalized map data ---")
+        print("\n--- [Debug] Comparing API store list against normalized map data ---")
+        
+        var matchedCount = 0
+        var unmatchedCount = 0
         
         for store in self.allStores {
             let normalizedStoreName = normalize(name: store.name)
             if let originalMapName = normalizedMapLocations[normalizedStoreName] {
                 print("  ✅ Match Found: Store '\(store.name)' (as '\(normalizedStoreName)') matches map location '\(originalMapName)'.")
+                matchedCount += 1
             } else {
                 print("  ❌ MISSING: Store '\(store.name)' (as '\(normalizedStoreName)') was NOT found in the normalized map locations.")
+                unmatchedCount += 1
             }
         }
         
-        print("--- [Debug Check] Verification complete ---\n")
+        print("--- [Debug Check] Summary: \(matchedCount) matched, \(unmatchedCount) unmatched ---\n")
     }
     
     private func normalize(name: String) -> String {
         var normalized = name.lowercased()
         
+        // Remove trailing numbers (e.g., "store-1" becomes "store")
         if let range = normalized.range(of: "-\\d+$", options: .regularExpression) {
             normalized.removeSubrange(range)
         }
         
+        // Remove common separators and symbols
         normalized = normalized.replacingOccurrences(of: " ", with: "")
         normalized = normalized.replacingOccurrences(of: "-", with: "")
         normalized = normalized.replacingOccurrences(of: "_", with: "")
         normalized = normalized.replacingOccurrences(of: "&", with: "")
         normalized = normalized.replacingOccurrences(of: ",", with: "")
+        normalized = normalized.replacingOccurrences(of: ".", with: "")
+        normalized = normalized.replacingOccurrences(of: "'", with: "")
         
         return normalized
     }
     
-    private func loadMockData() {
-        self.allStores = [
-            Store(
-                name: "One Love Bespoke",
-                category: .shop,
-                imageName: "store_logo_placeholder",
-                subcategory: "Fashion, Watches & Jewelry",
-                description: "One Love Bespoke is a dedicated atelier where couples can bring their dream wedding ring to life. They specialize in creating handcrafted rings tailored precisely to your unique preferences. Each piece is meticulously crafted with attention to detail, using premium materials and traditional techniques passed down through generations.",
-                location: "Level 1, Unit 116",
-                website: "https://onelovebespoke.com",
-                phone: "+62 817 0350 3999",
-                hours: "10:00AM - 10:00PM",
-                detailImageName: "store_logo_placeholder"
-            ),
-            Store(
-                name: "Adidas",
-                category: .shop,
-                imageName: "store_logo_placeholder",
-                subcategory: "Sports & Lifestyle",
-                description: "Adidas is a global leader in sporting goods, offering premium athletic footwear, apparel, and accessories for all sports and lifestyle needs. Adidas is a global leader in sporting goods, offering premium athletic footwear, apparel, and accessories for all sports and lifestyle needs. Adidas is a global leader in sporting goods, offering premium athletic footwear, apparel, and accessories for all sports and lifestyle needs. Adidas is a global leader in sporting goods, offering premium athletic footwear, apparel, and accessories for all sports and lifestyle needs. Adidas is a global leader in sporting goods, offering premium athletic footwear, apparel, and accessories for all sports and lifestyle needs. Adidas is a global leader in sporting goods, offering premium athletic footwear, apparel, and accessories for all sports and lifestyle needs.",
-                location: "Level 1, Unit 101",
-                website: "https://adidas.com",
-                phone: "+62 21 1234 5678",
-                hours: "10:00AM - 10:00PM",
-                detailImageName: "store_logo_placeholder"
-            ),
-            Store(
-                name: "Aigner",
-                category: .shop,
-                imageName: "store_logo_placeholder",
-                subcategory: "Luxury Fashion",
-                description: "Aigner offers luxury leather goods, handbags, and fashion accessories with distinctive German craftsmanship and timeless elegance.",
-                location: "Level 1, Unit 102",
-                website: "https://aigner.com",
-                phone: "+62 21 2345 6789",
-                hours: "10:00AM - 10:00PM",
-                detailImageName: "store_logo_placeholder"
-            ),
-            Store(
-                name: "Alba",
-                category: .shop,
-                imageName: "store_logo_placeholder",
-                subcategory: "Watches & Timepieces",
-                description: "Alba provides stylish and reliable timepieces for everyday wear, combining modern design with Japanese precision.",
-                location: "Level 1, Unit 103",
-                website: "https://alba-watch.com",
-                phone: "+62 21 3456 7890",
-                hours: "10:00AM - 10:00PM",
-                detailImageName: "store_logo_placeholder"
-            ),
-            Store(
-                name: "Aldo",
-                category: .shop,
-                imageName: "store_logo_placeholder",
-                subcategory: "Footwear & Accessories",
-                description: "Aldo offers trendy footwear and accessories for men and women, featuring contemporary designs at accessible prices.",
-                location: "Level 1, Unit 104",
-                website: "https://aldoshoes.com",
-                phone: "+62 21 4567 8901",
-                hours: "10:00AM - 10:00PM",
-                detailImageName: "store_logo_placeholder"
-            ),
-            Store(
-                name: "Starbucks",
-                category: .fnb,
-                imageName: "store_logo_placeholder",
-                subcategory: "Coffee & Beverages",
-                description: "Starbucks serves premium coffee, handcrafted beverages, and light bites in a welcoming atmosphere perfect for meetings or relaxation.",
-                location: "Level 1, Unit 105",
-                website: "https://starbucks.com",
-                phone: "+62 21 6789 0123",
-                hours: "07:00AM - 11:00PM",
-                detailImageName: "store_logo_placeholder"
-            ),
-            Store(
-                name: "McDonald's",
-                category: .fnb,
-                imageName: "store_logo_placeholder",
-                subcategory: "Fast Food",
-                description: "McDonald's offers quick service meals, burgers, fries, and beverages loved by families worldwide.",
-                location: "Level 1, Unit 106",
-                website: "https://mcdonalds.com",
-                phone: "+62 21 7890 1234",
-                hours: "24 Hours",
-                detailImageName: "store_logo_placeholder"
-            ),
-            Store(
-                name: "ATM Center",
-                category: .others,
-                imageName: "store_logo_placeholder",
-                subcategory: "Banking Services",
-                description: "ATM Center provides 24-hour banking services with multiple bank options for your convenience.",
-                location: "Level 1, Lobby",
-                website: nil,
-                phone: nil,
-                hours: "24 Hours",
-                detailImageName: "store_logo_placeholder"
-            ),
-            // Lobbies
-            Store(
-                name: "Main Lobby",
-                category: .lobbies,
-                imageName: "store_logo_placeholder",
-                subcategory: "Information Center",
-                description: "",
-                location: "Ground Floor, Central",
-                website: nil,
-                phone: nil,
-                hours: "06:00AM - 12:00AM",
-                detailImageName: "store_logo_placeholder"
-            ),
-            Store(
-                name: "North Entrance Lobby",
-                category: .lobbies,
-                imageName: "store_logo_placeholder",
-                subcategory: "Main Entrance",
-                description: "",
-                location: "Ground Floor, North Wing",
-                website: nil,
-                phone: nil,
-                hours: "24 Hours",
-                detailImageName: "store_logo_placeholder"
-            ),
-            Store(
-                name: "South Entrance Lobby",
-                category: .lobbies,
-                imageName: "store_logo_placeholder",
-                subcategory: "Main Entrance",
-                description: "",
-                location: "Ground Floor, South Wing",
-                website: nil,
-                phone: nil,
-                hours: "24 Hours",
-                detailImageName: "store_logo_placeholder"
-            ),
-            Store(
-                name: "Restroom - Level 1 North",
-                category: .facilities,
-                imageName: "store_logo_placeholder",
-                subcategory: "Public Facilities",
-                description: "Public restroom facilities with baby changing room available",
-                location: "Level 1, North Wing",
-                website: nil,
-                phone: nil,
-                hours: "06:00AM - 12:00AM",
-                detailImageName: "store_logo_placeholder"
-            ),
-            Store(
-                name: "Restroom - Level 1 South",
-                category: .facilities,
-                imageName: "store_logo_placeholder",
-                subcategory: "Public Facilities",
-                description: "Public restroom facilities with baby changing room available",
-                location: "Level 1, Near Food Court",
-                website: nil,
-                phone: nil,
-                hours: "06:00AM - 12:00AM",
-                detailImageName: "store_logo_placeholder"
-            ),
-            Store(
-                name: "Restroom - Level 2 East",
-                category: .facilities,
-                imageName: "store_logo_placeholder",
-                subcategory: "Public Facilities",
-                description: "Public restroom facilities with baby changing room available",
-                location: "Level 2, East Wing",
-                website: nil,
-                phone: nil,
-                hours: "06:00AM - 12:00AM",
-                detailImageName: "store_logo_placeholder"
-            ),
-            Store(
-                name: "Restroom - Level 2 West",
-                category: .facilities,
-                imageName: "store_logo_placeholder",
-                subcategory: "Public Facilities",
-                description: "Public restroom facilities with baby changing room available",
-                location: "Level 2, Near Cinema",
-                website: nil,
-                phone: nil,
-                hours: "06:00AM - 12:00AM",
-                detailImageName: "store_logo_placeholder"
-            ),
-            Store(
-                name: "Restroom - Level 3",
-                category: .facilities,
-                imageName: "store_logo_placeholder",
-                subcategory: "Public Facilities",
-                description: "Public restroom facilities with baby changing room available",
-                location: "Level 3, Central Area",
-                website: nil,
-                phone: nil,
-                hours: "06:00AM - 12:00AM",
-                detailImageName: "store_logo_placeholder"
-            ),
-            Store(
-                name: "Restroom - Ground Floor",
-                category: .facilities,
-                imageName: "store_logo_placeholder",
-                subcategory: "Public Facilities",
-                description: "Public restroom facilities with baby changing room available",
-                location: "Ground Floor, Main Lobby",
-                website: nil,
-                phone: nil,
-                hours: "06:00AM - 12:00AM",
-                detailImageName: "store_logo_placeholder"
-            ),
-            // Information Desks (Wheelchair, Charging Station, Baby Stroller available) - Category: facilities
-            Store(
-                name: "Information Desk - Main Lobby",
-                category: .facilities,
-                imageName: "store_logo_placeholder",
-                subcategory: "Customer Service",
-                description: "Main information desk providing wheelchair rental, charging stations, and baby stroller rental services",
-                location: "Ground Floor, Main Lobby",
-                website: nil,
-                phone: "+62 21 5555 0001",
-                hours: "09:00AM - 10:00PM",
-                detailImageName: "store_logo_placeholder"
-            ),
-            Store(
-                name: "Information Desk - Level 1",
-                category: .facilities,
-                imageName: "store_logo_placeholder",
-                subcategory: "Customer Service",
-                description: "Information desk providing wheelchair rental, charging stations, and baby stroller rental services",
-                location: "Level 1, Central Area",
-                website: nil,
-                phone: "+62 21 5555 0002",
-                hours: "09:00AM - 10:00PM",
-                detailImageName: "store_logo_placeholder"
-            ),
-            Store(
-                name: "Information Desk - Level 2",
-                category: .facilities,
-                imageName: "store_logo_placeholder",
-                subcategory: "Customer Service",
-                description: "Information desk providing wheelchair rental, charging stations, and baby stroller rental services",
-                location: "Level 2, Food Court Area",
-                website: nil,
-                phone: "+62 21 5555 0003",
-                hours: "09:00AM - 10:00PM",
-                detailImageName: "store_logo_placeholder"
-            ),
-            Store(
-                name: "Information Desk - Level 3",
-                category: .facilities,
-                imageName: "store_logo_placeholder",
-                subcategory: "Customer Service",
-                description: "Information desk providing wheelchair rental, charging stations, and baby stroller rental services",
-                location: "Level 3, Entertainment Area",
-                website: nil,
-                phone: "+62 21 5555 0004",
-                hours: "09:00AM - 10:00PM",
-                detailImageName: "store_logo_placeholder"
-            ),
-            // Other Facilities
-            Store(
-                name: "Elevator Bank A",
-                category: .facilities,
-                imageName: "store_logo_placeholder",
-                subcategory: "Vertical Transportation",
-                description: "",
-                location: "Central Area, All Levels",
-                website: nil,
-                phone: nil,
-                hours: "06:00AM - 12:00AM",
-                detailImageName: "store_logo_placeholder"
-            ),
-            Store(
-                name: "Elevator Bank B",
-                category: .facilities,
-                imageName: "store_logo_placeholder",
-                subcategory: "Vertical Transportation",
-                description: "",
-                location: "East Wing, All Levels",
-                website: nil,
-                phone: nil,
-                hours: "06:00AM - 12:00AM",
-                detailImageName: "store_logo_placeholder"
-            )
-        ]
+    // MARK: - Core Filtering Logic
+    
+    func filterStores(text: String, category: StoreCategory?, selectedStore: Store?) -> [Store] {
+        var storesToFilter = self.allStores
+        
+        // Apply category filter first
+        if let selectedCat = category {
+            storesToFilter = self.allStores.filter { $0.category == selectedCat }
+            
+            print("🔍 Filtering by category: \(selectedCat.rawValue)")
+            print("📊 Total stores: \(self.allStores.count)")
+            print("📊 Stores in category \(selectedCat.rawValue): \(storesToFilter.count)")
+        }
+        
+        // If no search text, return category-filtered results
+        if text.isEmpty {
+            return storesToFilter
+        }
+        
+        let searchQuery = text.lowercased().trimmingCharacters(in: .whitespacesAndNewlines)
+        
+        // Handle special search cases for facilities
+        if let specialResults = handleSpecialSearchCases(searchQuery: searchQuery) {
+            print("🔍 Special search case handled: \(searchQuery)")
+            return specialResults
+        }
+        
+        // Regular search through store names
+        let filteredResults = storesToFilter.filter { store in
+            let storeName = store.name.lowercased()
+            let storeContainsQuery = storeName.contains(searchQuery)
+            
+            // Exclude stores that match special facility terms to avoid confusion
+            let isSpecialSearchTerm = containsSpecialFacilityTerms(storeName)
+            
+            return storeContainsQuery && !isSpecialSearchTerm
+        }
+        
+        print("🔍 Regular search for '\(searchQuery)': found \(filteredResults.count) results")
+        return filteredResults
     }
+    
+    // MARK: - Special Search Cases
+    
+    private func handleSpecialSearchCases(searchQuery: String) -> [Store]? {
+        
+        // Baby room / Baby changing room
+        if (searchQuery.contains("baby") && (searchQuery.contains("room") || searchQuery.contains("changing"))) ||
+            searchQuery.hasPrefix("babyroom") || searchQuery.hasPrefix("baby room") ||
+            ("baby room".hasPrefix(searchQuery) && searchQuery.count >= 3) ||
+            ("babyroom".hasPrefix(searchQuery) && searchQuery.count >= 3) {
+            
+            let restrooms = self.allStores.filter { store in
+                store.category == .facilities && store.name.lowercased().contains("restroom")
+            }
+            print("🍼 Special search: Baby's room - Found \(restrooms.count) restrooms")
+            return restrooms
+        }
+        
+        // Wheelchair
+        if searchQuery.contains("wheelchair") ||
+            ("wheelchair".hasPrefix(searchQuery) && searchQuery.count >= 3) {
+            
+            let informationDesks = self.allStores.filter { store in
+                store.category == .facilities && store.name.lowercased().contains("information")
+            }
+            print("♿ Special search: Wheelchair - Found \(informationDesks.count) information desks")
+            return informationDesks
+        }
+        
+        // Charging station
+        if (searchQuery.contains("charging") && searchQuery.contains("station")) ||
+            ("charging station".hasPrefix(searchQuery) && searchQuery.count >= 3) ||
+            ("chargingstation".hasPrefix(searchQuery) && searchQuery.count >= 3) {
+            
+            let informationDesks = self.allStores.filter { store in
+                store.category == .facilities && store.name.lowercased().contains("information")
+            }
+            print("🔌 Special search: Charging station - Found \(informationDesks.count) information desks")
+            return informationDesks
+        }
+        
+        // Baby stroller
+        if (searchQuery.contains("baby") && searchQuery.contains("stroller")) ||
+            ("baby stroller".hasPrefix(searchQuery) && searchQuery.count >= 3) ||
+            ("babystroller".hasPrefix(searchQuery) && searchQuery.count >= 3) {
+            
+            let informationDesks = self.allStores.filter { store in
+                store.category == .facilities && store.name.lowercased().contains("information")
+            }
+            print("🍼🛒 Special search: Baby stroller - Found \(informationDesks.count) information desks")
+            return informationDesks
+        }
+        
+        // Information / Information desk
+        if searchQuery.contains("informant") || searchQuery.contains("information") {
+            let informationDesks = self.allStores.filter { store in
+                store.category == .facilities && store.name.lowercased().contains("information")
+            }
+            print("ℹ️ Special search: Information - Found \(informationDesks.count) information desks")
+            return informationDesks
+        }
+        
+        // Restroom / Toilet
+        if searchQuery.contains("restroom") || searchQuery.contains("toilet") {
+            let restrooms = self.allStores.filter { store in
+                store.category == .facilities && store.name.lowercased().contains("restroom")
+            }
+            print("🚻 Special search: Restroom - Found \(restrooms.count) restrooms")
+            return restrooms
+        }
+        
+        // ATM / Banking
+        if searchQuery.contains("atm") || searchQuery.contains("bank") {
+            let atmCenters = self.allStores.filter { store in
+                store.name.lowercased().contains("atm") || store.name.lowercased().contains("bank")
+            }
+            print("💳 Special search: ATM/Banking - Found \(atmCenters.count) locations")
+            return atmCenters
+        }
+        
+        // Elevator
+        if searchQuery.contains("elevator") || searchQuery.contains("lift") {
+            let elevators = self.allStores.filter { store in
+                store.category == .facilities &&
+                (store.name.lowercased().contains("elevator") || store.name.lowercased().contains("lift"))
+            }
+            print("🛗 Special search: Elevator - Found \(elevators.count) elevators")
+            return elevators
+        }
+        
+        return nil
+    }
+    
+    private func containsSpecialFacilityTerms(_ storeName: String) -> Bool {
+        let specialTerms = [
+            "wheelchair", "charging station", "baby stroller", "baby room",
+            "babyroom", "babys room", "baby", "babys", "information",
+            "restroom", "toilet", "atm", "elevator", "lift"
+        ]
+        
+        return specialTerms.contains { storeName.contains($0) }
+    }
+    
+    // MARK: - Public Filtering Methods
+    
+    // Provide a convenience method for NavigationModalView to call the same filtering
+    func filteredStoresForNavigation(query: String, category: StoreCategory?) -> [Store] {
+        return filterStores(text: query, category: category, selectedStore: nil)
+    }
+    
+    // MARK: - Setup Combine Filtering
     
     private func setupFiltering() {
         Publishers.CombineLatest3($searchText, $selectedCategory, $selectedStore)
+            .debounce(for: .milliseconds(300), scheduler: RunLoop.main) // Add debounce for better performance
             .map { [weak self] (text, category, store) -> [Store] in
                 guard let self = self else { return [] }
-                
-                var storesToFilter = self.allStores
-                if let selectedCat = category {
-                    storesToFilter = self.allStores.filter { $0.category == selectedCat }
-                    
-                    print("🔍 Filtering by category: \(selectedCat.rawValue)")
-                    print("📊 Total stores: \(self.allStores.count)")
-                    print("📊 Stores in category \(selectedCat.rawValue): \(storesToFilter.count)")
-                    
-                    for store in self.allStores {
-                        print("🏪 Store: \(store.name) - Category: \(store.category.rawValue)")
-                    }
-                }
-                
-                if text.isEmpty {
-                    return storesToFilter
-                }
-                
-                let searchQuery = text.lowercased().trimmingCharacters(in: .whitespacesAndNewlines)
-                
-                if (searchQuery.contains("baby") && (searchQuery.contains("room") || searchQuery.contains("changing"))) ||
-                    searchQuery.hasPrefix("babyroom") || searchQuery.hasPrefix("baby room") ||
-                    ("baby room".hasPrefix(searchQuery) && searchQuery.count >= 3) ||
-                    ("babyroom".hasPrefix(searchQuery) && searchQuery.count >= 3) {
-                    let restrooms = self.allStores.filter { store in
-                        store.category == .facilities && store.name.lowercased().contains("restroom")
-                    }
-                    print("🍼 Special search: Baby's room - Found \(restrooms.count) restrooms")
-                    return restrooms
-                }
-                
-                if searchQuery.contains("wheelchair") ||
-                    "wheelchair".hasPrefix(searchQuery) && searchQuery.count >= 3 {
-                    let informationDesks = self.allStores.filter { store in
-                        store.category == .facilities && store.name.lowercased().contains("information")
-                    }
-                    print("♿ Special search: Wheelchair - Found \(informationDesks.count) information")
-                    return informationDesks
-                }
-                
-                if (searchQuery.contains("charging") && searchQuery.contains("station")) ||
-                    ("charging station".hasPrefix(searchQuery) && searchQuery.count >= 3) ||
-                    ("chargingstation".hasPrefix(searchQuery) && searchQuery.count >= 3) {
-                    let informationDesks = self.allStores.filter { store in
-                        store.category == .facilities && store.name.lowercased().contains("information")
-                    }
-                    print("🔌 Special search: Charging station - Found \(informationDesks.count) information")
-                    return informationDesks
-                }
-                
-                if (searchQuery.contains("baby") && searchQuery.contains("stroller")) ||
-                    ("baby stroller".hasPrefix(searchQuery) && searchQuery.count >= 3) ||
-                    ("babystroller".hasPrefix(searchQuery) && searchQuery.count >= 3) {
-                    let informationDesks = self.allStores.filter { store in
-                        store.category == .facilities && store.name.lowercased().contains("information")
-                    }
-                    print("🍼🛒 Special search: Baby stroller - Found \(informationDesks.count) information")
-                    return informationDesks
-                }
-                
-                if searchQuery.contains("informant") || searchQuery.contains("information") {
-                    let informationDesks = self.allStores.filter { store in
-                        store.category == .facilities && store.name.lowercased().contains("information")
-                    }
-                    print("ℹ️ Special search: Information - Found \(informationDesks.count) information")
-                    return informationDesks
-                }
-                
-                if searchQuery.contains("restroom") {
-                    let restrooms = self.allStores.filter { store in
-                        store.category == .facilities && store.name.lowercased().contains("restroom")
-                    }
-                    print("🚻 Special search: Restroom - Found \(restrooms.count) restrooms")
-                    return restrooms
-                }
-                
-                let filteredResults = storesToFilter.filter { store in
-                    let storeName = store.name.lowercased()
-                    let storeContainsQuery = storeName.contains(searchQuery)
-                    
-                    let isSpecialSearchTerm = storeName.contains("wheelchair") ||
-                    storeName.contains("charging station") ||
-                    storeName.contains("baby stroller") ||
-                    storeName.contains("baby room") ||
-                    storeName.contains("babyroom") ||
-                    storeName.contains("babys room") ||
-                    storeName.contains("baby") ||
-                    storeName.contains("babys")
-                    
-                    return storeContainsQuery && !isSpecialSearchTerm
-                }
-                
-                return filteredResults
+                return self.filterStores(text: text, category: category, selectedStore: store)
             }
             .assign(to: \.filteredStores, on: self)
             .store(in: &cancellables)
     }
+    
+    // MARK: - User Interaction Methods
     
     func selectCategory(_ category: StoreCategory) {
         if selectedCategory == category {
@@ -547,18 +385,39 @@ class DirectoryViewModel: ObservableObject {
     func clearSearch() {
         searchText = ""
         selectedStore = nil
+        selectedCategory = nil
     }
     
     func exitSearch() {
-        isSearching = false
-        searchText = ""
-        selectedCategory = nil
-        selectedStore = nil
+        // Only exit search if not navigating
+        if !isNavigating {
+            isSearching = false
+            searchText = ""
+            selectedCategory = nil
+            selectedStore = nil
+        } else {
+            // If navigating, just clear the search text but keep isSearching true
+            searchText = ""
+        }
     }
     
     func selectStore(_ store: Store) {
         selectedStore = store
         searchText = store.name
+    }
+    
+    // MARK: - Navigation Methods
+    
+    /// Set up selection coming from NavigationModalView
+    func applyNavigationSelection(_ store: Store, isStart: Bool) {
+        selectedStore = store
+        if isStart {
+            fromLocation = store.name
+        } else {
+            toLocation = store.name
+        }
+        // Clear the search text (so textfield bound to searchText becomes empty)
+        searchText = ""
     }
     
     func showDirections(for store: Store) {
@@ -570,5 +429,66 @@ class DirectoryViewModel: ObservableObject {
         if !fromLocation.isEmpty && !toLocation.isEmpty {
             shouldNavigateToDirection = true
         }
+    }
+    
+    // MARK: - Navigation State Management
+    
+    func resetForNewNavigation() {
+        // Reset only navigation-specific states, preserve loaded stores
+        searchText = ""
+        selectedCategory = nil
+        selectedStore = nil
+        showDirectionModal = false
+        selectedStoreForDirection = nil
+        fromLocation = ""
+        toLocation = ""
+        shouldNavigateToDirection = false
+        calculatedPath = []
+    }
+    
+    func handleEndRoute() {
+        // Clear navigation states but keep the store data
+        isNavigating = false
+        resetForNewNavigation()
+        
+        // Reset to non-searching state
+        isSearching = false
+        
+        print("🏁 Navigation ended - states reset")
+    }
+    
+    // MARK: - Error Handling
+    
+    func retryDataLoad() {
+        errorMessage = nil
+        refreshData()
+    }
+    
+    func clearError() {
+        errorMessage = nil
+    }
+    
+    // MARK: - Computed Properties
+    
+    var hasStores: Bool {
+        return !allStores.isEmpty
+    }
+    
+    var isLoadingOrEmpty: Bool {
+        return isLoading || allStores.isEmpty
+    }
+    
+    var shouldShowEmptyState: Bool {
+        return !isLoading && allStores.isEmpty && errorMessage == nil
+    }
+    
+    var shouldShowErrorState: Bool {
+        return errorMessage != nil
+    }
+    
+    // MARK: - Cleanup
+    
+    deinit {
+        cancellables.removeAll()
     }
 }
