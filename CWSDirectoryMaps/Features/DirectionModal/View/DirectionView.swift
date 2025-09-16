@@ -192,7 +192,6 @@ struct DirectionView: View {
                             onDismissNavigationModal?()
                             onDismissTenantModal?()
                             dismiss()
-                            onDismiss?()
                         }
                     )
                 }
@@ -205,7 +204,6 @@ struct DirectionView: View {
                     destinationStore: $destinationStore,
                     pathfindingManager: pathfindingManager,
                     onEndRoute: {
-                        onDismiss?()
                         showEndRouteAlert = true
                     }
                 )
@@ -403,7 +401,7 @@ struct EnhancedDirectionsModal: View {
                     
                     // Enhanced GO button
                     Button(action: {
-                        //                        print("Go tapped - Starting navigation")
+//                        print("Go tapped - Starting navigation")
                         showModal = false
                         onGoTapped?()
                     }) {

@@ -15,7 +15,7 @@ enum NavigationMode {
 struct NavigationState {
     var startLocation: Store?
     var endLocation: Store?
-    var mode: NavigationMode?
+    var mode: NavigationMode
     
     mutating func setLocation(_ store: Store, for mode: NavigationMode) {
         switch mode {
