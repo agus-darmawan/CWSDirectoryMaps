@@ -101,7 +101,7 @@ enum Floor: String, CaseIterable, Codable, Hashable, Identifiable {
         case .fourth: return "4th_path"
         case .third: return "3rd_path"
         case .second: return "2nd_path"
-        case .first: return "1st_path"
+        case .first: return "1st_floor_path"
         case .ground: return "ground_path"
         case .lowerGround: return "lowerground_path"
         }

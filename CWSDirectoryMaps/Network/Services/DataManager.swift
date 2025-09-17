@@ -118,11 +118,44 @@ class DataManager: ObservableObject {
         let connectionMap: [String: String] = [
             "escalator_mid_bw_to_g": "escalator_mid_bw",
             "escalator_mid_bw_to_lg": "escalator_mid_bw",
+            
             "escalator_west_bw_to_g": "escalator_west_bw",
             "escalator_west_bw_to_lg": "escalator_west_bw",
-            "elevator_west_to_g": "elevator_west",
-            "elevator_west_to_lg": "elevator_west"
+            
+            "elevator_west_to_g": "lift_west",
+            "elevator_west_to_lg": "lift_west",
+            
+            "elevator_2_west_to_lg": "lift_west",
+            "elevator_2_my_cws": "lift_west",
+
+            "escalator_bw_uniqlo": "escalator_uniqlo",
+            "escalator_bw_mini_atrium": "escalator_uniqlo",
+            
+            "escalator_bw_linear_east_atrium-9": "escalator_linear_east",
+            "escalator_bw_parking-7": "escalator_linear_east",
+            
+            "escalator_bw_oval_east_atrium": "escalator_oval_east",
+            "escalator_bw_asics": "escalator_oval_east",
+            
+            "escalator_bw_south_lobby": "escalator_south_lobby_project_soul",
+            "escalator_bw_project_soul": "escalator_south_lobby_project_soul",
+            
+            "escalator_bw_linear_atrium": "escalator_linear_atrium_giordano",
+            "escalator_bw_giordano": "escalator_linear_atrium_giordano",
+            
+            "escalator_bw_braun_buffel": "escalator_braun_buffel_mycws",
+            "escalator_bw_my_cws_lower": "escalator_braun_buffel_mycws",
+
+            "elevator_frederique": "lift_south_east",
+            "elevator_south_east": "lift_south_east",
+            
+            "elevator_south_lobby": "lift_south_lobby_entrance",
+            "elevator_first_floor_entrance": "lift_south_lobby_entrance",
+            
+            "elevator_2": "lift_north",
+            "elevator_north": "lift_north"
         ]
+        
         
         for (floor, data) in floorData {
             let floorPrefix = floor.fileName
