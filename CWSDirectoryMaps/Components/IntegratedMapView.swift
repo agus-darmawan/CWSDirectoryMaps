@@ -750,8 +750,8 @@ struct ZoomableScrollView<Content: View>: View {
                 .offset(offset)
                 .onAppear {
                     // Start with a comfortable zoom level
-                    scale = 4.0
-                    lastScale = 4.0
+                    scale = 4.5
+                    lastScale = 4.5
                     offset = .zero
                     lastOffset = .zero
                 }
