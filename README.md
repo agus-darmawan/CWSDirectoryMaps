@@ -1,6 +1,6 @@
-# CWSDirectoryMaps
+# CiWay
 
-A comprehensive SwiftUI navigation app for shopping malls and large buildings, featuring interactive floor maps, intelligent pathfinding, and real-time turn-by-turn navigation.
+A comprehensive SwiftUI navigation app for Ciputra World Surabaya Mall, featuring interactive floor maps, intelligent pathfinding, and real-time turn-by-turn navigation.
 
 ## 📱 Features
 
