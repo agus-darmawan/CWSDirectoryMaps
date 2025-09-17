@@ -214,8 +214,8 @@ struct IntegratedMapOverlayView: View {
         let currentFloorSteps = getCurrentFloorSteps()
         let currentFloorPathIndex = getCurrentFloorPathIndex()
         
-        let baseIconSize: CGFloat = 8
-        let baseFontSize: CGFloat = 2
+        let baseIconSize: CGFloat = 10
+        let baseFontSize: CGFloat = 4
         
         let iconSize = baseIconSize / sqrt(overlayScale)
         let fontSize = baseFontSize / sqrt(overlayScale)
@@ -260,7 +260,6 @@ struct IntegratedMapOverlayView: View {
                                 textColor: Color(UIColor.systemBlue),
                                 outlineColor: .white,
                                 lineWidth: 0.5,
-                                maxWidth: iconSize * 3
                             )
                             
                         }
@@ -404,39 +403,39 @@ struct IntegratedMapOverlayView: View {
     }
 }
 
-//Text Outline
-struct StrokeText: View {
-    let text: String
-    let fontSize: CGFloat
-    let textColor: Color
-    let outlineColor: Color
-    let lineWidth: CGFloat
-    let maxWidth: CGFloat?
-    
-    var body: some View {
-        ZStack {
-            Text(text)
-                .font(.system(size: fontSize, weight: .bold))
-                .offset(x: lineWidth, y: lineWidth)
-            Text(text)
-                .font(.system(size: fontSize, weight: .bold))
-                .offset(x: -lineWidth, y: -lineWidth)
-            Text(text)
-                .font(.system(size: fontSize, weight: .bold))
-                .offset(x: -lineWidth, y: lineWidth)
-            Text(text)
-                .font(.system(size: fontSize, weight: .bold))
-                .offset(x: lineWidth, y: -lineWidth)
-            // Isi utama
-            Text(text)
-                .font(.system(size: fontSize, weight: .bold))
-                .foregroundColor(textColor)
-                .lineLimit(1)
-                .frame(maxWidth: maxWidth)
-        }
-        .foregroundColor(outlineColor)
-    }
-}
+////Text Outline
+//struct StrokeText: View {
+//    let text: String
+//    let fontSize: CGFloat
+//    let textColor: Color
+//    let outlineColor: Color
+//    let lineWidth: CGFloat
+//    let maxWidth: CGFloat?
+//    
+//    var body: some View {
+//        ZStack {
+//            Text(text)
+//                .font(.system(size: fontSize, weight: .bold))
+//                .offset(x: lineWidth, y: lineWidth)
+//            Text(text)
+//                .font(.system(size: fontSize, weight: .bold))
+//                .offset(x: -lineWidth, y: -lineWidth)
+//            Text(text)
+//                .font(.system(size: fontSize, weight: .bold))
+//                .offset(x: -lineWidth, y: lineWidth)
+//            Text(text)
+//                .font(.system(size: fontSize, weight: .bold))
+//                .offset(x: lineWidth, y: -lineWidth)
+//            // Isi utama
+//            Text(text)
+//                .font(.system(size: fontSize, weight: .bold))
+//                .foregroundColor(textColor)
+//                .lineLimit(1)
+//                .frame(maxWidth: maxWidth)
+//        }
+//        .foregroundColor(outlineColor)
+//    }
+//}
 
 // MARK: - Current Floor Path View
 struct CurrentFloorPathView: View {
